@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eksplorasi Bilangan Rasional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. DASAR DAN SETUP */
+        * { box-sizing: border-box; }
+        p { margin: 0 0 15px 0; }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: 0;
+            padding: 40px 0;
+            align-items: center;
+        }
+
+        .slide-container {
+            align-items: center;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Lato', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+            width: 1280px;
+        }
+
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; }
+
+        /* 2. TIPOGRAFI */
+        h1, h2, h3 { color: #1e293b; font-weight: 700; font-family: 'Poppins', sans-serif; margin: 0; }
+        .slide-title { font-size: 42px; font-weight: 700; margin-bottom: 40px; text-align: left; width: 100%; border-left: 10px solid #4f46e5; padding-left: 20px; }
+        h1 { font-size: 82px; color: #4f46e5; line-height: 1.1; }
+        h3 { font-size: 28px; margin-bottom: 15px; color: #4f46e5; }
+        p, li, td, th { font-size: 20px; line-height: 1.5; color: #475569; }
+
+        /* 3. LAYOUT KOMPONEN */
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; width: 100%; align-items: center; }
+        .math-box { background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; padding: 30px; text-align: center; }
+
+        /* Buttons & Inputs */
+        .btn { 
+            background: #4f46e5; border: none; border-radius: 12px; color: white; cursor: pointer; 
+            font-family: 'Poppins'; font-weight: 700; padding: 14px 28px; transition: 0.3s; font-size: 18px;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn:hover { background: #3730a3; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-success { background: #10b981; }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-outline { background: transparent; border: 2px solid #4f46e5; color: #4f46e5; }
+
+        input[type="text"] { 
+            padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 20px; width: 140px; text-align: center; font-family: 'Poppins';
+        }
+
+        /* Slide 6 - Game Grid */
+        .game-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-bottom: 15px; width: 100%; }
+        .card { 
+            background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; 
+            height: 52px; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: 0.2s; font-size: 15px; color: #334155;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .discussion-panel { background: #f1f5f9; border-radius: 12px; min-height: 75px; padding: 15px; width: 100%; font-weight: 500; border-left: 6px solid #64748b; }
+
+        /* Table styling rapi (Slide 9) */
+        .table-wrapper { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; width: 100%; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 20px; text-align: center; }
+        th { background: #4f46e5; color: white; font-weight: 700; font-family: 'Poppins'; font-size: 18px; letter-spacing: 0.5px; }
+        td { border-bottom: 1px solid #f1f5f9; font-size: 19px; }
+        tr:hover { background-color: #f8fafc; }
+        tr:last-child td { border-bottom: none; }
+        .table-input { padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-size: 18px; width: 120px; text-align: center; transition: 0.2s; }
+        .table-input:focus { border-color: #4f46e5; outline: none; }
+
+        /* Interactive Game Containers */
+        .game-container { background: #f8fafc; border-radius: 20px; padding: 40px; text-align: center; width: 100%; border: 1px solid #e2e8f0; }
+        .timer-box { font-size: 36px; font-weight: 700; color: #ef4444; margin-bottom: 15px; font-family: monospace; }
+
+        /* Venn Diagram Circles */
+        .venn-wrapper { display: flex; justify-content: center; align-items: center; height: 350px; position: relative; width: 100%; }
+        .circle { border-radius: 50%; opacity: 0.85; position: absolute; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; border: 3px solid white; transition: 0.3s; font-family: 'Poppins'; font-size: 24px; }
+        .circle:hover { opacity: 1; transform: scale(1.05); z-index: 10; }
+
+        /* Animation / Feedback */
+        .feedback-msg { font-weight: 700; margin-top: 15px; min-height: 30px; font-size: 22px; }
+        .correct { color: #10b981; }
+        .wrong { color: #ef4444; }
+
+        /* Slide 18 Grid */
+        .q-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .instruction-box { background: #fff7ed; border: 1px dashed #f97316; padding: 8px 15px; border-radius: 8px; color: #c2410c; font-weight: 700; display: inline-block; margin-bottom: 15px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slide1" style="background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.85)), url('http://googleusercontent.com/image_collection/image_retrieval/14293735064225401523') center/cover;">
+    <div class="content-area" style="text-align: center;">
+        <h3 style="color: #60a5fa; letter-spacing: 5px; margin-bottom: 20px;">MATEMATIKA KELAS VII</h3>
+        <h1 style="color: white; font-size: 100px;">BILANGAN<br>RASIONAL</h1>
+        <div style="width: 120px; height: 6px; background: #10b981; margin: 40px auto;"></div>
+        <p style="font-size: 26px; color: #cbd5e1;">Eksplorasi Angka dalam Bentuk Pecahan dan Desimal</p>
+    </div>
+</div>
+
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Tujuan Pembelajaran</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 30px; display: flex; gap: 20px; align-items: center;">
+                        <div style="background: #4f46e5; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">1</div>
+                        <span>Memahami definisi dan mampu mengidentifikasi bilangan rasional.</span>
+                    </li>
+                    <li style="margin-bottom: 30px; display: flex; gap: 20px; align-items: center;">
+                        <div style="background: #4f46e5; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">2</div>
+                        <span>Mengubah bentuk pecahan ke desimal dan sebaliknya secara akurat.</span>
+                    </li>
+                    <li style="margin-bottom: 30px; display: flex; gap: 20px; align-items: center;">
+                        <div style="background: #4f46e5; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">3</div>
+                        <span>Membandingkan, mengurutkan, dan mengoperasikan hitungan bilangan rasional.</span>
+                    </li>
+                </ul>
+            </div>
+            <div style="text-align: center;">
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/4916992594624813857" style="width: 480px; border-radius: 24px; box-shadow: 0 15px 30px rgba(0,0,0,0.1);" alt="Learning Math">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Definisi Bilangan Rasional</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="math-box">
+                <h3>Apa itu Bilangan Rasional?</h3>
+                <p>Berasal dari kata <em>"Ratio"</em> (perbandingan). Bilangan rasional adalah angka yang dapat dinyatakan dalam bentuk:</p>
+                <div style="font-size: 60px; margin: 25px 0; font-weight: 700;">
+                    <math display="block"><mfrac><mi>a</mi><mi>b</mi></mfrac></math>
+                </div>
+                <p>Dimana <math><mi>a</mi></math> dan <math><mi>b</mi></math> adalah bilangan bulat, dan <math><mi>b &ne; 0</mi></math>.</p>
+            </div>
+            <div>
+                <h3>Cakupan Bilangan Rasional:</h3>
+                <ul style="padding-left: 20px;">
+                    <li style="margin-bottom: 15px;"><strong>Bilangan Bulat:</strong> <math><mn>4</mn><mo>=</mo><mfrac><mn>4</mn><mn>1</mn></mfrac></math></li>
+                    <li style="margin-bottom: 15px;"><strong>Pecahan Biasa/Campuran:</strong> <math><mfrac><mn>2</mn><mn>3</mn></mfrac></math></li>
+                    <li style="margin-bottom: 15px;"><strong>Desimal Berhenti/Berpola:</strong> 0,5 atau 0,333...</li>
+                    <li style="margin-bottom: 15px;"><strong>Persen:</strong> <math><mn>75%</mn><mo>=</mo><mfrac><mn>75</mn><mn>100</mn></mfrac></math></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide4" style="background: #f8fafc;">
+    <div class="content-area" style="text-align: center;">
+        <i class="fa-solid fa-lightbulb" style="font-size: 80px; color: #f59e0b; margin-bottom: 30px;"></i>
+        <h2 style="font-size: 50px; margin-bottom: 40px;">Apakah SEMUA bentuk desimal<br>termasuk bilangan rasional?</h2>
+        <div style="display: flex; gap: 20px; justify-content: center;" id="s4BtnArea">
+            <button class="btn btn-success" onclick="revealS4(true)">YA, SEMUA DESIMAL</button>
+            <button class="btn btn-danger" onclick="revealS4(false)">TIDAK SEMUA</button>
+        </div>
+        <div id="feedbackS4" style="margin-top: 40px; display: none; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h3 id="ansS4Title" style="font-size: 32px;"></h3>
+            <p style="font-size: 22px;">Desimal yang <strong>tidak berhenti</strong> dan <strong>tidak memiliki pola berulang</strong> disebut sebagai <strong>Bilangan Irasional</strong>.</p>
+            <div class="two-column" style="margin-top: 25px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <div class="math-box" style="padding: 15px;">&pi; &approx; 3,14159265...</div>
+                <div class="math-box" style="padding: 15px;">&radic;2 &approx; 1,41421356...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">3 Ciri Utama Desimal Rasional</h2>
+    <div class="content-area">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+            <div class="math-box" style="border-top: 8px solid #4f46e5;">
+                <i class="fa-solid fa-stop-circle" style="font-size: 45px; color: #4f46e5; margin-bottom: 20px;"></i>
+                <h3>Terbatas (Berhenti)</h3>
+                <p>Angka di belakang koma selesai di satu titik baku.</p>
+                <p style="font-weight: 700; color: #1e293b; font-size: 22px;">Contoh: 0,25 atau 0,125</p>
+            </div>
+            <div class="math-box" style="border-top: 8px solid #10b981;">
+                <i class="fa-solid fa-repeat" style="font-size: 45px; color: #10b981; margin-bottom: 20px;"></i>
+                <h3>Berulang (Berpola)</h3>
+                <p>Angka berlanjut tanpa henti namun membentuk pola berulang.</p>
+                <p style="font-weight: 700; color: #1e293b; font-size: 22px;">Contoh: 0,333... (<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math>)</p>
+            </div>
+            <div class="math-box" style="border-top: 8px solid #f59e0b;">
+                <i class="fa-solid fa-equals" style="font-size: 45px; color: #f59e0b; margin-bottom: 20px;"></i>
+                <h3>Dapat Dikonversi</h3>
+                <p>Bisa dikembalikan secara utuh menjadi pecahan biasa <math><mfrac><mi>a</mi><mi>b</mi></mfrac></math>.</p>
+                <p style="font-weight: 700; color: #1e293b; font-size: 22px;">Contoh: 0,75 = <math><mfrac><mn>3</mn><mn>4</mn></mfrac></math></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Tantangan: Pilah 50 Kartu Unik Bilangan</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 12px;">Klik kartu angka di bawah untuk memilah. Hijau = Rasional, Merah = Irasional!</p>
+        <div class="game-grid" id="cardGrid"></div>
+        <div class="discussion-panel" id="discussionPanel">
+            <p id="discussionText" style="margin:0; color:#475569;"><em>Klik salah satu kartu di atas untuk memunculkan analisa pembahasan...</em></p>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">Sistem Klasifikasi Bilangan Real</h2>
+    <div class="content-area">
+        <div class="venn-wrapper">
+            <div class="circle" style="width: 540px; height: 340px; background: rgba(226, 232, 240, 0.4); border: 3px dashed #64748b; top: 5px; color: #1e293b; display: block; padding-top: 15px; text-align: center;">
+                BILANGAN REAL
+            </div>
+            <div class="circle" style="width: 240px; height: 240px; background: #4f46e5; left: 400px; top: 50px;">RASIONAL</div>
+            <div class="circle" style="width: 220px; height: 220px; background: #ef4444; left: 660px; top: 60px;">IRASIONAL</div>
+        </div>
+        <p style="text-align: center; font-style: italic; margin-top: 10px;">Kedua kelompok bilangan ini terpisah sempurna (saling lepas) dan membentuk payung Bilangan Real.</p>
+    </div>
+</div>
+
+<div class="slide-container" id="slide8">
+    <h2 class="slide-title">Metode Mengubah Bentuk Bilangan</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="math-box" style="text-align: left; height: 100%;">
+                <h3>Pecahan &rarr; Desimal</h3>
+                <p><strong>Cara 1: Mengubah Penyebut</strong><br>Buat penyebut menjadi kelipatan 10, 100, atau 1000.</p>
+                <div style="background: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                    <math><mfrac><mn>3</mn><mn>5</mn></mfrac><mo>=</mo><mfrac><mrow><mn>3</mn><mo>&times;</mo><mn>2</mn></mrow><mrow><mn>5</mn><mo>&times;</mo><mn>2</mn></mrow></mfrac><mo>=</mo><mfrac><mn>6</mn><mn>10</mn></mfrac><mo>=</mo><mn>0,6</mn></math>
+                </div>
+                <p><strong>Cara 2: Pembagian Porogapit</strong><br>Bagi langsung pembilang dengan penyebut secara bersusun.</p>
+            </div>
+            <div class="math-box" style="text-align: left; height: 100%;">
+                <h3>Desimal &rarr; Pecahan</h3>
+                <p>Gunakan jumlah angka di belakang koma sebagai patokan nilai nol pada penyebut:</p>
+                <ul style="font-size: 18px; margin-bottom: 15px;">
+                    <li>1 angka belakang koma = Per 10</li>
+                    <li>2 angka belakang koma = Per 100</li>
+                </ul>
+                <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                    <math><mn>0,35</mn><mo>=</mo><mfrac><mn>35</mn><mn>100</mn></mfrac><mo>=</mo><mfrac><mn>7</mn><mn>20</mn></mfrac></math>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">Evaluasi Mandiri: Konversi Bentuk</h2>
+    <div class="content-area">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Bentuk Pecahan</th>
+                        <th style="width: 30%;">Bentuk Desimal (Gunakan Koma)</th>
+                        <th style="width: 20%;">Aksi Evaluasi</th>
+                        <th style="width: 25%;">Status Umpan Balik</th>
+                    </tr>
+                </thead>
+                <tbody id="tableConversion"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title">Strategi Membandingkan Nilai</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="math-box" style="background: #f0fdf4; border: 2px dashed #10b981;">
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Trik Konversi Desimal</h3>
+                <p>Cara paling aman membandingkan dua bilangan rasional yang berbeda bentuk adalah <strong>mengubah semuanya menjadi desimal</strong> terlebih dahulu.</p>
+            </div>
+            <div>
+                <p><strong>Contoh Kasus:</strong> Bandingkan <math><mfrac><mn>3</mn><mn>5</mn></mfrac></math> dengan 0,55.</p>
+                <ul style="padding-left: 20px;">
+                    <li style="margin-bottom: 10px;">Ubah <math><mfrac><mn>3</mn><mn>5</mn></mfrac></math> menjadi desimal &rarr; 0,60</li>
+                    <li style="margin-bottom: 10px;">Bandingkan: 0,60 dengan 0,55</li>
+                    <li style="margin-bottom: 10px;">Hasil akhir: 0,60 &gt; 0,55</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide11">
+    <h2 class="slide-title">Latihan: Isilah Simbol (&lt; , &gt; , =)</h2>
+    <div class="content-area">
+        <div class="game-container">
+            <div style="font-size: 52px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 15px;">
+                <span id="compQ1">1/2</span>
+                <input type="text" id="compIn" placeholder="?" style="width: 90px; height: 80px; font-size: 36px;">
+                <span id="compQ2">0,4</span>
+            </div>
+            <div class="feedback-msg" id="compFeedback"></div>
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                <button class="btn btn-success" onclick="checkComp()">CEK JAWABAN</button>
+                <button class="btn btn-outline" onclick="showCompDiscussion()">LIHAT CARA</button>
+                <button class="btn" onclick="nextComp()">SOAL BERIKUTNYA</button>
+            </div>
+            <p id="compDiscussion" style="margin-top: 20px; font-style: italic; color: #4f46e5; display: none; font-size: 22px;"></p>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide12">
+    <h2 class="slide-title">Latihan: Mengurutkan Bilangan Rasional</h2>
+    <div class="content-area">
+        <div class="game-container">
+            <p style="font-size: 22px; margin-bottom: 25px;">Masukkan urutan posisi angka dari yang <strong>TERKECIL (1)</strong> hingga <strong>TERBESAR (4)</strong>.</p>
+            <div id="sortNums" style="display: flex; gap: 40px; justify-content: center; font-size: 36px; font-weight: 700; margin-bottom: 15px;"></div>
+            <div id="sortInputs" style="display: flex; gap: 40px; justify-content: center; margin-bottom: 30px;"></div>
+            <div class="feedback-msg" id="sortFeedback"></div>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                <button class="btn btn-success" onclick="checkSort()">VERIFIKASI URUTAN</button>
+                <button class="btn" onclick="nextSort()">GANTI SOAL</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide13">
+    <h2 class="slide-title">Aturan Operasi Hitung Pecahan</h2>
+    <div class="content-area">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px;">
+            <div class="math-box" style="text-align: left;">
+                <h3><i class="fa-solid fa-plus-minus"></i> Penjumlahan & Pengurangan</h3>
+                <p>Wajib menyamakan nilai penyebut menggunakan KPK asal sebelum dihitung.</p>
+                <math><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>+</mo><mfrac><mn>2</mn><mn>4</mn></mfrac><mo>=</mo><mfrac><mn>3</mn><mn>4</mn></mfrac></math>
+            </div>
+            <div class="math-box" style="text-align: left;">
+                <h3><i class="fa-solid fa-xmark"></i> Operasi Perkalian</h3>
+                <p>Langsung mengalikan elemen pembilang dengan pembilang, serta penyebut dengan penyebut.</p>
+                <math><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>&times;</mo><mfrac><mn>3</mn><mn>5</mn></mfrac><mo>=</mo><mfrac><mn>6</mn><mn>15</mn></mfrac><mo>=</mo><mfrac><mn>2</mn><mn>5</mn></mfrac></math>
+            </div>
+            <div class="math-box" style="text-align: left;">
+                <h3><i class="fa-solid fa-divide"></i> Operasi Pembagian</h3>
+                <p>Balik posisi pecahan kedua (pembagi) menjadi perkalian invers.</p>
+                <math><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&divide;</mo><mfrac><mn>3</mn><mn>4</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&times;</mo><mfrac><mn>4</mn><mn>3</mn></mfrac><mo>=</mo><mfrac><mn>4</mn><mn>6</mn></mfrac><mo>=</mo><mfrac><mn>2</mn><mn>3</mn></mfrac></math>
+            </div>
+            <div class="math-box" style="background: #fffbeb; display: flex; flex-direction: column; justify-content: center; border-color: #fcd34d;">
+                <h3>Golden Rule!</h3>
+                <p style="margin: 0;">Sederhanakan selalu hasil akhir hitungan pecahan Anda ke dalam bentuk paling minimal.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide14">
+    <h2 class="slide-title">Aplikasi Hitung Operasi Pecahan</h2>
+    <div class="content-area">
+        <div class="game-container" style="max-width: 700px; margin: 0 auto;">
+            <h3 id="fracOpQ" style="font-size: 50px; margin-bottom: 25px;">1/2 + 1/4</h3>
+            <input type="text" id="fracOpIn" style="width: 100%; font-size: 24px; margin-bottom: 15px;" placeholder="Gunakan format per (contoh: 3/4)">
+            <div class="feedback-msg" id="fracOpFeedback"></div>
+            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                <button class="btn btn-success" onclick="checkFracOp()">HITUNG</button>
+                <button class="btn" onclick="nextFracOp()">SOAL BARU</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide15">
+    <h2 class="slide-title">Aturan Operasi Hitung Desimal</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="math-box" style="text-align: left; height: 100%;">
+                <h3> Penjumlahan & Pengurangan</h3>
+                <p>Gunakan pengerjaan bersusun dengan aturan mutlak: <strong>Tanda koma (,) harus lurus vertikal!</strong></p>
+                <p style="font-family: monospace; font-size: 26px; background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0;">
+                    1,25<br>+0,40<br>----<br>1,65
+                </p>
+            </div>
+            <div class="math-box" style="text-align: left; height: 100%;">
+                <h3> Perkalian & Pembagian</h3>
+                <p><strong>Perkalian:</strong> Hitung seperti perkalian biasa, lalu tempatkan koma sejumlah akumulasi total digit belakang koma asal.</p>
+                <p><strong>Pembagian:</strong> Kalikan angka pembagi dengan 10, 100, atau 1000 agar koma hilang sebelum dibagi bersusun.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide16">
+    <h2 class="slide-title">Aplikasi Hitung Operasi Desimal</h2>
+    <div class="content-area">
+        <div class="game-container" style="max-width: 700px; margin: 0 auto;">
+            <h3 id="decOpQ" style="font-size: 50px; margin-bottom: 25px;">0,5 &times; 1,2</h3>
+            <input type="text" id="decOpIn" style="width: 100%; font-size: 24px; margin-bottom: 15px;" placeholder="Contoh jawaban: 0.6 atau 0,6">
+            <div class="feedback-msg" id="decOpFeedback"></div>
+            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                <button class="btn btn-success" onclick="checkDecOp()">HITUNG</button>
+                <button class="btn" onclick="nextDecOp()">SOAL BARU</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide17">
+    <h2 class="slide-title">Latihan Kombinasi Operasi Campuran</h2>
+    <div class="content-area">
+        <div class="game-container" style="max-width: 700px; margin: 0 auto;">
+            <h3 id="mixOpQ" style="font-size: 50px; margin-bottom: 25px;">1/2 + 0,25</h3>
+            <input type="text" id="mixOpIn" style="width: 100%; font-size: 24px; margin-bottom: 15px;" placeholder="Tulis dalam desimal atau pecahan">
+            <div class="feedback-msg" id="mixOpFeedback"></div>
+            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                <button class="btn btn-success" onclick="checkMixOp()">HITUNG</button>
+                <button class="btn" onclick="nextMixOp()">SOAL BARU</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide18">
+    <h2 class="slide-title">Misi Pemecahan Masalah: Soal Cerita</h2>
+    <div class="content-area">
+        <div style="display: grid; grid-template-columns: 320px 1fr; gap: 40px; height: 100%; align-items: start;">
+            <div style="background: #f1f5f9; padding: 25px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                <p style="font-weight: 700; margin-bottom: 15px;">Daftar Bank Soal (1-20):</p>
+                <div class="q-grid" id="qGrid"></div>
+                <div class="timer-box" style="margin-top: 35px; text-align: center;">
+                    <i class="fa-solid fa-hourglass-start" style="color: #ef4444; margin-right: 10px;"></i><span id="timerText">03:00</span>
+                </div>
+            </div>
+            <div class="math-box" style="text-align: left; min-height: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h3 id="storyTitle" style="color: #1e293b; margin-bottom: 10px;">Pilih Nomor Misi</h3>
+                    <p id="storyText" style="font-size: 22px; color: #475569; min-height: 100px; line-height: 1.6; margin-bottom: 10px;">Silakan klik salah satu tombol nomor soal di bagian kiri untuk memulai simulasi pengerjaan.</p>
+                    <div id="storyInstructionContainer" style="display:none;">
+                        <div class="instruction-box" id="storyInstruction"></div>
+                    </div>
+                    <input type="text" id="storyIn" style="width: 100%; margin-bottom: 15px; font-size: 22px;" placeholder="Ketik jawaban Anda di sini...">
+                </div>
+                <div>
+                    <div style="display: flex; gap: 15px; margin-top: 15px;">
+                        <button class="btn btn-success" id="storyCheckBtn" onclick="checkStory()" disabled>VERIFIKASI</button>
+                        <button class="btn btn-outline" id="storyDiscBtn" onclick="showStoryDiscussion()" disabled>LIHAT JALUR JAWABAN</button>
+                    </div>
+                    <div class="feedback-msg" id="storyFeedback"></div>
+                    <p id="storyDiscussion" style="margin-top: 20px; font-style: italic; color: #4f46e5; display: none; font-size: 20px; background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #4f46e5;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide19">
+    <h2 class="slide-title">Dashboard Capaian Evaluasi</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="math-box" style="padding: 50px 30px;">
+                <i class="fa-solid fa-stopwatch" style="font-size: 60px; color: #4f46e5; margin-bottom: 25px;"></i>
+                <h3>Rata-rata Durasi</h3>
+                <p style="font-size: 54px; font-weight: 700; color: #1e293b;" id="avgTime">-- s</p>
+                <p style="margin: 0; color: #64748b;">Per penyelesaian misi soal cerita</p>
+            </div>
+            <div class="math-box" style="padding: 50px 30px;">
+                <i class="fa-solid fa-circle-check" style="font-size: 60px; color: #10b981; margin-bottom: 25px;"></i>
+                <h3>Total Akurasi Benar</h3>
+                <p style="font-size: 54px; font-weight: 700; color: #1e293b;" id="totalCorrect">0</p>
+                <p style="margin: 0; color: #64748b;">Aktivitas interaktif sukses diselesaikan</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide20">
+    <h2 class="slide-title">Rangkuman Materi & Refleksi</h2>
+    <div class="content-area">
+        <div style="background: #eef2ff; border-radius: 16px; padding: 35px; border-left: 10px solid #4f46e5; margin-bottom: 40px;">
+            <p style="font-size: 24px; font-style: italic; color: #1e293b; margin: 0; font-family: 'Poppins';">
+                "Bilangan rasional adalah fondasi dari akurasi matematika. Kemampuan mengubah bentuk dan membandingkannya memberi kita fleksibilitas dalam memecahkan masalah sehari-hari."
+            </p>
+        </div>
+        <div class="two-column" style="align-items: start;">
+            <div>
+                <h3>Refleksi Pembelajaran</h3>
+                <p>1. Apa metode konversi yang menurut Anda paling cepat digunakan?</p>
+                <p>2. Mengapa penyebut harus disamakan sebelum menjumlahkan pecahan?</p>
+            </div>
+            <div class="math-box" style="background: #fafafa; text-align: left;">
+                <h4 style="margin: 0 0 10px 0; font-family: 'Poppins'; color: #1e293b;">Tugas Mandiri:</h4>
+                <p style="margin: 0; font-size: 18px;">Catat satu contoh pengaplikasian bilangan pecahan atau desimal yang paling sering Anda jumpai dalam kehidupan sehari-hari di buku tugas.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide21" style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: white; text-align: center;">
+    <div class="content-area" style="justify-content: center; align-items: center;">
+        <i class="fa-solid fa-graduation-cap" style="font-size: 90px; color: #f59e0b; margin-bottom: 30px;"></i>
+        <h1 style="color: white; font-size: 75px; margin-bottom: 20px;">SESI SELESAI</h1>
+        <p style="font-size: 28px; opacity: 0.9; max-width: 700px; margin: 0 auto 40px auto;">Luar biasa! Anda telah menyelesaikan seluruh rangkaian materi dan tantangan interaktif Bilangan Rasional.</p>
+        <div style="font-weight: 700; font-family: 'Poppins'; font-size: 22px; letter-spacing: 2px; text-transform: uppercase; background: rgba(255,255,255,0.2); padding: 15px 40px; border-radius: 50px;">Matematika itu Menyenangkan</div>
+    </div>
+</div>
+
+<script>
+    /* ==========================================================================
+       ENGINE UTAMA & LOGIKA JAVASCRIPT
+       ========================================================================== */
+
+    const synth = window.speechSynthesis;
+    let totalCorrectAnswers = 0;
+
+    function speak(text) {
+        if (synth.speaking) return;
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'id-ID';
+        utter.rate = 1.0;
+        synth.speak(utter);
+    }
+
+    function incrementCorrectScore() {
+        totalCorrectAnswers++;
+        document.getElementById('totalCorrect').innerText = totalCorrectAnswers;
+    }
+
+    // --- LOGIKA SLIDE 4 ---
+    function revealS4(isYes) {
+        const feedback = document.getElementById('feedbackS4');
+        const title = document.getElementById('ansS4Title');
+        document.getElementById('s4BtnArea').style.display = 'none';
+        feedback.style.display = 'block';
+        if (isYes) {
+            title.innerText = "KURANG TEPAT!"; title.style.color = "#ef4444";
+            speak("kurang tepat");
+        } else {
+            title.innerText = "BENAR SEKALI!"; title.style.color = "#10b981";
+            speak("benar sekali");
+            incrementCorrectScore();
+        }
+    }
+
+    // --- LOGIKA SLIDE 6 (50 KARTU UNIK BENAR-BENAR BERBEDA) ---
+    const uniqueCardsData = [
+        // Rasional (35 kartu unik)
+        { v: "1/2", r: true, d: "Rasional, pecahan biasa bentuk a/b." },
+        { v: "0,5", r: true, d: "Rasional, desimal terbatas dari pecahan 1/2." },
+        { v: "-3", r: true, d: "Rasional, dapat ditulis sebagai -3/1." },
+        { v: "3/4", r: true, d: "Rasional, pecahan biasa bentuk a/b." },
+        { v: "0,33..", r: true, d: "Rasional, desimal berulang teratur senilai 1/3." },
+        { v: "√9", r: true, d: "Rasional, hasil akarnya bulat sempurna yaitu 3." },
+        { v: "60%", r: true, d: "Rasional, persen berarti pecahan per seratus (60/100)." },
+        { v: "5", r: true, d: "Rasional, bilangan bulat positif dapat ditulis 5/1." },
+        { v: "0,125", r: true, d: "Rasional, desimal terbatas senilai dengan 1/8." },
+        { v: "-1/4", r: true, d: "Rasional, pecahan negatif bentuk a/b." },
+        { v: "22/7", r: true, d: "Rasional, pecahan biasa pembagian dua bilangan bulat." },
+        { v: "1,5", r: true, d: "Rasional, desimal terbatas pecahan dari 3/2." },
+        { v: "0", r: true, d: "Rasional, bilangan bulat netral dapat ditulis 0/1." },
+        { v: "2 1/2", r: true, d: "Rasional, pecahan campuran dapat diubah ke pecahan biasa 5/2." },
+        { v: "12%", r: true, d: "Rasional, bernilai senilai dengan pecahan 12/100." },
+        { v: "0,66..", r: true, d: "Rasional, desimal tak terbatas berulang teratur senilai 2/3." },
+        { v: "√16", r: true, d: "Rasional, nilai akar sempurna ini adalah bilangan bulat 4." },
+        { v: "4/5", r: true, d: "Rasional, perbandingan dua bilangan bulat bukan nol." },
+        { v: "-0,8", r: true, d: "Rasional, desimal terbatas negatif senilai dengan -4/5." },
+        { v: "100", r: true, d: "Rasional, bilangan bulat utuh dapat ditulis 100/1." },
+        { v: "3/10", r: true, d: "Rasional, pecahan biasa dengan nilai desimal terbatas 0,3." },
+        { v: "0,75", r: true, d: "Rasional, pecahan desimal berakhir dari 3/4." },
+        { v: "√25", r: true, d: "Rasional, hasil ekstraksi akar ini bernilai bulat 5." },
+        { v: "1/8", r: true, d: "Rasional, pembagian bilangan bulat yang menghasilkan 0,125." },
+        { v: "1,25", r: true, d: "Rasional, pecahan desimal terbatas senilai dengan 5/4." },
+        { v: "75%", r: true, d: "Rasional, sama dengan bentuk pecahan 75/100 atau 3/4." },
+        { v: "-0,2", r: true, d: "Rasional, desimal terbatas negatif dari -1/5." },
+        { v: "1/3", r: true, d: "Rasional, pecahan murni bentuk pecahan desimal berulang 0,333..." },
+        { v: "0,4", r: true, d: "Rasional, pecahan desimal berakhir dari pecahan biasa 2/5." },
+        { v: "6/3", r: true, d: "Rasional, pecahan biasa yang menghasilkan bilangan bulat 2." },
+        { v: "0,11..", r: true, d: "Rasional, desimal tak terbatas berulang teratur senilai 1/9." },
+        { v: "√36", r: true, d: "Rasional, nilai akar kuadrat dari 36 adalah 6." },
+        { v: "5/2", r: true, d: "Rasional, pecahan biasa pembilang lebih besar dari penyebut." },
+        { v: "2,4", r: true, d: "Rasional, pecahan desimal berakhir senilai dengan 24/10 atau 12/5." },
+        { v: "40%", r: true, d: "Rasional, sama dengan bentuk pecahan sederhana 2/5." },
+
+        // Irasional (15 kartu unik)
+        { v: "π", r: false, d: "Irasional, nilai desimal Pi 3,14159... acak tiada akhir." },
+        { v: "√2", r: false, d: "Irasional, nilai penarikan akar bukan kuadrat kuadrat sempurna (1,414...)" },
+        { v: "e", r: false, d: "Irasional, konstanta matematika Euler 2,71828... tiada pola tetap." },
+        { v: "√3", r: false, d: "Irasional, hasil akar acak kontinu tidak berakhir (1,732...)" },
+        { v: "√5", r: false, d: "Irasional, bukan bentuk kuadrat bilangan bulat sempurna (2,236...)" },
+        { v: "1,41..", r: false, d: "Irasional, jika yang dimaksud pemotongan nilai kontinu akar 2." },
+        { v: "√7", r: false, d: "Irasional, hasil penarikan akar menghasilkan desimal acak kontinu." },
+        { v: "√8", r: false, d: "Irasional, penyederhanaan menjadi 2√2 yang mengandung irasional." },
+        { v: "√10", r: false, d: "Irasional, desimal tidak berulang dan tidak berakhir (3,162...)" },
+        { v: "√11", r: false, d: "Irasional, bukan hasil kali kembar bilangan bulat manapun." },
+        { v: "√12", r: false, d: "Irasional, bentuk akar non-sempurna bernilai desimal acak kontinu." },
+        { v: "√13", r: false, d: "Irasional, bilangan prima di dalam akar pasti menghasilkan irasional." },
+        { v: "2π", r: false, d: "Irasional, kelipatan dari bilangan irasional tetaplah irasional." },
+        { v: "√14", r: false, d: "Irasional, hasil desimal tidak berulang teratur tanpa akhir." },
+        { v: "√15", r: false, d: "Irasional, tidak bisa dinyatakan dalam pecahan bulat a/b." }
+    ];
+    
+    // Acak data agar posisi kartu bervariasi
+    uniqueCardsData.sort(() => Math.random() - 0.5);
+
+    const cardGrid = document.getElementById('cardGrid');
+    uniqueCardsData.forEach((currentItem) => {
+        const cardNode = document.createElement('div');
+        cardNode.className = 'card';
+        cardNode.innerText = currentItem.v;
+        cardNode.onclick = function() {
+            if (currentItem.r) {
+                cardNode.style.background = "#10b981"; cardNode.style.color = "white";
+                cardNode.style.borderColor = "#10b981";
+                speak("ya itu aku");
+            } else {
+                cardNode.style.background = "#ef4444"; cardNode.style.color = "white";
+                cardNode.style.borderColor = "#ef4444";
+                speak("itu bukan aku");
+            }
+            document.getElementById('discussionText').innerHTML = `Analisis <strong>${currentItem.v}</strong>: ${currentItem.d}`;
+        };
+        cardGrid.appendChild(cardNode);
+    });
+
+    // --- LOGIKA SLIDE 9 (Tabel Konversi Rapi) ---
+    const conversionDataSet = [
+        { p: "1/2", d: "0,5" }, { p: "1/4", d: "0,25" }, { p: "3/4", d: "0,75" }, { p: "1/5", d: "0,2" },
+        { p: "2/5", d: "0,4" }, { p: "1/10", d: "0,1" }, { p: "3/10", d: "0,3" }, { p: "1/8", d: "0,125" },
+        { p: "1/20", d: "0,05" }, { p: "5/4", d: "1,25" }
+    ];
+    const tableContainer = document.getElementById('tableConversion');
+    conversionDataSet.forEach((data, index) => {
+        const rowNode = document.createElement('tr');
+        rowNode.innerHTML = `
+            <td style="font-weight:700; color:#1e293b;">${data.p}</td>
+            <td><input type="text" class="table-input" id="inputConv-${index}" placeholder="..."></td>
+            <td><button class="btn btn-success" style="padding:6px 16px; font-size:15px; border-radius:6px;" onclick="verifyTableConversion(${index})">CEK</button></td>
+            <td id="feedConv-${index}" style="font-weight:700; font-size:17px;"></td>
+        `;
+        tableContainer.appendChild(rowNode);
+    });
+
+    function verifyTableConversion(index) {
+        const userInput = document.getElementById(`inputConv-${index}`).value.trim().replace('.', ',');
+        const targetFeedback = document.getElementById(`feedConv-${index}`);
+        if (userInput === conversionDataSet[index].d) {
+            targetFeedback.innerHTML = "<i class='fa-solid fa-check-circle'></i> Berhasil"; targetFeedback.className = "correct";
+            speak("good job");
+            incrementCorrectScore();
+        } else {
+            targetFeedback.innerHTML = "<i class='fa-solid fa-times-circle'></i> Keliru"; targetFeedback.className = "wrong";
+            speak("try again");
+        }
+    }
+
+    // --- LOGIKA SLIDE 11 (Komparasi) ---
+    const comparisonPool = [
+        { q1: "1/2", q2: "0,6", ans: "<", desc: "Konversi: 1/2 nilainya sebanding dengan 0,5. Hasil komparasi: 0,5 < 0,6." },
+        { q1: "3/4", q2: "0,75", ans: "=", desc: "Konversi: 3/4 bernilai tepat sama dengan 0,75. Hasil komparasi: 0,75 = 0,75." },
+        { q1: "0,8", q2: "4/5", ans: "=", desc: "Konversi: 4/5 diubah menjadi pecahan desimal bernilai 0,8. Hasil komparasi: 0,8 = 0,8." },
+        { q1: "2/5", q2: "0,35", ans: ">", desc: "Konversi: Pecahan 2/5 senilai dengan 0,40. Hasil komparasi: 0,40 > 0,35." }
+    ];
+    let activeCompIdx = 0;
+    function nextComp() {
+        activeCompIdx = (activeCompIdx + 1) % comparisonPool.length;
+        document.getElementById('compQ1').innerText = comparisonPool[activeCompIdx].q1;
+        document.getElementById('compQ2').innerText = comparisonPool[activeCompIdx].q2;
+        document.getElementById('compIn').value = "";
+        document.getElementById('compFeedback').innerText = "";
+        document.getElementById('compDiscussion').style.display = 'none';
+    }
+    function checkComp() {
+        const val = document.getElementById('compIn').value.trim();
+        const feedbackContainer = document.getElementById('compFeedback');
+        if (val === comparisonPool[activeCompIdx].ans) {
+            feedbackContainer.innerText = "Luar Biasa, Jawaban Anda Benar!"; feedbackContainer.className = "correct";
+            speak("good job");
+            incrementCorrectScore();
+        } else {
+            feedbackContainer.innerText = "Simbol Tidak Tepat, Analisis Kembali."; feedbackContainer.className = "wrong";
+            speak("try again");
+        }
+    }
+    function showCompDiscussion() {
+        const container = document.getElementById('compDiscussion');
+        container.innerText = comparisonPool[activeCompIdx].desc; container.style.display = 'block';
+    }
+
+    // --- LOGIKA SLIDE 12 (Mengurutkan) ---
+    const sortingPool = [
+        { nums: ["0,7", "1/4", "0,55", "3/5"], kor: ["4", "1", "2", "3"], help: "Desimal ke pecahan: 1/4=0,25; 3/5=0,60. Urutan: 0,25 (1/4) < 0,55 < 0,60 (3/5) < 0,7." },
+        { nums: ["1/2", "0,15", "4/5", "0,6"], kor: ["2", "1", "4", "3"], help: "Desimal ke pecahan: 1/2=0,50; 4/5=0,80. Urutan: 0,15 < 0,50 (1/2) < 0,60 < 0,80 (4/5)." }
+    ];
+    let activeSortIdx = 0;
+    function generateSortGame() {
+        const game = sortingPool[activeSortIdx];
+        const displayDiv = document.getElementById('sortNums');
+        const inputDiv = document.getElementById('sortInputs');
+        displayDiv.innerHTML = ""; inputDiv.innerHTML = "";
+        document.getElementById('sortFeedback').innerText = "";
+        
+        game.nums.forEach((num, index) => {
+            const span = document.createElement('span'); span.innerText = num;
+            displayDiv.appendChild(span);
+            const input = document.createElement('input'); input.type = "text"; input.id = `sortIn-${index}`;
+            input.placeholder = "#"; input.style.width = "70px";
+            inputDiv.appendChild(input);
+        });
+    }
+    function checkSort() {
+        const game = sortingPool[activeSortIdx];
+        let correctFlag = true;
+        game.nums.forEach((_, index) => {
+            const val = document.getElementById(`sortIn-${index}`).value.trim();
+            if (val !== game.kor[index]) correctFlag = false;
+        });
+        const feedback = document.getElementById('sortFeedback');
+        if (correctFlag) {
+            feedback.innerText = "Urutan Sempurna! Anda Memahami Konsep."; feedback.className = "correct";
+            speak("good job");
+            incrementCorrectScore();
+        } else {
+            feedback.innerText = `Posisi Urutan Keliru. Petunjuk: ${game.help}`; feedback.className = "wrong";
+            speak("try again");
+        }
+    }
+    function nextSort() {
+        activeSortIdx = (activeSortIdx + 1) % sortingPool.length;
+        generateSortGame();
+    }
+
+    // --- LOGIKA SLIDE 14 (Operasi Pecahan) ---
+    const fracOpPool = [
+        { q: "1/2 + 1/4", a: "3/4" }, { q: "3/5 - 1/5", a: "2/5" },
+        { q: "2/3 × 1/4", a: "2/12" }, { q: "1/2 ÷ 1/3", a: "3/2" }
+    ];
+    let curFracIdx = 0;
+    function nextFracOp() {
+        curFracIdx = (curFracIdx + 1) % fracOpPool.length;
+        document.getElementById('fracOpQ').innerText = fracOpPool[curFracIdx].q;
+        document.getElementById('fracOpIn').value = "";
+        document.getElementById('fracOpFeedback').innerText = "";
+    }
+    function checkFracOp() {
+        const val = document.getElementById('fracOpIn').value.trim();
+        const f = document.getElementById('fracOpFeedback');
+        if (val === fracOpPool[curFracIdx].a) {
+            f.innerText = "Jawaban Tepat!"; f.className = "correct"; speak("good job");
+            incrementCorrectScore();
+        } else {
+            f.innerText = "Hasil Kurang Sesuai, Cek Penyederhanaan Suku."; f.className = "wrong"; speak("try again");
+        }
+    }
+
+    // --- LOGIKA SLIDE 16 (Operasi Desimal) ---
+    const decOpPool = [
+        { q: "0,4 + 0,2", a: "0,6" }, { q: "1,5 - 0,7", a: "0,8" },
+        { q: "0,2 × 0,3", a: "0,06" }, { q: "2,4 ÷ 0,6", a: "4" } 
+    ];
+    let curDecIdx = 0;
+    function nextDecOp() {
+        curDecIdx = (curDecIdx + 1) % decOpPool.length;
+        document.getElementById('decOpQ').innerText = decOpPool[curDecIdx].q;
+        document.getElementById('decOpIn').value = "";
+        document.getElementById('decOpFeedback').innerText = "";
+    }
+    function checkDecOp() {
+        const val = document.getElementById('decOpIn').value.trim().replace('.', ',');
+        const f = document.getElementById('decOpFeedback');
+        if (val === decOpPool[curDecIdx].a) {
+            f.innerText = "Perhitungan Desimal Akurat!"; f.className = "correct"; speak("good job");
+            incrementCorrectScore();
+        } else {
+            f.innerText = "Salah Batas Koma, Koreksi Kembali Hitungan Susun."; f.className = "wrong"; speak("try again");
+        }
+    }
+
+    // --- LOGIKA SLIDE 17 (Operasi Campuran) ---
+    const mixOpPool = [
+        { q: "1/2 + 0,25", a: "0,75", a:"3/4" }, { q: "0,75 - 1/4", a: "0,5", a:"1/2" }, { q: "3/5 × 0,5", a: "0,3", a:"3/10" }
+    ];
+    let curMixIdx = 0;
+    function nextMixOp() {
+        curMixIdx = (curMixIdx + 1) % mixOpPool.length;
+        document.getElementById('mixOpQ').innerText = mixOpPool[curMixIdx].q;
+        document.getElementById('mixOpIn').value = "";
+        document.getElementById('mixOpFeedback').innerText = "";
+    }
+    function checkMixOp() {
+        const val = document.getElementById('mixOpIn').value.trim().replace('.', ',');
+        const f = document.getElementById('mixOpFeedback');
+        if (val === mixOpPool[curMixIdx].a) {
+            f.innerText = "Komparasi Campuran Berhasil!"; f.className = "correct"; speak("good job");
+            incrementCorrectScore();
+        } else {
+            f.innerText = "Gagal. Konversikan Seluruh Suku Ke Desimal Terlebih Dahulu."; f.className = "wrong"; speak("try again");
+        }
+    }
+
+    // --- LOGIKA SLIDE 18 (SOAL CERITA - KUNCI DIPERIKSA & PETUNJUK FORMAT) ---
+    const storyProblemPool = [
+        { 
+            q: "Ibu memiliki persediaan tepung sebanyak 2,5 kg. Digunakan untuk membuat kue bolu sebanyak 1,25 kg. Berapakah sisa tepung Ibu sekarang?", 
+            format: "desimal",
+            a: "1.25", 
+            d: "Jalur Hitung: 2,50 - 1,25 = 1,25 kg tepung tersisa." 
+        },
+        { 
+            q: "Andi membeli buah jeruk sebanyak 1/2 kg, kemudian membeli lagi apel sebanyak 0,75 kg. Berapakah berat total belanjaan buah Andi?", 
+            format: "desimal",
+            a: "1.25", 
+            d: "Jalur Hitung: 1/2 diubah ke desimal = 0,5. Maka totalnya 0,5 + 0,75 = 1,25 kg." 
+        },
+        { 
+            q: "Sebuah pipa sepanjang 3,8 meter dipotong oleh Tukang sepanjang 1 1/2 meter. Berapa meter sisa pipa saat ini?", 
+            format: "desimal",
+            a: "2.3", 
+            d: "Jalur Hitung: 1 1/2 meter setara dengan 1,5 meter. Sisa pipa: 3,8 - 1,5 = 2,3 meter." 
+        },
+        { 
+            q: "Kakak memiliki tali sepanjang 3/4 meter. Kemudian ia memberikan 1/4 meter tali kepada adiknya. Berapa meter sisa tali Kakak sekarang?", 
+            format: "pecahan",
+            a: "1/2", 
+            d: "Jalur Hitung: 3/4 - 1/4 = 2/4. Jika disederhanakan terkecil menjadi 1/2 meter." 
+        },
+        {
+            q: "Pak Joko memiliki lahan perkebunan seluas 1,25 hektar. Sebanyak 2/5 bagian dari total lahan tersebut ditanami pohon jagung. Berapa hektar luas lahan yang ditanami jagung oleh Pak Joko?", 
+            format: "desimal",
+            a: "0,2", 
+            d: "Jalur Hitung: 1,25 x 2/5 = 0,2." 
+        },
+        {
+            q: "Seorang petani berhasil memanen 5 1/2 beras. Sebanyak 1,2 kuintal beras ia simpan untuk konsumsi keluarga sendiri. Sisa beras hasil panen tersebut kemudian dijual merata kepada 5 orang pedagang di pasar. Berapa kuintal beras yang diterima oleh masing-masing pedagang?", 
+            format: "desimal",
+            a: "0,86", 
+            d: "Jalur Hitung: (5 1/2 - 1,2) ÷ 5 = (5,5-1,2)÷ 5 = 4,3 ÷ 5 = 0,86."
+        },
+        {
+            q: "Rina membuat minuman dari 2 1/2 liter jus mangga. Sebanyak 0,75 liter digunakan untuk acara keluarga, kemudian 2/5 dari sisa jus diberikan kepada tetangga. Berapa liter jus yang masih dimiliki Rina?",
+            format: "desimal",
+            a: "1,05",
+            d: "Jalur Hitung: Sisa setelah digunakan = 2,5 - 0,75 = 1,75 liter. Jus yang diberikan = 2/5 × 1,75 = 0,7 liter. Sisa akhir = 1,75 - 0,7 = 1,05 liter."
+        },
+        {
+            q: "Sebuah gulungan pita panjangnya 8,4 meter. Untuk menghias panggung digunakan 2 1/5 meter, kemudian digunakan lagi 3/8 dari sisa pita untuk membuat hiasan meja. Berapa meter pita yang masih tersisa?",
+            format: "desimal",
+            a: "3,875",
+            d: "Jalur Hitung: Sisa pertama = 8,4 - 2,2 = 6,2 meter. Pita yang dipakai lagi = 3/8 × 6,2 = 2,325 meter. Sisa akhir = 6,2 - 2,325 = 3,875 meter."
+        },
+        {
+            q: "Seorang pembuat roti memiliki 12 kg tepung. Ia menggunakan 3 1/4 kg untuk membuat roti dan 2,5 kg untuk membuat kue. Setelah itu, ia membeli lagi 5/2 kg tepung. Berapa kilogram tepung yang dimiliki sekarang?",
+            format: "desimal",
+            a: "8,75",
+            d: "Jalur Hitung: 12 - 3,25 - 2,5 + 2,5 = 8,75 kg."
+        },
+        {
+            q: "Tangki berisi 15 1/2 liter air. Sebanyak 3,75 liter digunakan untuk mencuci kendaraan. Setelah itu, tangki diisi kembali sebanyak 4/5 dari air yang telah digunakan. Berapa liter air yang ada di dalam tangki sekarang?",
+            format: "desimal",
+            a: "14,75",
+            d: "Jalur Hitung: Air tersisa = 15,5 - 3,75 = 11,75 liter. Air yang ditambahkan = 4/5 × 3,75 = 3 liter. Jumlah akhir = 11,75 + 3 = 14,75 liter."
+        },
+        {
+            q: "Ibu membeli 2,4 kg apel, 1 3/5 kg jeruk, dan 0,85 kg anggur. Sebanyak 1/4 dari seluruh buah diberikan kepada tetangga. Berapa kilogram buah yang masih dimiliki Ibu?",
+            format: "desimal",
+            a: "3,6375",
+            d: "Jalur Hitung: Total buah = 2,4 + 1,6 + 0,85 = 4,85 kg. Buah yang diberikan = 1/4 × 4,85 = 1,2125 kg. Sisa = 4,85 - 1,2125 = 3,6375 kg."
+        },
+        {
+            q: "Sebuah buku memiliki 320 halaman. Hari pertama Dito membaca 3/10 bagian buku. Hari kedua ia membaca lagi 0,25 bagian dari seluruh buku. Hari ketiga ia membaca 1/8 bagian buku. Berapa halaman yang belum dibaca Dito?",
+            format: "angka",
+            a: "104",
+            d: "Jalur Hitung: Halaman yang dibaca = (3/10 × 320) + (0,25 × 320) + (1/8 × 320) = 96 + 80 + 40 = 216 halaman. Sisa = 320 - 216 = 104 halaman."
+        },
+        {
+            q: "Pak Andi memiliki 18 liter cat. Ia menggunakan 4 1/2 liter untuk ruang tamu dan 2,75 liter untuk kamar. Kemudian ia membeli lagi 7/4 liter cat. Berapa liter cat yang dimiliki sekarang?",
+            format: "desimal",
+            a: "12,5",
+            d: "Jalur Hitung: 18 - 4,5 - 2,75 + 1,75 = 12,5 liter."
+        },
+        {
+            q: "Raka bersepeda sejauh 24 km. Pada pagi hari ia menempuh 5/12 dari seluruh perjalanan. Siang hari ia menempuh lagi 7,5 km. Berapa kilometer lagi yang harus ditempuh Raka agar sampai tujuan?",
+            format: "desimal",
+            a: "6,5",
+            d: "Jalur Hitung: Jarak pagi = 5/12 × 24 = 10 km. Total yang sudah ditempuh = 10 + 7,5 = 17,5 km. Sisa = 24 - 17,5 = 6,5 km."
+        },
+        {
+            q: "Tangki motor berisi 9,6 liter bensin. Saat perjalanan, bensin yang digunakan adalah 3/8 dari isi tangki. Kemudian pengendara mengisi kembali bensin sebanyak 2,4 liter. Berapa liter bensin yang ada di dalam tangki sekarang?",
+            format: "desimal",
+            a: "8,4",
+            d: "Jalur Hitung: Bensin yang digunakan = 3/8 × 9,6 = 3,6 liter. Sisa = 9,6 - 3,6 = 6 liter. Setelah diisi = 6 + 2,4 = 8,4 liter."
+        },
+        {
+            q: "Panitia memiliki dana sebesar Rp4.800.000,00. Dana tersebut digunakan untuk membeli perlengkapan sebesar 3/8 dari seluruh dana dan konsumsi sebesar Rp1.250.000,00. Setelah itu, panitia menerima tambahan dana sponsor sebesar Rp875.000,00. Berapa sisa dana panitia sekarang?",
+            format: "angka",
+            a: "2625000",
+            d: "Jalur Hitung: Perlengkapan = 3/8 × 4.800.000 = Rp1.800.000. Sisa setelah belanja = 4.800.000 - 1.800.000 - 1.250.000 = Rp1.750.000. Setelah mendapat sponsor = 1.750.000 + 875.000 = Rp2.625.000."
+        },
+        {
+            q: "Sebuah toko memiliki 15 3/4 kg gula. Pada pagi hari terjual 4,5 kg. Siang harinya datang kiriman gula sebanyak 2 1/4 kg. Kemudian toko menjual lagi 2/5 dari gula yang tersedia saat itu. Berapa kilogram gula yang masih tersisa di toko?",
+            format: "desimal",
+            a: "8,1",
+            d: "Jalur Hitung: Persediaan setelah kiriman = 15,75 - 4,5 + 2,25 = 13,5 kg. Gula yang terjual lagi = 2/5 × 13,5 = 5,4 kg. Sisa = 13,5 - 5,4 = 8,1 kg."
+        },
+        {
+            q: "Beni memiliki pita sepanjang 12,8 meter. Ia menggunakan 2 3/5 meter untuk menghias kado dan 1,75 meter untuk membuat kerajinan. Setelah itu ia membeli lagi 3/2 meter pita. Berapa panjang pita yang dimiliki Beni sekarang?",
+            format: "desimal",
+            a: "9,95",
+            d: "Jalur Hitung: 12,8 - 2,6 - 1,75 + 1,5 = 9,95 meter."
+        },
+        {
+            q: "Sebuah kolam berisi 48 liter air. Sebanyak 5/16 bagian air digunakan untuk menyiram tanaman. Setelah itu ditambahkan lagi 6,5 liter air ke dalam kolam. Berapa liter air yang ada di dalam kolam sekarang?",
+            format: "desimal",
+            a: "39,5",
+            d: "Jalur Hitung: Air yang digunakan = 5/16 × 48 = 15 liter. Sisa = 48 - 15 = 33 liter. Setelah ditambah = 33 + 6,5 = 39,5 liter."
+        },
+        {
+            q: "Seorang siswa menabung Rp350.000,00. Ia menggunakan 2/7 dari tabungannya untuk membeli buku dan Rp45.000,00 untuk membeli alat tulis. Seminggu kemudian ia mendapat uang hadiah sebesar Rp80.000,00. Berapa uang tabungan siswa tersebut sekarang?",
+            format: "angka",
+            a: "285000",
+            d: "Jalur Hitung: Uang untuk membeli buku = 2/7 × 350.000 = Rp100.000. Sisa = 350.000 - 100.000 - 45.000 = Rp205.000. Setelah mendapat hadiah = 205.000 + 80.000 = Rp285.000."
+        }
+    ];
+
+    let countdownSeconds = 180;
+    let timerCountdownInterval;
+    let activeStoryIndex = -1;
+    let timeTrackingArray = [];
+    let initialTimestamp;
+
+    function initStoryNavButtons() {
+        const gridNode = document.getElementById('qGrid');
+        for (let i = 1; i <= 20; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-outline';
+            btn.style.padding = '8px';
+            btn.innerText = i;
+            btn.onclick = () => loadSelectedStoryProblem(i);
+            gridNode.appendChild(btn);
+        }
+    }
+
+    function loadSelectedStoryProblem(questionId) {
+        activeStoryIndex = (questionId - 1) % storyProblemPool.length;
+        const currentProblem = storyProblemPool[activeStoryIndex];
+        
+        document.getElementById('storyTitle').innerText = `Misi Kasus Cerita #${questionId}`;
+        document.getElementById('storyText').innerText = currentProblem.q;
+        document.getElementById('storyIn').value = "";
+        document.getElementById('storyFeedback').innerText = "";
+        document.getElementById('storyDiscussion').style.display = 'none';
+        
+        // Memunculkan instruksi format jawaban secara eksplisit
+        const instBox = document.getElementById('storyInstruction');
+        const instContainer = document.getElementById('storyInstructionContainer');
+        instContainer.style.display = "block";
+        if(currentProblem.format === "desimal") {
+            instBox.innerHTML = "<i class='fa-solid fa-pen'></i> Petunjuk: Jawablah dalam bentuk <strong>Bilangan Desimal</strong> (gunakan tanda koma atau titik, contoh: 1,25)";
+        } else {
+            instBox.innerHTML = "<i class='fa-solid fa-pen'></i> Petunjuk: Jawablah dalam bentuk <strong>Bilangan Pecahan Paling Sederhana</strong> (format per, contoh: 1/2)";
+        }
+
+        document.getElementById('storyCheckBtn').disabled = false;
+        document.getElementById('storyDiscBtn').disabled = false;
+        
+        triggerTimerStart();
+    }
+
+    function triggerTimerStart() {
+        clearInterval(timerCountdownInterval);
+        countdownSeconds = 180;
+        initialTimestamp = Date.now();
+        timerCountdownInterval = setInterval(() => {
+            countdownSeconds--;
+            const min = Math.floor(countdownSeconds / 60);
+            const sec = countdownSeconds % 60;
+            document.getElementById('timerText').innerText = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+            if (countdownSeconds <= 0) {
+                clearInterval(timerCountdownInterval);
+                speak("waktu habis");
+            }
+        }, 1000);
+    }
+
+    function checkStory() {
+        if(activeStoryIndex === -1) return;
+        let userInput = document.getElementById('storyIn').value.trim();
+        const feedbackNode = document.getElementById('storyFeedback');
+        const targetProblem = storyProblemPool[activeStoryIndex];
+
+        // Normalisasi input jika tipenya desimal (mengubah koma menjadi titik)
+        if(targetProblem.format === "desimal") {
+            userInput = userInput.replace(',', '.');
+        }
+
+        if (userInput === targetProblem.a) {
+            clearInterval(timerCountdownInterval);
+            feedbackNode.innerText = "Misi Terselesaikan! Solusi Anda Sempurna."; feedbackNode.className = "correct";
+            speak("good job");
+            
+            const elapsedDuration = (Date.now() - initialTimestamp) / 1000;
+            timeTrackingArray.push(elapsedDuration);
+            incrementCorrectScore();
+            updateLivePerformanceAnalytics();
+        } else {
+            feedbackNode.innerText = "Data Hasil Kurang Valid. Periksa Kembali Aturan Format dan Hitungan."; feedbackNode.className = "wrong";
+            speak("try again");
+        }
+    }
+
+    function showStoryDiscussion() {
+        if(activeStoryIndex === -1) return;
+        const targetNode = document.getElementById('storyDiscussion');
+        targetNode.innerText = storyProblemPool[activeStoryIndex].d;
+        targetNode.style.display = 'block';
+    }
+
+    function updateLivePerformanceAnalytics() {
+        if (timeTrackingArray.length === 0) return;
+        const totalDurationAccumulated = timeTrackingArray.reduce((acc, curr) => acc + curr, 0);
+        const calculationAverage = (totalDurationAccumulated / timeTrackingArray.length).toFixed(1);
+        document.getElementById('avgTime').innerText = `${calculationAverage} s`;
+    }
+
+    // RUNTIME INITIALIZATION CALLS
+    initStoryNavButtons();
+    nextComp();
+    generateSortGame();
+
+</script>
+</body>
+</html>
