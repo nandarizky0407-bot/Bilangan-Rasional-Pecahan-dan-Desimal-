@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilangan Rasional — Kelas Ceria</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --pink:#ff5fa2;--pink-deep:#e63d8a;--pink-soft:#ffc2dc;
+  --pink-bg:#fff5fa;--pink-bg2:#ffe8f1;--lavender:#c8a8e9;
+  --lavender-soft:#e8d8f5;--peach:#ffb5a7;--mint:#a8e6cf;
+  --yellow:#ffe6a7;--cream:#fffaf3;--deep:#4a2c4d;
+  --deep-soft:#8b6b8d;--white:#fff;--green:#5fc78a;--red:#ff6b8a;
+}
+*{font-family:'Nunito',sans-serif;box-sizing:border-box}
+body{
+  background:
+    radial-gradient(circle at 10% 20%, #ffe1ee 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, #e8d8f5 0%, transparent 40%),
+    linear-gradient(135deg,#fff5fa 0%,#ffe8f1 50%,#f5e8ff 100%);
+  background-attachment:fixed;
+  color:var(--deep);margin:0;min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4,.display{font-family:'Fredoka',sans-serif;letter-spacing:-0.01em}
+
+/* Floating decorations */
+.float-deco{position:fixed;pointer-events:none;z-index:1;opacity:.5;animation:floaty 10s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-25px) rotate(15deg)}}
+.sparkle{position:absolute;pointer-events:none;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+/* Slides */
+.slide{min-height:100vh;padding:3.5rem 1.5rem 7rem;display:none;position:relative;z-index:2;max-width:1400px;margin:0 auto}
+.slide.active{display:block;animation:fadeUp .6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* Navigation */
+.navbar{
+  position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:100;
+  background:rgba(255,255,255,.85);backdrop-filter:blur(16px);
+  border-radius:9999px;padding:.6rem 1rem;box-shadow:0 12px 40px rgba(255,95,162,.25);
+  border:2px solid var(--pink-soft);display:flex;align-items:center;gap:.6rem;
+  max-width:95vw;
+}
+.nav-btn{
+  width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;
+  font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(255,95,162,.4);
+}
+.nav-btn:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 6px 18px rgba(255,95,162,.5)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.nav-info{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--deep);padding:0 .5rem;font-size:.95rem;white-space:nowrap}
+.dot-nav{display:flex;gap:.35rem;padding:0 .5rem}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--pink-soft);cursor:pointer;transition:all .2s;border:none}
+.dot.active{background:var(--pink);transform:scale(1.3)}
+.dot:hover{background:var(--pink)}
+
+/* Buttons */
+.btn{
+  background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;
+  border:none;border-radius:9999px;padding:.7rem 1.4rem;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;transition:all .2s;font-size:.95rem;
+  box-shadow:0 6px 18px rgba(255,95,162,.35);display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,95,162,.45)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-secondary{background:linear-gradient(135deg,#fff,var(--pink-bg));color:var(--pink-deep);border:2px solid var(--pink-soft);box-shadow:0 4px 12px rgba(199,168,233,.25)}
+.btn-mint{background:linear-gradient(135deg,#7edcb0,#5fc78a);box-shadow:0 6px 18px rgba(95,199,138,.35)}
+.btn-lav{background:linear-gradient(135deg,#c8a8e9,#9d7dd4);box-shadow:0 6px 18px rgba(157,125,212,.35)}
+.btn-sm{padding:.4rem .9rem;font-size:.85rem}
+
+/* Cards */
+.card{
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-radius:24px;padding:1.5rem;box-shadow:0 8px 28px rgba(255,95,162,.12);
+  border:2px solid var(--pink-soft);position:relative;
+}
+.card-soft{background:rgba(255,255,255,.7);border-radius:20px;padding:1.25rem;border:2px solid var(--lavender-soft)}
+
+/* Title styling */
+.tag-pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:linear-gradient(135deg,var(--pink-soft),var(--lavender-soft));
+  color:var(--pink-deep);padding:.4rem 1rem;border-radius:9999px;
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:.85rem;
+  border:2px solid rgba(255,255,255,.7);
+}
+
+/* Rational cards (slide 3 game) */
+.rational-card{
+  background:linear-gradient(135deg,#fff,var(--pink-bg));
+  border:2px solid var(--pink-soft);border-radius:16px;padding:1rem .5rem;
+  text-align:center;cursor:pointer;transition:all .2s;
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.15rem;
+  color:var(--deep);position:relative;user-select:none;
+}
+.rational-card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(255,95,162,.25)}
+.rational-card.selected{background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;border-color:var(--pink-deep);transform:translateY(-3px) scale(1.05);box-shadow:0 10px 24px rgba(255,95,162,.5)}
+.rational-card.correct-flash{background:linear-gradient(135deg,#7edcb0,#5fc78a);color:#fff;border-color:#3da771}
+.rational-card.wrong-flash{background:linear-gradient(135deg,#ff8aa6,#ff6b8a);color:#fff;border-color:#e63d8a}
+.rational-card.show-answer.irrational{background:linear-gradient(135deg,var(--yellow),#ffd97a);color:var(--deep);border-color:#e0b94a}
+.rational-card.show-answer.rational{background:linear-gradient(135deg,#7edcb0,#5fc78a);color:#fff;border-color:#3da771}
+
+/* Difficulty badges */
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:9999px;font-size:.7rem;font-weight:700;font-family:'Fredoka',sans-serif;text-transform:uppercase;letter-spacing:.05em}
+.badge-mudah{background:#d4f5e0;color:#2d8c52}
+.badge-sedang{background:#fff0c2;color:#9a7210}
+.badge-sulit{background:#ffd4d4;color:#a02828}
+.badge-hots{background:#e8d4ff;color:#6b3da8}
+
+/* Problem cards */
+.problem-card{
+  background:rgba(255,255,255,.95);border:2px solid var(--pink-soft);border-radius:18px;
+  padding:1rem;display:flex;flex-direction:column;gap:.6rem;transition:all .2s;position:relative;
+}
+.problem-card.correct{border-color:#5fc78a;background:linear-gradient(135deg,#fff,#f0fff7)}
+.problem-card.wrong{border-color:#ff6b8a;background:linear-gradient(135deg,#fff,#fff5f8)}
+.prob-num{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--pink-deep);font-size:.8rem}
+.prob-q{font-weight:700;color:var(--deep);font-size:1rem;line-height:1.4}
+.answer-input{
+  width:100%;padding:.55rem .8rem;border:2px solid var(--pink-soft);border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:600;background:var(--pink-bg);color:var(--deep);
+  transition:all .2s;font-size:.95rem;
+}
+.answer-input:focus{outline:none;border-color:var(--pink);background:#fff;box-shadow:0 0 0 4px rgba(255,95,162,.15)}
+.result-badge{padding:.3rem .6rem;border-radius:10px;font-size:.8rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.result-correct{background:#d4f5e0;color:#2d8c52}
+.result-wrong{background:#ffd4d4;color:#a02828}
+.explanation-box{
+  background:linear-gradient(135deg,var(--lavender-soft),var(--pink-bg));
+  border-left:4px solid var(--lavender);padding:.7rem .9rem;border-radius:10px;
+  font-size:.85rem;color:var(--deep);line-height:1.5;
+}
+
+/* Multiple choice */
+.mc-option{
+  display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;
+  background:var(--pink-bg);border:2px solid var(--pink-soft);border-radius:12px;
+  cursor:pointer;transition:all .2s;font-weight:600;color:var(--deep);font-size:.9rem;
+}
+.mc-option:hover{border-color:var(--pink);background:#fff}
+.mc-option.selected{background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;border-color:var(--pink-deep)}
+.mc-option.correct{background:linear-gradient(135deg,#7edcb0,#5fc78a);color:#fff;border-color:#3da771}
+.mc-option.wrong{background:linear-gradient(135deg,#ff8aa6,#ff6b8a);color:#fff;border-color:#e63d8a}
+.mc-letter{
+  width:26px;height:26px;border-radius:50%;background:#fff;color:var(--pink-deep);
+  display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;
+  font-weight:700;font-size:.85rem;flex-shrink:0;
+}
+.mc-option.selected .mc-letter,.mc-option.correct .mc-letter,.mc-option.wrong .mc-letter{background:rgba(255,255,255,.3);color:#fff}
+
+/* Stopwatch */
+.stopwatch{
+  position:sticky;top:1rem;z-index:50;
+  background:linear-gradient(135deg,#fff,var(--pink-bg));border:3px solid var(--pink-soft);
+  border-radius:24px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;
+  box-shadow:0 8px 24px rgba(255,95,162,.2);
+}
+.sw-time{font-family:'Fredoka',sans-serif;font-weight:700;font-size:2rem;color:var(--pink-deep);min-width:140px;text-align:center;font-variant-numeric:tabular-nums}
+.sw-time.running{color:var(--pink)}
+.sw-time.stopped{color:var(--green)}
+
+/* Stats */
+.stat-card{
+  background:linear-gradient(135deg,#fff,var(--pink-bg));border:2px solid var(--pink-soft);
+  border-radius:20px;padding:1.5rem;text-align:center;box-shadow:0 8px 20px rgba(255,95,162,.12);
+}
+.stat-num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.5rem;line-height:1;background:linear-gradient(135deg,var(--pink),var(--lavender));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.85rem;color:var(--deep-soft);font-weight:600;margin-top:.4rem}
+
+/* Decorative shapes */
+.deco-blob{position:absolute;border-radius:50%;filter:blur(40px);opacity:.3;pointer-events:none;z-index:0}
+
+/* Cover heart */
+.heart-burst{position:absolute;pointer-events:none;animation:burst 4s ease-in-out infinite}
+@keyframes burst{0%,100%{transform:scale(1) rotate(0);opacity:.7}50%{transform:scale(1.15) rotate(10deg);opacity:1}}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--pink-bg)}
+::-webkit-scrollbar-thumb{background:var(--pink-soft);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--pink)}
+
+/* Hide elements */
+.hidden{display:none!important}
+
+/* Bouncy icons */
+.bouncy{animation:bouncy 2.5s ease-in-out infinite}
+@keyframes bouncy{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* Progress bar */
+.progress-bar{height:8px;background:var(--pink-bg);border-radius:9999px;overflow:hidden;border:1px solid var(--pink-soft)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--lavender));border-radius:9999px;transition:width .5s ease}
+
+/* Ribbon title */
+.ribbon-title{
+  display:inline-block;background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+  color:#fff;padding:.5rem 1.5rem;border-radius:9999px;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;
+  box-shadow:0 6px 18px rgba(255,95,162,.35);margin-bottom:1rem;
+}
+
+/* Type chips */
+.type-chip{
+  background:linear-gradient(135deg,#fff,var(--pink-bg));border:2px solid var(--pink-soft);
+  border-radius:14px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.8rem;
+  transition:all .2s;
+}
+.type-chip:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(255,95,162,.15)}
+.type-icon{
+  width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:#fff;flex-shrink:0;
+}
+
+/* Question list compact */
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+
+/* Responsive */
+@media(max-width:768px){
+  .slide{padding:2rem 1rem 6rem}
+  .sw-time{font-size:1.5rem;min-width:100px}
+  .q-grid{grid-template-columns:1fr}
+}
+
+/* Toast */
+.toast{
+  position:fixed;top:1.5rem;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:#fff;border:2px solid var(--pink-soft);border-radius:16px;padding:.8rem 1.4rem;
+  box-shadow:0 12px 32px rgba(255,95,162,.25);z-index:1000;transition:all .3s ease;
+  font-family:'Fredoka',sans-serif;font-weight:600;color:var(--deep);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:#5fc78a;color:#2d8c52}
+.toast.error{border-color:#ff6b8a;color:#a02828}
+</style>
+</head>
+<body>
+
+<!-- Floating decorations -->
+<div class="float-deco" style="top:8%;left:5%;font-size:2rem;color:var(--pink);animation-delay:0s">♥</div>
+<div class="float-deco" style="top:15%;right:7%;font-size:1.5rem;color:var(--lavender);animation-delay:1s">✦</div>
+<div class="float-deco" style="top:55%;left:3%;font-size:1.8rem;color:var(--peach);animation-delay:2s">♥</div>
+<div class="float-deco" style="top:75%;right:5%;font-size:2.2rem;color:var(--pink-soft);animation-delay:3s">✿</div>
+<div class="float-deco" style="top:35%;right:15%;font-size:1.2rem;color:var(--lavender);animation-delay:1.5s">✦</div>
+<div class="float-deco" style="top:90%;left:20%;font-size:1.5rem;color:var(--mint);animation-delay:.5s">✿</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- ============ SLIDE 1: COVER ============ -->
+<section class="slide active" id="slide1">
+  <div class="deco-blob" style="top:10%;left:10%;width:300px;height:300px;background:var(--pink-soft)"></div>
+  <div class="deco-blob" style="bottom:10%;right:10%;width:400px;height:400px;background:var(--lavender-soft)"></div>
+  
+  <div class="min-h-screen flex flex-col items-center justify-center text-center relative">
+    <div class="tag-pill mb-6 bouncy">
+      <i class="fa-solid fa-sparkles"></i>
+      <span>Matematika Kelas Ceria</span>
+    </div>
+    
+    <div class="relative mb-4">
+      <div class="heart-burst" style="top:-30px;left:-40px;font-size:2rem;color:var(--pink)">♥</div>
+      <div class="heart-burst" style="top:-20px;right:-40px;font-size:1.5rem;color:var(--lavender);animation-delay:.5s">✦</div>
+      <div class="heart-burst" style="bottom:-20px;left:-30px;font-size:1.5rem;color:var(--peach);animation-delay:1s">✿</div>
+      
+      <h1 class="display font-bold leading-none" style="font-size:clamp(2.8rem,8vw,5.5rem)">
+        <span style="background:linear-gradient(135deg,var(--pink),var(--pink-deep) 50%,var(--lavender));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Bilangan</span>
+        <br>
+        <span style="background:linear-gradient(135deg,var(--lavender),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Rasional</span>
+      </h1>
+    </div>
+    
+    <p class="text-lg md:text-xl mt-4 max-w-2xl" style="color:var(--deep-soft);font-weight:600">
+      Petualangan manis menjelajah dunia pecahan, desimal, dan persen <span style="color:var(--pink)">♥</span>
+    </p>
+    
+    <div class="flex flex-wrap gap-3 justify-center mt-8">
+      <span class="tag-pill" style="background:linear-gradient(135deg,#fff,var(--pink-bg))"><i class="fa-solid fa-book"></i> 8 Slide</span>
+      <span class="tag-pill" style="background:linear-gradient(135deg,#fff,var(--lavender-soft))"><i class="fa-solid fa-cards-blank"></i> 50 Kartu</span>
+      <span class="tag-pill" style="background:linear-gradient(135deg,#fff,var(--peach))"><i class="fa-solid fa-pen"></i> 50 Soal Latihan</span>
+      <span class="tag-pill" style="background:linear-gradient(135deg,#fff,var(--mint))"><i class="fa-solid fa-lightbulb"></i> 50 Soal Cerita HOTS</span>
+    </div>
+    
+    <div class="mt-10 flex gap-3">
+      <button class="btn" onclick="goToSlide(2)">
+        <i class="fa-solid fa-play"></i> Mulai Belajar
+      </button>
+      <button class="btn btn-secondary" onclick="goToSlide(8)">
+        <i class="fa-solid fa-info"></i> Lihat Kesimpulan
+      </button>
+    </div>
+    
+    <div class="absolute bottom-8 flex flex-col items-center" style="color:var(--deep-soft)">
+      <span class="text-sm font-semibold">Geser untuk navigasi</span>
+      <i class="fa-solid fa-chevron-down mt-2 bouncy" style="color:var(--pink)"></i>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: TUJUAN ============ -->
+<section class="slide" id="slide2">
+  <div class="text-center mb-8">
+    <div class="ribbon-title">Slide 02</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Tujuan Pembelajaran</h2>
+    <p class="text-lg" style="color:var(--deep-soft)">Setelah pembelajaran ini, kamu akan mampu...</p>
+  </div>
+  
+  <div class="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+    <div class="card flex gap-4 items-start">
+      <div class="type-icon" style="background:linear-gradient(135deg,var(--pink),var(--pink-deep))"><i class="fa-solid fa-1"></i></div>
+      <div>
+        <h3 class="font-bold text-lg mb-1" style="color:var(--deep)">Memahami Konsep</h3>
+        <p style="color:var(--deep-soft)">Menjelaskan definisi bilangan rasional dan membedakannya dengan bilangan irasional.</p>
+      </div>
+    </div>
+    
+    <div class="card flex gap-4 items-start">
+      <div class="type-icon" style="background:linear-gradient(135deg,var(--lavender),#9d7dd4)"><i class="fa-solid fa-2"></i></div>
+      <div>
+        <h3 class="font-bold text-lg mb-1" style="color:var(--deep)">Mengidentifikasi</h3>
+        <p style="color:var(--deep-soft)">Mengelompokkan 50 kartu bilangan ke dalam rasional dan irasional dengan tepat.</p>
+      </div>
+    </div>
+    
+    <div class="card flex gap-4 items-start">
+      <div class="type-icon" style="background:linear-gradient(135deg,var(--peach),#ff8a6b)"><i class="fa-solid fa-3"></i></div>
+      <div>
+        <h3 class="font-bold text-lg mb-1" style="color:var(--deep)">Menghitung Operasi</h3>
+        <p style="color:var(--deep-soft)">Melakukan operasi hitung (+, −, ×, ÷) pada pecahan, desimal, dan persen.</p>
+      </div>
+    </div>
+    
+    <div class="card flex gap-4 items-start">
+      <div class="type-icon" style="background:linear-gradient(135deg,var(--mint),#5fc78a)"><i class="fa-solid fa-4"></i></div>
+      <div>
+        <h3 class="font-bold text-lg mb-1" style="color:var(--deep)">Memecahkan Masalah</h3>
+        <p style="color:var(--deep-soft)">Menyelesaikan soal cerita kontekstual termasuk soal HOTS dengan strategi yang tepat.</p>
+      </div>
+    </div>
+    
+    <div class="card flex gap-4 items-start md:col-span-2">
+      <div class="type-icon" style="background:linear-gradient(135deg,var(--yellow),#ffd97a);color:var(--deep)"><i class="fa-solid fa-5"></i></div>
+      <div>
+        <h3 class="font-bold text-lg mb-1" style="color:var(--deep)">Merefleksi Diri</h3>
+        <p style="color:var(--deep-soft)">Menganalisis waktu dan ketepatan jawaban untuk meningkatkan strategi belajar ke depannya.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center mt-8">
+    <button class="btn" onclick="goToSlide(3)">Lanjut ke Materi <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: DEFINISI ============ -->
+<section class="slide" id="slide3">
+  <div class="text-center mb-6">
+    <div class="ribbon-title">Slide 03</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Definisi & Macam Bilangan Rasional</h2>
+  </div>
+  
+  <div class="grid md:grid-cols-2 gap-5 mb-6">
+    <div class="card">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--pink),var(--pink-deep))"><i class="fa-solid fa-heart"></i></div>
+        <h3 class="text-2xl font-bold" style="color:var(--pink-deep)">Bilangan Rasional</h3>
+      </div>
+      <p class="mb-3" style="color:var(--deep)">Bilangan rasional adalah bilangan yang <strong>dapat ditulis dalam bentuk <span style="color:var(--pink-deep)">a/b</span></strong>, di mana <strong>a</strong> dan <strong>b</strong> adalah bilangan bulat dengan <strong>b ≠ 0</strong>.</p>
+      <div class="card-soft" style="background:linear-gradient(135deg,var(--pink-bg),var(--pink-bg2))">
+        <p class="font-bold mb-2" style="color:var(--pink-deep)">Macam-macam:</p>
+        <ul class="space-y-1.5 text-sm" style="color:var(--deep)">
+          <li><span class="font-bold">① Bilangan bulat:</span> ..., −2, −1, 0, 1, 2, ...</li>
+          <li><span class="font-bold">② Pecahan:</span> ½, ¾, ⅖, −¼, ...</li>
+          <li><span class="font-bold">③ Desimal berakhir:</span> 0,5 ; 1,25 ; −3,75</li>
+          <li><span class="font-bold">④ Desimal berulang:</span> 0,333... ; 0,142857...</li>
+          <li><span class="font-bold">⑤ Persen:</span> 25%, 50%, 125% (dapat ditulis pecahan)</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="card" style="border-color:var(--lavender-soft)">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--lavender),#9d7dd4)"><i class="fa-solid fa-bolt"></i></div>
+        <h3 class="text-2xl font-bold" style="color:#7d5dbc">Bilangan Irasional</h3>
+      </div>
+      <p class="mb-3" style="color:var(--deep)">Bilangan yang <strong>tidak dapat</strong> ditulis sebagai pecahan a/b (a, b bulat, b≠0). Bentuk desimalnya tidak berakhir dan tidak berulang.</p>
+      <div class="card-soft" style="background:linear-gradient(135deg,var(--lavender-soft),#f0e8ff)">
+        <p class="font-bold mb-2" style="color:#7d5dbc">Contoh:</p>
+        <ul class="space-y-1.5 text-sm" style="color:var(--deep)">
+          <li><span class="font-bold">√2</span> ≈ 1,41421356...</li>
+          <li><span class="font-bold">√3, √5, √7</span> (bukan kuadrat sempurna)</li>
+          <li><span class="font-bold">π</span> ≈ 3,14159... (tetapi 22/7 itu rasional!)</li>
+          <li><span class="font-bold">e</span> ≈ 2,71828...</li>
+          <li><span class="font-bold">0,1010010001...</span> (pola tidak berulang)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div>
+        <h3 class="text-2xl font-bold" style="color:var(--pink-deep)">🎯 Game: Pilih Kartu Rasional!</h3>
+        <p style="color:var(--deep-soft)" class="text-sm">Klik semua kartu yang berisi <strong>bilangan rasional</strong>. Lalu tekan tombol cek!</p>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="tag-pill" id="rationalCount">Terpilih: 0</span>
+        <button class="btn btn-secondary btn-sm" onclick="resetRationalCards()"><i class="fa-solid fa-rotate"></i> Reset</button>
+        <button class="btn btn-sm" onclick="checkRationalCards()"><i class="fa-solid fa-check"></i> Cek Jawaban</button>
+        <button class="btn btn-mint btn-sm" onclick="showRationalAnswers()"><i class="fa-solid fa-eye"></i> Tampilkan Jawaban</button>
+      </div>
+    </div>
+    
+    <div id="rationalGrid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2"></div>
+    
+    <div id="rationalResult" class="mt-4 hidden"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: MATERI ============ -->
+<section class="slide" id="slide4">
+  <div class="text-center mb-6">
+    <div class="ribbon-title">Slide 04</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Materi: Operasi Hitung</h2>
+    <p class="text-lg" style="color:var(--deep-soft)">Pecahan, desimal, dan persen — semua bisa dihitung!</p>
+  </div>
+  
+  <div class="grid lg:grid-cols-2 gap-5">
+    <!-- Pecahan -->
+    <div class="card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--pink),var(--pink-deep))"><i class="fa-solid fa-divide"></i></div>
+        <div>
+          <h3 class="text-2xl font-bold" style="color:var(--pink-deep)">Pecahan & Operasinya</h3>
+          <p class="text-sm" style="color:var(--deep-soft)">Bentuk a/b dengan b ≠ 0</p>
+        </div>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="card-soft">
+          <p class="font-bold mb-1" style="color:var(--pink-deep)">➕ Penjumlahan & Pengurangan</p>
+          <p class="text-sm mb-1">Samakan penyebut (KPK) terlebih dahulu:</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">½ + ⅓ = 3/6 + 2/6 = <strong style="color:var(--pink-deep)">5/6</strong></p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg mt-1">¾ − ¼ = <strong style="color:var(--pink-deep)">2/4 = ½</strong></p>
+        </div>
+        <div class="card-soft">
+          <p class="font-bold mb-1" style="color:var(--pink-deep)">✖️ Perkalian</p>
+          <p class="text-sm mb-1">Kalikan pembilang × pembilang, penyebut × penyebut:</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">⅔ × ⅗ = (2×3)/(3×5) = <strong style="color:var(--pink-deep)">6/15 = ⅖</strong></p>
+        </div>
+        <div class="card-soft">
+          <p class="font-bold mb-1" style="color:var(--pink-deep)">➗ Pembagian</p>
+          <p class="text-sm mb-1">Balikkan pecahan kedua, lalu kalikan:</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">⅔ ÷ ¾ = ⅔ × 4/3 = <strong style="color:var(--pink-deep)">8/9</strong></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Desimal & Persen -->
+    <div class="card" style="border-color:var(--lavender-soft)">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--lavender),#9d7dd4)"><i class="fa-solid fa-percent"></i></div>
+        <div>
+          <h3 class="text-2xl font-bold" style="color:#7d5dbc">Desimal, Persen & Operasinya</h3>
+          <p class="text-sm" style="color:var(--deep-soft)">Desimal = pecahan per 10/100/1000. Persen = per 100.</p>
+        </div>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="card-soft" style="background:linear-gradient(135deg,var(--lavender-soft),#f0e8ff)">
+          <p class="font-bold mb-2" style="color:#7d5dbc">🔄 Konversi</p>
+          <p class="text-sm">¼ = 0,25 = 25% &nbsp;|&nbsp; ½ = 0,5 = 50% &nbsp;|&nbsp; ⅗ = 0,6 = 60%</p>
+        </div>
+        <div class="card-soft" style="background:linear-gradient(135deg,var(--lavender-soft),#f0e8ff)">
+          <p class="font-bold mb-1" style="color:#7d5dbc">➕➖ Penjumlahan & Pengurangan</p>
+          <p class="text-sm mb-1">Selaraskan koma, jumlahkan langsung:</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">0,75 + 0,5 = 0,75 + 0,50 = <strong style="color:#7d5dbc">1,25</strong></p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg mt-1">45% − 20% = <strong style="color:#7d5dbc">25%</strong></p>
+        </div>
+        <div class="card-soft" style="background:linear-gradient(135deg,var(--lavender-soft),#f0e8ff)">
+          <p class="font-bold mb-1" style="color:#7d5dbc">✖️ Perkalian</p>
+          <p class="text-sm mb-1">Kalikan biasa, tentukan letak koma (jumlah angka di belakang koma):</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">0,3 × 0,4 = <strong style="color:#7d5dbc">0,12</strong> (2 angka di belakang koma)</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg mt-1">50% × 80 = 0,5 × 80 = <strong style="color:#7d5bc">40</strong></p>
+        </div>
+        <div class="card-soft" style="background:linear-gradient(135deg,var(--lavender-soft),#f0e8ff)">
+          <p class="font-bold mb-1" style="color:#7d5dbc">➗ Pembagian</p>
+          <p class="text-sm mb-1">Geser koma pembagi jadi bulat, geser sama pembilang:</p>
+          <p class="text-sm font-mono bg-white p-2 rounded-lg">1,5 ÷ 0,3 = 15 ÷ 3 = <strong style="color:#7d5dbc">5</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card mt-5" style="background:linear-gradient(135deg,var(--yellow),#ffd97a);border-color:#e0b94a">
+    <p class="text-center font-bold" style="color:var(--deep)"><i class="fa-solid fa-lightbulb"></i> Tip Penting: Campuran pecahan & desimal lebih mudah jika dikonversi dulu ke salah satu bentuk!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: LATIHAN SOAL ============ -->
+<section class="slide" id="slide5">
+  <div class="text-center mb-4">
+    <div class="ribbon-title">Slide 05</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-2" style="color:var(--deep)">Latihan Soal Operasi Hitung</h2>
+    <p class="text-lg" style="color:var(--deep-soft)">50 soal isian singkat • Tekan tombol Start untuk memulai stopwatch!</p>
+  </div>
+  
+  <div class="stopwatch">
+    <div class="type-icon" style="background:linear-gradient(135deg,var(--pink),var(--pink-deep));width:50px;height:50px"><i class="fa-solid fa-stopwatch"></i></div>
+    <div>
+      <div class="text-xs font-bold uppercase tracking-wider" style="color:var(--deep-soft)">Stopwatch Latihan</div>
+      <div id="swTime" class="sw-time">00:00</div>
+    </div>
+    <div class="flex gap-2 flex-wrap ml-auto">
+      <button id="startBtn" class="btn btn-sm" onclick="startStopwatch()"><i class="fa-solid fa-play"></i> Start</button>
+      <button id="stopBtn" class="btn btn-mint btn-sm hidden" onclick="finishPractice()"><i class="fa-solid fa-flag-checkered"></i> Selesai Berlatih</button>
+    </div>
+  </div>
+  
+  <div class="flex flex-wrap gap-2 my-4 justify-center">
+    <button class="btn btn-secondary btn-sm" onclick="filterProblems('all')">Semua (50)</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterProblems('mudah')">Mudah</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterProblems('sedang')">Sedang</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterProblems('sulit')">Sulit</button>
+  </div>
+  
+  <div id="arithmeticGrid" class="q-grid"></div>
+  
+  <div class="text-center mt-6">
+    <button class="btn btn-mint" onclick="finishPractice()"><i class="fa-solid fa-chart-line"></i> Lihat Hasil & Statistik</button>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: STATISTIK ============ -->
+<section class="slide" id="slide6">
+  <div class="text-center mb-6">
+    <div class="ribbon-title">Slide 06</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Statistik Pengerjaanmu</h2>
+    <p class="text-lg" style="color:var(--deep-soft)">Hasil latihan soal operasi hitung</p>
+  </div>
+  
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 max-w-4xl mx-auto">
+    <div class="stat-card">
+      <div class="stat-num" id="statAnswered">0</div>
+      <div class="stat-label">Soal Terjawab</div>
+    </div>
+    <div class="stat-card" style="border-color:#5fc78a">
+      <div class="stat-num" id="statCorrect" style="background:linear-gradient(135deg,#5fc78a,#7edcb0);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
+      <div class="stat-label">Jawaban Benar</div>
+    </div>
+    <div class="stat-card" style="border-color:#ff6b8a">
+      <div class="stat-num" id="statWrong" style="background:linear-gradient(135deg,#ff6b8a,#ff8aa6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
+      <div class="stat-label">Jawaban Salah</div>
+    </div>
+    <div class="stat-card" style="border-color:var(--lavender)">
+      <div class="stat-num" id="statAvgTime" style="background:linear-gradient(135deg,var(--lavender),#9d7dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0s</div>
+      <div class="stat-label">Rata-rata Waktu/Soal</div>
+    </div>
+  </div>
+  
+  <div class="grid md:grid-cols-2 gap-4 mb-6">
+    <div class="stat-card">
+      <div class="stat-num" id="statTotalTime" style="background:linear-gradient(135deg,var(--pink),var(--lavender));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0s</div>
+      <div class="stat-label">Total Waktu Pengerjaan</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statAccuracy" style="background:linear-gradient(135deg,var(--peach),#ff8a6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0%</div>
+      <div class="stat-label">Tingkat Ketepatan</div>
+    </div>
+  </div>
+  
+  <div class="card mb-4">
+    <h3 class="text-xl font-bold mb-3" style="color:var(--pink-deep)"><i class="fa-solid fa-clock"></i> Waktu per Soal</h3>
+    <div id="perQuestionTimes" class="space-y-1 max-h-96 overflow-y-auto pr-2"></div>
+  </div>
+  
+  <div class="text-center">
+    <button class="btn" onclick="goToSlide(7)">Lanjut ke Soal Cerita <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: SOAL CERITA ============ -->
+<section class="slide" id="slide7">
+  <div class="text-center mb-6">
+    <div class="ribbon-title">Slide 07</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Soal Cerita & HOTS</h2>
+    <p class="text-lg" style="color:var(--deep-soft)">50 soal cerita • 20 mudah-sedang • 30 HOTS</p>
+  </div>
+  
+  <div class="flex flex-wrap gap-2 my-4 justify-center">
+    <button class="btn btn-secondary btn-sm" onclick="filterWordProblems('all')">Semua (50)</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterWordProblems('mudah')">Mudah</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterWordProblems('sedang')">Sedang</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterWordProblems('hots')">HOTS (30)</button>
+  </div>
+  
+  <div id="wordGrid" class="q-grid"></div>
+</section>
+
+<!-- ============ SLIDE 8: KESIMPULAN ============ -->
+<section class="slide" id="slide8">
+  <div class="deco-blob" style="top:5%;left:5%;width:300px;height:300px;background:var(--pink-soft)"></div>
+  <div class="deco-blob" style="bottom:5%;right:5%;width:400px;height:400px;background:var(--lavender-soft)"></div>
+  
+  <div class="text-center mb-8 relative">
+    <div class="ribbon-title">Slide 08</div>
+    <h2 class="text-4xl md:text-5xl font-bold mb-3" style="color:var(--deep)">Kesimpulan & Refleksi</h2>
+  </div>
+  
+  <div class="grid md:grid-cols-2 gap-5 max-w-5xl mx-auto">
+    <div class="card">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--pink),var(--pink-deep))"><i class="fa-solid fa-star"></i></div>
+        <h3 class="text-2xl font-bold" style="color:var(--pink-deep)">Kesimpulan</h3>
+      </div>
+      <ul class="space-y-2" style="color:var(--deep)">
+        <li class="flex gap-2"><span style="color:var(--pink)">♥</span> Bilangan rasional dapat ditulis sebagai a/b (a, b bulat, b≠0).</li>
+        <li class="flex gap-2"><span style="color:var(--pink)">♥</span> Termasuk: bulat, pecahan, desimal berakhir/berulang, dan persen.</li>
+        <li class="flex gap-2"><span style="color:var(--pink)">♥</span> Bilangan irasional tidak dapat ditulis a/b (contoh: √2, π).</li>
+        <li class="flex gap-2"><span style="color:var(--pink)">♥</span> Operasi +, −, ×, ÷ pada pecahan, desimal, dan persen mengikuti aturan masing-masing.</li>
+        <li class="flex gap-2"><span style="color:var(--pink)">♥</span> Soal HOTS memerlukan pemahaman konsep, analisis, dan strategi multi-langkah.</li>
+      </ul>
+    </div>
+    
+    <div class="card" style="border-color:var(--lavender)">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="type-icon" style="background:linear-gradient(135deg,var(--lavender),#9d7dd4)"><i class="fa-solid fa-lightbulb"></i></div>
+        <h3 class="text-2xl font-bold" style="color:#7d5dbc">Refleksi Diri</h3>
+      </div>
+      <div class="space-y-3" style="color:var(--deep)">
+        <div class="card-soft">
+          <p class="text-sm mb-1">🤔 Bagian mana yang paling menantang bagimu?</p>
+          <textarea class="answer-input" rows="2" placeholder="Tuliskan jawabanmu..."></textarea>
+        </div>
+        <div class="card-soft">
+          <p class="text-sm mb-1">💡 Strategi apa yang membantumu menyelesaikan soal HOTS?</p>
+          <textarea class="answer-input" rows="2" placeholder="Tuliskan jawabanmu..."></textarea>
+        </div>
+        <div class="card-soft">
+          <p class="text-sm mb-1">🎯 Apa yang akan kamu lakukan untuk meningkatkan diri?</p>
+          <textarea class="answer-input" rows="2" placeholder="Tuliskan jawabanmu..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center mt-10 relative">
+    <div class="heart-burst" style="top:-30px;left:30%;font-size:2rem;color:var(--pink)">♥</div>
+    <div class="heart-burst" style="top:-20px;right:30%;font-size:1.5rem;color:var(--lavender);animation-delay:.5s">✦</div>
+    
+    <h2 class="display text-4xl md:text-6xl font-bold mb-3" style="background:linear-gradient(135deg,var(--pink),var(--lavender));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+      Thank You for Today!
+    </h2>
+    <p class="text-lg mb-6" style="color:var(--deep-soft)">Terima kasih sudah belajar dengan ceria. Sampai jumpa di petualangan matematika berikutnya! <span style="color:var(--pink)">♥</span></p>
+    
+    <div class="flex justify-center gap-3">
+      <button class="btn" onclick="goToSlide(1)"><i class="fa-solid fa-house"></i> Kembali ke Awal</button>
+      <button class="btn btn-secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak</button>
+    </div>
+  </div>
+</section>
+
+<!-- Navigation Bar -->
+<nav class="navbar">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" title="Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="dot-nav" id="dotNav"></div>
+  <span class="nav-info" id="navInfo">1 / 8</span>
+  <button class="nav-btn" id="nextBtn" onclick="nextSlide()" title="Berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+</nav>
+
+<script>
+/* =========================================================
+   DATA
+========================================================= */
+
+// 50 kartu bilangan untuk slide 3 (32 rasional, 18 irasional)
+const rationalCards = [
+  {v:'5',r:true},{v:'−3',r:true},{v:'0',r:true},{v:'½',r:true},
+  {v:'¾',r:true},{v:'⅖',r:true},{v:'−¼',r:true},{v:'0,5',r:true},
+  {v:'0,25',r:true},{v:'0,125',r:true},{v:'−0,75',r:true},{v:'0,333...',r:true},
+  {v:'0,666...',r:true},{v:'0,142857...',r:true},{v:'1,5',r:true},{v:'2,5',r:true},
+  {v:'−3,2',r:true},{v:'7/9',r:true},{v:'11/8',r:true},{v:'22/7',r:true},
+  {v:'4',r:true},{v:'−10',r:true},{v:'0,625',r:true},{v:'100',r:true},
+  {v:'−1/3',r:true},{v:'0,875',r:true},{v:'9/2',r:true},{v:'6/3',r:true},
+  {v:'−7/2',r:true},{v:'8/4',r:true},{v:'0,0',r:true},{v:'125%',r:true},
+  {v:'√2',r:false},{v:'√3',r:false},{v:'√5',r:false},{v:'√7',r:false},
+  {v:'π',r:false},{v:'e',r:false},{v:'1,41421...',r:false},{v:'3,14159...',r:false},
+  {v:'0,101001000...',r:false},{v:'√8',r:false},{v:'√10',r:false},{v:'√11',r:false},
+  {v:'√13',r:false},{v:'1/√2',r:false},{v:'π/2',r:false},{v:'2,505005000...',r:false},
+  {v:'−√3',r:false},{v:'∛2',r:false}
+];
+
+// 50 soal isian singkat operasi hitung
+// q=pertanyaan, a=jawaban utama, alts=alternatif, d=kesulitan, e=pembahasan
+const arithmeticProblems = [
+  {q:'½ + ¼ = ?',a:'3/4',alts:['0.75','0,75','¾'],d:'mudah',e:'Samakan penyebut: 2/4 + 1/4 = 3/4 = 0,75'},
+  {q:'⅔ + ⅙ = ?',a:'5/6',alts:[],d:'mudah',e:'Samakan penyebut: 4/6 + 1/6 = 5/6'},
+  {q:'¾ − ¼ = ?',a:'1/2',alts:['0.5','0,5','½'],d:'mudah',e:'3/4 − 1/4 = 2/4 = 1/2'},
+  {q:'⅚ − ⅓ = ?',a:'1/2',alts:['0.5','0,5','½'],d:'mudah',e:'5/6 − 2/6 = 3/6 = 1/2'},
+  {q:'⅓ × ⅖ = ?',a:'2/15',alts:[],d:'mudah',e:'Kalikan langsung: (1×2)/(3×5) = 2/15'},
+  {q:'⅖ × ⅝ = ?',a:'1/4',alts:['0.25','0,25','¼'],d:'mudah',e:'(2×5)/(5×8) = 10/40 = 1/4'},
+  {q:'½ ÷ ¼ = ?',a:'2',alts:[],d:'mudah',e:'½ × 4/1 = 4/2 = 2'},
+  {q:'⅔ ÷ 4/9 = ?',a:'3/2',alts:['1.5','1,5','1½'],d:'sedang',e:'⅔ × 9/4 = 18/12 = 3/2 = 1,5'},
+  {q:'0,3 + 0,4 = ?',a:'0.7',alts:['0,7'],d:'mudah',e:'Jumlahkan langsung: 0,3 + 0,4 = 0,7'},
+  {q:'0,5 − 0,25 = ?',a:'0.25',alts:['0,25','¼'],d:'mudah',e:'0,50 − 0,25 = 0,25'},
+  {q:'0,2 × 0,4 = ?',a:'0.08',alts:['0,08'],d:'sedang',e:'2×4=8, total 3 angka desimal → 0,08'},
+  {q:'0,6 ÷ 0,3 = ?',a:'2',alts:[],d:'mudah',e:'6 ÷ 3 = 2'},
+  {q:'25% + 35% = ?',a:'60%',alts:['60'],d:'mudah',e:'25 + 35 = 60%'},
+  {q:'80% − 30% = ?',a:'50%',alts:['50'],d:'mudah',e:'80 − 30 = 50%'},
+  {q:'10% × 50% = ?',a:'5%',alts:['5','0.05','0,05'],d:'sedang',e:'0,10 × 0,50 = 0,05 = 5%'},
+  {q:'75% ÷ 25% = ?',a:'3',alts:[],d:'sedang',e:'0,75 ÷ 0,25 = 75 ÷ 25 = 3'},
+  {q:'½ + 0,25 = ?',a:'0.75',alts:['0,75','3/4','¾'],d:'sedang',e:'0,5 + 0,25 = 0,75 atau 3/4'},
+  {q:'¾ − 0,5 = ?',a:'0.25',alts:['0,25','1/4','¼'],d:'sedang',e:'0,75 − 0,5 = 0,25'},
+  {q:'0,5 × ¼ = ?',a:'0.125',alts:['0,125','1/8','⅛'],d:'sedang',e:'0,5 × 0,25 = 0,125'},
+  {q:'½ ÷ 0,25 = ?',a:'2',alts:[],d:'sedang',e:'0,5 ÷ 0,25 = 50 ÷ 25 = 2'},
+  {q:'25% dari 80 = ?',a:'20',alts:[],d:'mudah',e:'0,25 × 80 = 20'},
+  {q:'15% dari 200 = ?',a:'30',alts:[],d:'mudah',e:'0,15 × 200 = 30'},
+  {q:'1½ + 2⅓ = ?',a:'3 5/6',alts:['23/6'],d:'sulit',e:'3/2 + 7/3 = 9/6 + 14/6 = 23/6 = 3 5/6'},
+  {q:'3¼ − 1¾ = ?',a:'1 1/2',alts:['1.5','1,5','3/2'],d:'sulit',e:'13/4 − 7/4 = 6/4 = 3/2 = 1½'},
+  {q:'2½ × 1⅓ = ?',a:'3 1/3',alts:['10/3'],d:'sulit',e:'5/2 × 4/3 = 20/6 = 10/3 = 3⅓'},
+  {q:'4½ ÷ 1½ = ?',a:'3',alts:[],d:'sulit',e:'9/2 × 2/3 = 18/6 = 3'},
+  {q:'0,125 + 0,875 = ?',a:'1',alts:[],d:'sedang',e:'0,125 + 0,875 = 1,000 = 1'},
+  {q:'2,5 − 1,75 = ?',a:'0.75',alts:['0,75','3/4'],d:'sedang',e:'2,50 − 1,75 = 0,75'},
+  {q:'0,3 × 0,3 = ?',a:'0.09',alts:['0,09'],d:'sedang',e:'3×3=9, 2 angka desimal → 0,09'},
+  {q:'4,8 ÷ 1,2 = ?',a:'4',alts:[],d:'sedang',e:'48 ÷ 12 = 4'},
+  {q:'12,5% dari 240 = ?',a:'30',alts:[],d:'sulit',e:'0,125 × 240 = 30'},
+  {q:'33⅓% × 90 = ?',a:'30',alts:[],d:'sulit',e:'33⅓% = ⅓, maka ⅓ × 90 = 30'},
+  {q:'⅓ + ⅙ + 1/12 = ?',a:'7/12',alts:[],d:'sulit',e:'4/12 + 2/12 + 1/12 = 7/12'},
+  {q:'⅚ − ¼ + ⅓ = ?',a:'11/12',alts:[],d:'sulit',e:'10/12 − 3/12 + 4/12 = 11/12'},
+  {q:'(⅔)² = ?',a:'4/9',alts:[],d:'sedang',e:'⅔ × ⅔ = 4/9'},
+  {q:'0,45 + 0,55 = ?',a:'1',alts:[],d:'mudah',e:'0,45 + 0,55 = 1,00 = 1'},
+  {q:'⅞ − ⅜ = ?',a:'1/2',alts:['0.5','0,5','½'],d:'mudah',e:'4/8 = 1/2'},
+  {q:'3/10 × 5/9 = ?',a:'1/6',alts:[],d:'sedang',e:'15/90 = 1/6'},
+  {q:'6/7 ÷ 3/14 = ?',a:'4',alts:[],d:'sulit',e:'6/7 × 14/3 = 84/21 = 4'},
+  {q:'0,6 + ⅕ = ?',a:'0.8',alts:['0,8','4/5','⅘'],d:'sedang',e:'0,6 + 0,2 = 0,8'},
+  {q:'⅝ × 0,4 = ?',a:'0.25',alts:['0,25','1/4','¼'],d:'sulit',e:'5/8 × 2/5 = 10/40 = 1/4 = 0,25'},
+  {q:'30% dari ⅚ = ?',a:'1/4',alts:['0.25','0,25','¼'],d:'sulit',e:'0,3 × 5/6 = 1,5/6 = 3/12 = 1/4'},
+  {q:'0,75 ÷ ¾ = ?',a:'1',alts:[],d:'sulit',e:'0,75 = ¾, jadi ¾ ÷ ¾ = 1'},
+  {q:'1¼ + 0,75 = ?',a:'2',alts:[],d:'sedang',e:'1,25 + 0,75 = 2'},
+  {q:'⅖ dari 25% = ?',a:'1/10',alts:['0.1','0,1','10%'],d:'sulit',e:'2/5 × 1/4 = 2/20 = 1/10'},
+  {q:'7,5% × 80 = ?',a:'6',alts:[],d:'sulit',e:'0,075 × 80 = 6'},
+  {q:'¾ + ⅚ = ?',a:'19/12',alts:['1 7/12'],d:'sulit',e:'9/12 + 10/12 = 19/12 = 1 7/12'},
+  {q:'0,875 − ⅝ = ?',a:'0.25',alts:['0,25','1/4','¼'],d:'sulit',e:'0,875 = 7/8, 7/8 − 5/8 = 2/8 = 1/4 = 0,25'},
+  {q:'(½ + ¼) ÷ 3/8 = ?',a:'2',alts:[],d:'sulit',e:'3/4 ÷ 3/8 = 3/4 × 8/3 = 24/12 = 2'},
+  {q:'0,4 × 0,05 = ?',a:'0.02',alts:['0,02'],d:'sedang',e:'4×5=20, 4 angka desimal → 0,0200 = 0,02'}
+];
+
+// 50 soal cerita (20 mudah+sedang, 30 HOTS)
+const wordProblems = [
+  // MUDAH (1-10)
+  {q:'Andi membeli ¾ kg apel lalu membeli lagi ¼ kg. Total berapa kg apel Andi?',o:['½ kg','1 kg','3/8 kg','1½ kg'],a:1,d:'mudah',e:'¾ + ¼ = 4/4 = 1 kg'},
+  {q:'Sebuah baju diskon 20% dari harga Rp 150.000. Berapa harga setelah diskon?',o:['Rp 100.000','Rp 120.000','Rp 130.000','Rp 30.000'],a:1,d:'mudah',e:'Diskon = 20% × 150.000 = 30.000. Harga = 150.000 − 30.000 = Rp 120.000'},
+  {q:'Sari memiliki 0,5 liter susu. Ia meminum 0,2 liter. Berapa sisa susu Sari?',o:['0,3 L','0,7 L','0,25 L','0,1 L'],a:0,d:'mudah',e:'0,5 − 0,2 = 0,3 liter'},
+  {q:'Hasil dari ⅔ + ⅙ adalah ...',o:['3/9','5/6','2/6','½'],a:1,d:'mudah',e:'4/6 + 1/6 = 5/6'},
+  {q:'Sebuah pizza dipotong menjadi 8 bagian sama. Andi makan 3 potong. Berapa pecahan yang dimakan Andi?',o:['3/8','8/3','3/5','5/8'],a:0,d:'mudah',e:'3 dari 8 potong = 3/8'},
+  {q:'Hasil dari 0,25 × 0,4 adalah ...',o:['0,1','1','0,65','0,01'],a:0,d:'mudah',e:'0,25 × 0,4 = 0,10 = 0,1'},
+  {q:'15% dari 200 adalah ...',o:['15','30','45','60'],a:1,d:'mudah',e:'0,15 × 200 = 30'},
+  {q:'Hasil dari ⅞ − ⅜ adalah ...',o:['4/16','½','4/8','¼'],a:1,d:'mudah',e:'4/8 = ½'},
+  {q:'Doni menabung Rp 25.000 per minggu. Berapa tabungannya setelah 4 minggu?',o:['Rp 75.000','Rp 100.000','Rp 125.000','Rp 50.000'],a:1,d:'mudah',e:'25.000 × 4 = Rp 100.000'},
+  {q:'Hasil dari 0,8 ÷ 0,2 adalah ...',o:['0,16','0,4','4','16'],a:2,d:'mudah',e:'8 ÷ 2 = 4'},
+  
+  // SEDANG (11-20)
+  {q:'Ibu membeli 2½ kg tepung. Untuk membuat kue digunakan ¾ kg. Berapa sisa tepung?',o:['1¼ kg','1½ kg','1¾ kg','2 kg'],a:2,d:'sedang',e:'5/2 − 3/4 = 10/4 − 3/4 = 7/4 = 1¾ kg'},
+  {q:'Sebuah mobil melaju 60 km/jam. Berapa jarak yang ditempuh dalam 2½ jam?',o:['120 km','140 km','150 km','180 km'],a:2,d:'sedang',e:'60 × 2,5 = 150 km'},
+  {q:'Tabungan Rina Rp 80.000. Ia mengambil ¼ bagian. Berapa sisa tabungannya?',o:['Rp 60.000','Rp 20.000','Rp 40.000','Rp 70.000'],a:0,d:'sedang',e:'¼ × 80.000 = 20.000. Sisa = 80.000 − 20.000 = Rp 60.000'},
+  {q:'Berat 6 buah jeruk adalah 0,9 kg. Berapa berat 1 buah jeruk?',o:['0,1 kg','0,15 kg','0,2 kg','0,12 kg'],a:1,d:'sedang',e:'0,9 ÷ 6 = 0,15 kg'},
+  {q:'Dalam ujian, Andi menjawab benar 18 dari 25 soal. Berapa persentase jawaban benar?',o:['70%','72%','75%','80%'],a:1,d:'sedang',e:'18/25 = 72/100 = 72%'},
+  {q:'Harga ½ kg apel Rp 12.000. Berapa harga 3 kg apel?',o:['Rp 36.000','Rp 60.000','Rp 72.000','Rp 84.000'],a:2,d:'sedang',e:'1 kg = 24.000, maka 3 kg = 24.000 × 3 = Rp 72.000'},
+  {q:'Hasil dari 2½ + 1⅓ adalah ...',o:['3 2/5','3 5/6','3 1/6','4 1/6'],a:1,d:'sedang',e:'15/6 + 8/6 = 23/6 = 3 5/6'},
+  {q:'Suhu udara pagi 18,5°C. Siang naik 5,3°C. Berapa suhu siang hari?',o:['22,8°C','23,8°C','24,8°C','13,2°C'],a:1,d:'sedang',e:'18,5 + 5,3 = 23,8°C'},
+  {q:'Hasil dari 75% × 80 adalah ...',o:['55','60','65','70'],a:1,d:'sedang',e:'0,75 × 80 = 60'},
+  {q:'Sebuah tali sepanjang ¾ m dipotong menjadi 3 bagian sama panjang. Panjang setiap potongan?',o:['¼ m','⅓ m','½ m','⅔ m'],a:0,d:'sedang',e:'¾ ÷ 3 = ¾ × ⅓ = 1/4 m'},
+  
+  // HOTS (21-50) - 30 soal
+  {q:'Di kelas 40 siswa, ⅗ adalah perempuan. Jika 25% siswa perempuan berjilbab, berapa siswa perempuan yang TIDAK berjilbab?',o:['24','18','12','6'],a:1,d:'hots',e:'Perempuan = ⅗ × 40 = 24. Tidak berjilbab = 75% × 24 = 18'},
+  {q:'Harga barang naik 20%, lalu turun 20% dari harga baru. Berapa persen perubahan akhir dari harga awal?',o:['0%','Turun 4%','Naik 4%','Turun 2%'],a:1,d:'hots',e:'1 × 1,2 × 0,8 = 0,96 → turun 4%'},
+  {q:'Suatu pekerjaan dapat diselesaikan 8 orang dalam 6 hari. Jika dikerjakan 12 orang, berapa hari yang dibutuhkan?',o:['4 hari','5 hari','6 hari','8 hari'],a:0,d:'hots',e:'8 × 6 = 48 orang-hari. 48 ÷ 12 = 4 hari (perbandingan berbalik nilai)'},
+  {q:'Sebuah tangki berisi ¾ penuh. Dipakai ⅔ dari isinya. Berapa bagian tangki yang tersisa?',o:['¼','⅓','5/12','1/12'],a:0,d:'hots',e:'¾ × (1 − ⅔) = ¾ × ⅓ = ¼ bagian'},
+  {q:'Toko memberi diskon 25%, lalu tambahan diskon 10% dari harga sudah diskon. Berapa total diskon dari harga awal?',o:['35%','32,5%','27,5%','30%'],a:1,d:'hots',e:'Harga akhir = 0,75 × 0,9 = 0,675. Diskon total = 1 − 0,675 = 32,5%'},
+  {q:'Hasil dari 0,8% dari 0,25 adalah ...',o:['0,2','0,02','0,002','0,0002'],a:2,d:'hots',e:'0,008 × 0,25 = 0,002'},
+  {q:'Hasil dari (½ + ⅓) × (½ − ⅓) adalah ...',o:['5/36','1/36','5/12','5/6'],a:0,d:'hots',e:'(5/6) × (1/6) = 5/36'},
+  {q:'Sebuah roda berputar 1¼ putaran. Berapa derajat putaran roda tersebut?',o:['360°','450°','480°','540°'],a:1,d:'hots',e:'1¼ × 360° = 5/4 × 360° = 450°'},
+  {q:'Sebuah mobil melaju dengan kecepatan 45 km/jam. Berapa jarak yang ditempuh dalam 40 menit?',o:['18 km','30 km','24 km','45 km'],a:1,d:'hots',e:'40 menit = ⅔ jam. 45 × ⅔ = 30 km'},
+  {q:'Hasil dari 0,333... × 3 adalah ...',o:['1','0,999','1,33','0,9'],a:0,d:'hots',e:'0,333... = ⅓. Maka ⅓ × 3 = 1'},
+  {q:'Volume kubus dengan sisi 1½ cm adalah ...',o:['3 3/8 cm³','2¼ cm³','4½ cm³','1⅛ cm³'],a:0,d:'hots',e:'(3/2)³ = 27/8 = 3 3/8 cm³'},
+  {q:'Suhu awal −2,5°C, naik 7,8°C, lalu turun 4,3°C. Berapa suhu akhir?',o:['1°C','0,5°C','1,5°C','2°C'],a:0,d:'hots',e:'−2,5 + 7,8 − 4,3 = 1°C'},
+  {q:'Pekerja A menyelesaikan ⅓ pekerjaan per jam, pekerja B ¼ per jam. Jika bekerja bersama, berapa jam selesai?',o:['1 1/7 jam','1 5/7 jam','2 jam','2½ jam'],a:1,d:'hots',e:'Gabungan = ⅓ + ¼ = 7/12 per jam. Waktu = 12/7 = 1 5/7 jam'},
+  {q:'⅓ uang Andi ditambah Rp 5.000 sama dengan ½ uangnya. Berapa uang Andi semula?',o:['Rp 25.000','Rp 30.000','Rp 35.000','Rp 40.000'],a:1,d:'hots',e:'½ − ⅓ = 1/6 uang = Rp 5.000. Total = Rp 30.000'},
+  {q:'Air mengalir ½ liter per menit ke dalam tangki 12 liter. Berapa menit untuk penuh?',o:['6 menit','12 menit','24 menit','18 menit'],a:2,d:'hots',e:'12 ÷ ½ = 24 menit'},
+  {q:'Luas kebun 480 m². ⅛ ditanam jagung, 25% tomat, sisanya cabai. Berapa m² untuk cabai?',o:['180 m²','160 m²','140 m²','120 m²'],a:0,d:'hots',e:'Jagung = 180, tomat = 120, total = 300, sisa = 480−300 = 180 m²'},
+  {q:'Tabungan Rp 200.000 naik 0,5% per bulan. Berapa tabungan setelah 1 bulan?',o:['Rp 100.000','Rp 201.000','Rp 200.500','Rp 205.000'],a:1,d:'hots',e:'200.000 × 1,005 = Rp 201.000'},
+  {q:'Hasil dari 1½ ÷ ⅓ adalah ...',o:['4½','3','½','4'],a:0,d:'hots',e:'3/2 × 3/1 = 9/2 = 4½'},
+  {q:'5 pekerja selesai dalam 8 hari. Jika hanya 4 pekerja, berapa hari dibutuhkan?',o:['10 hari','6 hari','7 hari','12 hari'],a:0,d:'hots',e:'5 × 8 = 40 orang-hari. 40 ÷ 4 = 10 hari'},
+  {q:'Sebuah baju setelah diskon 25% harganya Rp 90.000. Berapa harga awalnya?',o:['Rp 120.000','Rp 112.500','Rp 117.500','Rp 115.000'],a:0,d:'hots',e:'75% × harga awal = 90.000. Harga awal = 90.000 ÷ 0,75 = Rp 120.000'},
+  {q:'0,4 uang Andi sama dengan ⅓ uangnya ditambah Rp 8.000. Berapa uang Andi?',o:['Rp 120.000','Rp 100.000','Rp 90.000','Rp 80.000'],a:0,d:'hots',e:'0,4x − ⅓x = 8.000 → (2/5 − 1/3)x = 1/15 x = 8.000. x = Rp 120.000'},
+  {q:'Hasil dari (⅔)² + (½)² adalah ...',o:['25/36','5/6','5/9','25/72'],a:0,d:'hots',e:'4/9 + ¼ = 16/36 + 9/36 = 25/36'},
+  {q:'Waktu ¼ jam sama dengan ... menit',o:['15 menit','25 menit','30 menit','45 menit'],a:0,d:'hots',e:'¼ × 60 = 15 menit'},
+  {q:'Berat ⅖ kg dan 0,3 kg digabung. Berapa total beratnya?',o:['0,7 kg','0,5 kg','0,8 kg','0,6 kg'],a:0,d:'hots',e:'0,4 + 0,3 = 0,7 kg'},
+  {q:'Suku bunga ½% per bulan. Modal Rp 1.000.000. Berapa bunga 1 bulan?',o:['Rp 5.000','Rp 500','Rp 50','Rp 50.000'],a:0,d:'hots',e:'0,005 × 1.000.000 = Rp 5.000'},
+  {q:'1,5 kg gula dipakai 0,8 kg, lalu sisanya dipakai lagi ¼ kg. Berapa sisa akhir?',o:['0,45 kg','0,5 kg','0,55 kg','0,4 kg'],a:0,d:'hots',e:'1,5 − 0,8 − 0,25 = 0,45 kg'},
+  {q:'Andi punya ⅜ kue. Ia memberi Budi ¼ dari yang ia punya. Berapa sisa kue Andi?',o:['9/32','3/8','3/32','5/16'],a:0,d:'hots',e:'⅜ × ¾ = 9/32 (sisa Andi setelah memberi ¼ dari ⅜)'},
+  {q:'Skala peta 1:50.000. Jarak sebenarnya 2,5 km. Berapa jarak di peta?',o:['5 cm','10 cm','2,5 cm','0,5 cm'],a:0,d:'hots',e:'2,5 km = 250.000 cm. 250.000 ÷ 50.000 = 5 cm'},
+  {q:'Hasil dari ½ ÷ 0,25 × ¾ adalah ...',o:['1½','¾','3/8','1'],a:0,d:'hots',e:'½ ÷ 0,25 = 2. 2 × ¾ = 3/2 = 1½'},
+  {q:'Penjualan toko naik 10% bulan ini, lalu naik lagi 20% bulan depan. Berapa total kenaikan dari awal?',o:['30%','32%','28%','22%'],a:1,d:'hots',e:'1 × 1,1 × 1,2 = 1,32 → naik 32%'}
+];
+
+/* =========================================================
+   STATE
+========================================================= */
+const state = {
+  current: 1,
+  total: 8,
+  stopwatch: {
+    running: false,
+    startTime: 0,
+    elapsed: 0,
+    intervalId: null,
+    lastActionTime: 0,
+    questionTimes: {}, // {id: {time, correct, difficulty}}
+    stopped: false
+  },
+  rationalSelected: new Set(),
+  rationalAnswered: false,
+  wordAnswers: {}, // {id: selectedOption}
+  wordChecked: {}, // {id: true}
+  arithmeticAnswered: {}, // {id: {answer, correct}}
+  arithmeticRevealed: {}, // {id: true}
+  filter: { arithmetic: 'all', word: 'all' }
+};
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+function goToSlide(n) {
+  if (n < 1 || n > state.total) return;
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.getElementById('slide' + n).classList.add('active');
+  state.current = n;
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function nextSlide(){ if(state.current < state.total) goToSlide(state.current + 1); }
+function prevSlide(){ if(state.current > 1) goToSlide(state.current - 1); }
+
+function updateNav() {
+  document.getElementById('navInfo').textContent = `${state.current} / ${state.total}`;
+  document.getElementById('prevBtn').disabled = state.current === 1;
+  document.getElementById('nextBtn').disabled = state.current === state.total;
+  document.querySelectorAll('.dot').forEach((d,i) => {
+    d.classList.toggle('active', i+1 === state.current);
+  });
+}
+
+function buildDots() {
+  const dotNav = document.getElementById('dotNav');
+  for (let i=1; i<=state.total; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i===1 ? ' active' : '');
+    d.title = 'Slide ' + i;
+    d.onclick = () => goToSlide(i);
+    dotNav.appendChild(d);
+  }
+}
+
+/* =========================================================
+   SLIDE 3 - RATIONAL CARDS GAME
+========================================================= */
+function renderRationalCards() {
+  const grid = document.getElementById('rationalGrid');
+  grid.innerHTML = '';
+  rationalCards.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = 'rational-card';
+    card.dataset.idx = i;
+    card.textContent = c.v;
+    card.onclick = () => toggleRationalCard(i, card);
+    grid.appendChild(card);
+  });
+}
+
+function toggleRationalCard(i, el) {
+  if (state.rationalAnswered) return;
+  if (state.rationalSelected.has(i)) {
+    state.rationalSelected.delete(i);
+    el.classList.remove('selected');
+  } else {
+    state.rationalSelected.add(i);
+    el.classList.add('selected');
+  }
+  document.getElementById('rationalCount').textContent = `Terpilih: ${state.rationalSelected.size}`;
+}
+
+function checkRationalCards() {
+  const cards = document.querySelectorAll('.rational-card');
+  let correct = 0, wrong = 0;
+  cards.forEach((card, i) => {
+    const c = rationalCards[i];
+    const isSelected = state.rationalSelected.has(i);
+    card.classList.remove('selected');
+    if (isSelected && c.r) {
+      card.classList.add('correct-flash');
+      correct++;
+    } else if (isSelected && !c.r) {
+      card.classList.add('wrong-flash');
+      wrong++;
+    } else if (!isSelected && c.r) {
+      card.classList.add('wrong-flash');
+      wrong++;
+    }
+  });
+  state.rationalAnswered = true;
+  const result = document.getElementById('rationalResult');
+  result.classList.remove('hidden');
+  const totalRational = rationalCards.filter(c => c.r).length;
+  result.innerHTML = `
+    <div class="card-soft" style="background:linear-gradient(135deg,#fff,var(--pink-bg));border:2px solid var(--pink-soft)">
+      <p class="font-bold text-lg" style="color:var(--pink-deep)">📊 Hasil Pemeriksaan</p>
+      <p style="color:var(--deep)">Benar: <strong style="color:#2d8c52">${correct}</strong> &nbsp;|&nbsp; Salah/Tertinggal: <strong style="color:#a02828">${wrong}</strong> &nbsp;|&nbsp; Total kartu rasional: <strong>${totalRational}</strong></p>
+      <p class="text-sm mt-1" style="color:var(--deep-soft)">${correct === totalRational && wrong === 0 ? 'Sempurna! Kamu hebat! ♥' : 'Pelajari lagi definisinya ya, kamu pasti bisa!'}</p>
+    </div>
+  `;
+  showToast(correct === totalRational && wrong === 0 ? 'Sempurna! Semua benar!' : `Benar ${correct} dari ${totalRational}`, correct === totalRational && wrong === 0 ? 'success' : 'error');
+}
+
+function showRationalAnswers() {
+  const cards = document.querySelectorAll('.rational-card');
+  cards.forEach((card, i) => {
+    card.classList.remove('selected','correct-flash','wrong-flash');
+    card.classList.add('show-answer');
+    if (rationalCards[i].r) card.classList.add('rational');
+    else card.classList.add('irrational');
+  });
+  state.rationalAnswered = true;
+  const result = document.getElementById('rationalResult');
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="card-soft" style="background:linear-gradient(135deg,var(--mint),#d4f5e0);border:2px solid #5fc78a">
+      <p class="font-bold" style="color:#2d8c52"><i class="fa-solid fa-eye"></i> Jawaban Ditampilkan</p>
+      <p style="color:var(--deep)">Hijau = Bilangan Rasional &nbsp;|&nbsp; Kuning = Bilangan Irasional</p>
+    </div>
+  `;
+}
+
+function resetRationalCards() {
+  state.rationalSelected.clear();
+  state.rationalAnswered = false;
+  document.getElementById('rationalCount').textContent = 'Terpilih: 0';
+  document.getElementById('rationalResult').classList.add('hidden');
+  renderRationalCards();
+}
+
+/* =========================================================
+   SLIDE 5 - ARITHMETIC PROBLEMS & STOPWATCH
+========================================================= */
+function renderArithmeticProblems() {
+  const grid = document.getElementById('arithmeticGrid');
+  grid.innerHTML = '';
+  arithmeticProblems.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'problem-card';
+    card.dataset.id = i;
+    card.dataset.diff = p.d;
+    const id = `ar-${i}`;
+    card.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="prob-num">Soal ${i+1}</span>
+        <span class="badge badge-${p.d}">${p.d}</span>
+      </div>
+      <div class="prob-q">${p.q}</div>
+      <input type="text" class="answer-input" id="${id}-input" placeholder="Tulis jawaban..." data-id="${i}" onkeydown="if(event.key==='Enter'){checkArithmetic(${i});}">
+      <div class="flex gap-2">
+        <button class="btn btn-sm" onclick="checkArithmetic(${i})"><i class="fa-solid fa-check"></i> Cek</button>
+        <button class="btn btn-secondary btn-sm" onclick="toggleExplanation(${i})"><i class="fa-solid fa-lightbulb"></i> Pembahasan</button>
+      </div>
+      <div id="${id}-result"></div>
+      <div id="${id}-explain" class="explanation-box hidden"></div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function filterProblems(d) {
+  state.filter.arithmetic = d;
+  document.querySelectorAll('#arithmeticGrid .problem-card').forEach(c => {
+    if (d === 'all' || c.dataset.diff === d) c.style.display = '';
+    else c.style.display = 'none';
+  });
+}
+
+function normalizeAnswer(s) {
+  return String(s).trim().toLowerCase()
+    .replace(/,/g, '.')
+    .replace(/\s+/g, '')
+    .replace(/\\/g, '/');
+}
+
+function checkArithmetic(i) {
+  const p = arithmeticProblems[i];
+  const input = document.getElementById(`ar-${i}-input`);
+  const userAns = normalizeAnswer(input.value);
+  if (!userAns) { showToast('Isi jawaban dulu ya!', 'error'); return; }
+  
+  // Record timing
+  if (state.stopwatch.running && !state.stopwatch.questionTimes[i]) {
+    const now = Date.now();
+    const delta = (now - state.stopwatch.lastActionTime) / 1000;
+    state.stopwatch.questionTimes[i] = { time: delta, correct: false, difficulty: p.d };
+    state.stopwatch.lastActionTime = now;
+  }
+  
+  const correct = userAns === normalizeAnswer(p.a) || p.alts.some(a => normalizeAnswer(a) === userAns);
+  if (state.stopwatch.questionTimes[i]) state.stopwatch.questionTimes[i].correct = correct;
+  state.arithmeticAnswered[i] = { answer: input.value, correct };
+  
+  const card = document.querySelector(`.problem-card[data-id="${i}"]`);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct ? 'correct' : 'wrong');
+  
+  const resultEl = document.getElementById(`ar-${i}-result`);
+  resultEl.innerHTML = correct
+    ? `<div class="result-badge result-correct"><i class="fa-solid fa-check"></i> Benar!</div>`
+    : `<div class="result-badge result-wrong"><i class="fa-solid fa-xmark"></i> Salah. Jawaban: <strong>${p.a}</strong></div>`;
+  
+  showToast(correct ? 'Jawaban benar! ♥' : 'Belum tepat, coba lagi', correct ? 'success' : 'error');
+}
+
+function toggleExplanation(i) {
+  const el = document.getElementById(`ar-${i}-explain`);
+  if (el.classList.contains('hidden')) {
+    el.innerHTML = `<strong>💡 Pembahasan:</strong> ${arithmeticProblems[i].e}`;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+  }
+}
+
+function startStopwatch() {
+  if (state.stopwatch.running || state.stopwatch.stopped) return;
+  state.stopwatch.running = true;
+  state.stopwatch.startTime = Date.now();
+  state.stopwatch.lastActionTime = state.stopwatch.startTime;
+  state.stopwatch.intervalId = setInterval(updateStopwatch, 100);
+  document.getElementById('startBtn').classList.add('hidden');
+  document.getElementById('stopBtn').classList.remove('hidden');
+  document.getElementById('swTime').classList.add('running');
+  showToast('Stopwatch dimulai! Semangat ya! ♥', 'success');
+}
+
+function updateStopwatch() {
+  const elapsed = Math.floor((Date.now() - state.stopwatch.startTime) / 1000);
+  state.stopwatch.elapsed = elapsed;
+  const m = Math.floor(elapsed / 60).toString().padStart(2,'0');
+  const s = (elapsed % 60).toString().padStart(2,'0');
+  document.getElementById('swTime').textContent = `${m}:${s}`;
+}
+
+function finishPractice() {
+  if (!state.stopwatch.running) {
+    showToast('Tekan tombol Start dulu ya!', 'error');
+    return;
+  }
+  state.stopwatch.running = false;
+  state.stopwatch.stopped = true;
+  clearInterval(state.stopwatch.intervalId);
+  document.getElementById('swTime').classList.remove('running');
+  document.getElementById('swTime').classList.add('stopped');
+  document.getElementById('stopBtn').classList.add('hidden');
+  renderStats();
+  goToSlide(6);
+  showToast('Latihan selesai! Lihat hasilnya di slide selanjutnya ♥', 'success');
+}
+
+/* =========================================================
+   SLIDE 6 - STATISTICS
+========================================================= */
+function renderStats() {
+  const qTimes = state.stopwatch.questionTimes;
+  const answered = Object.keys(qTimes).length;
+  const correct = Object.values(qTimes).filter(v => v.correct).length;
+  const wrong = answered - correct;
+  const totalTime = state.stopwatch.elapsed;
+  const avgTime = answered > 0 ? (totalTime / answered).toFixed(1) : 0;
+  const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+  
+  document.getElementById('statAnswered').textContent = answered;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statAvgTime').textContent = avgTime + 's';
+  document.getElementById('statTotalTime').textContent = formatTime(totalTime);
+  document.getElementById('statAccuracy').textContent = accuracy + '%';
+  
+  // Per-question list
+  const list = document.getElementById('perQuestionTimes');
+  list.innerHTML = '';
+  if (answered === 0) {
+    list.innerHTML = '<p style="color:var(--deep-soft);text-align:center;padding:1rem">Belum ada soal yang dikerjakan. Tekan Start dan jawab soal pada slide sebelumnya!</p>';
+    return;
+  }
+  Object.keys(qTimes).sort((a,b) => parseInt(a)-parseInt(b)).forEach(i => {
+    const v = qTimes[i];
+    const p = arithmeticProblems[i];
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-3 p-2 rounded-lg';
+    row.style.background = v.correct ? 'rgba(95,199,138,.1)' : 'rgba(255,107,138,.1)';
+    row.innerHTML = `
+      <span class="prob-num" style="min-width:60px">Soal ${parseInt(i)+1}</span>
+      <span class="badge badge-${v.difficulty}" style="min-width:60px">${v.difficulty}</span>
+      <span class="flex-1 text-sm" style="color:var(--deep)">${p.q}</span>
+      <span class="font-bold" style="color:${v.correct?'#2d8c52':'#a02828'};min-width:60px;text-align:right">${v.time.toFixed(1)}s</span>
+      <i class="fa-solid ${v.correct?'fa-check':'fa-xmark'}" style="color:${v.correct?'#2d8c52':'#a02828'}"></i>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec/60);
+  const s = sec % 60;
+  if (m === 0) return s + 's';
+  return `${m}m ${s}s`;
+}
+
+/* =========================================================
+   SLIDE 7 - WORD PROBLEMS
+========================================================= */
+function renderWordProblems() {
+  const grid = document.getElementById('wordGrid');
+  grid.innerHTML = '';
+  wordProblems.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'problem-card';
+    card.dataset.id = i;
+    card.dataset.diff = p.d;
+    const id = `wp-${i}`;
+    const badgeClass = p.d === 'hots' ? 'badge-hots' : `badge-${p.d}`;
+    card.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="prob-num">Soal ${i+1}</span>
+        <span class="badge ${badgeClass}">${p.d}</span>
+      </div>
+      <div class="prob-q">${p.q}</div>
+      <div class="space-y-2" id="${id}-options"></div>
+      <div class="flex gap-2">
+        <button class="btn btn-sm" onclick="checkWordProblem(${i})"><i class="fa-solid fa-check"></i> Cek</button>
+        <button class="btn btn-secondary btn-sm" onclick="toggleWordExplanation(${i})"><i class="fa-solid fa-lightbulb"></i> Pembahasan</button>
+      </div>
+      <div id="${id}-result"></div>
+      <div id="${id}-explain" class="explanation-box hidden"></div>
+    `;
+    grid.appendChild(card);
+    
+    const optsEl = card.querySelector(`#${id}-options`);
+    p.o.forEach((opt, j) => {
+      const btn = document.createElement('div');
+      btn.className = 'mc-option';
+      btn.dataset.option = j;
+      btn.innerHTML = `<span class="mc-letter">${String.fromCharCode(65+j)}</span><span>${opt}</span>`;
+      btn.onclick = () => selectWordOption(i, j);
+      optsEl.appendChild(btn);
+    });
+  });
+}
+
+function filterWordProblems(d) {
+  state.filter.word = d;
+  document.querySelectorAll('#wordGrid .problem-card').forEach(c => {
+    if (d === 'all' || c.dataset.diff === d) c.style.display = '';
+    else c.style.display = 'none';
+  });
+}
+
+function selectWordOption(i, j) {
+  if (state.wordChecked[i]) return;
+  state.wordAnswers[i] = j;
+  const card = document.querySelector(`#wordGrid .problem-card[data-id="${i}"]`);
+  card.querySelectorAll('.mc-option').forEach((el, idx) => {
+    el.classList.toggle('selected', idx === j);
+  });
+}
+
+function checkWordProblem(i) {
+  const p = wordProblems[i];
+  if (state.wordAnswers[i] === undefined) {
+    showToast('Pilih salah satu jawaban dulu!', 'error');
+    return;
+  }
+  state.wordChecked[i] = true;
+  const card = document.querySelector(`#wordGrid .problem-card[data-id="${i}"]`);
+  const opts = card.querySelectorAll('.mc-option');
+  opts.forEach((el, idx) => {
+    el.classList.remove('selected');
+    if (idx === p.a) el.classList.add('correct');
+    else if (idx === state.wordAnswers[i]) el.classList.add('wrong');
+  });
+  const correct = state.wordAnswers[i] === p.a;
+  const resultEl = document.getElementById(`wp-${i}-result`);
+  resultEl.innerHTML = correct
+    ? `<div class="result-badge result-correct"><i class="fa-solid fa-check"></i> Benar!</div>`
+    : `<div class="result-badge result-wrong"><i class="fa-solid fa-xmark"></i> Salah. Jawaban: ${String.fromCharCode(65+p.a)}</div>`;
+  showToast(correct ? 'Benar! ♥' : 'Cek pembahasannya ya', correct ? 'success' : 'error');
+}
+
+function toggleWordExplanation(i) {
+  const el = document.getElementById(`wp-${i}-explain`);
+  if (el.classList.contains('hidden')) {
+    el.innerHTML = `<strong>💡 Pembahasan:</strong> ${wordProblems[i].e}`;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+  }
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* =========================================================
+   KEYBOARD NAVIGATION
+========================================================= */
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') nextSlide();
+  else if (e.key === 'ArrowLeft') prevSlide();
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+buildDots();
+renderRationalCards();
+renderArithmeticProblems();
+renderWordProblems();
+updateNav();
+</script>
+
+</body>
+</html>
