@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 Petualangan Bilangan Rasional 🌸</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink-50:#fff5f7;--pink-100:#ffe4ec;--pink-200:#ffc9dc;--pink-300:#ffa3c2;
+  --pink-400:#ff7eac;--pink-500:#ff5c95;--pink-600:#e63d7d;
+  --lav-100:#f3edff;--lav-200:#e0d4ff;--lav-300:#c8b6ff;--lav-400:#a78bfa;
+  --gold:#f6c177;--rose:#f87171;--green:#4ade80;--text:#4a2c3d;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Quicksand',sans-serif;background:linear-gradient(135deg,#ffe4ec 0%,#f3edff 50%,#e0d4ff 100%);background-attachment:fixed;color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Fredoka',sans-serif;margin:0}
+.float-deco{position:fixed;pointer-events:none;z-index:0;opacity:.6;animation:float 8s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
+.slide{display:none;min-height:100vh;padding:5rem 1.5rem 6rem;position:relative;z-index:1}
+.slide.active{display:block;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.cute-card{background:#fff;border-radius:1.5rem;box-shadow:0 8px 30px rgba(255,92,149,.15),0 2px 8px rgba(167,139,250,.1);border:2px solid var(--pink-100)}
+.btn-cute{background:linear-gradient(135deg,var(--pink-400),var(--pink-500));color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;padding:.65rem 1.6rem;border-radius:9999px;border:none;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(255,92,149,.4);font-size:.95rem}
+.btn-cute:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 6px 20px rgba(255,92,149,.5)}
+.btn-cute:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-lav{background:linear-gradient(135deg,var(--lav-300),var(--lav-400));box-shadow:0 4px 15px rgba(167,139,250,.4)}
+.btn-sm{padding:.3rem .9rem;font-size:.8rem}
+.num-card{background:#fff;border:3px solid var(--pink-200);border-radius:1rem;padding:.7rem .3rem;text-align:center;cursor:pointer;transition:all .3s;font-family:'Fredoka',sans-serif;font-weight:600;font-size:1rem;user-select:none}
+.num-card:hover{transform:translateY(-3px);border-color:var(--pink-400);box-shadow:0 6px 15px rgba(255,92,149,.2)}
+.num-card.correct{background:linear-gradient(135deg,#bbf7d0,#86efac);border-color:var(--green);color:#166534}
+.num-card.wrong{background:linear-gradient(135deg,#fecaca,#fca5a5);border-color:var(--rose);color:#991b1b}
+
+/* RAPIKAN NOTASI PECAHAN */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 .25em;
+  line-height: 1.1;
+  font-family: 'Fredoka', sans-serif;
+}
+.frac .num { border-bottom: 2.5px solid currentColor; padding: 0 .4em .1em; font-weight: 600; }
+.frac .den { padding: .1em .4em 0; font-weight: 600; }
+.mixed-frac {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  gap: 0.15rem;
+}
+.mixed-frac .int-part {
+  font-weight: 600;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.1em;
+  align-self: center;
+}
+.frac-input-group {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  gap: 0.4rem;
+}
+.frac-input {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+}
+.frac-input input {
+  width: 65px !important;
+  padding: 0.4rem !important;
+  font-size: 1.1rem !important;
+  border-radius: 0.5rem !important;
+  text-align: center !important;
+  height: 42px !important;
+  box-sizing: border-box !important;
+}
+.frac-input .div-line {
+  width: 100%;
+  height: 0;
+  border-top: 2.5px solid var(--pink-500);
+  margin: 2px 0;
+}
+
+.cute-input{background:#fff;border:2px solid var(--pink-200);border-radius:.75rem;padding:.4rem .65rem;font-family:'Fredoka',sans-serif;font-size:.95rem;width:60px;text-align:center;transition:all .2s}
+.cute-input:focus{outline:none;border-color:var(--pink-400);box-shadow:0 0 0 3px rgba(255,92,149,.2)}
+.cute-text{width:100%;background:#fff;border:2px solid var(--pink-200);border-radius:.75rem;padding:.65rem 1rem;font-family:'Quicksand',sans-serif;font-size:1rem;transition:all .2s}
+.cute-text:focus{outline:none;border-color:var(--pink-400);box-shadow:0 0 0 3px rgba(255,92,149,.2)}
+.nav-bar{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#fff;border-radius:9999px;padding:.4rem .8rem;box-shadow:0 4px 20px rgba(255,92,149,.3);display:flex;align-items:center;gap:.5rem;z-index:50}
+.nav-dot{width:10px;height:10px;border-radius:50%;background:var(--pink-200);cursor:pointer;transition:all .3s}
+.nav-dot.active{background:var(--pink-500);width:30px;border-radius:5px}
+.nav-btn{background:var(--pink-100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;color:var(--pink-600);font-weight:bold;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.nav-btn:hover{background:var(--pink-300)}
+.student-panel{max-height:480px;overflow-y:auto;padding-right:.4rem}
+.student-panel::-webkit-scrollbar{width:8px}
+.student-panel::-webkit-scrollbar-track{background:var(--pink-50);border-radius:4px}
+.student-panel::-webkit-scrollbar-thumb{background:var(--pink-300);border-radius:4px}
+.student-panel.s2::-webkit-scrollbar-thumb{background:var(--lav-400)}
+.tab-btn{padding:.45rem .9rem;border-radius:9999px;background:#fff;border:2px solid var(--pink-200);cursor:pointer;font-family:'Fredoka',sans-serif;font-weight:500;color:var(--text);transition:all .2s;font-size:.85rem}
+.tab-btn.active{background:linear-gradient(135deg,var(--pink-400),var(--pink-500));color:#fff;border-color:transparent}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn .3s}
+.fraction-block{display:grid;gap:3px;background:var(--pink-100);padding:3px;border-radius:.5rem;width:fit-content}
+.fraction-cell{width:38px;height:38px;background:#fff;border-radius:.25rem;cursor:pointer;transition:all .2s}
+.fraction-cell.colored{background:linear-gradient(135deg,var(--pink-400),var(--pink-500))}
+.fraction-cell:hover{transform:scale(1.05)}
+.mc-option{background:#fff;border:2px solid var(--pink-100);border-radius:.75rem;padding:.6rem .9rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.5rem;font-size:.95rem}
+.mc-option:hover{border-color:var(--pink-300);background:var(--pink-50)}
+.mc-option.selected{border-color:var(--pink-500);background:var(--pink-100)}
+.mc-option.correct{border-color:var(--green);background:#dcfce7}
+.mc-option.incorrect{border-color:var(--rose);background:#fee2e2}
+.progress-bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--pink-400),var(--lav-400));z-index:100;transition:width .3s}
+.mascot{font-size:3.5rem;display:inline-block;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.feedback{margin-top:.5rem;padding:.5rem .75rem;border-radius:.5rem;font-weight:600;font-size:.9rem;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#dcfce7;color:#166534}
+.feedback.wrong{background:#fee2e2;color:#991b1b}
+.title-glow{background:linear-gradient(135deg,var(--pink-500),var(--lav-400));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.slide-header{text-align:center;margin-bottom:1.5rem}
+.slide-badge{display:inline-block;background:linear-gradient(135deg,var(--pink-400),var(--lav-400));color:#fff;padding:.25rem 1rem;border-radius:9999px;font-family:'Fredoka',sans-serif;font-size:.85rem;font-weight:500;margin-bottom:.5rem}
+.s1-color{background:linear-gradient(135deg,#fff0f5,#ffe4ec);border:2px solid var(--pink-300)}
+.s2-color{background:linear-gradient(135deg,#f3edff,#e0d4ff);border:2px solid var(--lav-300)}
+@keyframes confetti-fall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.confetti{position:fixed;width:10px;height:10px;pointer-events:none;z-index:1000;animation:confetti-fall 3s linear forwards;border-radius:2px}
+.op-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.q-card{background:#fff;border:2px solid var(--pink-100);border-radius:.75rem;padding:.75rem;transition:all .2s}
+.q-card:hover{border-color:var(--pink-300)}
+select.cute-input{cursor:pointer}
+@media(max-width:640px){
+  .num-card{font-size:.85rem;padding:.5rem .2rem}
+  .fraction-cell{width:30px;height:30px}
+  h1{font-size:2rem!important}
+  h2{font-size:1.5rem!important}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:14.28%"></div>
+
+<div class="float-deco" style="top:8%;left:4%;font-size:2.5rem">🌸</div>
+<div class="float-deco" style="top:20%;right:6%;font-size:2rem;animation-delay:1.2s">✨</div>
+<div class="float-deco" style="bottom:25%;left:8%;font-size:2.2rem;animation-delay:2.5s">💖</div>
+<div class="float-deco" style="top:65%;right:12%;font-size:2rem;animation-delay:3.5s">🦋</div>
+<div class="float-deco" style="bottom:10%;right:20%;font-size:1.8rem;animation-delay:4s">🌟</div>
+
+<div id="app">
+
+<!-- ===== SLIDE 1: COVER ===== -->
+<section class="slide active" id="slide1">
+  <div class="max-w-4xl mx-auto pt-8">
+    <div class="text-center mb-6">
+      <div class="mascot">🎀</div>
+      <div class="slide-badge">Matematika Kelas 7 SMP</div>
+      <h1 class="text-4xl md:text-6xl font-bold title-glow mb-2 mt-3">Petualangan Bilangan Rasional</h1>
+      <p class="text-lg text-pink-600 font-semibold">Yuk belajar pecahan sambil bermain! 🌷</p>
+    </div>
+    <div class="cute-card p-6 md:p-8 max-w-2xl mx-auto">
+      <h2 class="text-2xl text-center mb-4" style="color:var(--pink-600)">✨ Kenalan Yuk! ✨</h2>
+      <p class="text-center mb-5 text-gray-600">Tulis nama kalian berdua dulu ya, sobat cantik!</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block mb-2 font-bold text-pink-700">🌷 Siswa 1</label>
+          <input type="text" id="name1" class="cute-text" placeholder="Namamu siapa?" oninput="updateNames()">
+        </div>
+        <div>
+          <label class="block mb-2 font-bold text-purple-700">🌷 Siswa 2</label>
+          <input type="text" id="name2" class="cute-text" placeholder="Namamu siapa?" oninput="updateNames()">
+        </div>
+      </div>
+      <div class="text-center mt-6">
+        <button class="btn-cute" onclick="goToSlide(2)">Mulai Petualangan! 🚀</button>
+      </div>
+    </div>
+    <div class="text-center mt-6 text-pink-500 text-sm italic">
+      "Belajar matematika itu seperti bermain - semakin sering berlatih, semakin pintar kita!" 💕
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 2: REVIEW ===== -->
+<section class="slide" id="slide2">
+  <div class="max-w-5xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 2 • Review</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Ingat Yuk, Bilangan Bulat! 📚</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="cute-card p-6">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">🔄 Apa itu Bilangan Bulat?</h3>
+        <p class="mb-3">Bilangan bulat adalah himpunan bilangan yang terdiri dari:</p>
+        <ul class="space-y-2">
+          <li class="flex items-start gap-2"><span>➕</span><span>Bilangan bulat positif (1, 2, 3, 4, ...)</span></li>
+          <li class="flex items-start gap-2"><span>⭕</span><span>Nol (0)</span></li>
+          <li class="flex items-start gap-2"><span>➖</span><span>Bilangan bulat negatif (-1, -2, -3, ...)</span></li>
+        </ul>
+        <div class="mt-4 p-3 rounded-xl" style="background:var(--lav-100)">
+          <p class="text-center font-bold">..., -3, -2, -1, 0, 1, 2, 3, ...</p>
+        </div>
+      </div>
+      <div class="cute-card p-6">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--lav-400)">🤔 Pertanyaan Pemantik</h3>
+        <p class="mb-3">Sobat cantik, pernahkah kalian menemui situasi seperti ini?</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg bg-pink-50 border border-pink-200">
+            <p>🍕 Andi makan <b>seperempat</b> piza. Bagaimana cara menuliskannya?</p>
+          </div>
+          <div class="p-3 rounded-lg bg-purple-50 border border-purple-200">
+            <p>💧 Botol berisi <b>setengah</b> liter air. Berapa liter itu?</p>
+          </div>
+          <div class="p-3 rounded-lg bg-pink-50 border border-pink-200">
+            <p>📏 Penggaris menunjukkan <b>2,5 cm</b>. Bisakah ditulis sebagai pecahan?</p>
+          </div>
+        </div>
+        <p class="mt-4 text-center font-bold text-pink-600">💡 Bilangan seperti itu disebut BILANGAN RASIONAL!</p>
+      </div>
+    </div>
+    <div class="text-center mt-6">
+      <button class="btn-cute" onclick="goToSlide(3)">Lanjut ke Tujuan Pembelajaran 🎯</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 3: OBJECTIVES ===== -->
+<section class="slide" id="slide3">
+  <div class="max-w-4xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 3 • Tujuan</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Tujuan Pembelajaran 🎯</h2>
+      <p class="text-pink-600 font-semibold mt-2">Setelah belajar hari ini, kalian akan bisa...</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4 mt-5">
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">🌸</div><div><h3 class="font-bold text-pink-600">1. Memahami Konsep</h3><p class="text-sm">Menjelaskan definisi bilangan rasional dan irasional serta perbedaannya</p></div></div>
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">🍰</div><div><h3 class="font-bold text-pink-600">2. Membentuk Pecahan</h3><p class="text-sm">Membentuk pecahan dari gambar dan cerita sehari-hari</p></div></div>
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">✨</div><div><h3 class="font-bold text-pink-600">3. Pecahan Senilai</h3><p class="text-sm">Menentukan pecahan senilai dan menyederhanakan pecahan</p></div></div>
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">⚖️</div><div><h3 class="font-bold text-pink-600">4. Membandingkan</h3><p class="text-sm">Membandingkan dan mengurutkan pecahan</p></div></div>
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">🌈</div><div><h3 class="font-bold text-pink-600">5. Pecahan Campuran</h3><p class="text-sm">Mengubah pecahan biasa menjadi pecahan campuran dan sebaliknya</p></div></div>
+      <div class="cute-card p-5 flex items-start gap-4"><div class="text-3xl">🧮</div><div><h3 class="font-bold text-pink-600">6. Operasi Hitung</h3><p class="text-sm">Menjumlahkan, mengurangkan, mengalikan, dan membagi pecahan</p></div></div>
+    </div>
+    <div class="text-center mt-6">
+      <button class="btn-cute" onclick="goToSlide(4)">Ayo Mulai Belajar! 💪</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 4: RATIONAL VS IRRATIONAL ===== -->
+<section class="slide" id="slide4">
+  <div class="max-w-6xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 4 • Konsep</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Bilangan Rasional vs Irasional 🌟</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5 mb-5">
+      <div class="cute-card p-6">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--green)">💚 Bilangan Rasional</h3>
+        <p class="mb-3"><b>Definisi:</b> Bilangan yang dapat ditulis dalam bentuk <span class="frac"><span class="num">a</span><span class="den">b</span></span>, di mana <b>a</b> dan <b>b</b> bilangan bulat, dan <b>b ≠ 0</b>.</p>
+        <p class="mb-2 font-semibold">Contoh:</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm"><span class="frac"><span class="num">1</span><span class="den">2</span></span></span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm"><span class="frac"><span class="num">3</span><span class="den">4</span></span></span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">5</span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">-3</span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">0.75</span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">2.5</span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">√4 = 2</span>
+          <span class="px-3 py-1 bg-green-100 rounded-full text-sm">0</span>
+        </div>
+      </div>
+      <div class="cute-card p-6">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--rose)">❤️ Bilangan Irasional</h3>
+        <p class="mb-3"><b>Definisi:</b> Bilangan yang <b>tidak</b> dapat ditulis sebagai pecahan <span class="frac"><span class="num">a</span><span class="den">b</span></span>. Desimalnya tidak berulang dan tidak terbatas.</p>
+        <p class="mb-2 font-semibold">Contoh:</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-red-100 rounded-full text-sm">π = 3.14159...</span>
+          <span class="px-3 py-1 bg-red-100 rounded-full text-sm">√2 = 1.414...</span>
+          <span class="px-3 py-1 bg-red-100 rounded-full text-sm">√3 = 1.732...</span>
+          <span class="px-3 py-1 bg-red-100 rounded-full text-sm">√5 = 2.236...</span>
+          <span class="px-3 py-1 bg-red-100 rounded-full text-sm">e = 2.718...</span>
+        </div>
+      </div>
+    </div>
+    <div class="cute-card p-6">
+      <h3 class="text-xl font-bold mb-2 text-center" style="color:var(--pink-600)">🎮 Ayo Pilih Kartu! (50 Kartu)</h3>
+      <p class="text-center mb-3 text-sm text-gray-600">Klik kartu untuk menandai: 🟢 Hijau = Rasional | 🔴 Merah = Irasional | Klik lagi untuk reset</p>
+      <div class="flex justify-center gap-3 mb-4 text-sm flex-wrap">
+        <div class="px-4 py-2 rounded-full" style="background:#dcfce7;color:#166534">Benar: <span id="correctCount" class="font-bold">0</span>/50</div>
+        <div class="px-4 py-2 rounded-full" style="background:#fee2e2;color:#991b1b">Salah: <span id="wrongCount" class="font-bold">0</span></div>
+        <div class="px-4 py-2 rounded-full" style="background:#fef3c7;color:#92400e">Belum dijawab: <span id="unansweredCount" class="font-bold">50</span></div>
+      </div>
+      <div id="numberCards" class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-10 gap-2"></div>
+      <div class="text-center mt-5">
+        <button class="btn-cute" onclick="checkCards()">Cek Jawaban! 🔍</button>
+        <button class="btn-cute btn-lav ml-2" onclick="resetCards()">Reset 🔄</button>
+        <div id="cardsFeedback" class="mt-3"></div>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <button class="btn-cute" onclick="goToSlide(5)">Lanjut ke Pecahan 🍰</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 5: FRACTIONS ===== -->
+<section class="slide" id="slide5">
+  <div class="max-w-6xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 5 • Pecahan</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Dunia Pecahan yang Menyenangkan! 🍰</h2>
+    </div>
+    
+    <div class="cute-card p-5 mb-4">
+      <div class="grid md:grid-cols-2 gap-5">
+        <div>
+          <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">🍰 Apa itu Pecahan?</h3>
+          <p class="mb-3"><b>Pecahan</b> adalah bilangan yang menyatakan bagian dari suatu keseluruhan yang dibagi menjadi bagian-bagian yang sama.</p>
+          <p class="mb-2"><b>Notasi Pecahan:</b></p>
+          <div class="flex items-center gap-4 my-3">
+            <div class="text-center">
+              <div class="frac" style="font-size:1.6rem;color:var(--pink-600)">
+                <span class="num">pembilang</span>
+                <span class="den">penyebut</span>
+              </div>
+            </div>
+            <div class="text-sm">
+              <p>↑ <b>Pembilang:</b> bagian yang diambil</p>
+              <p>↓ <b>Penyebut:</b> total bagian</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-3" style="color:var(--lav-400)">➗ Per Sama dengan Bagi!</h3>
+          <p class="mb-3">Tanda pecahan <span class="frac"><span class="num">a</span><span class="den">b</span></span> sama dengan <b>a dibagi b</b>.</p>
+          <div class="p-4 rounded-xl bg-purple-50 text-center">
+            <p class="text-2xl font-bold" style="color:var(--lav-400)">
+              <span class="frac"><span class="num">2</span><span class="den">2</span></span> = 2 ÷ 2 = <span style="color:var(--pink-500)">1</span>
+            </p>
+            <p class="mt-2 text-2xl font-bold" style="color:var(--lav-400)">
+              <span class="frac"><span class="num">6</span><span class="den">3</span></span> = 6 ÷ 3 = <span style="color:var(--pink-500)">2</span>
+            </p>
+            <p class="mt-2 text-2xl font-bold" style="color:var(--lav-400)">
+              <span class="frac"><span class="num">10</span><span class="den">2</span></span> = 10 ÷ 2 = <span style="color:var(--pink-500)">5</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap justify-center gap-2 mb-4" id="subTabs">
+      <button class="tab-btn active" onclick="switchSubTab(1)">1. Membentuk</button>
+      <button class="tab-btn" onclick="switchSubTab(2)">2. Senilai</button>
+      <button class="tab-btn" onclick="switchSubTab(3)">3. Sederhanakan</button>
+      <button class="tab-btn" onclick="switchSubTab(4)">4. Bandingkan</button>
+      <button class="tab-btn" onclick="switchSubTab(5)">5. Campuran</button>
+      <button class="tab-btn" onclick="switchSubTab(6)">6. + dan -</button>
+      <button class="tab-btn" onclick="switchSubTab(7)">7. × dan ÷</button>
+      <button class="tab-btn" onclick="switchSubTab(8)">8. Soal Cerita</button>
+    </div>
+    
+    <!-- Sub 1: Membentuk -->
+    <div id="subTab1" class="tab-content active">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">A. Membentuk Pecahan dari Gambar</h3>
+        <p class="mb-4 text-sm">Atur jumlah bagian, klik balok untuk memberi warna pink, lalu tentukan pecahannya!</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <p class="mb-2 font-semibold text-sm">Jumlah bagian: 
+              <input type="number" id="blockParts" class="cute-input" value="6" min="2" max="12" onchange="regenBlock()" style="width:70px">
+            </p>
+            <div class="fraction-block" id="fractionBlock" style="grid-template-columns:repeat(6,38px)"></div>
+            <p class="mt-2 text-sm">Bagian berwarna: <span id="coloredCount">0</span> dari <span id="totalParts">6</span></p>
+          </div>
+          <div>
+            <p class="mb-2 font-semibold text-sm">Tulis pecahan yang terbentuk:</p>
+            <div class="frac-input-group">
+              <div class="frac-input">
+                <input type="number" id="blockNum" placeholder="?">
+                <div class="div-line"></div>
+                <input type="number" id="blockDen" placeholder="?">
+              </div>
+            </div>
+            <button class="btn-cute btn-sm mt-3" onclick="checkBlockAnswer()">Cek Jawaban ✨</button>
+            <div id="blockFeedback" class="feedback"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cute-card p-5">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">B. Pecahan dari Cerita (10 Soal)</h3>
+        <div id="formFractionStories" class="space-y-3"></div>
+      </div>
+    </div>
+    
+    <!-- Sub 2: Senilai -->
+    <div id="subTab2" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">✨ Pecahan Senilai</h3>
+        <p class="mb-3"><b>Pecahan senilai</b> adalah pecahan-pecahan yang memiliki nilai yang sama, walaupun pembilang dan penyebutnya berbeda.</p>
+        <p class="mb-2"><b>Cara mencari pecahan senilai:</b></p>
+        <ul class="space-y-1 ml-6 list-disc mb-3 text-sm">
+          <li>Kalikan atau bagi pembilang dan penyebut dengan bilangan yang sama</li>
+          <li><b>Penting!</b> Pecahan senilai tidak selalu hanya dikali/dibagi — yang pasti, mereka memiliki <b>bentuk paling sederhana yang sama</b></li>
+        </ul>
+        <div class="p-3 rounded-xl bg-pink-50 text-center">
+          <p class="text-xl">
+            <span class="frac"><span class="num">1</span><span class="den">2</span></span> = 
+            <span class="frac"><span class="num">2</span><span class="den">4</span></span> = 
+            <span class="frac"><span class="num">3</span><span class="den">6</span></span> = 
+            <span class="frac"><span class="num">4</span><span class="den">8</span></span> = 
+            <span class="frac"><span class="num">50</span><span class="den">100</span></span>
+          </p>
+          <p class="text-sm mt-2">Semua pecahan ini bernilai 0,5!</p>
+        </div>
+      </div>
+      <div class="cute-card p-5">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">🎯 Latihan: Pilih Semua Pecahan Senilai! (20 Soal)</h3>
+        <p class="text-sm mb-3 text-gray-600">Centang semua pecahan yang senilai dengan pecahan yang ditanya. Bisa lebih dari satu jawaban benar!</p>
+        <div id="equivQuestions" class="space-y-3"></div>
+        <div class="text-center mt-4">
+          <button class="btn-cute" onclick="checkEquiv()">Cek Semua Jawaban 🔍</button>
+          <div id="equivFeedback" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sub 3: Sederhanakan -->
+    <div id="subTab3" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">✂️ Menyederhanakan Pecahan</h3>
+        <p class="mb-3"><b>Cara menyederhanakan pecahan:</b></p>
+        <ul class="space-y-1 ml-6 list-disc mb-3 text-sm">
+          <li>Cari FPB (Faktor Persekutuan Terbesar) dari pembilang dan penyebut</li>
+          <li>Bagi pembilang dan penyebut dengan FPB tersebut</li>
+        </ul>
+        <div class="p-3 rounded-xl bg-pink-50">
+          <p class="font-semibold">Contoh:</p>
+          <p class="mt-2">Sederhanakan <span class="frac"><span class="num">6</span><span class="den">8</span></span></p>
+          <p class="text-sm">FPB dari 6 dan 8 adalah <b>2</b></p>
+          <p class="font-bold mt-1">
+            <span class="frac"><span class="num">6 ÷ 2</span><span class="den">8 ÷ 2</span></span> = 
+            <span class="frac"><span class="num">3</span><span class="den">4</span></span>
+          </p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="cute-card p-4 s1-color">
+          <h3 class="text-lg font-bold mb-2 text-pink-700">🌷 <span id="s1Name3">Siswa 1</span></h3>
+          <p class="text-sm mb-3">Sederhanakan pecahan berikut (20 soal):</p>
+          <div class="student-panel s1 space-y-2" id="simplifyS1"></div>
+          <button class="btn-cute btn-sm mt-3" onclick="checkSimplify(1)">Cek Jawaban 🔍</button>
+          <div id="simplifyFb1" class="feedback"></div>
+        </div>
+        <div class="cute-card p-4 s2-color">
+          <h3 class="text-lg font-bold mb-2 text-purple-700">🌷 <span id="s2Name3">Siswa 2</span></h3>
+          <p class="text-sm mb-3">Sederhanakan pecahan berikut (20 soal):</p>
+          <div class="student-panel s2 space-y-2" id="simplifyS2"></div>
+          <button class="btn-cute btn-lav btn-sm mt-3" onclick="checkSimplify(2)">Cek Jawaban 🔍</button>
+          <div id="simplifyFb2" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sub 4: Bandingkan -->
+    <div id="subTab4" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">⚖️ Membandingkan Pecahan</h3>
+        <p class="mb-3"><b>Cara membandingkan pecahan:</b></p>
+        <ul class="space-y-1 ml-6 list-disc mb-3 text-sm">
+          <li>Jika penyebut sama: bandingkan pembilangnya. Pembilang lebih besar = pecahan lebih besar</li>
+          <li>Jika penyebut berbeda: samakan penyebut (cari KPK), lalu bandingkan pembilangnya</li>
+          <li>Bisa juga dengan menyederhanakan kedua pecahan, lalu bandingkan</li>
+        </ul>
+        <div class="p-3 rounded-xl bg-pink-50">
+          <p class="font-semibold">Contoh:</p>
+          <p class="mt-2">Bandingkan <span class="frac"><span class="num">3</span><span class="den">4</span></span> dan <span class="frac"><span class="num">2</span><span class="den">3</span></span></p>
+          <p class="text-sm">Samakan penyebut: KPK(4, 3) = 12</p>
+          <p><span class="frac"><span class="num">9</span><span class="den">12</span></span> vs <span class="frac"><span class="num">8</span><span class="den">12</span></span></p>
+          <p class="font-bold mt-1">
+            <span class="frac"><span class="num">3</span><span class="den">4</span></span> > 
+            <span class="frac"><span class="num">2</span><span class="den">3</span></span> karena 9 > 8
+          </p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="cute-card p-4 s1-color">
+          <h3 class="text-lg font-bold mb-2 text-pink-700">🌷 <span id="s1Name4">Siswa 1</span></h3>
+          <p class="text-sm mb-3">Pilih <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b> (20 soal):</p>
+          <div class="student-panel s1 space-y-2" id="compareS1"></div>
+          <button class="btn-cute btn-sm mt-3" onclick="checkCompare(1)">Cek Jawaban 🔍</button>
+          <div id="compareFb1" class="feedback"></div>
+        </div>
+        <div class="cute-card p-4 s2-color">
+          <h3 class="text-lg font-bold mb-2 text-purple-700">🌷 <span id="s2Name4">Siswa 2</span></h3>
+          <p class="text-sm mb-3">Pilih <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b> (20 soal):</p>
+          <div class="student-panel s2 space-y-2" id="compareS2"></div>
+          <button class="btn-cute btn-lav btn-sm mt-3" onclick="checkCompare(2)">Cek Jawaban 🔍</button>
+          <div id="compareFb2" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sub 5: Campuran -->
+    <div id="subTab5" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">🌈 Pecahan Campuran</h3>
+        <p class="mb-3"><b>Pecahan campuran</b> = bilangan bulat + pecahan biasa. Contoh: <span class="mixed-frac"><span class="int-part">2</span><span class="frac"><span class="num">1</span><span class="den">2</span></span></span> (dibaca "dua setengah")</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-pink-50">
+            <p class="font-semibold text-pink-700">Pecahan Biasa → Campuran</p>
+            <p class="mt-2">Contoh: <span class="frac"><span class="num">7</span><span class="den">3</span></span></p>
+            <p class="text-sm">7 ÷ 3 = 2 sisa 1</p>
+            <p class="font-bold mt-1"><span class="frac"><span class="num">7</span><span class="den">3</span></span> = <span class="mixed-frac"><span class="int-part">2</span><span class="frac"><span class="num">1</span><span class="den">3</span></span></span></p>
+          </div>
+          <div class="p-4 rounded-xl bg-purple-50">
+            <p class="font-semibold text-purple-700">Campuran → Pecahan Biasa</p>
+            <p class="mt-2">Contoh: <span class="mixed-frac"><span class="int-part">2</span><span class="frac"><span class="num">1</span><span class="den">3</span></span></span></p>
+            <p class="text-sm">(2 × 3) + 1 = 7</p>
+            <p class="font-bold mt-1"><span class="mixed-frac"><span class="int-part">2</span><span class="frac"><span class="num">1</span><span class="den">3</span></span></span> = <span class="frac"><span class="num">7</span><span class="den">3</span></span></p>
+          </div>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="cute-card p-4 s1-color">
+          <h3 class="text-lg font-bold mb-2 text-pink-700">🌷 <span id="s1Name5">Siswa 1</span></h3>
+          <p class="text-sm mb-3">Ubah ke bentuk yang diminta (20 soal):</p>
+          <div class="student-panel s1 space-y-2" id="mixedS1"></div>
+          <button class="btn-cute btn-sm mt-3" onclick="checkMixed(1)">Cek Jawaban 🔍</button>
+          <div id="mixedFb1" class="feedback"></div>
+        </div>
+        <div class="cute-card p-4 s2-color">
+          <h3 class="text-lg font-bold mb-2 text-purple-700">🌷 <span id="s2Name5">Siswa 2</span></h3>
+          <p class="text-sm mb-3">Ubah ke bentuk yang diminta (20 soal):</p>
+          <div class="student-panel s2 space-y-2" id="mixedS2"></div>
+          <button class="btn-cute btn-lav btn-sm mt-3" onclick="checkMixed(2)">Cek Jawaban 🔍</button>
+          <div id="mixedFb2" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sub 6: + dan - -->
+    <div id="subTab6" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">➕➖ Penjumlahan & Pengurangan Pecahan</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-pink-50">
+            <p class="font-semibold">Penyebut sama:</p>
+            <p class="mt-2"><span class="frac"><span class="num">2</span><span class="den">5</span></span> + <span class="frac"><span class="num">1</span><span class="den">5</span></span> = <span class="frac"><span class="num">3</span><span class="den">5</span></span></p>
+            <p class="text-sm mt-1">Pembilang dijumlah, penyebut tetap</p>
+          </div>
+          <div class="p-4 rounded-xl bg-purple-50">
+            <p class="font-semibold">Penyebut beda:</p>
+            <p class="mt-2"><span class="frac"><span class="num">1</span><span class="den">2</span></span> + <span class="frac"><span class="num">1</span><span class="den">3</span></span> = <span class="frac"><span class="num">3</span><span class="den">6</span></span> + <span class="frac"><span class="num">2</span><span class="den">6</span></span> = <span class="frac"><span class="num">5</span><span class="den">6</span></span></p>
+            <p class="text-sm mt-1">Samakan penyebut dulu (KPK)</p>
+          </div>
+        </div>
+        <p class="mt-3 text-sm text-gray-600">💡 Untuk pecahan campuran, jumlahkan bagian bulat dan pecahannya terpisah. Untuk pecahan dengan bilangan bulat, ubah dulu bilangan bulat menjadi pecahan.</p>
+      </div>
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">➕ Latihan Penjumlahan (10 Soal)</h3>
+        <div id="addQuestions" class="space-y-3"></div>
+      </div>
+      <div class="cute-card p-5">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">➖ Latihan Pengurangan (10 Soal)</h3>
+        <div id="subQuestions" class="space-y-3"></div>
+      </div>
+    </div>
+    
+    <!-- Sub 7: × dan ÷ -->
+    <div id="subTab7" class="tab-content">
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">✖️➗ Perkalian & Pembagian Pecahan</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-pink-50">
+            <p class="font-semibold">Perkalian:</p>
+            <p class="mt-2"><span class="frac"><span class="num">2</span><span class="den">3</span></span> × <span class="frac"><span class="num">4</span><span class="den">5</span></span> = <span class="frac"><span class="num">8</span><span class="den">15</span></span></p>
+            <p class="text-sm mt-1">Kalikan pembilang dengan pembilang, penyebut dengan penyebut</p>
+          </div>
+          <div class="p-4 rounded-xl bg-purple-50">
+            <p class="font-semibold">Pembagian:</p>
+            <p class="mt-2"><span class="frac"><span class="num">2</span><span class="den">3</span></span> ÷ <span class="frac"><span class="num">4</span><span class="den">5</span></span> = <span class="frac"><span class="num">2</span><span class="den">3</span></span> × <span class="frac"><span class="num">5</span><span class="den">4</span></span> = <span class="frac"><span class="num">10</span><span class="den">12</span></span> = <span class="frac"><span class="num">5</span><span class="den">6</span></span></p>
+            <p class="text-sm mt-1">Balik pecahan kedua, lalu kalikan</p>
+          </div>
+        </div>
+      </div>
+      <div class="cute-card p-5 mb-4">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">✖️ Latihan Perkalian (10 Soal)</h3>
+        <div id="mulQuestions" class="space-y-3"></div>
+      </div>
+      <div class="cute-card p-5">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">➗ Latihan Pembagian (10 Soal)</h3>
+        <div id="divQuestions" class="space-y-3"></div>
+      </div>
+    </div>
+    
+    <!-- Sub 8: Soal Cerita -->
+    <div id="subTab8" class="tab-content">
+      <div class="cute-card p-5">
+        <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">📖 Soal Cerita (20 Soal)</h3>
+        <p class="mb-4 text-sm text-gray-600">Kerjakan bersama-sama ya, sobat cantik! Pilih jawaban yang benar, lalu cek dan baca pembahasannya.</p>
+        <div id="wordQuestions" class="space-y-4"></div>
+        <div class="text-center mt-4">
+          <button class="btn-cute" onclick="checkAllWP()">Cek Semua Jawaban 🔍</button>
+          <div id="wpAllFb" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-5">
+      <button class="btn-cute" onclick="goToSlide(6)">Lanjut ke Kuis 🏆</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 6: QUIZ ===== -->
+<section class="slide" id="slide6">
+  <div class="max-w-3xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 6 • Kuis</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Kuis Akhir 🏆</h2>
+      <p class="text-pink-600 font-semibold mt-2">Sudah siap menjadi juara pecahan?</p>
+    </div>
+    <div class="cute-card p-6">
+      <div id="quizContainer" class="space-y-4"></div>
+      <div class="text-center mt-5">
+        <button class="btn-cute" onclick="checkQuiz()">Kumpulkan Jawaban 🎀</button>
+        <div id="quizResult" class="mt-4"></div>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <button class="btn-cute" onclick="goToSlide(7)">Lihat Kesimpulan 💝</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 7: CONCLUSION ===== -->
+<section class="slide" id="slide7">
+  <div class="max-w-4xl mx-auto">
+    <div class="slide-header">
+      <div class="slide-badge">Slide 7 • Penutup</div>
+      <h2 class="text-3xl md:text-4xl font-bold title-glow">Kesimpulan & Refleksi 💝</h2>
+    </div>
+    <div class="cute-card p-6 mb-4">
+      <h3 class="text-xl font-bold mb-3" style="color:var(--pink-600)">🌟 Yang Sudah Kalian Pelajari Hari Ini</h3>
+      <div class="grid sm:grid-cols-2 gap-2 text-sm">
+        <div>✅ Bilangan rasional vs irasional</div>
+        <div>✅ Membentuk pecahan dari gambar</div>
+        <div>✅ Pecahan dari cerita sehari-hari</div>
+        <div>✅ Pecahan senilai</div>
+        <div>✅ Menyederhanakan pecahan</div>
+        <div>✅ Membandingkan pecahan</div>
+        <div>✅ Pecahan campuran</div>
+        <div>✅ Operasi hitung pecahan (+, -, ×, ÷)</div>
+        <div>✅ Menyelesaikan soal cerita</div>
+      </div>
+    </div>
+    <div class="cute-card p-6 mb-4">
+      <h3 class="text-xl font-bold mb-3" style="color:var(--lav-400)">💭 Refleksi</h3>
+      <p class="mb-3">Yuk jawab pertanyaan refleksi berikut di buku catatanmu:</p>
+      <ul class="space-y-2 ml-4 text-sm">
+        <li>🌸 Bagian mana yang paling kamu suka? Kenapa?</li>
+        <li>🌷 Bagian mana yang masih sulit? Apa rencanamu belajar lebih?</li>
+        <li>💖 Bagaimana perasaan mu setelah belajar hari ini?</li>
+        <li>✨ Apa yang membuat kamu bangga hari ini?</li>
+      </ul>
+    </div>
+    <div class="cute-card p-6 text-center mb-4">
+      <div class="mascot" style="font-size:4rem">🌸</div>
+      <h3 class="text-2xl font-bold mb-3" style="color:var(--pink-600)">Thank You for Today! 🎀</h3>
+      <p class="mb-2">Terima kasih sudah belajar dengan ceria, <span id="thankNames">sobat cantik</span>!</p>
+      <p class="text-sm text-gray-600">Kalian hebat karena sudah menyelesaikan semua materi!</p>
+    </div>
+    <div class="cute-card p-6">
+      <h3 class="text-xl font-bold mb-3" style="color:var(--lav-400)">📅 Next Lesson: Desimal & Persen</h3>
+      <p class="mb-2">Di pertemuan selanjutnya, kita akan belajar tentang:</p>
+      <ul class="space-y-2 ml-4 text-sm">
+        <li>🔵 Mengubah pecahan menjadi desimal</li>
+        <li>🔵 Mengubah desimal menjadi persen</li>
+        <li>🔵 Hubungan pecahan, desimal, dan persen</li>
+        <li>🔵 Operasi hitung dengan desimal dan persen</li>
+      </ul>
+      <p class="mt-4 text-center font-bold text-pink-600">Sampai jumpa di petualangan berikutnya! 🌈</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" onclick="prevSlide()" title="Sebelumnya">‹</button>
+  <div id="navDots" class="flex gap-1 items-center"></div>
+  <button class="nav-btn" onclick="nextSlide()" title="Berikutnya">›</button>
+</div>
+
+<script>
+// ============ STATE ============
+let currentSlide = 1;
+const totalSlides = 7;
+let student1Name = 'Siswa 1';
+let student2Name = 'Siswa 2';
+
+// ============ MATH HELPERS ============
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+function simplify(num, den) {
+  if (den === 0) return { num, den };
+  if (den < 0) { num = -num; den = -den; }
+  const g = gcd(Math.abs(num), Math.abs(den));
+  return { num: num / g, den: den / g };
+}
+function isEquivalent(n1, d1, n2, d2) {
+  const s1 = simplify(n1, d1), s2 = simplify(n2, d2);
+  return s1.num === s2.num && s1.den === s2.den;
+}
+
+// Seeded random for reproducible problems
+let seed = 42;
+function srand() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+function randInt(min, max) { return Math.floor(srand() * (max - min + 1)) + min; }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(srand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ============ NAVIGATION ============
+function goToSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.getElementById('slide' + n).classList.add('active');
+  currentSlide = n;
+  updateProgressBar();
+  updateNavDots();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+function updateProgressBar() {
+  document.getElementById('progressBar').style.width = (currentSlide / totalSlides * 100) + '%';
+}
+function updateNavDots() {
+  const dots = document.getElementById('navDots');
+  dots.innerHTML = '';
+  for (let i = 1; i <= totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === currentSlide ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dots.appendChild(dot);
+  }
+}
+
+function updateNames() {
+  student1Name = document.getElementById('name1').value || 'Siswa 1';
+  student2Name = document.getElementById('name2').value || 'Siswa 2';
+  ['3', '4', '5'].forEach(n => {
+    const e1 = document.getElementById('s1Name' + n);
+    const e2 = document.getElementById('s2Name' + n);
+    if (e1) e1.textContent = student1Name;
+    if (e2) e2.textContent = student2Name;
+  });
+  const tn = document.getElementById('thankNames');
+  if (tn) tn.textContent = student1Name + ' & ' + student2Name;
+}
+
+// ============ CONFETTI ============
+function celebrate() {
+  const colors = ['#ff5c95', '#a78bfa', '#f6c177', '#4ade80', '#ff8fab', '#c8b6ff'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }, i * 30);
+  }
+}
+
+// ============ SLIDE 4: CARDS ============
+const allCards = [
+  { d: "1/2", r: true }, { d: "3/4", r: true }, { d: "0.5", r: true }, { d: "0.25", r: true },
+  { d: "7", r: true }, { d: "-3", r: true }, { d: "√4", r: true }, { d: "√9", r: true },
+  { d: "√16", r: true }, { d: "0.333...", r: true }, { d: "5/8", r: true }, { d: "2.5", r: true },
+  { d: "10/2", r: true }, { d: "100", r: true }, { d: "0", r: true }, { d: "-1/2", r: true },
+  { d: "0.75", r: true }, { d: "3/3", r: true }, { d: "1.25", r: true }, { d: "√25", r: true },
+  { d: "11/4", r: true }, { d: "0.125", r: true }, { d: "6", r: true }, { d: "-7/3", r: true },
+  { d: "0.6", r: true },
+  { d: "π", r: false }, { d: "√2", r: false }, { d: "√3", r: false }, { d: "√5", r: false },
+  { d: "√6", r: false }, { d: "√7", r: false }, { d: "√8", r: false }, { d: "√10", r: false },
+  { d: "√11", r: false }, { d: "√12", r: false }, { d: "√13", r: false }, { d: "√14", r: false },
+  { d: "√15", r: false }, { d: "√17", r: false }, { d: "√18", r: false }, { d: "√19", r: false },
+  { d: "√20", r: false }, { d: "√21", r: false }, { d: "√22", r: false }, { d: "√23", r: false },
+  { d: "√24", r: false }, { d: "√26", r: false }, { d: "√27", r: false }, { d: "√28", r: false },
+  { d: "e", r: false }
+];
+let cardStates = [];
+function initCards() {
+  cardStates = allCards.map(() => 0);
+  renderCards();
+}
+function renderCards() {
+  const c = document.getElementById('numberCards');
+  if (!c) return;
+  c.innerHTML = '';
+  allCards.forEach((card, i) => {
+    const div = document.createElement('div');
+    div.className = 'num-card';
+    if (cardStates[i] === 1) div.classList.add('correct');
+    if (cardStates[i] === 2) div.classList.add('wrong');
+    div.textContent = card.d;
+    div.onclick = () => { cardStates[i] = (cardStates[i] + 1) % 3; renderCards(); };
+    c.appendChild(div);
+  });
+  updateCardCounts();
+}
+function updateCardCounts() {
+  let correct = 0, wrong = 0, unanswered = 0;
+  allCards.forEach((card, i) => {
+    if (cardStates[i] === 0) unanswered++;
+    else if ((cardStates[i] === 1 && card.r) || (cardStates[i] === 2 && !card.r)) correct++;
+    else wrong++;
+  });
+  const cc = document.getElementById('correctCount');
+  const wc = document.getElementById('wrongCount');
+  const uc = document.getElementById('unansweredCount');
+  if (cc) cc.textContent = correct;
+  if (wc) wc.textContent = wrong;
+  if (uc) uc.textContent = unanswered;
+}
+function checkCards() {
+  let correct = 0, wrong = 0, unanswered = 0;
+  allCards.forEach((card, i) => {
+    if (cardStates[i] === 0) unanswered++;
+    else if ((cardStates[i] === 1 && card.r) || (cardStates[i] === 2 && !card.r)) correct++;
+    else wrong++;
+  });
+  const fb = document.getElementById('cardsFeedback');
+  if (unanswered > 0) {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#fef3c7;color:#92400e">Masih ada ${unanswered} kartu yang belum dijawab! 🌸</div>`;
+  } else if (wrong === 0) {
+    fb.innerHTML = `<div class="p-4 rounded-xl font-bold" style="background:#dcfce7;color:#166534">🎉 Hebat! Semua jawaban benar! ${correct}/50!</div>`;
+    celebrate();
+  } else {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#ffe4ec;color:#991b1b">Benar: ${correct}, Salah: ${wrong}. Coba lihat lagi ya! 💪</div>`;
+  }
+}
+function resetCards() {
+  initCards();
+  document.getElementById('cardsFeedback').innerHTML = '';
+}
+
+// ============ SUB TABS ============
+function switchSubTab(n) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const tab = document.getElementById('subTab' + n);
+  if (tab) tab.classList.add('active');
+  const btns = document.querySelectorAll('.tab-btn');
+  if (btns[n - 1]) btns[n - 1].classList.add('active');
+}
+
+// ============ SUB 1A: BLOCK ============
+let blockParts = 6;
+let blockColored = [];
+function regenBlock() {
+  blockParts = parseInt(document.getElementById('blockParts').value) || 6;
+  blockParts = Math.max(2, Math.min(12, blockParts));
+  document.getElementById('blockParts').value = blockParts;
+  document.getElementById('fractionBlock').style.gridTemplateColumns = `repeat(${blockParts}, 38px)`;
+  blockColored = new Array(blockParts).fill(false);
+  renderBlock();
+}
+function renderBlock() {
+  const block = document.getElementById('fractionBlock');
+  if (!block) return;
+  block.innerHTML = '';
+  for (let i = 0; i < blockParts; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'fraction-cell' + (blockColored[i] ? ' colored' : '');
+    cell.onclick = () => { blockColored[i] = !blockColored[i]; renderBlock(); };
+    block.appendChild(cell);
+  }
+  const colored = blockColored.filter(x => x).length;
+  document.getElementById('coloredCount').textContent = colored;
+  document.getElementById('totalParts').textContent = blockParts;
+}
+function checkBlockAnswer() {
+  const num = parseInt(document.getElementById('blockNum').value);
+  const den = parseInt(document.getElementById('blockDen').value);
+  const colored = blockColored.filter(x => x).length;
+  const fb = document.getElementById('blockFeedback');
+  if (!num || !den) {
+    fb.className = 'feedback show wrong';
+    fb.textContent = 'Isi dulu pembilang dan penyebut! 🌸';
+    return;
+  }
+  if (isEquivalent(num, den, colored, blockParts)) {
+    fb.className = 'feedback show correct';
+    fb.textContent = `🎉 Benar! Pecahannya ${num}/${den}`;
+  } else {
+    fb.className = 'feedback show wrong';
+    fb.textContent = `Belum tepat. Bagian berwarna ${colored} dari ${blockParts}, jadi ${colored}/${blockParts}`;
+  }
+}
+
+// ============ SUB 1B: STORIES ============
+const formFractionStories = [
+  { s: "Doni memiliki 12 kue. Ia memberikan 5 kue kepada adiknya. Bagian kue yang diberikan Doni kepada adiknya adalah...", n: 5, d: 12 },
+  { s: "Di kelas 7A ada 30 siswa. 18 di antaranya adalah siswa perempuan. Bagian siswa perempuan di kelas tersebut adalah...", n: 18, d: 30 },
+  { s: "Ibu membuat 16 pancake. 7 di antaranya dimakan oleh keluarga. Bagian pancake yang sudah dimakan adalah...", n: 7, d: 16 },
+  { s: "Toko bunga memiliki 24 mawar. 9 di antaranya berwarna merah. Bagian mawar merah adalah...", n: 9, d: 24 },
+  { s: "Ayah membeli 1 kg gula. Kemudian digunakan 250 gram untuk membuat kue. Bagian gula yang digunakan dari yang dibeli ayah adalah...", n: 1, d: 4 },
+  { s: "Dari 20 soal ulangan, Siti menjawab 15 dengan benar. Bagian soal yang dijawab benar oleh Siti adalah...", n: 15, d: 20 },
+  { s: "Sebuah pizza dipotong menjadi 8 bagian sama. Andi memakan 3 potong. Bagian pizza yang dimakan Andi adalah...", n: 3, d: 8 },
+  { s: "Kandang ayam berisi 40 ekor ayam. 25 di antaranya adalah ayam betina. Bagian ayam betina adalah...", n: 25, d: 40 },
+  { s: "Tabungan Rina Rp 50.000,00. Ia membelanjakan Rp 20.000,00 untuk membeli buku. Bagian uang yang dibelanjakan adalah...", n: 20, d: 50 },
+  { s: "Kebun Pak Tani seluas 10 hektar. 3 hektar ditanami padi. Bagian kebun yang ditanami padi adalah...", n: 3, d: 10 }
+];
+function renderFormStories() {
+  const c = document.getElementById('formFractionStories');
+  if (!c) return;
+  c.innerHTML = '';
+  formFractionStories.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'p-3 rounded-xl bg-pink-50 border border-pink-200';
+    div.innerHTML = `
+      <p class="mb-2 text-sm"><b>${i + 1}.</b> ${s.s}</p>
+      <div class="op-row">
+        <span class="text-sm">Pecahan:</span>
+        <div class="frac-input">
+          <input type="number" id="ffn${i}" placeholder="?">
+          <div class="div-line"></div>
+          <input type="number" id="ffd${i}" placeholder="?">
+        </div>
+        <button class="btn-cute btn-sm" onclick="checkFormStory(${i})">Cek</button>
+        <span id="ffFb${i}" class="text-sm"></span>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+function checkFormStory(i) {
+  const num = parseInt(document.getElementById('ffn' + i).value);
+  const den = parseInt(document.getElementById('ffd' + i).value);
+  const s = formFractionStories[i];
+  const fb = document.getElementById('ffFb' + i);
+  if (!num || !den) { fb.innerHTML = '<span class="text-orange-600">⚠️ Isi dulu!</span>'; return; }
+  if (isEquivalent(num, den, s.n, s.d)) {
+    fb.innerHTML = '<span class="text-green-600">✅ Benar!</span>';
+  } else {
+    fb.innerHTML = `<span class="text-red-600">❌ Jawaban: <span class="frac"><span class="num">${s.n}</span><span class="den">${s.d}</span></span></span>`;
+  }
+}
+
+// ============ SUB 2: EQUIVALENT ============
+const equivQuestions = [];
+function genEquivQuestions() {
+  equivQuestions.length = 0;
+  for (let i = 0; i < 20; i++) {
+    const bn = randInt(1, 5);
+    const bd = randInt(bn + 1, 10);
+    const opts = [];
+    const m1 = randInt(2, 4);
+    opts.push({ n: bn * m1, d: bd * m1, c: true });
+    let m2 = randInt(2, 4);
+    while (m2 === m1) m2 = randInt(2, 4);
+    opts.push({ n: bn * m2, d: bd * m2, c: true });
+    opts.push({ n: bn + 1, d: bd, c: false });
+    opts.push({ n: bn, d: bd + 1, c: false });
+    if (i % 3 === 0) opts.push({ n: bn * m1 + 1, d: bd * m1, c: false });
+    equivQuestions.push({ bn, bd, opts: shuffle(opts) });
+  }
+}
+function renderEquivQuestions() {
+  const c = document.getElementById('equivQuestions');
+  if (!c) return;
+  c.innerHTML = '';
+  equivQuestions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'p-3 rounded-xl bg-pink-50 border border-pink-200';
+    let optsHtml = '';
+    q.opts.forEach((o, j) => {
+      optsHtml += `
+        <label class="mc-option" data-q="${i}" data-opt="${j}">
+          <input type="checkbox" class="equiv-cb" data-q="${i}" data-opt="${j}" onchange="toggleEquiv(${i},${j})">
+          <span class="frac"><span class="num">${o.n}</span><span class="den">${o.d}</span></span>
+        </label>`;
+    });
+    div.innerHTML = `<p class="mb-2 text-sm"><b>${i + 1}.</b> Pilih semua pecahan senilai dengan <span class="frac"><span class="num">${q.bn}</span><span class="den">${q.bd}</span></span></p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">${optsHtml}</div>`;
+    c.appendChild(div);
+  });
+}
+function toggleEquiv(i, j) {
+  const label = document.querySelector(`.mc-option[data-q="${i}"][data-opt="${j}"]`);
+  if (!label) return;
+  const cb = label.querySelector('input');
+  label.classList.toggle('selected', cb.checked);
+}
+function checkEquiv() {
+  let correct = 0;
+  equivQuestions.forEach((q, i) => {
+    let allRight = true;
+    q.opts.forEach((o, j) => {
+      const cb = document.querySelector(`.equiv-cb[data-q="${i}"][data-opt="${j}"]`);
+      if (!cb) return;
+      const label = cb.closest('.mc-option');
+      label.classList.remove('correct', 'incorrect');
+      const checked = cb.checked;
+      if (o.c) label.classList.add('correct');
+      if (checked && !o.c) { label.classList.add('incorrect'); allRight = false; }
+      if (!checked && o.c) allRight = false;
+    });
+    if (allRight) correct++;
+  });
+  const fb = document.getElementById('equivFeedback');
+  if (correct === 20) {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#dcfce7;color:#166534">🎉 Hebat sekali! Semua benar!</div>`;
+    celebrate();
+  } else {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#ffe4ec;color:#991b1b">Jawaban sempurna: ${correct}/20. Hijau = benar, Merah = salah pilih. Coba lagi ya! 💪</div>`;
+  }
+}
+
+// ============ SUB 3: SIMPLIFY ============
+const simplifyProblems = { s1: [], s2: [] };
+function genSimplifyProblems() {
+  ['s1', 's2'].forEach(key => {
+    simplifyProblems[key] = [];
+    let attempts = 0;
+    while (simplifyProblems[key].length < 20 && attempts < 200) {
+      attempts++;
+      const den = randInt(3, 12);
+      const num = randInt(2, den * 2);
+      const ans = simplify(num, den);
+      if (ans.num === num && ans.den === den) continue;
+      simplifyProblems[key].push({ num, den, ans });
+    }
+  });
+}
+function renderSimplifyProblems() {
+  ['s1', 's2'].forEach(key => {
+    const container = document.getElementById('simplify' + key.toUpperCase());
+    if (!container) return;
+    container.innerHTML = '';
+    simplifyProblems[key].forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-3 p-2 rounded-lg bg-white text-sm flex-wrap';
+      div.innerHTML = `
+        <span class="font-semibold w-5">${i + 1}.</span>
+        <span class="frac"><span class="num">${p.num}</span><span class="den">${p.den}</span></span>
+        <span>=</span>
+        <div class="frac-input">
+          <input type="number" id="sim${key}_${i}_n" placeholder="?">
+          <div class="div-line"></div>
+          <input type="number" id="sim${key}_${i}_d" placeholder="?">
+        </div>
+        <span id="simFb${key}_${i}" class="text-xs"></span>`;
+      container.appendChild(div);
+    });
+  });
+}
+function checkSimplify(student) {
+  const key = 's' + student;
+  let correct = 0, partial = 0;
+  simplifyProblems[key].forEach((p, i) => {
+    const n = parseInt(document.getElementById(`sim${key}_${i}_n`).value);
+    const d = parseInt(document.getElementById(`sim${key}_${i}_d`).value);
+    const fb = document.getElementById(`simFb${key}_${i}`);
+    if (!n || !d) { fb.innerHTML = '⚠️'; return; }
+    if (n === p.ans.num && d === p.ans.den) {
+      fb.innerHTML = '<span class="text-green-600">✅</span>'; correct++;
+    } else if (isEquivalent(n, d, p.ans.num, p.ans.den)) {
+      fb.innerHTML = '<span class="text-yellow-600">⭐</span>'; partial++;
+    } else {
+      fb.innerHTML = `<span class="text-red-500">❌<br><span class="frac"><span class="num">${p.ans.num}</span><span class="den">${p.ans.den}</span></span></span>`;
+    }
+  });
+  const fbId = 'simplifyFb' + student;
+  const fbEl = document.getElementById(fbId);
+  fbEl.className = 'feedback show ' + (correct === 20 ? 'correct' : 'wrong');
+  fbEl.innerHTML = `Benar: ${correct}/20 ${partial > 0 ? `(${partial} senilai tapi belum sederhana)` : ''} ${correct === 20 ? '🎉 Hebat!' : ' 💪 Coba lagi!'}`;
+  if (correct === 20) celebrate();
+}
+
+// ============ SUB 4: COMPARE ============
+const compareProblems = { s1: [], s2: [] };
+function genCompareProblems() {
+  ['s1', 's2'].forEach(key => {
+    compareProblems[key] = [];
+    for (let i = 0; i < 20; i++) {
+      const d1 = randInt(2, 9), d2 = randInt(2, 9);
+      const n1 = randInt(1, d1 * 2), n2 = randInt(1, d2 * 2);
+      const v1 = n1 / d1, v2 = n2 / d2;
+      let ans;
+      if (Math.abs(v1 - v2) < 0.0001) ans = '=';
+      else if (v1 > v2) ans = '>';
+      else ans = '<';
+      compareProblems[key].push({ n1, d1, n2, d2, ans });
+    }
+  });
+}
+function renderCompareProblems() {
+  ['s1', 's2'].forEach(key => {
+    const container = document.getElementById('compare' + key.toUpperCase());
+    if (!container) return;
+    container.innerHTML = '';
+    compareProblems[key].forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-3 p-2 rounded-lg bg-white text-sm flex-wrap';
+      div.innerHTML = `
+        <span class="font-semibold w-5">${i + 1}.</span>
+        <span class="frac"><span class="num">${p.n1}</span><span class="den">${p.d1}</span></span>
+        <select id="cmp${key}_${i}" class="cute-input" style="width:55px">
+          <option value="">?</option>
+          <option value="<">&lt;</option>
+          <option value=">">&gt;</option>
+          <option value="=">=</option>
+        </select>
+        <span class="frac"><span class="num">${p.n2}</span><span class="den">${p.d2}</span></span>
+        <span id="cmpFb${key}_${i}" class="text-xs"></span>`;
+      container.appendChild(div);
+    });
+  });
+}
+function checkCompare(student) {
+  const key = 's' + student;
+  let correct = 0;
+  compareProblems[key].forEach((p, i) => {
+    const v = document.getElementById(`cmp${key}_${i}`).value;
+    const fb = document.getElementById(`cmpFb${key}_${i}`);
+    if (!v) { fb.innerHTML = '⚠️'; return; }
+    if (v === p.ans) { fb.innerHTML = '<span class="text-green-600">✅</span>'; correct++; }
+    else { fb.innerHTML = `<span class="text-red-500">❌ ${p.ans}</span>`; }
+  });
+  const fbId = 'compareFb' + student;
+  const fbEl = document.getElementById(fbId);
+  fbEl.className = 'feedback show ' + (correct === 20 ? 'correct' : 'wrong');
+  fbEl.textContent = `Benar: ${correct}/20 ${correct === 20 ? '🎉 Hebat!' : ' 💪 Coba lagi!'}`;
+  if (correct === 20) celebrate();
+}
+
+// ============ SUB 5: MIXED ============
+const mixedProblems = { s1: [], s2: [] };
+function genMixedProblems() {
+  ['s1', 's2'].forEach(key => {
+    mixedProblems[key] = [];
+    for (let i = 0; i < 20; i++) {
+      const den = randInt(2, 8);
+      const whole = randInt(1, 4);
+      const num = randInt(1, den - 1);
+      const imp = whole * den + num;
+      if (srand() < 0.5) {
+        mixedProblems[key].push({ type: 'toMixed', imp, den, aW: whole, aN: num, aD: den });
+      } else {
+        mixedProblems[key].push({ type: 'toImp', whole, num, den, aN: imp, aD: den });
+      }
+    }
+  });
+}
+function renderMixedProblems() {
+  ['s1', 's2'].forEach(key => {
+    const container = document.getElementById('mixed' + key.toUpperCase());
+    if (!container) return;
+    container.innerHTML = '';
+    mixedProblems[key].forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'p-2 rounded-lg bg-white text-sm';
+      
+      let displayHtml = '';
+      if (p.type === 'toMixed') {
+        displayHtml = `<span class="frac"><span class="num">${p.imp}</span><span class="den">${p.den}</span></span>`;
+      } else {
+        displayHtml = `<span class="mixed-frac"><span class="int-part">${p.whole}</span><span class="frac"><span class="num">${p.num}</span><span class="den">${p.den}</span></span></span>`;
+      }
+
+      let inputs;
+      if (p.type === 'toMixed') {
+        inputs = `
+          <div class="frac-input-group">
+            <input type="number" id="mix${key}_${i}_w" class="cute-input" placeholder="b" style="width:55px!important; height: 42px !important; font-size: 1.1rem !important;">
+            <div class="frac-input">
+              <input type="number" id="mix${key}_${i}_n" placeholder="?">
+              <div class="div-line"></div>
+              <input type="number" id="mix${key}_${i}_d" placeholder="?">
+            </div>
+          </div>`;
+      } else {
+        inputs = `
+          <div class="frac-input">
+            <input type="number" id="mix${key}_${i}_n" placeholder="?">
+            <div class="div-line"></div>
+            <input type="number" id="mix${key}_${i}_d" placeholder="?">
+          </div>`;
+      }
+
+      div.innerHTML = `
+        <div class="text-xs text-gray-500 mb-1">${i + 1}. ${p.type === 'toMixed' ? 'Biasa → Campuran' : 'Campuran → Biasa'}</div>
+        <div class="op-row">
+          <span class="font-bold text-base">${displayHtml}</span>
+          <span class="text-base">=</span>
+          ${inputs}
+          <span id="mixFb${key}_${i}" class="text-xs"></span>
+        </div>`;
+      container.appendChild(div);
+    });
+  });
+}
+function checkMixed(student) {
+  const key = 's' + student;
+  let correct = 0;
+  mixedProblems[key].forEach((p, i) => {
+    const fb = document.getElementById(`mixFb${key}_${i}`);
+    if (p.type === 'toMixed') {
+      const w = parseInt(document.getElementById(`mix${key}_${i}_w`).value);
+      const n = parseInt(document.getElementById(`mix${key}_${i}_n`).value);
+      const d = parseInt(document.getElementById(`mix${key}_${i}_d`).value);
+      if (w === p.aW && n === p.aN && d === p.aD) { fb.innerHTML = '<span class="text-green-600">✅</span>'; correct++; }
+      else { fb.innerHTML = `<span class="text-red-500">❌ <span class="mixed-frac"><span class="int-part">${p.aW}</span><span class="frac"><span class="num">${p.aN}</span><span class="den">${p.aD}</span></span></span></span>`; }
+    } else {
+      const n = parseInt(document.getElementById(`mix${key}_${i}_n`).value);
+      const d = parseInt(document.getElementById(`mix${key}_${i}_d`).value);
+      if (n === p.aN && d === p.aD) { fb.innerHTML = '<span class="text-green-600">✅</span>'; correct++; }
+      else { fb.innerHTML = `<span class="text-red-500">❌ <span class="frac"><span class="num">${p.aN}</span><span class="den">${p.aD}</span></span></span>`; }
+    }
+  });
+  const fbId = 'mixedFb' + student;
+  const fbEl = document.getElementById(fbId);
+  fbEl.className = 'feedback show ' + (correct === 20 ? 'correct' : 'wrong');
+  fbEl.textContent = `Benar: ${correct}/20 ${correct === 20 ? '🎉 Hebat!' : ' 💪 Coba lagi!'}`;
+  if (correct === 20) celebrate();
+}
+
+// ============ SUB 6 & 7: OPERATIONS ============
+const addProblems = [], subProblems = [], mulProblems = [], divProblems = [];
+
+function genOpProblem(op) {
+  const types = ['ff', 'fb', 'fm', 'mm'];
+  const type = types[randInt(0, 3)];
+  let a, b;
+  if (type === 'ff') {
+    const d1 = randInt(2, 6), d2 = randInt(2, 6);
+    a = { type: 'frac', n: randInt(1, d1 - 1), d: d1 };
+    b = { type: 'frac', n: randInt(1, d2 - 1), d: d2 };
+  } else if (type === 'fb') {
+    const d = randInt(2, 6);
+    a = { type: 'frac', n: randInt(1, d - 1), d: d };
+    b = { type: 'int', v: randInt(1, 5) };
+  } else if (type === 'fm') {
+    const d1 = randInt(2, 6), d2 = randInt(2, 6);
+    a = { type: 'frac', n: randInt(1, d1 - 1), d: d1 };
+    b = { type: 'mixed', w: randInt(1, 4), n: randInt(1, d2 - 1), d: d2 };
+  } else {
+    const d1 = randInt(2, 6), d2 = randInt(2, 6);
+    a = { type: 'mixed', w: randInt(1, 3), n: randInt(1, d1 - 1), d: d1 };
+    b = { type: 'mixed', w: randInt(1, 3), n: randInt(1, d2 - 1), d: d2 };
+  }
+  const va = a.type === 'int' ? a.v : (a.type === 'frac' ? a.n / a.d : a.w + a.n / a.d);
+  const vb = b.type === 'int' ? b.v : (b.type === 'frac' ? b.n / b.d : b.w + b.n / b.d);
+  let result;
+  if (op === '+') result = va + vb;
+  else if (op === '-') result = va - vb;
+  else if (op === '×') result = va * vb;
+  else result = va / vb;
+  return { a, b, op, result, type };
+}
+
+function formatOperand(o) {
+  if (o.type === 'int') return `<span class="text-base font-bold">${o.v}</span>`;
+  if (o.type === 'frac') return `<span class="frac"><span class="num">${o.n}</span><span class="den">${o.d}</span></span>`;
+  return `<span class="mixed-frac"><span class="int-part">${o.w}</span><span class="frac"><span class="num">${o.n}</span><span class="den">${o.d}</span></span></span>`;
+}
+
+function formatResult(r) {
+  if (r < 0) return r.toFixed(2);
+  for (let d = 1; d <= 100; d++) {
+    const n = r * d;
+    if (Math.abs(n - Math.round(n)) < 0.0001) {
+      let num = Math.round(n), den = d;
+      const g = gcd(Math.abs(num), Math.abs(den));
+      num = num / g; den = den / g;
+      if (den === 1) return num.toString();
+      if (Math.abs(num) >= den) {
+        const w = Math.floor(num / den);
+        const rem = Math.abs(num - w * den);
+        return rem === 0 ? w.toString() : `<span class="mixed-frac"><span class="int-part">${w}</span><span class="frac"><span class="num">${rem}</span><span class="den">${den}</span></span></span>`;
+      }
+      return `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+    }
+  }
+  return r.toFixed(2);
+}
+
+function genAllOps() {
+  addProblems.length = 0; subProblems.length = 0;
+  mulProblems.length = 0; divProblems.length = 0;
+  for (let i = 0; i < 10; i++) addProblems.push(genOpProblem('+'));
+  for (let i = 0; i < 10; i++) {
+    let p = genOpProblem('-');
+    while (p.result < 0) p = genOpProblem('-');
+    subProblems.push(p);
+  }
+  for (let i = 0; i < 10; i++) mulProblems.push(genOpProblem('×'));
+  for (let i = 0; i < 10; i++) {
+    let p = genOpProblem('÷');
+    while (p.result < 0 || !isFinite(p.result)) p = genOpProblem('÷');
+    divProblems.push(p);
+  }
+}
+
+function renderOpProblem(p, idx, prefix) {
+  const typeDesc = p.type === 'ff' ? 'Pecahan + Pecahan' : p.type === 'fb' ? 'Pecahan + Bilangan Bulat' : p.type === 'fm' ? 'Pecahan + Pecahan Campuran' : 'Pecahan Campuran + Pecahan Campuran';
+  return `
+    <div class="q-card">
+      <div class="op-row">
+        <span class="font-bold text-sm">${idx + 1}.</span>
+        <span class="text-lg">${formatOperand(p.a)}</span>
+        <span class="text-lg font-bold" style="color:var(--pink-600)">${p.op}</span>
+        <span class="text-lg">${formatOperand(p.b)}</span>
+        <span class="text-lg">=</span>
+        <div class="frac-input-group">
+          <input type="number" id="${prefix}_${idx}_w" class="cute-input" placeholder="b" style="width:55px!important; height: 42px !important; font-size: 1.1rem !important;">
+          <div class="frac-input">
+            <input type="number" id="${prefix}_${idx}_n" placeholder="?">
+            <div class="div-line"></div>
+            <input type="number" id="${prefix}_${idx}_d" placeholder="?">
+          </div>
+        </div>
+        <button class="btn-cute btn-sm" onclick="checkOpProblem('${prefix}',${idx})">Cek</button>
+        <span id="${prefix}Fb${idx}" class="text-sm"></span>
+      </div>
+      <div class="text-xs text-gray-500 mt-1">${typeDesc}</div>
+    </div>`;
+}
+
+function renderOps() {
+  const addC = document.getElementById('addQuestions');
+  const subC = document.getElementById('subQuestions');
+  const mulC = document.getElementById('mulQuestions');
+  const divC = document.getElementById('divQuestions');
+  if (addC) addC.innerHTML = addProblems.map((p, i) => renderOpProblem(p, i, 'add')).join('');
+  if (subC) subC.innerHTML = subProblems.map((p, i) => renderOpProblem(p, i, 'sub')).join('');
+  if (mulC) mulC.innerHTML = mulProblems.map((p, i) => renderOpProblem(p, i, 'mul')).join('');
+  if (divC) divC.innerHTML = divProblems.map((p, i) => renderOpProblem(p, i, 'div')).join('');
+}
+
+function checkOpProblem(prefix, idx) {
+  const arr = prefix === 'add' ? addProblems : prefix === 'sub' ? subProblems : prefix === 'mul' ? mulProblems : divProblems;
+  const p = arr[idx];
+  const w = parseInt(document.getElementById(`${prefix}_${idx}_w`).value);
+  const n = parseInt(document.getElementById(`${prefix}_${idx}_n`).value);
+  const d = parseInt(document.getElementById(`${prefix}_${idx}_d`).value);
+  const fb = document.getElementById(`${prefix}Fb${idx}`);
+  let studentAns = NaN;
+  if (!isNaN(w) && !isNaN(n) && !isNaN(d) && d !== 0) studentAns = w + n / d;
+  else if (!isNaN(n) && !isNaN(d) && d !== 0) studentAns = n / d;
+  else if (!isNaN(w)) studentAns = w;
+  if (isNaN(studentAns)) { fb.innerHTML = '<span class="text-orange-600">Isi dulu!</span>'; return; }
+  if (Math.abs(studentAns - p.result) < 0.001) {
+    fb.innerHTML = '<span class="text-green-600">✅ Benar!</span>';
+  } else {
+    fb.innerHTML = `<span class="text-red-600">❌ Jawaban: ${formatResult(p.result)}</span>`;
+  }
+}
+
+// ============ SUB 8: WORD PROBLEMS ============
+const wordProblems = [
+  { q: "Andi makan 1/4 piza, Budi makan 1/3 piza. Berapa bagian piza yang sudah dimakan bersama?", options: ["7/12", "2/7", "1/12", "5/12"], correct: 0, explanation: "1/4 + 1/3 = 3/12 + 4/12 = 7/12" },
+  { q: "Ibu membeli 2 kg gula. Digunakan 1/2 kg. Sisa gula berapa kg?", options: ["1 1/2 kg", "1 kg", "2 1/2 kg", "1/2 kg"], correct: 0, explanation: "2 - 1/2 = 4/2 - 1/2 = 3/2 = 1 1/2 kg" },
+  { q: "Sebuah kue dipotong 8 bagian sama. Andi makan 3 potong. Bagian kue yang tersisa?", options: ["5/8", "3/8", "8/5", "1/8"], correct: 0, explanation: "8/8 - 3/8 = 5/8" },
+  { q: "Tabungan Rina Rp 50.000,00. Belanja 2/5 tabungan. Berapa rupiah dibelanjakan?", options: ["Rp 20.000", "Rp 25.000", "Rp 10.000", "Rp 30.000"], correct: 0, explanation: "2/5 × 50.000 = 100.000/5 = Rp 20.000" },
+  { q: "Tali sepanjang 3/4 meter dipotong menjadi 3 bagian sama. Panjang setiap potongan?", options: ["1/4 m", "1/3 m", "3/12 m", "9/4 m"], correct: 0, explanation: "3/4 ÷ 3 = 3/4 × 1/3 = 3/12 = 1/4 m" },
+  { q: "Kebon Pak Tani 1 1/2 ha. 2/3 ditanami padi. Luas kebun padi?", options: ["1 ha", "2/3 ha", "1 1/3 ha", "3/2 ha"], correct: 0, explanation: "1 1/2 × 2/3 = 3/2 × 2/3 = 6/6 = 1 ha" },
+  { q: "Jarak rumah-sekolah 4/5 km. Andi bersepeda 3/4 jarak. Berapa km ditempuh?", options: ["3/5 km", "12/20 km", "16/15 km", "7/9 km"], correct: 0, explanation: "4/5 × 3/4 = 12/20 = 3/5 km" },
+  { q: "Air dalam botol 3/4 liter. Diminum 1/3 liter. Sisa air?", options: ["5/12 L", "1/4 L", "4/12 L", "1/3 L"], correct: 0, explanation: "3/4 - 1/3 = 9/12 - 4/12 = 5/12 L" },
+  { q: "3/4 kue dibagi rata untuk 6 anak. Bagian setiap anak?", options: ["1/8", "1/6", "1/4", "3/24"], correct: 0, explanation: "3/4 ÷ 6 = 3/4 × 1/6 = 3/24 = 1/8" },
+  { q: "Ibu membuat 5/6 kg kue. Diberikan 1/3 kg ke tetangga. Sisa kue?", options: ["1/2 kg", "2/3 kg", "1/3 kg", "5/18 kg"], correct: 0, explanation: "5/6 - 1/3 = 5/6 - 2/6 = 3/6 = 1/2 kg" },
+  { q: "Suhu pagi 1/2 derajat, naik 3/4 derajat siang. Suhu sekarang?", options: ["5/4 °C", "2/6 °C", "1 °C", "4/6 °C"], correct: 0, explanation: "1/2 + 3/4 = 2/4 + 3/4 = 5/4 °C" },
+  { q: "Air gelas 2/3 liter, diminum 1/4 liter. Sisa air?", options: ["5/12 L", "1/3 L", "1/6 L", "8/12 L"], correct: 0, explanation: "2/3 - 1/4 = 8/12 - 3/12 = 5/12 L" },
+  { q: "Motor isi 3/8 liter, ditambah 1/4 liter. Total bensin?", options: ["5/8 L", "4/12 L", "1/2 L", "3/8 L"], correct: 0, explanation: "3/8 + 1/4 = 3/8 + 2/8 = 5/8 L" },
+  { q: "5 anak berbagi 2/3 kg permen. Bagian tiap anak?", options: ["2/15 kg", "10/3 kg", "5/6 kg", "3/10 kg"], correct: 0, explanation: "2/3 ÷ 5 = 2/3 × 1/5 = 2/15 kg" },
+  { q: "Lemari 1 1/4 m tinggi. 2/5 tinggi untuk rak bawah. Tinggi rak bawah?", options: ["1/2 m", "2/5 m", "1/4 m", "5/8 m"], correct: 0, explanation: "1 1/4 × 2/5 = 5/4 × 2/5 = 10/20 = 1/2 m" },
+  { q: "Lemari berisi 3/4 buku. Dipindah 1/3 dari buku tersebut. Berapa bagian dari total lemari yang dipindah?", options: ["1/4", "1/3", "3/12", "1/2"], correct: 0, explanation: "3/4 × 1/3 = 3/12 = 1/4" },
+  { q: "1/2 mangkok gula + 1/3 mangkok tepung. Total bahan kering?", options: ["5/6 mangkok", "2/5 mangkok", "1/6 mangkok", "3/6 mangkok"], correct: 0, explanation: "1/2 + 1/3 = 3/6 + 2/6 = 5/6" },
+  { q: "Kain 3/4 m. Dipakai 2/3 bagian. Berapa meter kain tersisa?", options: ["1/4 m", "1/3 m", "5/12 m", "1/12 m"], correct: 0, explanation: "Dipakai: 3/4 × 2/3 = 6/12 = 1/2 m. Sisa: 3/4 - 1/2 = 3/4 - 2/4 = 1/4 m" },
+  { q: "Tali 4/5 m dipotong menjadi 4 bagian sama panjang. Panjang tiap potongan?", options: ["1/5 m", "1/4 m", "4/9 m", "5/4 m"], correct: 0, explanation: "4/5 ÷ 4 = 4/5 × 1/4 = 4/20 = 1/5 m" },
+  { q: "1/2 kg tepung, 1/4 kg gula, 1/8 kg mentega. Total berat bahan?", options: ["7/8 kg", "3/14 kg", "1/2 kg", "5/8 kg"], correct: 0, explanation: "1/2 + 1/4 + 1/8 = 4/8 + 2/8 + 1/8 = 7/8 kg" }
+];
+
+let wpAnswers = {};
+
+function renderWordProblems() {
+  const c = document.getElementById('wordQuestions');
+  if (!c) return;
+  c.innerHTML = '';
+  wpAnswers = {};
+  wordProblems.forEach((wp, i) => {
+    const div = document.createElement('div');
+    div.className = 'p-3 rounded-xl bg-pink-50 border border-pink-200';
+    let optsHtml = '';
+    wp.options.forEach((opt, j) => {
+      optsHtml += `
+        <label class="mc-option" data-wq="${i}" data-wopt="${j}" onclick="selectWP(${i},${j})">
+          <span class="w-5 h-5 rounded-full border-2 border-pink-300 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65+j)}</span>
+          <span>${opt}</span>
+        </label>`;
+    });
+    div.innerHTML = `
+      <p class="mb-2 text-sm"><b>${i+1}.</b> ${wp.q}</p>
+      <div class="grid sm:grid-cols-2 gap-2">${optsHtml}</div>
+      <div id="wpExp${i}" class="mt-2 hidden p-2 rounded-lg bg-purple-50 text-xs"></div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function selectWP(i, j) {
+  document.querySelectorAll(`[data-wq="${i}"]`).forEach(el => el.classList.remove('selected'));
+  const label = document.querySelector(`[data-wq="${i}"][data-wopt="${j}"]`);
+  if (label) label.classList.add('selected');
+  wpAnswers[i] = j;
+}
+
+function checkAllWP() {
+  let correct = 0;
+  let answered = 0;
+  wordProblems.forEach((wp, i) => {
+    const labels = document.querySelectorAll(`[data-wq="${i}"]`);
+    labels.forEach((el, j) => {
+      el.classList.remove('correct', 'incorrect');
+      if (wpAnswers[i] === undefined) return;
+      if (j === wp.correct) el.classList.add('correct');
+      else if (j === wpAnswers[i]) el.classList.add('incorrect');
+    });
+    const exp = document.getElementById('wpExp' + i);
+    if (wpAnswers[i] !== undefined) {
+      answered++;
+      exp.classList.remove('hidden');
+      exp.innerHTML = `<b>📋 Pembahasan:</b> ${wp.explanation}`;
+      if (wpAnswers[i] === wp.correct) correct++;
+    } else {
+      exp.classList.add('hidden');
+    }
+  });
+  const fb = document.getElementById('wpAllFb');
+  if (answered === 0) {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#fef3c7;color:#92400e">⚠️ Jawab dulu minimal satu soal ya! 🌸</div>`;
+    return;
+  }
+  if (correct === 20) {
+    fb.innerHTML = `<div class="p-4 rounded-xl font-bold" style="background:#dcfce7;color:#166534">🎉 Luar biasa! Semua benar!</div>`;
+    celebrate();
+  } else {
+    fb.innerHTML = `<div class="p-4 rounded-xl" style="background:#ffe4ec;color:#991b1b">Benar: ${correct}/${answered} terjawab. Lihat pembahasan di tiap soal! 💪</div>`;
+  }
+}
+
+// ============ SLIDE 6: QUIZ ============
+const quizData = [
+  { q: "Bilangan berikut yang termasuk bilangan irasional adalah...", options: ["1/2", "0.75", "√2", "-3"], correct: 2 },
+  { q: "Bentuk pecahan paling sederhana dari 6/8 adalah...", options: ["2/3", "3/4", "6/8", "1/2"], correct: 1 },
+  { q: "Hasil dari 1/3 + 1/6 adalah...", options: ["2/9", "1/2", "2/6", "1/3"], correct: 1 },
+  { q: "Pecahan senilai dengan 2/3 adalah...", options: ["4/6", "3/4", "2/5", "4/5"], correct: 0 },
+  { q: "Hasil 3/4 × 2/5 adalah...", options: ["6/20", "5/9", "6/9", "5/20"], correct: 0 },
+  { q: "Bentuk campuran dari 11/4 adalah...", options: ["2 3/4", "3 1/4", "2 1/4", "3 3/4"], correct: 0 },
+  { q: "Hasil 2/3 ÷ 4/5 adalah...", options: ["8/15", "5/6", "10/12", "3/4"], correct: 1 },
+  { q: "Pecahan terbesar di antara berikut adalah...", options: ["1/2", "2/3", "3/4", "5/6"], correct: 3 },
+  { q: "Hasil 5/6 - 1/3 adalah...", options: ["4/6", "1/2", "3/6", "1/3"], correct: 1 },
+  { q: "2 1/3 diubah ke pecahan biasa menjadi...", options: ["6/3", "7/3", "5/3", "8/3"], correct: 1 }
+];
+
+let quizAnswers = {};
+
+function initQuiz() {
+  const c = document.getElementById('quizContainer');
+  if (!c) return;
+  c.innerHTML = '';
+  quizAnswers = {};
+  quizData.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'p-3 rounded-xl bg-pink-50 border border-pink-200';
+    let optsHtml = '';
+    q.options.forEach((opt, j) => {
+      optsHtml += `
+        <label class="mc-option" data-qq="${i}" data-qopt="${j}" onclick="selectQuiz(${i},${j})">
+          <span class="w-5 h-5 rounded-full border-2 border-pink-300 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65+j)}</span>
+          <span>${opt}</span>
+        </label>`;
+    });
+    div.innerHTML = `<p class="mb-2"><b>${i+1}.</b> ${q.q}</p><div class="grid sm:grid-cols-2 gap-2">${optsHtml}</div>`;
+    c.appendChild(div);
+  });
+}
+
+function selectQuiz(i, j) {
+  document.querySelectorAll(`[data-qq="${i}"]`).forEach(el => el.classList.remove('selected'));
+  const label = document.querySelector(`[data-qq="${i}"][data-qopt="${j}"]`);
+  if (label) label.classList.add('selected');
+  quizAnswers[i] = j;
+}
+
+function checkQuiz() {
+  let correct = 0;
+  let answered = 0;
+  quizData.forEach((q, i) => {
+    const labels = document.querySelectorAll(`[data-qq="${i}"]`);
+    labels.forEach((el, j) => {
+      el.classList.remove('correct', 'incorrect');
+      if (quizAnswers[i] === undefined) return;
+      if (j === q.correct) el.classList.add('correct');
+      else if (j === quizAnswers[i]) el.classList.add('incorrect');
+    });
+    if (quizAnswers[i] !== undefined) {
+      answered++;
+      if (quizAnswers[i] === q.correct) correct++;
+    }
+  });
+  const total = quizData.length;
+  const result = document.getElementById('quizResult');
+  if (answered === 0) {
+    result.innerHTML = `<div class="p-4 rounded-xl" style="background:#fef3c7;color:#92400e">⚠️ Jawab dulu minimal satu soal ya! 🌸</div>`;
+    return;
+  }
+  const pct = Math.round(correct/total*100);
+  let msg = '';
+  if (pct === 100) { msg = '🏆 SEMPURNA! Kalian juara!'; celebrate(); }
+  else if (pct >= 80) { msg = '🌟 Hebat sekali!'; }
+  else if (pct >= 60) { msg = '💪 Bagus, tingkatkan lagi!'; }
+  else { msg = '📚 Tetap semangat, belajar lagi ya!'; }
+  result.innerHTML = `<div class="p-4 rounded-xl text-center font-bold" style="background:${pct>=80?'#dcfce7':'#fef3c7'};color:${pct>=80?'#166534':'#92400e'}">
+    Skor: ${correct}/${total} (${pct}%)<br>${msg}
+  </div>`;
+}
+
+// ============ INIT ============
+function init() {
+  updateNavDots();
+  updateNames();
+  initCards();
+  regenBlock();
+  renderFormStories();
+  genEquivQuestions();
+  renderEquivQuestions();
+  genSimplifyProblems();
+  renderSimplifyProblems();
+  genCompareProblems();
+  renderCompareProblems();
+  genMixedProblems();
+  renderMixedProblems();
+  genAllOps();
+  renderOps();
+  renderWordProblems();
+  initQuiz();
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+// Run init when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
