@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Soal - Operasi Hitung Campuran Bilangan Rasional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#FF5C8A;--primary-dark:#E63E73;--primary-light:#FF8FAB;
+  --secondary:#B084CC;--secondary-dark:#8E63B5;--accent:#FFD166;
+  --text:#4A2545;--text-light:#7A5C76;--card:#FFFFFF;
+  --correct:#4ECDC4;--correct-bg:#E0F8F5;
+  --wrong:#FF6B6B;--wrong-bg:#FFE5E5;
+  --unanswered:#FFA94D;--unanswered-bg:#FFF4E0;
+  --shadow-soft:0 8px 24px rgba(255,92,138,.12);
+  --shadow-strong:0 12px 32px rgba(255,92,138,.2);
+}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FFF0F5 0%,#FFE0EC 40%,#E8D5F2 100%);min-height:100vh;color:var(--text);overflow-x:hidden;position:relative}
+h1,h2,h3,.title{font-family:'Baloo 2',cursive;color:var(--text)}
+.floating-shapes{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.floating-shapes span{position:absolute;font-size:28px;opacity:.55;animation:float 18s infinite ease-in-out}
+.fs-1{top:10%;left:5%}.fs-2{top:25%;right:8%;animation-delay:3s}.fs-3{top:50%;left:80%;animation-delay:5s;font-size:24px}
+.fs-4{top:70%;left:10%;animation-delay:7s}.fs-5{top:85%;right:15%;animation-delay:2s;font-size:22px}
+.fs-6{top:15%;left:45%;animation-delay:9s;font-size:32px}.fs-7{top:40%;left:15%;animation-delay:4s;font-size:20px}
+.fs-8{top:60%;right:30%;animation-delay:6s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg);opacity:.55}50%{transform:translateY(-30px) rotate(15deg);opacity:.8}}
+
+.cover{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.cover-card{background:var(--card);padding:48px 40px;border-radius:32px;box-shadow:var(--shadow-strong);max-width:540px;width:100%;text-align:center;position:relative;overflow:hidden;animation:cardIn .6s ease-out}
+@keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.cover-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:linear-gradient(135deg,var(--primary-light),var(--secondary));border-radius:50%;opacity:.25}
+.cover-card::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;background:linear-gradient(135deg,var(--accent),var(--primary-light));border-radius:50%;opacity:.2}
+.cover-decoration{font-size:32px;margin-bottom:14px;letter-spacing:6px;position:relative;z-index:1}
+.title{font-size:32px;font-weight:800;color:var(--primary);margin-bottom:8px;position:relative;z-index:1;line-height:1.2}
+.subtitle{font-size:16px;color:var(--text-light);margin-bottom:24px;position:relative;z-index:1;font-weight:600}
+.cover-icons{display:flex;justify-content:center;gap:10px;margin-bottom:28px;position:relative;z-index:1;flex-wrap:wrap}
+.cover-icons .icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#FFE5EC 0%,#F3E8FF 100%);box-shadow:0 4px 12px rgba(255,92,138,.15)}
+.input-group{margin-bottom:24px;text-align:left;position:relative;z-index:1}
+.input-group label{display:block;font-weight:700;margin-bottom:8px;color:var(--text);font-family:'Baloo 2',cursive;font-size:16px}
+.input-group input{width:100%;padding:14px 18px;font-size:16px;border:2px solid #FFD1DC;border-radius:16px;font-family:'Nunito',sans-serif;background:#FFF9FB;transition:all .3s;color:var(--text)}
+.input-group input:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 4px 12px rgba(255,92,138,.2)}
+.btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:#fff;border:none;padding:14px 36px;font-size:18px;font-weight:700;border-radius:50px;cursor:pointer;font-family:'Baloo 2',cursive;box-shadow:0 8px 20px rgba(255,92,138,.4);transition:all .3s;position:relative;z-index:1}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(255,92,138,.5)}
+.btn-primary:active{transform:translateY(-1px)}
+
+.quiz{padding:20px;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.quiz.hidden{display:none}
+.quiz-header{background:var(--card);padding:18px 24px;border-radius:20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;box-shadow:var(--shadow-soft);flex-wrap:wrap;gap:12px}
+.quiz-header h2{color:var(--primary);font-size:22px;margin:0}
+.quiz-header #studentName{color:var(--text-light);font-weight:600;font-size:14px;margin:2px 0 0}
+.stats-mini{display:flex;gap:8px;flex-wrap:wrap}
+.stats-mini .stat{padding:6px 12px;border-radius:50px;font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;gap:4px}
+.stats-mini .stat.correct{background:var(--correct)}
+.stats-mini .stat.wrong{background:var(--wrong)}
+.stats-mini .stat.unanswered{background:var(--unanswered)}
+
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--card);padding:6px;border-radius:50px;box-shadow:var(--shadow-soft)}
+.tab{flex:1;padding:12px 10px;background:transparent;border:none;font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;color:var(--text-light);cursor:pointer;border-radius:50px;transition:all .3s;white-space:nowrap}
+.tab.active{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:#fff;box-shadow:0 4px 12px rgba(255,92,138,.3)}
+
+.section{margin-bottom:24px}
+.section.hidden{display:none}
+.section h3{color:var(--primary);margin-bottom:16px;font-size:22px;text-align:center;font-family:'Baloo 2',cursive}
+.question-list{display:grid;gap:18px}
+.question-card{background:var(--card);border-radius:20px;padding:22px;box-shadow:var(--shadow-soft);border-left:5px solid var(--primary-light);position:relative;transition:all .3s;scroll-margin-top:20px}
+.question-card.correct{border-left-color:var(--correct);background:linear-gradient(135deg,#FFF 0%,#F0FBF9 100%)}
+.question-card.wrong{border-left-color:var(--wrong);background:linear-gradient(135deg,#FFF 0%,#FFF5F5 100%)}
+.q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
+.q-number{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:#fff;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;flex-shrink:0}
+.q-status{padding:5px 12px;border-radius:50px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:4px}
+.q-status.unanswered{background:var(--unanswered-bg);color:var(--unanswered)}
+.q-status.correct{background:var(--correct-bg);color:var(--correct)}
+.q-status.wrong{background:var(--wrong-bg);color:var(--wrong)}
+.q-status.hidden{display:none}
+.q-text{font-size:16px;line-height:1.8;margin-bottom:16px;color:var(--text)}
+.q-text mjx-container{font-size:1.08em !important}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:600px){.options{grid-template-columns:1fr}}
+.option{padding:12px 14px;border:2px solid #FFE0EC;border-radius:14px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:10px;background:#FFFBFD}
+.option:hover{border-color:var(--primary-light);background:#FFF5F8;transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,92,138,.15)}
+.option.selected{border-color:var(--primary);background:linear-gradient(135deg,#FFE5EC 0%,#FFD1DC 100%)}
+.option.correct-answer{border-color:var(--correct);background:var(--correct-bg)}
+.option.wrong-answer{border-color:var(--wrong);background:var(--wrong-bg)}
+.option-letter{background:var(--primary-light);color:#fff;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;font-family:'Baloo 2',cursive}
+.option.correct-answer .option-letter{background:var(--correct)}
+.option.wrong-answer .option-letter{background:var(--wrong)}
+.option-text{flex:1;font-size:15px;color:var(--text);line-height:1.5}
+.option-text mjx-container{font-size:1em !important}
+.q-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-check,.btn-explain{padding:8px 16px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:13px;transition:all .25s}
+.btn-check{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:#fff}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,92,138,.3)}
+.btn-explain{background:#F3E8FF;color:var(--secondary-dark)}
+.btn-explain:hover{background:#E5D0FF}
+.btn-explain.active{background:var(--secondary);color:#fff}
+.explanation{margin-top:14px;padding:16px 18px;background:linear-gradient(135deg,#F9F5FF 0%,#FFF5F8 100%);border-radius:14px;border-left:4px solid var(--secondary);display:none;animation:slideDown .3s ease-out}
+.explanation.visible{display:block}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.explanation h4{color:var(--secondary-dark);font-family:'Baloo 2',cursive;margin-bottom:8px;font-size:15px;font-weight:700}
+.explanation ol{padding-left:22px;font-size:14px;line-height:1.9;color:var(--text)}
+.explanation ol li{margin-bottom:6px}
+.explanation ol li mjx-container{font-size:1em !important}
+.explanation .answer-tag{margin-top:10px;padding:8px 14px;background:var(--correct-bg);color:var(--correct);border-radius:10px;font-weight:800;display:inline-block;font-size:14px;font-family:'Baloo 2',cursive}
+
+.actions{text-align:center;margin:32px 0 24px}
+.btn-finish{background:linear-gradient(135deg,#B084CC 0%,#FF5C8A 100%);color:#fff;border:none;padding:16px 48px;font-size:19px;font-weight:800;border-radius:50px;cursor:pointer;font-family:'Baloo 2',cursive;box-shadow:0 8px 24px rgba(176,132,204,.4);transition:all .3s}
+.btn-finish:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(176,132,204,.5)}
+.btn-finish:active{transform:translateY(-1px)}
+
+.modal{position:fixed;inset:0;background:rgba(74,37,69,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal.hidden{display:none}
+.modal-content{background:#fff;border-radius:28px;padding:32px 28px;max-width:640px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);text-align:center;position:relative;animation:modalIn .5s ease-out}
+@keyframes modalIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-decoration{font-size:48px;margin-bottom:8px}
+.modal-content h2{color:var(--primary);font-size:28px;margin-bottom:6px}
+.modal-content #resultName{color:var(--text-light);margin-bottom:20px;font-weight:700;font-size:16px}
+.score-circle{position:relative;width:140px;height:140px;margin:0 auto 20px}
+.score-circle svg{width:100%;height:100%}
+.score-circle #scoreRing{transition:stroke-dashoffset 1.5s ease-out}
+.score-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:var(--primary)}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.result-stat{padding:14px 6px;border-radius:16px;background:#FFF5F8}
+.result-stat .num{font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;line-height:1}
+.result-stat .label{font-size:12px;color:var(--text-light);margin-top:4px;font-weight:700}
+.result-stat.correct{background:var(--correct-bg)}
+.result-stat.correct .num{color:var(--correct)}
+.result-stat.wrong{background:var(--wrong-bg)}
+.result-stat.wrong .num{color:var(--wrong)}
+.result-stat.unanswered{background:var(--unanswered-bg)}
+.result-stat.unanswered .num{color:var(--unanswered)}
+.result-message{color:var(--secondary-dark);font-weight:700;margin-bottom:16px;font-size:16px;font-family:'Baloo 2',cursive}
+.modal-content h3{color:var(--text);margin:16px 0 12px;font-size:17px}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:6px;margin-bottom:20px;max-height:280px;overflow-y:auto;padding:10px;background:#FFF9FB;border-radius:14px}
+.detail-item{padding:8px 4px;border-radius:10px;font-size:12px;font-weight:800;text-align:center;cursor:pointer;transition:transform .2s;font-family:'Baloo 2',cursive;color:#fff}
+.detail-item:hover{transform:scale(1.08)}
+.detail-item.correct{background:var(--correct)}
+.detail-item.wrong{background:var(--wrong)}
+.detail-item.unanswered{background:var(--unanswered)}
+.modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.btn-secondary{background:#F3E8FF;color:var(--secondary-dark);border:none;padding:12px 28px;font-size:15px;font-weight:700;border-radius:50px;cursor:pointer;font-family:'Baloo 2',cursive;transition:all .25s}
+.btn-secondary:hover{background:#E5D0FF;transform:translateY(-2px)}
+
+@media(max-width:600px){
+  .quiz{padding:12px}.cover-card{padding:36px 24px}.title{font-size:26px}.subtitle{font-size:14px}
+  .quiz-header{padding:14px 16px}.quiz-header h2{font-size:18px}.tab{padding:10px 8px;font-size:12px}
+  .question-card{padding:18px}.q-text{font-size:15px}.result-stat .num{font-size:24px}
+  .modal-content{padding:24px 18px}.modal-content h2{font-size:22px}
+}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#FFF0F5;border-radius:10px}
+::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+</style>
+</head>
+<body>
+
+<div class="floating-shapes">
+  <span class="fs-1">🌸</span><span class="fs-2">✨</span><span class="fs-3">💕</span>
+  <span class="fs-4">🦋</span><span class="fs-5">⭐</span><span class="fs-6">🌷</span>
+  <span class="fs-7">🍓</span><span class="fs-8">🌸</span>
+</div>
+
+<section id="cover" class="cover">
+  <div class="cover-card">
+    <div class="cover-decoration">🌸 ⭐ 💕 ✨ 🌷</div>
+    <h1 class="title">Latihan Soal Matematika</h1>
+    <p class="subtitle">Operasi Hitung Campuran Bilangan Rasional</p>
+    <div class="cover-icons">
+      <div class="icon">🧮</div><div class="icon">📐</div>
+      <div class="icon">✏️</div><div class="icon">📚</div>
+    </div>
+    <div class="input-group">
+      <label for="nama">Masukkan Namamu, Yuk! 💕</label>
+      <input type="text" id="nama" placeholder="Tulis namamu di sini..." autocomplete="off">
+    </div>
+    <button id="startBtn" class="btn-primary">Mulai Latihan ♡</button>
+  </div>
+</section>
+
+<main id="quiz" class="quiz hidden">
+  <header class="quiz-header">
+    <div class="header-info">
+      <h2>Latihan Soal Matematika ✨</h2>
+      <p id="studentName">Selamat mengerjakan!</p>
+    </div>
+    <div class="stats-mini">
+      <div class="stat correct">✓ <span id="miniCorrect">0</span></div>
+      <div class="stat wrong">✗ <span id="miniWrong">0</span></div>
+      <div class="stat unanswered">○ <span id="miniUnanswered">70</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="operasi">🧮 Operasi Hitung (30)</button>
+    <button class="tab" data-tab="variasi">✨ Variatif & Kurung (20)</button>
+    <button class="tab" data-tab="cerita">📖 Soal Cerita (20)</button>
+  </nav>
+
+  <section id="operasi-section" class="section">
+    <h3>Operasi Hitung Campuran</h3>
+    <div id="operasiList" class="question-list"></div>
+  </section>
+
+  <section id="variasi-section" class="section hidden">
+    <h3>Operasi Variatif (Desimal, Pecahan, Persen)</h3>
+    <div id="variasiList" class="question-list"></div>
+  </section>
+
+  <section id="cerita-section" class="section hidden">
+    <h3>Soal Cerita</h3>
+    <div id="ceritaList" class="question-list"></div>
+  </section>
+
+  <div class="actions">
+    <button id="finishBtn" class="btn-finish">Selesai & Lihat Hasil ★</button>
+  </div>
+</main>
+
+<div id="resultModal" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-decoration">🎉</div>
+    <h2>Hasil Latihan</h2>
+    <p id="resultName">Hebat sekali!</p>
+    <div class="score-circle">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" stroke="#FFE0EC" stroke-width="8" fill="none"/>
+        <circle id="scoreRing" cx="50" cy="50" r="45" stroke="url(#scoreGradient)" stroke-width="8" fill="none" stroke-dasharray="282.74" stroke-dashoffset="282.74" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+        <defs>
+          <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF5C8A"/>
+            <stop offset="100%" stop-color="#B084CC"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="score-text"><span id="scorePercent">0</span>%</div>
+    </div>
+    <div class="result-stats">
+      <div class="result-stat correct"><div class="num" id="finalCorrect">0</div><div class="label">Benar</div></div>
+      <div class="result-stat wrong"><div class="num" id="finalWrong">0</div><div class="label">Salah</div></div>
+      <div class="result-stat unanswered"><div class="num" id="finalUnanswered">0</div><div class="label">Belum Dijawab</div></div>
+    </div>
+    <p id="resultMessage" class="result-message">Kerja bagus! 💕</p>
+    <h3>📋 Detail Setiap Soal</h3>
+    <div id="detailGrid" class="detail-grid"></div>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">Klik nomor soal untuk menuju ke soal tersebut</p>
+    <div class="modal-actions">
+      <button id="closeModal" class="btn-secondary">Tutup</button>
+      <button id="restartBtn" class="btn-primary">Ulangi Latihan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== DATA SOAL OPERASI HITUNG (30 SOAL) ==========
+const operasiData = [
+  {no:1,soal:`Hasil dari $1\\dfrac{3}{4} + \\dfrac{3}{4} : 0{,}25 + 10\\%$ adalah ...`,opsi:[`$4\\dfrac{17}{20}$`,`$4\\dfrac{11}{60}$`,`$5\\dfrac{1}{10}$`,`$3\\dfrac{7}{20}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{3}{4} + \\dfrac{3}{4} : \\dfrac{1}{4} + \\dfrac{1}{10}$`,`Kerjakan pembagian: $\\dfrac{3}{4} : \\dfrac{1}{4} = 3$, sehingga $1\\dfrac{3}{4} + 3 + \\dfrac{1}{10}$`,`Kerjakan penjumlahan: $1\\dfrac{3}{4} + 3 = 4\\dfrac{3}{4}$`,`Hasil: $4\\dfrac{3}{4} + \\dfrac{1}{10} = 4\\dfrac{15}{20} + \\dfrac{2}{20} = 4\\dfrac{17}{20}$`]},
+  {no:2,soal:`Hasil dari $150\\% - 1\\dfrac{4}{5} - 0{,}2 \\times \\dfrac{1}{4}$ adalah ...`,opsi:[`$\\dfrac{3}{20}$`,`$-1\\dfrac{17}{20}$`,`$-\\dfrac{13}{30}$`,`$-\\dfrac{7}{20}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{2} - 1\\dfrac{4}{5} - \\dfrac{1}{5} \\times \\dfrac{1}{4}$`,`Kerjakan perkalian: $\\dfrac{1}{5} \\times \\dfrac{1}{4} = \\dfrac{1}{20}$, sehingga $1\\dfrac{1}{2} - 1\\dfrac{4}{5} - \\dfrac{1}{20}$`,`Kerjakan pengurangan: $\\dfrac{3}{2} - \\dfrac{9}{5} = \\dfrac{15-18}{10} = -\\dfrac{3}{10}$`,`Hasil: $-\\dfrac{3}{10} - \\dfrac{1}{20} = -\\dfrac{6}{20} - \\dfrac{1}{20} = -\\dfrac{7}{20}$`]},
+  {no:3,soal:`Hasil dari $\\dfrac{3}{8} \\times 120\\% - 0{,}5 + 1\\dfrac{1}{3}$ adalah ...`,opsi:[`$1\\dfrac{7}{60}$`,`$\\dfrac{47}{60}$`,`$1\\dfrac{17}{60}$`,`$\\dfrac{59}{60}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{3}{8} \\times 1\\dfrac{1}{5} - \\dfrac{1}{2} + 1\\dfrac{1}{3}$`,`Kerjakan perkalian: $\\dfrac{3}{8} \\times \\dfrac{6}{5} = \\dfrac{18}{40} = \\dfrac{9}{20}$, sehingga $\\dfrac{9}{20} - \\dfrac{1}{2} + 1\\dfrac{1}{3}$`,`Kerjakan pengurangan: $\\dfrac{9}{20} - \\dfrac{10}{20} = -\\dfrac{1}{20}$`,`Hasil: $-\\dfrac{1}{20} + 1\\dfrac{1}{3} = -\\dfrac{3}{60} + 1\\dfrac{20}{60} = 1\\dfrac{17}{60}$`]},
+  {no:4,soal:`Hasil dari $1\\dfrac{1}{4} \\times 2{,}5 + 120\\% - \\dfrac{1}{5}$ adalah ...`,opsi:[`$3\\dfrac{11}{24}$`,`$4\\dfrac{1}{40}$`,`$4\\dfrac{13}{40}$`,`$4\\dfrac{1}{8}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{4} \\times 2\\dfrac{1}{2} + 1\\dfrac{1}{5} - \\dfrac{1}{5}$`,`Kerjakan perkalian: $\\dfrac{5}{4} \\times \\dfrac{5}{2} = \\dfrac{25}{8} = 3\\dfrac{1}{8}$, sehingga $3\\dfrac{1}{8} + 1\\dfrac{1}{5} - \\dfrac{1}{5}$`,`Kerjakan penjumlahan: $3\\dfrac{1}{8} + 1\\dfrac{1}{5} = 3\\dfrac{5}{40} + 1\\dfrac{8}{40} = 4\\dfrac{13}{40}$`,`Hasil: $4\\dfrac{13}{40} - \\dfrac{1}{5} = 4\\dfrac{13}{40} - \\dfrac{8}{40} = 4\\dfrac{5}{40} = 4\\dfrac{1}{8}$`]},
+  {no:5,soal:`Hasil dari $\\dfrac{1}{2} - 0{,}5 \\times 40\\% - 2\\dfrac{1}{5}$ adalah ...`,opsi:[`$-1\\dfrac{3}{10}$`,`$-1\\dfrac{17}{30}$`,`$-1\\dfrac{4}{5}$`,`$-1\\dfrac{9}{10}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{2} - \\dfrac{1}{2} \\times \\dfrac{2}{5} - 2\\dfrac{1}{5}$`,`Kerjakan perkalian: $\\dfrac{1}{2} \\times \\dfrac{2}{5} = \\dfrac{1}{5}$, sehingga $\\dfrac{1}{2} - \\dfrac{1}{5} - 2\\dfrac{1}{5}$`,`Kerjakan pengurangan: $\\dfrac{1}{2} - \\dfrac{1}{5} = \\dfrac{5-2}{10} = \\dfrac{3}{10}$`,`Hasil: $\\dfrac{3}{10} - 2\\dfrac{1}{5} = \\dfrac{3}{10} - 2\\dfrac{2}{10} = -1\\dfrac{9}{10}$`]},
+  {no:6,soal:`Hasil dari $\\dfrac{3}{4} - 0{,}2 : 30\\% + 1\\dfrac{3}{5}$ adalah ...`,opsi:[`$\\dfrac{41}{60}$`,`$1\\dfrac{13}{30}$`,`$1\\dfrac{41}{60}$`,`$2\\dfrac{41}{60}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{3}{4} - \\dfrac{1}{5} : \\dfrac{3}{10} + 1\\dfrac{3}{5}$`,`Kerjakan pembagian: $\\dfrac{1}{5} : \\dfrac{3}{10} = \\dfrac{1}{5} \\times \\dfrac{10}{3} = \\dfrac{2}{3}$, sehingga $\\dfrac{3}{4} - \\dfrac{2}{3} + 1\\dfrac{3}{5}$`,`Kerjakan pengurangan: $\\dfrac{3}{4} - \\dfrac{2}{3} = \\dfrac{9-8}{12} = \\dfrac{1}{12}$`,`Hasil: $\\dfrac{1}{12} + 1\\dfrac{3}{5} = \\dfrac{5}{60} + 1\\dfrac{36}{60} = 1\\dfrac{41}{60}$`]},
+  {no:7,soal:`Hasil dari $150\\% + 0{,}8 \\times 2\\dfrac{1}{2} \\times \\dfrac{5}{6}$ adalah ...`,opsi:[`$3\\dfrac{1}{6}$`,`$3\\dfrac{1}{2}$`,`$2\\dfrac{5}{12}$`,`$3\\dfrac{2}{3}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{2} + \\dfrac{4}{5} \\times 2\\dfrac{1}{2} \\times \\dfrac{5}{6}$`,`Kerjakan perkalian: $\\dfrac{4}{5} \\times \\dfrac{5}{2} = 2$, lalu $2 \\times \\dfrac{5}{6} = \\dfrac{10}{6} = 1\\dfrac{2}{3}$`,`Sehingga: $1\\dfrac{1}{2} + 1\\dfrac{2}{3}$`,`Hasil: $1\\dfrac{3}{6} + 1\\dfrac{4}{6} = 2\\dfrac{7}{6} = 3\\dfrac{1}{6}$`]},
+  {no:8,soal:`Hasil dari $\\dfrac{3}{4} - 2\\dfrac{1}{2} + 0{,}2 \\times 20\\%$ adalah ...`,opsi:[`$-1\\dfrac{71}{100}$`,`$-2\\dfrac{23}{50}$`,`$-2\\dfrac{13}{300}$`,`$-1\\dfrac{21}{100}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{3}{4} - 2\\dfrac{1}{2} + \\dfrac{1}{5} \\times \\dfrac{1}{5}$`,`Kerjakan perkalian: $\\dfrac{1}{5} \\times \\dfrac{1}{5} = \\dfrac{1}{25}$, sehingga $\\dfrac{3}{4} - 2\\dfrac{1}{2} + \\dfrac{1}{25}$`,`Kerjakan pengurangan: $\\dfrac{3}{4} - 2\\dfrac{1}{2} = \\dfrac{3}{4} - \\dfrac{5}{2} = \\dfrac{3-10}{4} = -\\dfrac{7}{4} = -1\\dfrac{3}{4}$`,`Hasil: $-1\\dfrac{3}{4} + \\dfrac{1}{25} = -1\\dfrac{75}{100} + \\dfrac{4}{100} = -1\\dfrac{71}{100}$`]},
+  {no:9,soal:`Hasil dari $\\dfrac{1}{3} - 2\\dfrac{1}{2} \\times 0{,}25 : 120\\%$ adalah ...`,opsi:[`$-\\dfrac{3}{16}$`,`$-\\dfrac{31}{80}$`,`$-\\dfrac{7}{16}$`,`$\\dfrac{9}{80}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{3} - 2\\dfrac{1}{2} \\times \\dfrac{1}{4} : 1\\dfrac{1}{5}$`,`Kerjakan perkalian: $\\dfrac{5}{2} \\times \\dfrac{1}{4} = \\dfrac{5}{8}$, lalu pembagian: $\\dfrac{5}{8} : \\dfrac{6}{5} = \\dfrac{5}{8} \\times \\dfrac{5}{6} = \\dfrac{25}{48}$`,`Sehingga: $\\dfrac{1}{3} - \\dfrac{25}{48}$`,`Hasil: $\\dfrac{16}{48} - \\dfrac{25}{48} = -\\dfrac{9}{48} = -\\dfrac{3}{16}$`]},
+  {no:10,soal:`Hasil dari $1\\dfrac{1}{3} \\times \\dfrac{5}{6} + 3{,}5 - 30\\%$ adalah ...`,opsi:[`$4\\dfrac{44}{45}$`,`$2\\dfrac{73}{90}$`,`$4\\dfrac{14}{45}$`,`$4\\dfrac{11}{18}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{3} \\times \\dfrac{5}{6} + 3\\dfrac{1}{2} - \\dfrac{3}{10}$`,`Kerjakan perkalian: $\\dfrac{4}{3} \\times \\dfrac{5}{6} = \\dfrac{20}{18} = 1\\dfrac{1}{9}$, sehingga $1\\dfrac{1}{9} + 3\\dfrac{1}{2} - \\dfrac{3}{10}$`,`Kerjakan penjumlahan: $1\\dfrac{1}{9} + 3\\dfrac{1}{2} = 1\\dfrac{2}{18} + 3\\dfrac{9}{18} = 4\\dfrac{11}{18}$`,`Hasil: $4\\dfrac{11}{18} - \\dfrac{3}{10} = 4\\dfrac{55}{90} - \\dfrac{27}{90} = 4\\dfrac{28}{90} = 4\\dfrac{14}{45}$`]},
+  {no:11,soal:`Hasil dari $0{,}5 - \\dfrac{1}{3} - 2\\dfrac{1}{2} : 75\\%$ adalah ...`,opsi:[`$-3\\dfrac{1}{6}$`,`$-2\\dfrac{5}{6}$`,`$-3\\dfrac{1}{12}$`,`$-3\\dfrac{1}{3}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{2} - \\dfrac{1}{3} - 2\\dfrac{1}{2} : \\dfrac{3}{4}$`,`Kerjakan pembagian: $\\dfrac{5}{2} : \\dfrac{3}{4} = \\dfrac{5}{2} \\times \\dfrac{4}{3} = \\dfrac{20}{6} = 3\\dfrac{1}{3}$, sehingga $\\dfrac{1}{2} - \\dfrac{1}{3} - 3\\dfrac{1}{3}$`,`Kerjakan pengurangan: $\\dfrac{1}{2} - \\dfrac{1}{3} = \\dfrac{3-2}{6} = \\dfrac{1}{6}$`,`Hasil: $\\dfrac{1}{6} - 3\\dfrac{1}{3} = \\dfrac{1}{6} - 3\\dfrac{2}{6} = -3\\dfrac{1}{6}$`]},
+  {no:12,soal:`Hasil dari $150\\% + 1\\dfrac{4}{5} : \\dfrac{2}{5} \\times 1{,}2$ adalah ...`,opsi:[`$7\\dfrac{3}{10}$`,`$5\\dfrac{9}{10}$`,`$6\\dfrac{7}{30}$`,`$6\\dfrac{9}{10}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{2} + 1\\dfrac{4}{5} : \\dfrac{2}{5} \\times 1\\dfrac{1}{5}$`,`Kerjakan pembagian: $\\dfrac{9}{5} : \\dfrac{2}{5} = \\dfrac{9}{5} \\times \\dfrac{5}{2} = \\dfrac{9}{2} = 4\\dfrac{1}{2}$, lalu perkalian: $4\\dfrac{1}{2} \\times 1\\dfrac{1}{5} = \\dfrac{9}{2} \\times \\dfrac{6}{5} = \\dfrac{54}{10} = 5\\dfrac{2}{5}$`,`Sehingga: $1\\dfrac{1}{2} + 5\\dfrac{2}{5}$`,`Hasil: $1\\dfrac{5}{10} + 5\\dfrac{4}{10} = 6\\dfrac{9}{10}$`]},
+  {no:13,soal:`Hasil dari $120\\% - 2{,}5 - \\dfrac{1}{4} : 1\\dfrac{1}{3}$ adalah ...`,opsi:[`$-1\\dfrac{157}{240}$`,`$-1\\dfrac{39}{80}$`,`$-\\dfrac{79}{80}$`,`$-1\\dfrac{23}{80}$`],jawaban:1,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{5} - 2\\dfrac{1}{2} - \\dfrac{1}{4} : 1\\dfrac{1}{3}$`,`Kerjakan pembagian: $\\dfrac{1}{4} : \\dfrac{4}{3} = \\dfrac{1}{4} \\times \\dfrac{3}{4} = \\dfrac{3}{16}$, sehingga $1\\dfrac{1}{5} - 2\\dfrac{1}{2} - \\dfrac{3}{16}$`,`Kerjakan pengurangan: $1\\dfrac{1}{5} - 2\\dfrac{1}{2} = \\dfrac{6}{5} - \\dfrac{5}{2} = \\dfrac{12-25}{10} = -\\dfrac{13}{10} = -1\\dfrac{3}{10}$`,`Hasil: $-1\\dfrac{3}{10} - \\dfrac{3}{16} = -1\\dfrac{48}{160} - \\dfrac{30}{160} = -1\\dfrac{78}{160} = -1\\dfrac{39}{80}$`]},
+  {no:14,soal:`Hasil dari $0{,}8 - 50\\% - \\dfrac{5}{6} \\times 2\\dfrac{1}{3}$ adalah ...`,opsi:[`$-2\\dfrac{29}{45}$`,`$-\\dfrac{29}{45}$`,`$-1\\dfrac{4}{9}$`,`$-1\\dfrac{29}{45}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{4}{5} - \\dfrac{1}{2} - \\dfrac{5}{6} \\times 2\\dfrac{1}{3}$`,`Kerjakan perkalian: $\\dfrac{5}{6} \\times \\dfrac{7}{3} = \\dfrac{35}{18} = 1\\dfrac{17}{18}$, sehingga $\\dfrac{4}{5} - \\dfrac{1}{2} - 1\\dfrac{17}{18}$`,`Kerjakan pengurangan: $\\dfrac{4}{5} - \\dfrac{1}{2} = \\dfrac{8-5}{10} = \\dfrac{3}{10}$`,`Hasil: $\\dfrac{3}{10} - 1\\dfrac{17}{18} = \\dfrac{27}{90} - 1\\dfrac{85}{90} = -1\\dfrac{58}{90} = -1\\dfrac{29}{45}$`]},
+  {no:15,soal:`Hasil dari $2\\dfrac{1}{2} - \\dfrac{3}{8} : 0{,}6 + 120\\%$ adalah ...`,opsi:[`$3\\dfrac{3}{40}$`,`$2\\dfrac{7}{10}$`,`$3\\dfrac{13}{40}$`,`$3\\dfrac{89}{120}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $2\\dfrac{1}{2} - \\dfrac{3}{8} : \\dfrac{3}{5} + 1\\dfrac{1}{5}$`,`Kerjakan pembagian: $\\dfrac{3}{8} : \\dfrac{3}{5} = \\dfrac{3}{8} \\times \\dfrac{5}{3} = \\dfrac{5}{8}$, sehingga $2\\dfrac{1}{2} - \\dfrac{5}{8} + 1\\dfrac{1}{5}$`,`Kerjakan pengurangan: $2\\dfrac{1}{2} - \\dfrac{5}{8} = 2\\dfrac{4}{8} - \\dfrac{5}{8} = 1\\dfrac{7}{8}$`,`Hasil: $1\\dfrac{7}{8} + 1\\dfrac{1}{5} = 1\\dfrac{35}{40} + 1\\dfrac{8}{40} = 2\\dfrac{43}{40} = 3\\dfrac{3}{40}$`]},
+  {no:16,soal:`Hasil dari $1\\dfrac{3}{4} + 2{,}5 + 40\\% : \\dfrac{1}{5}$ adalah ...`,opsi:[`$6\\dfrac{1}{2}$`,`$4\\dfrac{3}{4}$`,`$6\\dfrac{11}{12}$`,`$6\\dfrac{1}{4}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{3}{4} + 2\\dfrac{1}{2} + \\dfrac{2}{5} : \\dfrac{1}{5}$`,`Kerjakan pembagian: $\\dfrac{2}{5} : \\dfrac{1}{5} = \\dfrac{2}{5} \\times \\dfrac{5}{1} = 2$, sehingga $1\\dfrac{3}{4} + 2\\dfrac{1}{2} + 2$`,`Kerjakan penjumlahan: $1\\dfrac{3}{4} + 2\\dfrac{1}{2} = 1\\dfrac{3}{4} + 2\\dfrac{2}{4} = 3\\dfrac{5}{4} = 4\\dfrac{1}{4}$`,`Hasil: $4\\dfrac{1}{4} + 2 = 6\\dfrac{1}{4}$`]},
+  {no:17,soal:`Hasil dari $0{,}25 + \\dfrac{1}{5} \\times 2\\dfrac{1}{3} + 40\\%$ adalah ...`,opsi:[`$\\dfrac{37}{60}$`,`$1\\dfrac{59}{120}$`,`$-\\dfrac{23}{60}$`,`$1\\dfrac{7}{60}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{4} + \\dfrac{1}{5} \\times 2\\dfrac{1}{3} + \\dfrac{2}{5}$`,`Kerjakan perkalian: $\\dfrac{1}{5} \\times \\dfrac{7}{3} = \\dfrac{7}{15}$, sehingga $\\dfrac{1}{4} + \\dfrac{7}{15} + \\dfrac{2}{5}$`,`Kerjakan penjumlahan: $\\dfrac{1}{4} + \\dfrac{7}{15} = \\dfrac{15}{60} + \\dfrac{28}{60} = \\dfrac{43}{60}$`,`Hasil: $\\dfrac{43}{60} + \\dfrac{2}{5} = \\dfrac{43}{60} + \\dfrac{24}{60} = \\dfrac{67}{60} = 1\\dfrac{7}{60}$`]},
+  {no:18,soal:`Hasil dari $0{,}6 \\times 40\\% + 1\\dfrac{3}{4} + \\dfrac{1}{5}$ adalah ...`,opsi:[`$1\\dfrac{11}{25}$`,`$2\\dfrac{19}{100}$`,`$1\\dfrac{69}{100}$`,`$2\\dfrac{79}{100}$`],jawaban:1,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{3}{5} \\times \\dfrac{2}{5} + 1\\dfrac{3}{4} + \\dfrac{1}{5}$`,`Kerjakan perkalian: $\\dfrac{3}{5} \\times \\dfrac{2}{5} = \\dfrac{6}{25}$, sehingga $\\dfrac{6}{25} + 1\\dfrac{3}{4} + \\dfrac{1}{5}$`,`Kerjakan penjumlahan: $\\dfrac{6}{25} + 1\\dfrac{3}{4} = \\dfrac{24}{100} + 1\\dfrac{75}{100} = 1\\dfrac{99}{100}$`,`Hasil: $1\\dfrac{99}{100} + \\dfrac{1}{5} = 1\\dfrac{99}{100} + \\dfrac{20}{100} = 1\\dfrac{119}{100} = 2\\dfrac{19}{100}$`]},
+  {no:19,soal:`Hasil dari $120\\% - \\dfrac{3}{8} + 1\\dfrac{3}{5} \\times 0{,}75$ adalah ...`,opsi:[`$2\\dfrac{1}{40}$`,`$1\\dfrac{5}{8}$`,`$2\\dfrac{11}{40}$`,`$1\\dfrac{1}{40}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{5} - \\dfrac{3}{8} + 1\\dfrac{3}{5} \\times \\dfrac{3}{4}$`,`Kerjakan perkalian: $\\dfrac{8}{5} \\times \\dfrac{3}{4} = \\dfrac{24}{20} = \\dfrac{6}{5} = 1\\dfrac{1}{5}$, sehingga $1\\dfrac{1}{5} - \\dfrac{3}{8} + 1\\dfrac{1}{5}$`,`Kerjakan pengurangan: $1\\dfrac{1}{5} - \\dfrac{3}{8} = \\dfrac{48}{40} - \\dfrac{15}{40} = \\dfrac{33}{40}$`,`Hasil: $\\dfrac{33}{40} + 1\\dfrac{1}{5} = \\dfrac{33}{40} + 1\\dfrac{8}{40} = 1\\dfrac{41}{40} = 2\\dfrac{1}{40}$`]},
+  {no:20,soal:`Hasil dari $1{,}2 - 40\\% : 1\\dfrac{1}{3} + \\dfrac{1}{4}$ adalah ...`,opsi:[`$1\\dfrac{3}{20}$`,`$1\\dfrac{7}{30}$`,`$1\\dfrac{1}{15}$`,`$\\dfrac{19}{20}$`],jawaban:0,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{1}{5} - \\dfrac{2}{5} : 1\\dfrac{1}{3} + \\dfrac{1}{4}$`,`Kerjakan pembagian: $\\dfrac{2}{5} : \\dfrac{4}{3} = \\dfrac{2}{5} \\times \\dfrac{3}{4} = \\dfrac{6}{20} = \\dfrac{3}{10}$, sehingga $1\\dfrac{1}{5} - \\dfrac{3}{10} + \\dfrac{1}{4}$`,`Kerjakan pengurangan: $1\\dfrac{1}{5} - \\dfrac{3}{10} = 1\\dfrac{2}{10} - \\dfrac{3}{10} = \\dfrac{9}{10}$`,`Hasil: $\\dfrac{9}{10} + \\dfrac{1}{4} = \\dfrac{18}{20} + \\dfrac{5}{20} = \\dfrac{23}{20} = 1\\dfrac{3}{20}$`]},
+  {no:21,soal:`Hasil dari $\\dfrac{1}{2} \\times 1\\dfrac{4}{5} \\times 0{,}25 - 150\\%$ adalah ...`,opsi:[`$-\\dfrac{11}{40}$`,`$-2\\dfrac{11}{40}$`,`$-1\\dfrac{1}{40}$`,`$-1\\dfrac{11}{40}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{2} \\times 1\\dfrac{4}{5} \\times \\dfrac{1}{4} - 1\\dfrac{1}{2}$`,`Kerjakan perkalian: $\\dfrac{1}{2} \\times \\dfrac{9}{5} = \\dfrac{9}{10}$, lalu $\\dfrac{9}{10} \\times \\dfrac{1}{4} = \\dfrac{9}{40}$, sehingga $\\dfrac{9}{40} - 1\\dfrac{1}{2}$`,`Kerjakan pengurangan: $\\dfrac{9}{40} - 1\\dfrac{1}{2} = \\dfrac{9}{40} - \\dfrac{60}{40} = -\\dfrac{51}{40}$`,`Hasil: $-\\dfrac{51}{40} = -1\\dfrac{11}{40}$`]},
+  {no:22,soal:`Hasil dari $30\\% \\times 2\\dfrac{1}{2} - 1{,}2 \\times \\dfrac{2}{5}$ adalah ...`,opsi:[`$\\dfrac{17}{100}$`,`$-1\\dfrac{23}{100}$`,`$\\dfrac{27}{100}$`,`$\\dfrac{67}{100}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{3}{10} \\times 2\\dfrac{1}{2} - 1\\dfrac{1}{5} \\times \\dfrac{2}{5}$`,`Kerjakan perkalian: $\\dfrac{3}{10} \\times \\dfrac{5}{2} = \\dfrac{15}{20} = \\dfrac{3}{4}$, lalu $\\dfrac{6}{5} \\times \\dfrac{2}{5} = \\dfrac{12}{25}$, sehingga $\\dfrac{3}{4} - \\dfrac{12}{25}$`,`Samakan penyebut: $\\dfrac{3}{4} = \\dfrac{75}{100}$ dan $\\dfrac{12}{25} = \\dfrac{48}{100}$`,`Hasil: $\\dfrac{75}{100} - \\dfrac{48}{100} = \\dfrac{27}{100}$`]},
+  {no:23,soal:`Hasil dari $40\\% \\times \\dfrac{3}{4} : 0{,}8 + 1\\dfrac{1}{2}$ adalah ...`,opsi:[`$2\\dfrac{3}{8}$`,`$1\\dfrac{7}{8}$`,`$2\\dfrac{5}{8}$`,`$2\\dfrac{1}{8}$`],jawaban:1,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{2}{5} \\times \\dfrac{3}{4} : \\dfrac{4}{5} + 1\\dfrac{1}{2}$`,`Kerjakan perkalian: $\\dfrac{2}{5} \\times \\dfrac{3}{4} = \\dfrac{6}{20} = \\dfrac{3}{10}$, lalu pembagian: $\\dfrac{3}{10} : \\dfrac{4}{5} = \\dfrac{3}{10} \\times \\dfrac{5}{4} = \\dfrac{15}{40} = \\dfrac{3}{8}$, sehingga $\\dfrac{3}{8} + 1\\dfrac{1}{2}$`,`Samakan penyebut: $1\\dfrac{1}{2} = 1\\dfrac{4}{8}$`,`Hasil: $\\dfrac{3}{8} + 1\\dfrac{4}{8} = 1\\dfrac{7}{8}$`]},
+  {no:24,soal:`Hasil dari $0{,}2 - 50\\% - \\dfrac{2}{5} : 2\\dfrac{1}{5}$ adalah ...`,opsi:[`$-\\dfrac{161}{220}$`,`$\\dfrac{13}{110}$`,`$-\\dfrac{2}{11}$`,`$-\\dfrac{53}{110}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{5} - \\dfrac{1}{2} - \\dfrac{2}{5} : 2\\dfrac{1}{5}$`,`Kerjakan pembagian: $\\dfrac{2}{5} : \\dfrac{11}{5} = \\dfrac{2}{5} \\times \\dfrac{5}{11} = \\dfrac{2}{11}$, sehingga $\\dfrac{1}{5} - \\dfrac{1}{2} - \\dfrac{2}{11}$`,`Kerjakan pengurangan: $\\dfrac{1}{5} - \\dfrac{1}{2} = \\dfrac{2-5}{10} = -\\dfrac{3}{10}$`,`Hasil: $-\\dfrac{3}{10} - \\dfrac{2}{11} = -\\dfrac{33}{110} - \\dfrac{20}{110} = -\\dfrac{53}{110}$`]},
+  {no:25,soal:`Hasil dari $2{,}5 : 1\\dfrac{3}{5} - 50\\% : \\dfrac{1}{4}$ adalah ...`,opsi:[`$\\dfrac{9}{16}$`,`$-\\dfrac{9}{16}$`,`$-\\dfrac{7}{16}$`,`$1\\dfrac{1}{16}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $2\\dfrac{1}{2} : 1\\dfrac{3}{5} - \\dfrac{1}{2} : \\dfrac{1}{4}$`,`Kerjakan pembagian: $\\dfrac{5}{2} : \\dfrac{8}{5} = \\dfrac{5}{2} \\times \\dfrac{5}{8} = \\dfrac{25}{16} = 1\\dfrac{9}{16}$, lalu $\\dfrac{1}{2} : \\dfrac{1}{4} = \\dfrac{1}{2} \\times \\dfrac{4}{1} = 2$, sehingga $1\\dfrac{9}{16} - 2$`,`Kerjakan pengurangan: $1\\dfrac{9}{16} - 2 = \\dfrac{25}{16} - \\dfrac{32}{16} = -\\dfrac{7}{16}$`,`Hasil: $-\\dfrac{7}{16}$`]},
+  {no:26,soal:`Hasil dari $40\\% : \\dfrac{1}{4} + 1\\dfrac{1}{4} : 2{,}5$ adalah ...`,opsi:[`$2\\dfrac{23}{30}$`,`$2\\dfrac{2}{5}$`,`$2\\dfrac{1}{5}$`,`$2\\dfrac{1}{10}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{2}{5} : \\dfrac{1}{4} + 1\\dfrac{1}{4} : 2\\dfrac{1}{2}$`,`Kerjakan pembagian: $\\dfrac{2}{5} : \\dfrac{1}{4} = \\dfrac{2}{5} \\times \\dfrac{4}{1} = \\dfrac{8}{5} = 1\\dfrac{3}{5}$, lalu $\\dfrac{5}{4} : \\dfrac{5}{2} = \\dfrac{5}{4} \\times \\dfrac{2}{5} = \\dfrac{10}{20} = \\dfrac{1}{2}$, sehingga $1\\dfrac{3}{5} + \\dfrac{1}{2}$`,`Samakan penyebut: $1\\dfrac{3}{5} = 1\\dfrac{6}{10}$ dan $\\dfrac{1}{2} = \\dfrac{5}{10}$`,`Hasil: $1\\dfrac{6}{10} + \\dfrac{5}{10} = 1\\dfrac{11}{10} = 2\\dfrac{1}{10}$`]},
+  {no:27,soal:`Hasil dari $25\\% : \\dfrac{1}{2} + 1{,}5 - 1\\dfrac{1}{3}$ adalah ...`,opsi:[`$\\dfrac{1}{2}$`,`$\\dfrac{1}{15}$`,`$\\dfrac{2}{3}$`,`$\\dfrac{23}{30}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{1}{4} : \\dfrac{1}{2} + 1\\dfrac{1}{2} - 1\\dfrac{1}{3}$`,`Kerjakan pembagian: $\\dfrac{1}{4} : \\dfrac{1}{2} = \\dfrac{1}{4} \\times \\dfrac{2}{1} = \\dfrac{1}{2}$, sehingga $\\dfrac{1}{2} + 1\\dfrac{1}{2} - 1\\dfrac{1}{3}$`,`Kerjakan penjumlahan: $\\dfrac{1}{2} + 1\\dfrac{1}{2} = 2$, sehingga $2 - 1\\dfrac{1}{3}$`,`Hasil: $2 - 1\\dfrac{1}{3} = \\dfrac{6}{3} - \\dfrac{4}{3} = \\dfrac{2}{3}$`]},
+  {no:28,soal:`Hasil dari $\\dfrac{2}{3} \\times 0{,}2 : 120\\% - 1\\dfrac{4}{5}$ adalah ...`,opsi:[`$-1\\dfrac{8}{9}$`,`$-2\\dfrac{1}{45}$`,`$-1\\dfrac{31}{45}$`,`$-1\\dfrac{89}{90}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{2}{3} \\times \\dfrac{1}{5} : 1\\dfrac{1}{5} - 1\\dfrac{4}{5}$`,`Kerjakan perkalian: $\\dfrac{2}{3} \\times \\dfrac{1}{5} = \\dfrac{2}{15}$, lalu pembagian: $\\dfrac{2}{15} : \\dfrac{6}{5} = \\dfrac{2}{15} \\times \\dfrac{5}{6} = \\dfrac{10}{90} = \\dfrac{1}{9}$, sehingga $\\dfrac{1}{9} - 1\\dfrac{4}{5}$`,`Samakan penyebut: $\\dfrac{1}{9} = \\dfrac{5}{45}$ dan $1\\dfrac{4}{5} = 1\\dfrac{36}{45}$`,`Hasil: $\\dfrac{5}{45} - 1\\dfrac{36}{45} = -1\\dfrac{31}{45}$`]},
+  {no:29,soal:`Hasil dari $\\dfrac{2}{3} - 0{,}2 + 1\\dfrac{1}{4} : 20\\%$ adalah ...`,opsi:[`$6\\dfrac{29}{30}$`,`$7\\dfrac{7}{60}$`,`$6\\dfrac{43}{60}$`,`$7\\dfrac{13}{60}$`],jawaban:2,pembahasan:[`Ubah ke pecahan biasa: $\\dfrac{2}{3} - \\dfrac{1}{5} + 1\\dfrac{1}{4} : \\dfrac{1}{5}$`,`Kerjakan pembagian: $\\dfrac{5}{4} : \\dfrac{1}{5} = \\dfrac{5}{4} \\times \\dfrac{5}{1} = \\dfrac{25}{4} = 6\\dfrac{1}{4}$, sehingga $\\dfrac{2}{3} - \\dfrac{1}{5} + 6\\dfrac{1}{4}$`,`Kerjakan pengurangan: $\\dfrac{2}{3} - \\dfrac{1}{5} = \\dfrac{10-3}{15} = \\dfrac{7}{15}$`,`Hasil: $\\dfrac{7}{15} + 6\\dfrac{1}{4} = \\dfrac{28}{60} + 6\\dfrac{15}{60} = 6\\dfrac{43}{60}$`]},
+  {no:30,soal:`Hasil dari $1\\dfrac{4}{5} : \\dfrac{2}{5} : 10\\% - 0{,}6$ adalah ...`,opsi:[`$44\\dfrac{1}{5}$`,`$44\\dfrac{11}{15}$`,`$44\\dfrac{9}{10}$`,`$44\\dfrac{2}{5}$`],jawaban:3,pembahasan:[`Ubah ke pecahan biasa: $1\\dfrac{4}{5} : \\dfrac{2}{5} : \\dfrac{1}{10} - \\dfrac{3}{5}$`,`Kerjakan pembagian pertama: $\\dfrac{9}{5} : \\dfrac{2}{5} = \\dfrac{9}{5} \\times \\dfrac{5}{2} = \\dfrac{9}{2} = 4\\dfrac{1}{2}$`,`Kerjakan pembagian kedua: $4\\dfrac{1}{2} : \\dfrac{1}{10} = \\dfrac{9}{2} \\times \\dfrac{10}{1} = \\dfrac{90}{2} = 45$, sehingga $45 - \\dfrac{3}{5}$`,`Hasil: $45 - \\dfrac{3}{5} = 44\\dfrac{5}{5} - \\dfrac{3}{5} = 44\\dfrac{2}{5}$`]}
+];
+
+// ========== DATA SOAL VARIATIF & TANDA KURUNG (20 SOAL) ==========
+const variasiData = [
+  {no:1,soal:`Hasil dari $( \\dfrac{1}{2} + 0{,}25 ) \\times 40\\%$ adalah ...`,opsi:[`0,3`,`0,25`,`0,45`,`$\\dfrac{1}{5}$`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $\\dfrac{1}{2} + 0{,}25 = 0{,}5 + 0{,}25 = 0{,}75$`,`Lalu kalikan dengan $40\\% = 0{,}4$: $0{,}75 \\times 0{,}4 = 0{,}3$`,`Hasil: 0,3`]},
+  {no:2,soal:`Hasil dari $1{,}5 : ( 120\\% - \\dfrac{1}{5} )$ adalah ...`,opsi:[`1,5`,`1,2`,`0,5`,`2,5`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $120\\% - \\dfrac{1}{5} = 1{,}2 - 0{,}2 = 1$`,`Lalu bagi: $1{,}5 : 1 = 1{,}5$`,`Hasil: 1,5`]},
+  {no:3,soal:`Hasil dari $50\\% \\times ( 2{,}4 - \\dfrac{3}{4} )$ adalah ...`,opsi:[`0,825`,`0,75`,`1,65`,`8,25`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $2{,}4 - \\dfrac{3}{4} = 2{,}4 - 0{,}75 = 1{,}65$`,`Lalu kalikan dengan $50\\% = 0{,}5$: $0{,}5 \\times 1{,}65 = 0{,}825$`,`Hasil: 0,825`]},
+  {no:4,soal:`Hasil dari $( \\dfrac{5}{8} - 0{,}375 ) : 25\\%$ adalah ...`,opsi:[`1`,`0,25`,`0,1`,`25\\%`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $\\dfrac{5}{8} - 0{,}375 = 0{,}625 - 0{,}375 = 0{,}25$`,`Lalu bagi dengan $25\\% = 0{,}25$: $0{,}25 : 0{,}25 = 1$`,`Hasil: 1`]},
+  {no:5,soal:`Hasil dari $0{,}8 \\times ( \\dfrac{1}{4} + 150\\% )$ adalah ...`,opsi:[`1,4`,`1,75`,`1,2`,`0,8`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $\\dfrac{1}{4} + 150\\% = 0{,}25 + 1{,}5 = 1{,}75$`,`Lalu kalikan dengan $0{,}8$: $0{,}8 \\times 1{,}75 = 1{,}4$`,`Hasil: 1,4`]},
+  {no:6,soal:`Hasil dari $75\\% : ( 0{,}5 + \\dfrac{1}{2} )$ adalah ...`,opsi:[`0,75`,`0,5`,`1,5`,`0,25`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $0{,}5 + \\dfrac{1}{2} = 0{,}5 + 0{,}5 = 1$`,`Lalu bagi: $75\\% : 1 = 0{,}75 : 1 = 0{,}75$`,`Hasil: 0,75`]},
+  {no:7,soal:`Hasil dari $1{,}2 + 20\\% - \\dfrac{1}{5}$ adalah ...`,opsi:[`1,2`,`1,4`,`0,8`,`1,5`],jawaban:0,pembahasan:[`Ubah ke desimal: $1{,}2 + 0{,}2 - 0{,}2$`,`Kerjakan dari kiri ke kanan: $1{,}2 + 0{,}2 = 1{,}4$`,`Hasil: $1{,}4 - 0{,}2 = 1{,}2`]},
+  {no:8,soal:`Hasil dari $\\dfrac{3}{5} \\times 1{,}5 - 10\\%$ adalah ...`,opsi:[`0,8`,`0,9`,`1,0`,`0,5`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}6 \\times 1{,}5 - 0{,}1$`,`Kerjakan perkalian: $0{,}6 \\times 1{,}5 = 0{,}9$`,`Hasil: $0{,}9 - 0{,}1 = 0{,}8`]},
+  {no:9,soal:`Hasil dari $2{,}5 : 50\\% + \\dfrac{1}{4}$ adalah ...`,opsi:[`5,25`,`5,0`,`5,75`,`5,5`],jawaban:0,pembahasan:[`Ubah ke desimal: $2{,}5 : 0{,}5 + 0{,}25$`,`Kerjakan pembagian: $2{,}5 : 0{,}5 = 5$`,`Hasil: $5 + 0{,}25 = 5{,}25`]},
+  {no:10,soal:`Hasil dari $40\\% \\times 2{,}25 - \\dfrac{1}{2}$ adalah ...`,opsi:[`0,4`,`0,5`,`0,9`,`0,45`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}4 \\times 2{,}25 - 0{,}5$`,`Kerjakan perkalian: $0{,}4 \\times 2{,}25 = 0{,}9$`,`Hasil: $0{,}9 - 0{,}5 = 0{,}4`]},
+  {no:11,soal:`Hasil dari $1{,}75 - \\dfrac{3}{4} + 120\\%$ adalah ...`,opsi:[`2,2`,`1,2`,`2,0`,`2,5`],jawaban:0,pembahasan:[`Ubah ke desimal: $1{,}75 - 0{,}75 + 1{,}2$`,`Kerjakan dari kiri: $1{,}75 - 0{,}75 = 1{,}0$`,`Hasil: $1{,}0 + 1{,}2 = 2{,}2`]},
+  {no:12,soal:`Hasil dari $\\dfrac{7}{10} : 0{,}35 \\times 50\\%$ adalah ...`,opsi:[`1,0`,`0,5`,`2,0`,`1,5`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}7 : 0{,}35 \\times 0{,}5$`,`Kerjakan pembagian: $0{,}7 : 0{,}35 = 2$`,`Hasil: $2 \\times 0{,}5 = 1{,}0`]},
+  {no:13,soal:`Hasil dari $( 1{,}5 + \\dfrac{1}{2} ) : 200\\%$ adalah ...`,opsi:[`1`,`2`,`0,5`,`1,5`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $1{,}5 + 0{,}5 = 2$`,`Lalu bagi dengan $200\\% = 2$: $2 : 2 = 1$`,`Hasil: 1`]},
+  {no:14,soal:`Hasil dari $0{,}125 + \\dfrac{1}{8} - 25\\%$ adalah ...`,opsi:[`0`,`0,25`,`0,5`,`0,125`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}125 + 0{,}125 - 0{,}25$`,`Kerjakan penjumlahan: $0{,}125 + 0{,}125 = 0{,}25$`,`Hasil: $0{,}25 - 0{,}25 = 0`]},
+  {no:15,soal:`Hasil dari $2{,}4 \\times \\dfrac{5}{6} : 80\\%$ adalah ...`,opsi:[`2,5`,`2,0`,`3,2`,`3`],jawaban:0,pembahasan:[`Ubah ke desimal: $2{,}4 \\times \\dfrac{5}{6} : 0{,}8$`,`Kerjakan perkalian: $2{,}4 \\times \\dfrac{5}{6} = 0{,}4 \\times 5 = 2$`,`Hasil: $2 : 0{,}8 = 2{,}5`]},
+  {no:16,soal:`Hasil dari $150\\% - 0{,}75 + \\dfrac{1}{4}$ adalah ...`,opsi:[`1,0`,`0,5`,`1,5`,`0,75`],jawaban:0,pembahasan:[`Ubah ke desimal: $1{,}5 - 0{,}75 + 0{,}25$`,`Kerjakan dari kiri: $1{,}5 - 0{,}75 = 0{,}75$`,`Hasil: $0{,}75 + 0{,}25 = 1{,}0`]},
+  {no:17,soal:`Hasil dari $\\dfrac{9}{20} + 0{,}05 - 10\\%$ adalah ...`,opsi:[`0,4`,`0,5`,`0,35`,`0,45`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}45 + 0{,}05 - 0{,}1$`,`Kerjakan penjumlahan: $0{,}45 + 0{,}05 = 0{,}5$`,`Hasil: $0{,}5 - 0{,}1 = 0{,}4`]},
+  {no:18,soal:`Hasil dari $( 3{,}5 \\times 20\\% ) + \\dfrac{1}{2}$ adalah ...`,opsi:[`1,2`,`0,7`,`1,75`,`1,5`],jawaban:0,pembahasan:[`Kerjakan dalam tanda kurung: $3{,}5 \\times 0{,}2 = 0{,}7$`,`Lalu tambah $\\dfrac{1}{2} = 0{,}5$: $0{,}7 + 0{,}5 = 1{,}2$`,`Hasil: 1,2`]},
+  {no:19,soal:`Hasil dari $\\dfrac{3}{4} : 50\\% \\times 0{,}5$ adalah ...`,opsi:[`0,75`,`1,5`,`0,375`,`1,0`],jawaban:0,pembahasan:[`Ubah ke desimal: $0{,}75 : 0{,}5 \\times 0{,}5$`,`Kerjakan pembagian: $0{,}75 : 0{,}5 = 1{,}5$`,`Hasil: $1{,}5 \\times 0{,}5 = 0{,}75`]},
+  {no:20,soal:`Hasil dari $1{,}2 - \\dfrac{4}{5} + 20\\%$ adalah ...`,opsi:[`0,6`,`0,4`,`0,8`,`0,2`],jawaban:0,pembahasan:[`Ubah ke desimal: $1{,}2 - 0{,}8 + 0{,}2$`,`Kerjakan dari kiri: $1{,}2 - 0{,}8 = 0{,}4$`,`Hasil: $0{,}4 + 0{,}2 = 0{,}6`]}
+];
+
+// ========== DATA SOAL CERITA (20 SOAL) ==========
+const ceritaData = [
+  {no:1,soal:`Ibu memiliki gula pasir 3,5 kg. Digunakan $1\\dfrac{1}{4}$ kg untuk membuat kue. Ibu kemudian membeli lagi sebanyak 25% dari persediaan awal. Berapa kg gula pasir ibu sekarang?`,opsi:[`$2\\dfrac{1}{4}$ kg`,`$4\\dfrac{1}{8}$ kg`,`$3\\dfrac{1}{2}$ kg`,`$3\\dfrac{1}{8}$ kg`],jawaban:3,pembahasan:[`Persediaan awal = 3,5 kg. Digunakan = $1\\dfrac{1}{4}$ kg = 1,25 kg`,`Sisa setelah digunakan = 3,5 − 1,25 = 2,25 kg`,`Ibu membeli tambahan 25% dari persediaan awal: 25% × 3,5 kg = 0,25 × 3,5 = 0,875 kg`,`Gula pasir ibu sekarang = 2,25 + 0,875 = 3,125 kg = $3\\dfrac{1}{8}$ kg`]},
+  {no:2,soal:`Pak Budi memiliki tanah seluas 1200 m². Sebanyak 40% dari tanah tersebut ditanami jagung, $\\dfrac{1}{4}$ bagian ditanami singkong, dan dibangun gazebo seluas 0,15 bagian dari total tanah. Sisanya akan dibuat kolam ikan. Berapa m² luas kolam ikan tersebut?`,opsi:[`240 m²`,`300 m²`,`180 m²`,`480 m²`],jawaban:0,pembahasan:[`Luas tanah total = 1200 m²`,`Ditanami jagung = 40% × 1200 = 480 m². Ditanami singkong = $\\dfrac{1}{4}$ × 1200 = 300 m². Dibangun gazebo = 0,15 × 1200 = 180 m²`,`Luas kolam ikan = Total − (Jagung + Singkong + Gazebo)`,`Luas kolam ikan = 1200 − (480 + 300 + 180) = 1200 − 960 = 240 m²`]},
+  {no:3,soal:`Edo memiliki tali sepanjang $8\\dfrac{1}{2}$ meter. Ia memotong tali tersebut sepanjang 1,5 meter untuk mengikat kardus. Kemudian, 20% dari sisa tali tersebut diberikan kepada adiknya. Berapa meter panjang tali Edo sekarang?`,opsi:[`$5\\dfrac{1}{2}$ meter`,`$6\\dfrac{1}{4}$ meter`,`7 meter`,`$5\\dfrac{3}{5}$ meter`],jawaban:3,pembahasan:[`Tali awal = $8\\dfrac{1}{2}$ m = 8,5 m`,`Sisa setelah dipotong untuk kardus = 8,5 − 1,5 = 7 meter`,`Tali yang diberikan ke adik = 20% × 7 = 0,2 × 7 = 1,4 meter`,`Panjang tali Edo sekarang = 7 − 1,4 = 5,6 meter = $5\\dfrac{3}{5}$ meter`]},
+  {no:4,soal:`Sebuah bak penampungan berisi 150,5 liter air. Digunakan sebanyak 30% dari isi awal untuk mandi. Setelah itu, bak diisi lagi sebanyak $12\\dfrac{1}{2}$ liter. Berapa liter volume air di bak sekarang?`,opsi:[`$105\\dfrac{7}{20}$ liter`,`$150\\dfrac{1}{2}$ liter`,`163 liter`,`$117\\dfrac{17}{20}$ liter`],jawaban:3,pembahasan:[`Air awal = 150,5 liter`,`Air yang digunakan mandi = 30% × 150,5 = 0,3 × 150,5 = 45,15 liter`,`Sisa air di bak = 150,5 − 45,15 = 105,35 liter`,`Bak diisi lagi $12\\dfrac{1}{2}$ liter = 12,5 liter. Volume air sekarang = 105,35 + 12,5 = 117,85 liter = $117\\dfrac{17}{20}$ liter`]},
+  {no:5,soal:`Dalam sebuah kelas terdapat 40 siswa. Sebanyak 60% adalah siswa perempuan. Dari jumlah perempuan tersebut, $\\dfrac{1}{4}$ bagian mengikuti ekskul tari, 0,5 bagian mengikuti ekskul paduan suara, dan sisanya mengikuti ekskul melukis. Berapa banyak siswa perempuan yang mengikuti ekskul melukis?`,opsi:[`8 anak`,`12 anak`,`6 anak`,`4 anak`],jawaban:2,pembahasan:[`Total siswa = 40 anak. Siswa perempuan = 60% × 40 = 24 anak`,`Ekskul tari = $\\dfrac{1}{4}$ × 24 = 6 anak`,`Ekskul paduan suara = 0,5 × 24 = 12 anak`,`Ekskul melukis = Total perempuan − (Tari + Paduan Suara) = 24 − (6 + 12) = 24 − 18 = 6 anak`]},
+  {no:6,soal:`Anita membeli minyak goreng 2,5 liter. Digunakan untuk menggoreng ikan sebanyak 20% dari minyak tersebut. Kemudian Anita membeli lagi $1\\dfrac{1}{2}$ liter. Berapa liter persediaan minyak goreng Anita sekarang?`,opsi:[`3 liter`,`$3\\dfrac{1}{2}$ liter`,`2 liter`,`$2\\dfrac{1}{2}$ liter`],jawaban:1,pembahasan:[`Minyak awal = 2,5 liter`,`Minyak yang digunakan = 20% × 2,5 = 0,2 × 2,5 = 0,5 liter`,`Sisa minyak = 2,5 − 0,5 = 2 liter`,`Minyak tambahan yang dibeli = $1\\dfrac{1}{2}$ liter = 1,5 liter. Persediaan sekarang = 2 + 1,5 = 3,5 liter = $3\\dfrac{1}{2}$ liter`]},
+  {no:7,soal:`Paman memanen 50 kg buah jeruk. Sebanyak 0,1 bagian dari total panen ternyata busuk. Dari jeruk yang masih bagus, 40% dijual ke pasar dan $\\dfrac{1}{3}$ bagian dari jeruk yang bagus tersebut dibuat minuman sari buah. Berapa kg sisa jeruk Paman yang belum diolah/dijual?`,opsi:[`18 kg`,`12 kg`,`10 kg`,`15 kg`],jawaban:1,pembahasan:[`Jeruk panen = 50 kg. Jeruk busuk = 0,1 × 50 = 5 kg`,`Jeruk yang bagus = 50 − 5 = 45 kg`,`Jeruk yang dijual ke pasar = 40% × 45 = 18 kg. Jeruk untuk sari buah = $\\dfrac{1}{3}$ × 45 = 15 kg`,`Sisa jeruk Paman = 45 − 18 − 15 = 12 kg`]},
+  {no:8,soal:`Uang saku harian Dika adalah Rp 50.000. Sebanyak 25% digunakan untuk jajan, 0,4 bagian untuk ditabung, dan $\\dfrac{1}{5}$ bagian untuk dimasukkan ke kotak amal. Berapa rupiah sisa uang saku Dika?`,opsi:[`Rp 12.500`,`Rp 7.500`,`Rp 5.000`,`Rp 10.000`],jawaban:1,pembahasan:[`Total uang = Rp 50.000`,`Untuk jajan = 25% × 50.000 = Rp 12.500. Untuk ditabung = 0,4 × 50.000 = Rp 20.000`,`Untuk amal = $\\dfrac{1}{5}$ × 50.000 = Rp 10.000`,`Sisa uang saku = 50.000 − (12.500 + 20.000 + 10.000) = 50.000 − 42.500 = Rp 7.500`]},
+  {no:9,soal:`Jarak rumah Ani ke sekolah adalah $4\\dfrac{1}{2}$ km. Ani berangkat menggunakan sepeda. Setelah menempuh jarak sejauh 1,2 km, sepedanya rusak. Ani lalu melanjutkan perjalanan naik angkot sejauh 50% dari sisa perjalanannya, dan sisanya ia berjalan kaki. Berapa km Ani berjalan kaki?`,opsi:[`$1\\dfrac{13}{20}$ km`,`$2\\dfrac{3}{10}$ km`,`$1\\dfrac{1}{2}$ km`,`$3\\dfrac{3}{10}$ km`],jawaban:0,pembahasan:[`Jarak total = $4\\dfrac{1}{2}$ km = 4,5 km. Jarak dengan sepeda = 1,2 km`,`Sisa perjalanan (1) = 4,5 − 1,2 = 3,3 km`,`Jarak dengan angkot = 50% × 3,3 = 0,5 × 3,3 = 1,65 km`,`Jarak jalan kaki (sisa) = 3,3 − 1,65 = 1,65 km. 1,65 km = $1\\dfrac{65}{100}$ = $1\\dfrac{13}{20}$ km`]},
+  {no:10,soal:`Sebuah kue tart utuh dipotong menjadi beberapa bagian. Ayah memakan $\\dfrac{1}{8}$ bagian, ibu memakan 0,25 bagian, dan adik memakan 30% bagian dari kue tersebut. Sisa kue yang belum dimakan adalah ... bagian.`,opsi:[`$\\dfrac{11}{40}$ bagian`,`$\\dfrac{3}{8}$ bagian`,`$\\dfrac{13}{40}$ bagian`,`$\\dfrac{1}{4}$ bagian`],jawaban:2,pembahasan:[`Bagian kue utuh = 1. Ayah memakan $\\dfrac{1}{8}$ = 0,125 bagian`,`Ibu memakan 0,25 bagian. Adik memakan 30% = 0,3 bagian`,`Total yang dimakan = 0,125 + 0,25 + 0,3 = 0,675 bagian`,`Sisa kue = 1 − 0,675 = 0,325 bagian. 0,325 = $\\dfrac{325}{1000}$ = $\\dfrac{13}{40}$ bagian`]},
+  {no:11,soal:`Harga sebuah tas adalah Rp 200.000. Tas tersebut mendapat diskon 15%. Dina membayar tas tersebut dengan uang Rp 300.000. Uang kembaliannya digunakan untuk membeli dompet seharga 0,4 dari nominal kembalian tersebut, dan $\\dfrac{1}{5}$ dari kembalian dibelikan es krim. Berapa rupiah sisa uang Dina sekarang?`,opsi:[`Rp 78.000`,`Rp 130.000`,`Rp 26.000`,`Rp 52.000`],jawaban:3,pembahasan:[`Harga diskon tas = 15% × 200.000 = Rp 30.000`,`Harga tas yang harus dibayar = 200.000 − 30.000 = Rp 170.000`,`Uang kembalian dari kasir = 300.000 − 170.000 = Rp 130.000. Membeli dompet = 0,4 × 130.000 = Rp 52.000. Membeli es krim = $\\dfrac{1}{5}$ × 130.000 = Rp 26.000`,`Sisa uang Dina = 130.000 − 52.000 − 26.000 = Rp 52.000`]},
+  {no:12,soal:`Pak RT memiliki 120 paket sembako. Sebanyak $\\dfrac{3}{8}$ bagian dibagikan ke warga RT 01, 40% dibagikan ke warga RT 02, dan 0,15 bagian dibagikan ke warga RT 03. Sisa paket sembako disumbangkan ke panti asuhan. Berapa paket sembako yang disumbangkan ke panti asuhan?`,opsi:[`9 paket`,`18 paket`,`12 paket`,`15 paket`],jawaban:0,pembahasan:[`Total paket = 120 paket`,`Warga RT 01 = $\\dfrac{3}{8}$ × 120 = 45 paket. Warga RT 02 = 40% × 120 = 48 paket. Warga RT 03 = 0,15 × 120 = 18 paket`,`Total terbagi = 45 + 48 + 18 = 111 paket`,`Paket untuk panti asuhan = 120 − 111 = 9 paket`]},
+  {no:13,soal:`Tono memiliki botol minum berkapasitas $1\\dfrac{1}{2}$ liter. Pada pagi hari, botol tersebut terisi air sebanyak 80% dari kapasitas maksimalnya. Saat istirahat, Tono meminum air tersebut sebanyak 0,45 liter. Berapa liter air yang masih tersisa di dalam botol Tono?`,opsi:[`$\\dfrac{3}{4}$ liter`,`$\\dfrac{1}{4}$ liter`,`$1\\dfrac{1}{5}$ liter`,`$\\dfrac{1}{2}$ liter`],jawaban:0,pembahasan:[`Kapasitas botol = $1\\dfrac{1}{2}$ liter = 1,5 liter`,`Isi awal air di botol = 80% × 1,5 = 0,8 × 1,5 = 1,2 liter`,`Air yang diminum = 0,45 liter`,`Sisa air di botol = 1,2 − 0,45 = 0,75 liter. 0,75 liter = $\\dfrac{75}{100}$ = $\\dfrac{3}{4}$ liter`]},
+  {no:14,soal:`Berat badan Rina adalah 32,5 kg. Berat badan Siska adalah $1\\dfrac{1}{5}$ kali lipat dari berat badan Rina. Sementara itu, berat badan Tari adalah 90% dari berat badan Siska. Berapa kg berat badan Tari?`,opsi:[`$32\\dfrac{1}{2}$ kg`,`$35\\dfrac{1}{10}$ kg`,`39 kg`,`$42\\dfrac{1}{2}$ kg`],jawaban:1,pembahasan:[`Berat Rina = 32,5 kg`,`Berat Siska = $1\\dfrac{1}{5}$ × 32,5 = 1,2 × 32,5 = 39 kg`,`Berat Tari = 90% × 39 = 0,9 × 39 = 35,1 kg`,`35,1 kg = $35\\dfrac{1}{10}$ kg`]},
+  {no:15,soal:`Panjang sebuah pipa besi utuh adalah $6\\dfrac{3}{4}$ meter. Pipa tersebut dicat dengan warna merah sepanjang 2,5 meter dan dicat dengan warna biru sepanjang 120% dari panjang yang dicat merah. Sisa panjang pipa dibiarkan tidak dicat. Berapa meter pipa yang tidak dicat?`,opsi:[`3 meter`,`$4\\dfrac{1}{4}$ meter`,`$2\\dfrac{1}{2}$ meter`,`$1\\dfrac{1}{4}$ meter`],jawaban:3,pembahasan:[`Panjang total pipa = $6\\dfrac{3}{4}$ m = 6,75 meter`,`Pipa warna merah = 2,5 meter. Pipa warna biru = 120% × 2,5 = 1,2 × 2,5 = 3 meter`,`Total pipa yang dicat = 2,5 + 3 = 5,5 meter`,`Panjang pipa tidak dicat = 6,75 − 5,5 = 1,25 meter = $1\\dfrac{1}{4}$ meter`]},
+  {no:16,soal:`Koperasi sekolah memiliki persediaan 50 lusin buku tulis (1 lusin = 12 buah). Pada hari pertama terjual 0,25 bagian dari total buku. Hari kedua terjual $\\dfrac{1}{3}$ bagian dari total buku. Hari ketiga terjual 20% dari total buku. Berapa buah buku tulis yang belum terjual?`,opsi:[`150 buah`,`470 buah`,`130 buah`,`110 buah`],jawaban:2,pembahasan:[`Total persediaan buku = 50 × 12 = 600 buah`,`Penjualan hari pertama = 0,25 × 600 = 150 buah. Penjualan hari kedua = $\\dfrac{1}{3}$ × 600 = 200 buah`,`Penjualan hari ketiga = 20% × 600 = 0,2 × 600 = 120 buah. Total buku terjual = 150 + 200 + 120 = 470 buah`,`Sisa buku = 600 − 470 = 130 buah`]},
+  {no:17,soal:`Di gudang bulog terdapat beras sebanyak $3\\dfrac{1}{2}$ ton. Sebanyak 40% disalurkan ke Toko Makmur dan 0,9 ton disalurkan ke Toko Jaya. Sisa beras tersebut akan dibagikan sama rata ke 4 warung kecil di desa. Berapa kuintal beras yang diterima setiap warung kecil? (Catatan: 1 ton = 10 kuintal)`,opsi:[`2,5 kuintal`,`3 kuintal`,`4 kuintal`,`3,5 kuintal`],jawaban:1,pembahasan:[`Beras awal = $3\\dfrac{1}{2}$ ton = 3,5 ton`,`Untuk Toko Makmur = 40% × 3,5 = 1,4 ton. Untuk Toko Jaya = 0,9 ton`,`Sisa beras = 3,5 − (1,4 + 0,9) = 3,5 − 2,3 = 1,2 ton`,`Dibagikan ke 4 warung = 1,2 ÷ 4 = 0,3 ton untuk masing-masing warung. Dalam kuintal: 0,3 × 10 = 3 kuintal`]},
+  {no:18,soal:`Siti membuat minuman dari 1,5 liter air putih, $\\dfrac{3}{4}$ liter sirup kental, dan susu cair sebanyak 20% dari volume air putih saja. Berapa liter total volume minuman yang dibuat Siti?`,opsi:[`$2\\dfrac{1}{2}$ liter`,`$2\\dfrac{11}{20}$ liter`,`$2\\dfrac{2}{5}$ liter`,`$2\\dfrac{1}{4}$ liter`],jawaban:1,pembahasan:[`Volume air putih = 1,5 liter. Volume sirup kental = $\\dfrac{3}{4}$ = 0,75 liter`,`Volume susu cair = 20% × 1,5 = 0,2 × 1,5 = 0,3 liter`,`Total volume minuman = 1,5 + 0,75 + 0,3 = 2,55 liter`,`2,55 liter = $2\\dfrac{55}{100}$ = $2\\dfrac{11}{20}$ liter`]},
+  {no:19,soal:`Pak Joko memiliki sebidang kebun seluas 240 m². Seperenam ($\\dfrac{1}{6}$) bagian dari kebun ditanami tomat, 0,25 bagian ditanami cabai, dan 30% dari luas kebun ditanami bawang. Sisa kebun ditanami bayam. Berapa m² luas kebun yang ditanami bayam?`,opsi:[`68 m²`,`72 m²`,`60 m²`,`40 m²`],jawaban:0,pembahasan:[`Luas kebun total = 240 m²`,`Lahan tomat = $\\dfrac{1}{6}$ × 240 = 40 m². Lahan cabai = 0,25 × 240 = 60 m². Lahan bawang = 30% × 240 = 0,3 × 240 = 72 m²`,`Total luas yang sudah ditanami = 40 + 60 + 72 = 172 m²`,`Lahan bayam (sisa) = 240 − 172 = 68 m²`]},
+  {no:20,soal:`Di dalam keranjang terdapat 80 buah apel. Sebanyak 25% apel berwarna hijau, $\\dfrac{3}{8}$ bagian berwarna kuning, dan sisanya berwarna merah. Jika 0,2 bagian dari seluruh apel merah tersebut ternyata busuk, berapa banyak apel merah yang kondisinya masih bagus?`,opsi:[`20 buah`,`30 buah`,`6 buah`,`24 buah`],jawaban:3,pembahasan:[`Total apel = 80 buah. Apel hijau = 25% × 80 = 20 buah. Apel kuning = $\\dfrac{3}{8}$ × 80 = 30 buah`,`Apel merah (sebelum diseleksi) = 80 − (20 + 30) = 80 − 50 = 30 buah`,`Apel merah yang busuk = 0,2 × 30 = 6 buah`,`Apel merah yang bagus = 30 − 6 = 24 buah`]}
+];
+
+// ========== STATE MANAGEMENT ==========
+let answers = {};
+let allQuestions = {operasi: operasiData, variasi: variasiData, cerita: ceritaData};
+
+// ========== UTILITY FUNCTIONS ==========
+function renderQuestion(q, category) {
+  const letters = ['A','B','C','D'];
+  let optionsHtml = '';
+  q.opsi.forEach((op, idx) => {
+    optionsHtml += `
+      <div class="option" data-qid="${category}-${q.no}" data-idx="${idx}" onclick="selectOption('${category}',${q.no},${idx})">
+        <div class="option-letter">${letters[idx]}</div>
+        <div class="option-text">${op}</div>
+      </div>`;
+  });
+  return `
+    <div class="question-card" id="card-${category}-${q.no}">
+      <div class="q-header">
+        <div class="q-number">${q.no}</div>
+        <div class="q-status hidden" id="status-${category}-${q.no}"></div>
+      </div>
+      <div class="q-text">${q.soal}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="q-actions">
+        <button class="btn-check" onclick="checkAnswer('${category}',${q.no})">Cek Jawaban</button>
+        <button class="btn-explain" onclick="toggleExplanation('${category}',${q.no})">Pembahasan</button>
+      </div>
+      <div class="explanation" id="exp-${category}-${q.no}">
+        <h4>📋 Pembahasan:</h4>
+        <ol>${q.pembahasan.map(p => `<li>${p}</li>`).join('')}</ol>
+        <div class="answer-tag">Jawaban: ${letters[q.jawaban]}</div>
+      </div>
+    </div>`;
+}
+
+function renderAllQuestions() {
+  const operasiHtml = operasiData.map(q => renderQuestion(q, 'operasi')).join('');
+  document.getElementById('operasiList').innerHTML = operasiHtml;
+  
+  const variasiHtml = variasiData.map(q => renderQuestion(q, 'variasi')).join('');
+  document.getElementById('variasiList').innerHTML = variasiHtml;
+  
+  const ceritaHtml = ceritaData.map(q => renderQuestion(q, 'cerita')).join('');
+  document.getElementById('ceritaList').innerHTML = ceritaHtml;
+  
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+}
+
+function selectOption(category, qno, idx) {
+  const qid = `${category}-${qno}`;
+  answers[qid] = idx;
+  document.querySelectorAll(`.option[data-qid="${qid}"]`).forEach(opt => opt.classList.remove('selected'));
+  document.querySelector(`.option[data-qid="${qid}"][data-idx="${idx}"]`).classList.add('selected');
+}
+
+function checkAnswer(category, qno) {
+  const qid = `${category}-${qno}`;
+  const selected = answers[qid];
+  const correct = allQuestions[category].find(q => q.no === qno).jawaban;
+  const statusEl = document.getElementById(`status-${qid}`);
+  const cardEl = document.getElementById(`card-${qid}`);
+  const options = document.querySelectorAll(`.option[data-qid="${qid}"]`);
+
+  options.forEach(opt => {
+    opt.classList.remove('correct-answer','wrong-answer');
+    const idx = parseInt(opt.dataset.idx);
+    if (idx === correct) opt.classList.add('correct-answer');
+    if (idx === selected && selected !== correct) opt.classList.add('wrong-answer');
+  });
+
+  cardEl.classList.remove('correct','wrong');
+  statusEl.classList.remove('hidden','correct','wrong','unanswered');
+
+  if (selected === undefined) {
+    statusEl.classList.add('unanswered');
+    statusEl.textContent = '⚪ Belum dijawab';
+  } else if (selected === correct) {
+    statusEl.classList.add('correct');
+    statusEl.textContent = '✓ Benar';
+    cardEl.classList.add('correct');
+  } else {
+    statusEl.classList.add('wrong');
+    statusEl.textContent = '✗ Salah';
+    cardEl.classList.add('wrong');
+  }
+  updateStats();
+}
+
+function toggleExplanation(category, qno) {
+  const expEl = document.getElementById(`exp-${category}-${qno}`);
+  const btn = event.target;
+  expEl.classList.toggle('visible');
+  btn.classList.toggle('active');
+  if (expEl.classList.contains('visible') && window.MathJax) {
+    MathJax.typesetPromise([expEl]);
+  }
+}
+
+function updateStats() {
+  let correct = 0, wrong = 0, unanswered = 0;
+  ['operasi','variasi','cerita'].forEach(cat => {
+    allQuestions[cat].forEach(q => {
+      const qid = `${cat}-${q.no}`;
+      const selected = answers[qid];
+      if (selected === undefined) unanswered++;
+      else if (selected === q.jawaban) correct++;
+      else wrong++;
+    });
+  });
+  document.getElementById('miniCorrect').textContent = correct;
+  document.getElementById('miniWrong').textContent = wrong;
+  document.getElementById('miniUnanswered').textContent = unanswered;
+  return {correct, wrong, unanswered};
+}
+
+function showResults() {
+  const stats = updateStats();
+  const total = 70;
+  const percent = Math.round((stats.correct / total) * 100);
+  document.getElementById('finalCorrect').textContent = stats.correct;
+  document.getElementById('finalWrong').textContent = stats.wrong;
+  document.getElementById('finalUnanswered').textContent = stats.unanswered;
+  document.getElementById('scorePercent').textContent = percent;
+  document.getElementById('resultName').textContent = `${document.getElementById('nama').value}, ini hasil latihanmu:`;
+
+  let msg = '';
+  if (percent >= 90) msg = 'Luar biasa! Kamu hebat sekali! 🌟';
+  else if (percent >= 75) msg = 'Bagus sekali! Pertahankan! 💕';
+  else if (percent >= 60) msg = 'Cukup baik! Ayo tingkatkan lagi! 💪';
+  else msg = 'Jangan menyerah! Terus berlatih ya! 📚';
+  document.getElementById('resultMessage').textContent = msg;
+
+  let detailHtml = '';
+  ['operasi','variasi','cerita'].forEach(cat => {
+    allQuestions[cat].forEach(q => {
+      const qid = `${cat}-${q.no}`;
+      const selected = answers[qid];
+      let cls = 'unanswered';
+      if (selected !== undefined) cls = (selected === q.jawaban) ? 'correct' : 'wrong';
+      detailHtml += `<div class="detail-item ${cls}" onclick="goToQuestion('${cat}',${q.no})">${q.no}</div>`;
+    });
+  });
+  document.getElementById('detailGrid').innerHTML = detailHtml;
+
+  const ring = document.getElementById('scoreRing');
+  const circumference = 282.74;
+  ring.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+
+  document.getElementById('resultModal').classList.remove('hidden');
+}
+
+function goToQuestion(category, qno) {
+  document.getElementById('resultModal').classList.add('hidden');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${category}"]`).classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(`${category}-section`).classList.remove('hidden');
+  setTimeout(() => {
+    document.getElementById(`card-${category}-${qno}`).scrollIntoView({behavior:'smooth', block:'center'});
+  }, 100);
+}
+
+function startQuiz() {
+  const nama = document.getElementById('nama').value.trim();
+  if (!nama) {
+    alert('Masukkan namamu dulu ya, sayang! 💕');
+    return;
+  }
+  document.getElementById('studentName').textContent = `Selamat mengerjakan, ${nama}! Semoga sukses ya! ✨`;
+  document.getElementById('cover').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restartQuiz() {
+  answers = {};
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected','correct-answer','wrong-answer'));
+  document.querySelectorAll('.q-status').forEach(s => { s.classList.add('hidden'); s.classList.remove('correct','wrong','unanswered'); });
+  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('correct','wrong'));
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('visible'));
+  document.querySelectorAll('.btn-explain').forEach(b => b.classList.remove('active'));
+  document.getElementById('nama').value = '';
+  document.getElementById('resultModal').classList.add('hidden');
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('cover').classList.remove('hidden');
+  updateStats();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ========== EVENT LISTENERS ==========
+document.addEventListener('DOMContentLoaded', () => {
+  renderAllQuestions();
+  updateStats(); // Init stats to show total 70 unanswered
+  
+  document.getElementById('startBtn').addEventListener('click', startQuiz);
+  document.getElementById('finishBtn').addEventListener('click', showResults);
+  document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('resultModal').classList.add('hidden');
+  });
+  document.getElementById('restartBtn').addEventListener('click', restartQuiz);
+  
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      tab.classList.add('active');
+      document.getElementById(`${tab.dataset.tab}-section`).classList.remove('hidden');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+  
+  document.getElementById('nama').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') startQuiz();
+  });
+});
+</script>
+</body>
+</html>
