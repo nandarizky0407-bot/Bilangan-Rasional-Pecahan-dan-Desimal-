@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Desimal — Presentasi Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg-deep:#0a1f1c;--bg-mid:#103029;--bg-card:#163a31;--bg-card-2:#1d4a3f;
+  --fg:#f4e9d2;--fg-dim:#a8b8a8;--fg-mute:#6b8278;
+  --accent:#fbbf24;--accent-2:#fb7185;--accent-3:#34d399;--accent-4:#60a5fa;
+  --border:#2a5547;--shadow:0 20px 50px rgba(0,0,0,.45);--radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg-deep);color:var(--fg);position:relative}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 15% 20%,rgba(251,191,36,.08),transparent 40%),
+             radial-gradient(circle at 85% 75%,rgba(52,211,153,.08),transparent 45%),
+             radial-gradient(circle at 50% 50%,rgba(251,113,133,.05),transparent 60%)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+
+.progress-bar{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.05);z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 20px var(--accent)}
+
+.slides{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;padding:60px 80px 80px;opacity:0;visibility:hidden;
+  transform:translateX(60px);transition:opacity .6s,transform .6s cubic-bezier(.4,0,.2,1),visibility .6s;overflow-y:auto;z-index:1}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0);z-index:2}
+.slide.prev{transform:translateX(-60px)}
+.slide::-webkit-scrollbar{width:8px}
+.slide::-webkit-scrollbar-track{background:transparent}
+.slide::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+h1,h2,h3,.serif{font-family:'Fraunces',serif;font-weight:700;letter-spacing:-.02em}
+.mono{font-family:'JetBrains Mono',monospace}
+
+.cover{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;min-height:100vh;padding:60px 40px;position:absolute;inset:0}
+.cover .badge{display:inline-flex;align-items:center;gap:10px;padding:8px 18px;
+  border:1px solid var(--border);border-radius:999px;background:rgba(251,191,36,.08);
+  color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:30px}
+.cover h1{font-size:clamp(60px,9vw,140px);line-height:.95;
+  background:linear-gradient(180deg,var(--fg) 0%,var(--accent) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:20px}
+.cover .subtitle{font-size:clamp(18px,2vw,26px);color:var(--fg-dim);max-width:700px;
+  margin-bottom:40px;font-weight:300}
+.cover .meta{display:flex;gap:30px;color:var(--fg-mute);font-size:14px;
+  letter-spacing:.05em;flex-wrap:wrap;justify-content:center}
+.cover .meta span i{color:var(--accent);margin-right:6px}
+
+.float-decimals{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.float-decimals span{position:absolute;font-family:'JetBrains Mono',monospace;
+  color:rgba(251,191,36,.12);font-size:24px;font-weight:700;animation:floatUp linear infinite}
+@keyframes floatUp{
+  0%{transform:translateY(100vh) rotate(0deg);opacity:0}
+  10%{opacity:1}90%{opacity:1}
+  100%{transform:translateY(-100px) rotate(360deg);opacity:0}
+}
+
+.start-btn{margin-top:40px;padding:16px 40px;background:var(--accent);color:var(--bg-deep);
+  border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:16px;font-weight:700;letter-spacing:.05em;cursor:pointer;transition:all .3s;
+  display:inline-flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(251,191,36,.3);
+  position:relative;z-index:3}
+.start-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(251,191,36,.5)}
+.start-btn i{transition:transform .3s}
+.start-btn:hover i{transform:translateX(4px)}
+
+.slide-header{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:40px;padding-bottom:25px;border-bottom:1px solid var(--border);gap:20px}
+.slide-num{font-family:'Fraunces',serif;font-size:14px;color:var(--accent);
+  letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.slide-title{font-size:clamp(28px,4vw,48px);line-height:1.1;margin-top:8px;color:var(--fg)}
+.slide-icon{width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  color:var(--bg-deep);box-shadow:0 10px 30px rgba(251,191,36,.3);flex-shrink:0}
+
+.two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:start}
+.card{background:linear-gradient(135deg,var(--bg-card),var(--bg-card-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:28px;
+  position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:linear-gradient(180deg,var(--accent),var(--accent-2))}
+.card h3{font-size:22px;color:var(--accent);margin-bottom:12px;display:flex;
+  align-items:center;gap:10px}
+.card p{color:var(--fg-dim);line-height:1.7;margin-bottom:12px}
+.card .example{background:rgba(0,0,0,.25);border-radius:10px;padding:14px 18px;
+  font-family:'JetBrains Mono',monospace;font-size:15px;margin-top:12px;
+  border-left:3px solid var(--accent)}
+
+.trigger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-top:30px}
+.trigger-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;position:relative;overflow:hidden;transition:all .4s;cursor:pointer}
+.trigger-card:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.trigger-card .icon{width:56px;height:56px;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  color:var(--bg-deep);margin-bottom:18px}
+.trigger-card h4{font-family:'Fraunces',serif;font-size:20px;margin-bottom:8px;color:var(--fg)}
+.trigger-card p{color:var(--fg-dim);font-size:14px;line-height:1.6}
+.trigger-card .num{font-family:'JetBrains Mono',monospace;font-size:24px;
+  color:var(--accent);font-weight:700;margin-top:12px;display:block}
+
+.objectives{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px}
+.objective{display:flex;gap:18px;align-items:flex-start;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:14px;padding:22px;transition:all .3s}
+.objective:hover{border-color:var(--accent);transform:translateX(4px)}
+.objective .num{width:42px;height:42px;border-radius:50%;background:rgba(251,191,36,.15);
+  color:var(--accent);display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:18px;flex-shrink:0}
+.objective .text{font-size:15px;line-height:1.5;color:var(--fg-dim)}
+.objective .text strong{color:var(--fg);display:block;margin-bottom:4px;font-size:16px}
+
+.demo{background:linear-gradient(135deg,var(--bg-card),var(--bg-card-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin:24px 0}
+.demo-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.demo-title{font-family:'Fraunces',serif;font-size:24px;margin-bottom:16px;color:var(--fg)}
+
+.pv-table{display:flex;gap:4px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.pv-cell{display:flex;flex-direction:column;align-items:center;background:var(--bg-deep);
+  border:1px solid var(--border);border-radius:10px;padding:14px 8px;min-width:80px;
+  cursor:pointer;transition:all .3s}
+.pv-cell:hover{border-color:var(--accent);transform:translateY(-4px)}
+.pv-cell.active{background:rgba(251,191,36,.15);border-color:var(--accent);box-shadow:0 0 20px rgba(251,191,36,.3)}
+.pv-cell .digit{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--fg)}
+.pv-cell .label{font-size:10px;color:var(--fg-mute);margin-top:6px;text-align:center;letter-spacing:.05em}
+.pv-cell.active .digit{color:var(--accent)}
+.pv-cell.active .label{color:var(--accent)}
+.pv-info{background:rgba(0,0,0,.3);border-radius:12px;padding:18px;text-align:center;
+  margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--accent)}
+
+.btn{padding:10px 20px;border:none;border-radius:10px;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;
+  transition:all .3s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:var(--bg-deep)}
+.btn-primary:hover{background:#fcd34d;transform:translateY(-2px)}
+.btn-secondary{background:var(--bg-card);color:var(--fg);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--fg-dim);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--accent);border-color:var(--accent)}
+
+.input{background:var(--bg-deep);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;color:var(--fg);font-family:'JetBrains Mono',monospace;
+  font-size:16px;width:100%;outline:none;transition:border-color .3s}
+.input:focus{border-color:var(--accent)}
+
+.q-section{margin-top:50px;border-top:2px dashed var(--border);padding-top:40px}
+.q-section-header{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:30px;flex-wrap:wrap;gap:16px}
+.q-section-header h3{font-size:28px;color:var(--fg)}
+.q-section-header p{color:var(--fg-dim);font-size:14px;margin-top:4px}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:20px}
+.q-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  padding:22px;transition:all .3s}
+.q-card.correct{border-color:var(--accent-3);background:linear-gradient(135deg,rgba(52,211,153,.08),var(--bg-card))}
+.q-card.wrong{border-color:var(--accent-2);background:linear-gradient(135deg,rgba(251,113,133,.08),var(--bg-card))}
+.q-num{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;
+  font-weight:700;color:var(--accent);background:rgba(251,191,36,.1);
+  padding:4px 10px;border-radius:6px;margin-bottom:12px}
+.q-text{font-size:15px;line-height:1.5;color:var(--fg);margin-bottom:14px}
+.q-options{display:grid;gap:8px;margin-bottom:14px}
+.q-opt{display:flex;align-items:center;gap:10px;background:var(--bg-deep);
+  border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;
+  transition:all .2s;font-size:14px}
+.q-opt:hover{border-color:var(--accent)}
+.q-opt.selected{border-color:var(--accent);background:rgba(251,191,36,.1)}
+.q-opt .marker{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.q-opt.selected .marker{background:var(--accent);border-color:var(--accent);color:var(--bg-deep)}
+.q-card.correct .q-opt.selected{border-color:var(--accent-3);background:rgba(52,211,153,.15)}
+.q-card.correct .q-opt.selected .marker{background:var(--accent-3);border-color:var(--accent-3);color:var(--bg-deep)}
+.q-card.wrong .q-opt.selected{border-color:var(--accent-2);background:rgba(251,113,133,.15)}
+.q-card.wrong .q-opt.selected .marker{background:var(--accent-2);border-color:var(--accent-2);color:var(--bg-deep)}
+.q-card.wrong .q-opt.correct-opt{border-color:var(--accent-3);background:rgba(52,211,153,.1)}
+.q-actions{display:flex;gap:10px;flex-wrap:wrap}
+.q-feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:13px;
+  display:none;line-height:1.5}
+.q-feedback.show{display:block}
+.q-feedback.correct{background:rgba(52,211,153,.1);color:var(--accent-3);border:1px solid var(--accent-3)}
+.q-feedback.wrong{background:rgba(251,113,133,.1);color:var(--accent-2);border:1px solid var(--accent-2)}
+.q-explanation{margin-top:10px;padding:14px;background:rgba(0,0,0,.3);border-radius:10px;
+  font-size:13px;line-height:1.6;color:var(--fg-dim);display:none;border-left:3px solid var(--accent)}
+.q-explanation.show{display:block}
+.q-explanation strong{color:var(--accent)}
+
+.column-method{font-family:'JetBrains Mono',monospace;background:var(--bg-deep);
+  border-radius:12px;padding:24px;font-size:22px;line-height:1.8;color:var(--fg);
+  display:inline-block;min-width:260px;position:relative}
+.column-method .row{display:flex;justify-content:flex-end;gap:8px;align-items:center}
+.column-method .op{color:var(--accent-2);font-size:18px;margin-right:8px}
+.column-method .bar{border-top:2px solid var(--fg);margin:6px 0}
+.column-method .digit-col{display:inline-block;width:24px;text-align:center}
+
+.game-container{display:grid;grid-template-columns:1fr 320px;gap:30px;margin-top:30px}
+.game-area{background:linear-gradient(135deg,var(--bg-card),var(--bg-card-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:30px;
+  position:relative;min-height:480px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center}
+.game-target{font-family:'Fraunces',serif;font-size:18px;color:var(--fg-dim);letter-spacing:.05em;margin-bottom:14px}
+.game-target-num{font-family:'JetBrains Mono',monospace;font-size:64px;font-weight:700;
+  color:var(--accent);margin-bottom:30px;text-shadow:0 0 30px rgba(251,191,36,.3)}
+.game-current{font-family:'JetBrains Mono',monospace;font-size:32px;color:var(--fg);
+  background:var(--bg-deep);padding:14px 30px;border-radius:12px;
+  border:1px solid var(--border);margin-bottom:30px;min-width:200px;text-align:center}
+.chips{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.chip{padding:14px 20px;border-radius:12px;background:linear-gradient(135deg,var(--bg-card),var(--bg-deep));
+  border:2px solid var(--border);cursor:pointer;font-family:'JetBrains Mono',monospace;
+  font-size:18px;font-weight:700;color:var(--fg);transition:all .25s;user-select:none}
+.chip:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.chip .label{display:block;font-size:9px;color:var(--fg-mute);font-weight:400;margin-top:4px;letter-spacing:.1em}
+.game-sidebar{display:flex;flex-direction:column;gap:20px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.stat-card .label{font-size:11px;color:var(--fg-mute);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.stat-card .value{font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--accent)}
+.stat-card.timer .value{color:var(--accent-2)}
+.stat-card.streak .value{color:var(--accent-3)}
+
+.conclusion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:30px}
+.conclusion-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all .3s}
+.conclusion-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.conclusion-card .ic{width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;color:var(--bg-deep);
+  font-size:18px;margin-bottom:14px}
+.conclusion-card h4{font-family:'Fraunces',serif;font-size:17px;color:var(--fg);margin-bottom:8px}
+.conclusion-card p{font-size:13px;color:var(--fg-dim);line-height:1.5}
+
+.reflection-box{background:linear-gradient(135deg,var(--bg-card),var(--bg-card-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
+.reflection-box h4{font-family:'Fraunces',serif;font-size:20px;color:var(--accent);
+  margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.reflection-box textarea{width:100%;min-height:100px;background:var(--bg-deep);
+  border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--fg);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.6;
+  resize:vertical;outline:none;transition:border-color .3s}
+.reflection-box textarea:focus{border-color:var(--accent)}
+
+.thankyou{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;min-height:100vh;padding:60px 40px}
+.thankyou h1{font-size:clamp(60px,11vw,180px);line-height:.95;
+  background:linear-gradient(180deg,var(--accent) 0%,var(--accent-2) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:30px}
+.thankyou .quote{font-family:'Fraunces',serif;font-style:italic;font-size:22px;
+  color:var(--fg-dim);max-width:600px;margin-bottom:40px;line-height:1.5}
+.thankyou .signature{color:var(--fg-mute);font-size:14px;letter-spacing:.15em;text-transform:uppercase}
+
+.nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:16px;background:rgba(16,48,41,.85);
+  backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:999px;
+  padding:8px 12px;z-index:100;box-shadow:var(--shadow)}
+.nav button{width:42px;height:42px;border-radius:50%;background:transparent;
+  border:1px solid var(--border);color:var(--fg);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .25s}
+.nav button:hover:not(:disabled){background:var(--accent);color:var(--bg-deep);border-color:var(--accent)}
+.nav button:disabled{opacity:.3;cursor:not-allowed}
+.nav .info{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--fg-dim);
+  min-width:80px;text-align:center;letter-spacing:.05em}
+.nav .info .current{color:var(--accent);font-weight:700}
+
+.menu-toggle{position:fixed;top:20px;right:20px;z-index:100;width:46px;height:46px;
+  border-radius:50%;background:rgba(16,48,41,.85);backdrop-filter:blur(20px);
+  border:1px solid var(--border);color:var(--fg);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .25s}
+.menu-toggle:hover{background:var(--accent);color:var(--bg-deep);border-color:var(--accent)}
+.menu-panel{position:fixed;top:0;right:-360px;width:340px;height:100vh;
+  background:rgba(10,31,28,.97);backdrop-filter:blur(20px);border-left:1px solid var(--border);
+  padding:80px 24px 24px;z-index:99;transition:right .4s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+.menu-panel.open{right:0}
+.menu-panel h3{font-family:'Fraunces',serif;font-size:20px;color:var(--accent);
+  margin-bottom:20px;letter-spacing:.05em}
+.menu-item{display:block;width:100%;text-align:left;padding:12px 14px;
+  background:transparent;border:1px solid var(--border);border-radius:10px;
+  margin-bottom:8px;color:var(--fg-dim);font-size:13px;cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
+.menu-item:hover,.menu-item.active{background:rgba(251,191,36,.1);color:var(--accent);border-color:var(--accent)}
+.menu-item .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);margin-right:10px}
+
+.compare-pair{display:flex;align-items:center;justify-content:center;gap:30px;
+  font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:700;margin:30px 0;flex-wrap:wrap}
+.compare-pair .num{color:var(--fg)}
+.compare-pair .op{color:var(--accent);font-size:36px;width:60px;height:60px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:rgba(251,191,36,.1);border:2px solid var(--accent)}
+.compare-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.compare-buttons button{padding:14px 26px;font-size:22px;font-family:'JetBrains Mono',monospace;
+  font-weight:700;background:var(--bg-card);border:2px solid var(--border);border-radius:12px;
+  color:var(--fg);cursor:pointer;transition:all .25s;min-width:80px}
+.compare-buttons button:hover{border-color:var(--accent);background:rgba(251,191,36,.1)}
+
+.order-list{display:flex;flex-direction:column;gap:10px;margin:20px 0}
+.order-item{background:var(--bg-deep);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;cursor:grab;
+  transition:all .25s;color:var(--fg)}
+.order-item:hover{border-color:var(--accent)}
+.order-item.dragging{opacity:.5;border-color:var(--accent-2)}
+.order-item .handle{color:var(--fg-mute);font-size:14px}
+
+.rounding-demo{display:flex;flex-direction:column;gap:16px;align-items:center}
+.rounding-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;
+  color:var(--accent);margin:10px 0}
+.rounding-options{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.rounding-options button{padding:10px 18px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:10px;color:var(--fg);cursor:pointer;
+  font-size:13px;transition:all .25s}
+.rounding-options button.active,.rounding-options button:hover{
+  background:rgba(251,191,36,.15);border-color:var(--accent);color:var(--accent)}
+.rounding-result{font-family:'JetBrains Mono',monospace;font-size:24px;color:var(--accent-3);
+  background:var(--bg-deep);padding:14px 24px;border-radius:10px;border:1px solid var(--border);margin-top:10px}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;
+  font-family:'JetBrains Mono',monospace;font-weight:700;margin:0 4px}
+.frac .top{border-bottom:2px solid var(--fg);padding:0 8px 2px}
+.frac .bot{padding:2px 8px 0}
+.frac-res{font-family:'JetBrains Mono',monospace;font-size:24px;color:var(--accent);margin-top:14px}
+
+.story-card{background:linear-gradient(135deg,var(--bg-card),var(--bg-card-2));
+  border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:18px}
+.story-card .scenario{font-size:15px;line-height:1.7;color:var(--fg-dim);
+  background:rgba(0,0,0,.25);border-radius:12px;padding:16px 18px;
+  border-left:3px solid var(--accent);margin-bottom:14px}
+.story-card .scenario strong{color:var(--fg)}
+
+.confetti{position:fixed;pointer-events:none;z-index:1000}
+.confetti span{position:absolute;width:10px;height:10px;animation:confetti-fall 3s linear forwards}
+@keyframes confetti-fall{0%{transform:translateY(-100vh) rotate(0);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:var(--bg-card);border:1px solid var(--accent);color:var(--accent);
+  padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:1000;
+  opacity:0;transition:all .3s;pointer-events:none;box-shadow:var(--shadow)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.hl{color:var(--accent);font-weight:600}
+.hl-2{color:var(--accent-2);font-weight:600}
+.hl-3{color:var(--accent-3);font-weight:600}
+
+@media (max-width:900px){
+  .slide{padding:50px 30px 90px}
+  .two-col,.objectives,.game-container{grid-template-columns:1fr}
+  .cover h1{font-size:60px}
+  .slide-header{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="slides" id="slides">
+
+  <section class="slide active cover" data-slide="0">
+    <div class="float-decimals" id="floatDecimals"></div>
+    <div class="badge"><i class="fas fa-infinity"></i> Presentasi Interaktif Matematika</div>
+    <h1>Bilangan<br>Desimal</h1>
+    <p class="subtitle">Petualangan menaklukkan angka di balik koma — dari pasar tradisional hingga luar angkasa.</p>
+    <button class="start-btn" id="startBtn" type="button">Mulai Petualangan <i class="fas fa-arrow-right"></i></button>
+    <div class="meta">
+      <span><i class="fas fa-book-open"></i> 10 Sub-Materi</span>
+      <span><i class="fas fa-pencil-alt"></i> 200 Latihan Soal</span>
+      <span><i class="fas fa-gamepad"></i> Game Refleksi</span>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="1">
+    <div class="slide-header">
+      <div>
+        <div class="slide-num">Pertanyaan Pemantik</div>
+        <h2 class="slide-title">Di mana desimal bersembunyi dalam keseharian kita?</h2>
+      </div>
+      <div class="slide-icon"><i class="fas fa-magnifying-glass"></i></div>
+    </div>
+    <p style="font-size:18px;color:var(--fg-dim);max-width:800px;line-height:1.7">Coba amati situasi-situasi berikut. Angka-angka di balik koma itu bukanlah kebetulan — mereka adalah <span class="hl">bilangan desimal</span> yang menjelaskan dunia dengan cara yang lebih presisi daripada bilangan bulat.</p>
+    <div class="trigger-grid">
+      <div class="trigger-card"><div class="icon"><i class="fas fa-shopping-basket"></i></div><h4>Pasar &amp; Harga</h4><p>Berapa harga 2,5 kg jeruk jika每 kg Rp 12.500?</p><span class="num">Rp 31.250</span></div>
+      <div class="trigger-card"><div class="icon"><i class="fas fa-ruler"></i></div><h4>Pengukuran</h4><p>Tinggi badan, panjang meja, diameter sekrup — semuanya pakai desimal.</p><span class="num">1,75 m</span></div>
+      <div class="trigger-card"><div class="icon"><i class="fas fa-temperature-half"></i></div><h4>Sains &amp; Cuaca</h4><p>Suhu tubuh normal manusia adalah 36,5°C — bukan 36° atau 37°.</p><span class="num">36,5°C</span></div>
+      <div class="trigger-card"><div class="icon"><i class="fas fa-stopwatch"></i></div><h4>Waktu &amp; Olahraga</h4><p>Rekor lari 100m diukur sampai seperseribu detik.</p><span class="num">9,58 d</span></div>
+      <div class="trigger-card"><div class="icon"><i class="fas fa-percent"></i></div><h4>Keuangan</h4><p>Bunga bank, kurs mata uang, persentase — penuh desimal.</p><span class="num">3,5%</span></div>
+      <div class="trigger-card"><div class="icon"><i class="fas fa-graduation-cap"></i></div><h4>Rapor Sekolah</h4><p>Nilai matematika bukan 8 atau 9, melainkan 8,25 atau 8,75.</p><span class="num">8,75</span></div>
+    </div>
+    <p style="margin-top:30px;font-size:16px;color:var(--fg-mute);font-style:italic">Tanpa desimal, dunia akan menjadi tempat yang kasar dan tidak presisi. Mari kita dalami!</p>
+  </section>
+
+  <section class="slide" data-slide="2">
+    <div class="slide-header">
+      <div><div class="slide-num">Tujuan Pembelajaran</div><h2 class="slide-title">Apa yang akan kamu kuasai?</h2></div>
+      <div class="slide-icon"><i class="fas fa-bullseye"></i></div>
+    </div>
+    <p style="font-size:17px;color:var(--fg-dim);line-height:1.7;max-width:800px">Setelah mengikuti petualangan ini, kamu diharapkan mampu mencapai enam tujuan berikut. Setiap tujuan akan menjadi <span class="hl">pos pemeriksaan</span> yang menandai kemajuanmu.</p>
+    <div class="objectives">
+      <div class="objective"><div class="num">1</div><div class="text"><strong>Memahami Konsep</strong>Mendefinisikan bilangan desimal dan notasi standarnya, serta keterkaitannya dengan pecahan.</div></div>
+      <div class="objective"><div class="num">2</div><div class="text"><strong>Mengenal Nilai Tempat</strong>Menentukan nilai tempat masing-masing digit pada bilangan desimal sampai persepuluh ribuan.</div></div>
+      <div class="objective"><div class="num">3</div><div class="text"><strong>Membulatkan &amp; Membandingkan</strong>Membulatkan desimal sesuai aturan, serta membandingkan dan mengurutkannya.</div></div>
+      <div class="objective"><div class="num">4</div><div class="text"><strong>Konversi Bilangan</strong>Mengubah pecahan ke desimal dan sebaliknya dengan benar.</div></div>
+      <div class="objective"><div class="num">5</div><div class="text"><strong>Operasi Hitung</strong>Menjumlahkan, mengurangkan, mengalikan, dan membagi bilangan desimal.</div></div>
+      <div class="objective"><div class="num">6</div><div class="text"><strong>Penerapan Kontekstual</strong>Menyelesaikan soal cerita kehidupan sehari-hari yang melibatkan desimal.</div></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="3">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 01</div><h2 class="slide-title">Definisi &amp; Notasi Desimal</h2></div>
+      <div class="slide-icon">01</div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <h3><i class="fas fa-lightbulb"></i> Apa itu Bilangan Desimal?</h3>
+          <p>Bilangan desimal adalah sistem bilangan berbasis sepuluh yang menggunakan <span class="hl">tanda koma (,)</span> untuk memisahkan bagian bulat dan bagian pecahan.</p>
+          <p>Setiap posisi di kanan koma merepresentasikan <span class="hl">persepuluhan, perseperseratusan, perseperseribuan</span>, dan seterusnya.</p>
+          <div class="example">3,75 = 3 + 7/10 + 5/100 = 3 + 0,7 + 0,05</div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <h3><i class="fas fa-pen-fancy"></i> Cara Membaca Desimal</h3>
+          <p>Bagian kiri koma dibaca seperti bilangan bulat. Bagian kanan koma dibaca sebagai angka per angka, diawali dengan kata "koma".</p>
+          <div class="example">4,56 → <strong>empat koma lima enam</strong><br>0,123 → <strong>nol koma satu dua tiga</strong><br>12,05 → <strong>dua belas koma nol lima</strong></div>
+        </div>
+      </div>
+      <div>
+        <div class="demo">
+          <span class="demo-label">Demo Interaktif</span>
+          <div class="demo-title">Visualisasi 3,75</div>
+          <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:14px">
+            <div style="grid-column:span 10;background:rgba(251,191,36,.2);border:1px solid var(--accent);border-radius:8px;padding:12px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:24px;color:var(--accent)">3</div>
+          </div>
+          <div style="font-size:12px;color:var(--fg-mute);text-align:center;margin-bottom:16px">3 satuan utuh</div>
+          <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:8px" id="frac7"></div>
+          <div style="font-size:12px;color:var(--fg-mute);text-align:center;margin-bottom:16px">7 persepuluh (kolom berwarna)</div>
+          <div style="display:grid;grid-template-columns:repeat(100,1fr);gap:1px;margin-bottom:8px" id="frac5"></div>
+          <div style="font-size:12px;color:var(--fg-mute);text-align:center">5 perseperseratus</div>
+        </div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal untuk menguji pemahamanmu</p></div></div>
+      <div class="q-grid" id="q-t1"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 02</div><h2 class="slide-title">Nilai Tempat pada Desimal</h2></div>
+      <div class="slide-icon">02</div>
+    </div>
+    <div class="card" style="margin-bottom:24px">
+      <h3><i class="fas fa-table-columns"></i> Tabel Nilai Tempat</h3>
+      <p>Pada bilangan desimal, setiap digit memiliki nilai tempat yang berbeda. Semakin ke kanan, nilainya semakin <span class="hl">kecil sepuluh kali</span>. Klik setiap kolom untuk melihat nilainya!</p>
+    </div>
+    <div class="demo">
+      <span class="demo-label">Klik untuk eksplorasi</span>
+      <div class="demo-title">Eksplorasi Nilai Tempat: 247,369</div>
+      <div class="pv-table" id="pvTable">
+        <div class="pv-cell" data-val="200"><div class="digit">2</div><div class="label">RATUSAN</div></div>
+        <div class="pv-cell" data-val="40"><div class="digit">4</div><div class="label">PULUHAN</div></div>
+        <div class="pv-cell" data-val="7"><div class="digit">7</div><div class="label">SATUAN</div></div>
+        <div class="pv-cell" data-val="0,3" style="background:rgba(251,113,133,.1)"><div class="digit">3</div><div class="label">PERSEPULUHAN</div></div>
+        <div class="pv-cell" data-val="0,06" style="background:rgba(251,113,133,.1)"><div class="digit">6</div><div class="label">PERSEPSERATUSAN</div></div>
+        <div class="pv-cell" data-val="0,009" style="background:rgba(251,113,133,.1)"><div class="digit">9</div><div class="label">PERSEPERIBUAN</div></div>
+      </div>
+      <div class="pv-info" id="pvInfo">Klik salah satu digit di atas untuk melihat nilai tempatnya</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-key"></i> Kunci Penting</h3>
+      <p>Nilai digit = digit × nilai tempatnya. Contoh: angka 6 pada 247,369 bernilai <span class="hl-2">6 × 0,01 = 0,06</span>, bukan sekadar "angka 6".</p>
+      <div class="example">247,369 = 200 + 40 + 7 + 0,3 + 0,06 + 0,009</div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal nilai tempat</p></div></div>
+      <div class="q-grid" id="q-t2"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="5">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 03</div><h2 class="slide-title">Membulatkan Desimal</h2></div>
+      <div class="slide-icon">03</div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <h3><i class="fas fa-arrows-to-circle"></i> Aturan Pembulatan</h3>
+          <p>Aturan pembulatan desimal mengikuti prinsip "dekat ke mana?":</p>
+          <p>1. Tentukan sampai berapa tempat desimal akan dibulatkan.<br>2. Amati <span class="hl">satu digit di kanan</span> batas pembulatan.<br>3. Jika digit itu ≥ 5, maka digit batas <span class="hl">ditambah 1</span>.<br>4. Jika digit itu &lt; 5, digit batas tetap.</p>
+          <div class="example">3,476 dibulatkan 2 desimal → lihat digit ke-3 (6) ≥ 5 → <strong>3,48</strong></div>
+        </div>
+      </div>
+      <div>
+        <div class="demo">
+          <span class="demo-label">Coba Sendiri</span>
+          <div class="demo-title">Pembulatan Desimal</div>
+          <input class="input" id="roundInput" type="text" value="4,5728" style="margin-bottom:14px">
+          <div style="font-size:12px;color:var(--fg-mute);margin-bottom:10px">Masukkan bilangan desimal (gunakan koma):</div>
+          <div class="rounding-options" id="roundOpts">
+            <button class="active" data-prec="0">Bulatkan ke satuan</button>
+            <button data-prec="1">1 desimal</button>
+            <button data-prec="2">2 desimal</button>
+            <button data-prec="3">3 desimal</button>
+          </div>
+          <div class="rounding-result" id="roundResult">5</div>
+          <div style="font-size:13px;color:var(--fg-dim);margin-top:14px;line-height:1.6" id="roundExplain"></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal pembulatan</p></div></div>
+      <div class="q-grid" id="q-t3"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="6">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 04</div><h2 class="slide-title">Membandingkan Desimal</h2></div>
+      <div class="slide-icon">04</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-scale-balanced"></i> Cara Membandingkan</h3>
+      <p>Untuk membandingkan dua desimal: (1) Samakan jumlah angka di belakang koma dengan menambahkan nol, (2) Bandingkan dari kiri ke kanan, digit demi digit.</p>
+      <div class="example">Bandingkan 0,5 dan 0,48 → samakan: 0,50 vs 0,48 → 50 &gt; 48 → <strong>0,5 &gt; 0,48</strong></div>
+    </div>
+    <div class="demo">
+      <span class="demo-label">Latihan Cepat</span>
+      <div class="demo-title">Pilih Operator yang Tepat</div>
+      <div class="compare-pair">
+        <span class="num" id="cmpA">0,75</span>
+        <span class="op" id="cmpOp">?</span>
+        <span class="num" id="cmpB">0,8</span>
+      </div>
+      <div class="compare-buttons">
+        <button id="cmpGtBtn">&gt;</button>
+        <button id="cmpLtBtn">&lt;</button>
+        <button id="cmpEqBtn">=</button>
+      </div>
+      <div id="cmpFeedback" style="margin-top:18px;font-size:14px;text-align:center;min-height:24px"></div>
+      <button class="btn btn-ghost" id="cmpNextBtn" style="margin:14px auto 0;display:flex"><i class="fas fa-shuffle"></i> Soal Berikutnya</button>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal membandingkan desimal</p></div></div>
+      <div class="q-grid" id="q-t4"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="7">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 05</div><h2 class="slide-title">Mengurutkan Desimal</h2></div>
+      <div class="slide-icon">05</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-arrow-down-1-9"></i> Strategi Mengurutkan</h3>
+      <p>Urutkan desimal dengan mudah: (1) Samakan panjang dengan menambahkan nol di akhir, (2) Susun dari yang terkecil, (3) Kembalikan ke bentuk aslinya.</p>
+      <div class="example">Urutkan: 0,4 ; 0,38 ; 0,415 ; 0,42<br>Samakan: 0,400 ; 0,380 ; 0,415 ; 0,420<br>Urut: <strong>0,38 &lt; 0,4 &lt; 0,415 &lt; 0,42</strong></div>
+    </div>
+    <div class="demo">
+      <span class="demo-label">Latihan Drag &amp; Drop</span>
+      <div class="demo-title">Urutkan dari Terkecil ke Terbesar</div>
+      <div class="order-list" id="orderList"></div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:18px">
+        <button class="btn btn-primary" id="orderCheckBtn"><i class="fas fa-check"></i> Periksa</button>
+        <button class="btn btn-ghost" id="orderShuffleBtn"><i class="fas fa-shuffle"></i> Acak Lagi</button>
+      </div>
+      <div id="orderFeedback" style="text-align:center;margin-top:14px;font-size:14px;min-height:24px"></div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal mengurutkan desimal</p></div></div>
+      <div class="q-grid" id="q-t5"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="8">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 06</div><h2 class="slide-title">Pecahan → Desimal</h2></div>
+      <div class="slide-icon">06</div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <h3><i class="fas fa-right-left"></i> Tiga Metode Konversi</h3>
+          <p><strong style="color:var(--fg)">1. Metode Pembagian</strong> — Bagi pembilang dengan penyebut.</p>
+          <div class="example">3/4 = 3 ÷ 4 = 0,75</div>
+          <p><strong style="color:var(--fg)">2. Metode Persamaan Penyebut 10, 100, 1000</strong> — Kalikan pecahan agar penyebut menjadi persepuluhan/dst.</p>
+          <div class="example">3/5 = 6/10 = 0,6<br>7/25 = 28/100 = 0,28</div>
+          <p><strong style="color:var(--fg)">3. Metode Desimal Berulang</strong> — Hasil bagi yang tidak berakhir.</p>
+          <div class="example">1/3 = 0,333... = 0,3̄<br>2/3 = 0,666... = 0,6̄</div>
+        </div>
+      </div>
+      <div>
+        <div class="demo">
+          <span class="demo-label">Kalkulator Pecahan ke Desimal</span>
+          <div class="demo-title">Ubah Pecahan ke Desimal</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:20px 0">
+            <input class="input" id="numIn" type="number" value="3" style="width:80px;text-align:center;font-size:24px">
+            <span style="font-size:36px;color:var(--accent)">÷</span>
+            <input class="input" id="denIn" type="number" value="4" style="width:80px;text-align:center;font-size:24px">
+          </div>
+          <button class="btn btn-primary" id="calcFracBtn" style="margin:0 auto;display:flex"><i class="fas fa-equals"></i> Hitung</button>
+          <div class="frac-res" id="fracRes" style="text-align:center;margin-top:20px">0,75</div>
+          <div style="font-size:13px;color:var(--fg-dim);text-align:center;margin-top:10px" id="fracSteps">3 ÷ 4 = 0,75</div>
+        </div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal pecahan ke desimal</p></div></div>
+      <div class="q-grid" id="q-t6"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="9">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 07</div><h2 class="slide-title">Desimal → Pecahan</h2></div>
+      <div class="slide-icon">07</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-exchange-alt"></i> Langkah-Langkah Konversi</h3>
+      <p>1. Tulis bilangan desimal tanpa koma sebagai pembilang.<br>2. Tentukan penyebut: 10 (untuk 1 desimal), 100 (2 desimal), 1000 (3 desimal), dst.<br>3. Sederhanakan pecahan dengan membagi pembilang dan penyebut dengan FPB.</p>
+      <div class="example">0,75 = 75/100 = 3/4 (dibagi 25)<br>0,6 = 6/10 = 3/5 (dibagi 2)<br>0,125 = 125/1000 = 1/8 (dibagi 125)</div>
+    </div>
+    <div class="demo">
+      <span class="demo-label">Konverter Desimal ke Pecahan</span>
+      <div class="demo-title">Ubah Desimal ke Pecahan</div>
+      <input class="input" id="decIn" type="text" value="0,375" style="margin-bottom:14px">
+      <div id="decResult" style="font-family:'JetBrains Mono',monospace;font-size:28px;text-align:center;color:var(--accent);margin:20px 0">
+        <span class="frac"><span class="top">375</span><span class="bot">1000</span></span>
+        <span style="color:var(--fg-dim);margin:0 10px">=</span>
+        <span class="frac"><span class="top">3</span><span class="bot">8</span></span>
+      </div>
+      <div id="decSteps" style="font-size:13px;color:var(--fg-dim);text-align:center;line-height:1.7">
+        0,375 → 375/1000 → sederhanakan (÷125) → <strong style="color:var(--accent-3)">3/8</strong>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal desimal ke pecahan</p></div></div>
+      <div class="q-grid" id="q-t7"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="10">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 08</div><h2 class="slide-title">Penjumlahan &amp; Pengurangan Bersusun</h2></div>
+      <div class="slide-icon">08</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-plus"></i> Aturan Penjumlahan/Pengurangan Bersusun</h3>
+      <p>1. Sejajarkan tanda koma — koma harus berada di satu kolom yang sama.<br>2. Tambahkan nol di akhir jika jumlah desimalnya berbeda, agar panjangnya sama.<br>3. Jumlahkan/kurangkan seperti biasa, dari kanan ke kiri.<br>4. Tulis koma hasil pada posisi yang sama dengan koma operand.</p>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="demo">
+          <span class="demo-label">Contoh Penjumlahan</span>
+          <div class="demo-title">Hitung: 3,75 + 2,4</div>
+          <div style="text-align:center">
+            <div class="column-method">
+              <div class="row"><span class="digit-col">3</span><span class="digit-col">,</span><span class="digit-col">7</span><span class="digit-col">5</span></div>
+              <div class="row"><span class="op">+</span><span class="digit-col">2</span><span class="digit-col">,</span><span class="digit-col">4</span><span class="digit-col" style="color:var(--fg-mute)">0</span></div>
+              <div class="bar"></div>
+              <div class="row"><span class="digit-col" style="color:var(--accent-3)">6</span><span class="digit-col" style="color:var(--accent-3)">,</span><span class="digit-col" style="color:var(--accent-3)">1</span><span class="digit-col" style="color:var(--accent-3)">5</span></div>
+            </div>
+            <div style="font-size:13px;color:var(--fg-dim);margin-top:14px;line-height:1.6">
+              Tambahkan 0 di belakang 2,4 → 2,40<br>
+              Jumlahkan: 5+0=5, 7+4=11 (tulis 1 simpan 1),<br>
+              3+2+1=6 → <strong style="color:var(--accent-3)">6,15</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="demo">
+          <span class="demo-label">Contoh Pengurangan</span>
+          <div class="demo-title">Hitung: 5,8 - 2,36</div>
+          <div style="text-align:center">
+            <div class="column-method">
+              <div class="row"><span class="digit-col">5</span><span class="digit-col">,</span><span class="digit-col">8</span><span class="digit-col" style="color:var(--fg-mute)">0</span></div>
+              <div class="row"><span class="op">−</span><span class="digit-col">2</span><span class="digit-col">,</span><span class="digit-col">3</span><span class="digit-col">6</span></div>
+              <div class="bar"></div>
+              <div class="row"><span class="digit-col" style="color:var(--accent-3)">3</span><span class="digit-col" style="color:var(--accent-3)">,</span><span class="digit-col" style="color:var(--accent-3)">4</span><span class="digit-col" style="color:var(--accent-3)">4</span></div>
+            </div>
+            <div style="font-size:13px;color:var(--fg-dim);margin-top:14px;line-height:1.6">
+              Samakan: 5,8 → 5,80<br>
+              Kurangkan: 0-6 → pinjam, jadi 10-6=4<br>
+              8-1-3=4, 5-2=3 → <strong style="color:var(--accent-3)">3,44</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal penjumlahan &amp; pengurangan</p></div></div>
+      <div class="q-grid" id="q-t8"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="11">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 09</div><h2 class="slide-title">Perkalian &amp; Pembagian via Pecahan</h2></div>
+      <div class="slide-icon">09</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-calculator"></i> Strategi Konversi ke Pecahan</h3>
+      <p>Untuk perkalian dan pembagian desimal, kita ubah dahulu ke bentuk pecahan, lalu operasikan dengan aturan pecahan, kemudian kembalikan ke bentuk desimal. Metode ini sangat membantu ketika menghindari kesalahan tempat desimal.</p>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="demo">
+          <span class="demo-label">Contoh Perkalian</span>
+          <div class="demo-title">Hitung: 0,25 × 0,4</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;line-height:2.2;text-align:center">
+            <div>0,25 × 0,4</div>
+            <div style="color:var(--fg-dim)">↓ Ubah ke pecahan</div>
+            <div><span class="frac"><span class="top">25</span><span class="bot">100</span></span> × <span class="frac"><span class="top">4</span><span class="bot">10</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Sederhanakan</div>
+            <div><span class="frac"><span class="top">1</span><span class="bot">4</span></span> × <span class="frac"><span class="top">2</span><span class="bot">5</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Kalikan</div>
+            <div><span class="frac"><span class="top">2</span><span class="bot">20</span></span> = <span class="frac"><span class="top">1</span><span class="bot">10</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Kembalikan ke desimal</div>
+            <div style="color:var(--accent-3);font-size:24px;font-weight:700">= 0,1</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="demo">
+          <span class="demo-label">Contoh Pembagian</span>
+          <div class="demo-title">Hitung: 0,75 ÷ 0,5</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;line-height:2.2;text-align:center">
+            <div>0,75 ÷ 0,5</div>
+            <div style="color:var(--fg-dim)">↓ Ubah ke pecahan</div>
+            <div><span class="frac"><span class="top">75</span><span class="bot">100</span></span> ÷ <span class="frac"><span class="top">5</span><span class="bot">10</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Sederhanakan</div>
+            <div><span class="frac"><span class="top">3</span><span class="bot">4</span></span> ÷ <span class="frac"><span class="top">1</span><span class="bot">2</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Kalikan dengan kebalikan</div>
+            <div><span class="frac"><span class="top">3</span><span class="bot">4</span></span> × <span class="frac"><span class="top">2</span><span class="bot">1</span></span> = <span class="frac"><span class="top">6</span><span class="bot">4</span></span></div>
+            <div style="color:var(--fg-dim)">↓ Sederhanakan</div>
+            <div style="color:var(--accent-3);font-size:24px;font-weight:700">= <span class="frac"><span class="top">3</span><span class="bot">2</span></span> = 1,5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal perkalian &amp; pembagian</p></div></div>
+      <div class="q-grid" id="q-t9"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="12">
+    <div class="slide-header">
+      <div><div class="slide-num">Materi 10</div><h2 class="slide-title">Soal Cerita Kontekstual</h2></div>
+      <div class="slide-icon">10</div>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-book"></i> Strategi Menyelesaikan Soal Cerita</h3>
+      <p>1. <strong>Baca dengan cermat</strong> — Pahami konteks dan apa yang ditanya.<br>2. <strong>Tarik garis bawah</strong> — Data apa yang diketahui? Apa yang ditanya?<br>3. <strong>Pilih operasi</strong> — Apakah +, −, ×, atau ÷?<br>4. <strong>Hitung dengan teliti</strong> — Periksa kembali.<br>5. <strong>Tafsirkan hasil</strong> — Apakah jawabannya masuk akal?</p>
+    </div>
+    <div class="story-card">
+      <div class="scenario"><strong>Skenario:</strong> Ibu membeli 2,5 kg gula pasir dengan harga Rp 14.500 per kg. Ibu membayar dengan uang Rp 50.000. Berapa kembalian yang diterima ibu?</div>
+      <div style="font-size:14px;color:var(--fg-dim);line-height:1.7">
+        <strong style="color:var(--accent)">Diketahui:</strong> 2,5 kg gula, harga Rp 14.500/kg, bayar Rp 50.000<br>
+        <strong style="color:var(--accent)">Ditanya:</strong> Kembalian?<br>
+        <strong style="color:var(--accent)">Penyelesaian:</strong> Total harga = 2,5 × 14.500 = Rp 36.250<br>
+        Kembalian = 50.000 − 36.250 = <strong style="color:var(--accent-3)">Rp 13.750</strong>
+      </div>
+    </div>
+    <div class="q-section">
+      <div class="q-section-header"><div><h3>Latihan Mandiri</h3><p>20 soal cerita kontekstual</p></div></div>
+      <div class="q-grid" id="q-t10"></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="13">
+    <div class="slide-header">
+      <div><div class="slide-num">Game Refleksi</div><h2 class="slide-title">Decimal Builder — Bangun Bilangannya!</h2></div>
+      <div class="slide-icon"><i class="fas fa-gamepad"></i></div>
+    </div>
+    <p style="font-size:16px;color:var(--fg-dim);line-height:1.6;max-width:800px">Susunlah chip-chip bilangan agar totalnya sama dengan target. Tiap chip merepresentasikan nilai tempat yang berbeda. Game ini melatih pemahaman nilai tempat dan operasi penjumlahan desimal sekaligus!</p>
+    <div class="game-container">
+      <div class="game-area">
+        <div class="game-target">Targetkan bilangan:</div>
+        <div class="game-target-num" id="gameTarget">3,45</div>
+        <div class="game-current" id="gameCurrent">0</div>
+        <div class="chips" id="gameChips">
+          <div class="chip" data-val="1">+1<span class="label">SATUAN</span></div>
+          <div class="chip" data-val="0.1">+0,1<span class="label">PERSEPULUH</span></div>
+          <div class="chip" data-val="0.01">+0,01<span class="label">PERSEPSERATUS</span></div>
+          <div class="chip" data-val="0.001">+0,001<span class="label">PERSEPERIBU</span></div>
+          <div class="chip" data-val="-1" style="background:rgba(251,113,133,.15);border-color:var(--accent-2)"><i class="fas fa-rotate-left"></i><span class="label">RESET</span></div>
+        </div>
+        <div id="gameMsg" style="margin-top:24px;font-size:15px;min-height:24px;text-align:center"></div>
+      </div>
+      <div class="game-sidebar">
+        <div class="stat-card"><div class="label">SKOR</div><div class="value" id="gameScore">0</div></div>
+        <div class="stat-card streak"><div class="label">STREAK</div><div class="value" id="gameStreak">0</div></div>
+        <div class="stat-card timer"><div class="label">WAKTU</div><div class="value" id="gameTime">60</div></div>
+        <button class="btn btn-primary" id="gameStartBtn" style="width:100%"><i class="fas fa-play"></i> Mulai Game</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="14">
+    <div class="slide-header">
+      <div><div class="slide-num">Kesimpulan</div><h2 class="slide-title">Ringkasan Petualangan Desimal</h2></div>
+      <div class="slide-icon"><i class="fas fa-flag-checkered"></i></div>
+    </div>
+    <p style="font-size:17px;color:var(--fg-dim);line-height:1.7;max-width:800px">Selamat! Kamu telah menjelajahi sepuluh wilayah desimal. Berikut peta karunia pengetahuan yang telah kamu kumpulkan:</p>
+    <div class="conclusion-grid">
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-circle-info"></i></div><h4>Definisi</h4><p>Desimal = sistem bilangan berbasis sepuluh dengan koma sebagai pemisah.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-table-cells"></i></div><h4>Nilai Tempat</h4><p>Setiap digit punya nilai tempat: persepuluh, perseratus, perseribu.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-arrows-to-circle"></i></div><h4>Pembulatan</h4><p>Lihat digit kanan: ≥5 naikkan, &lt;5 tetap.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-scale-balanced"></i></div><h4>Perbandingan</h4><p>Samakan panjang lalu bandingkan kiri ke kanan.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-arrow-down-1-9"></i></div><h4>Pengurutan</h4><p>Tambahkan nol, urutkan, kembalikan ke bentuk asli.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-right-left"></i></div><h4>Pecahan↔Desimal</h4><p>Bagi pembilang/penyebut, atau gunakan persepuluhan.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-plus"></i></div><h4>+ dan −</h4><p>Sejajarkan koma, samakan panjang, jumlahkan bersusun.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-xmark"></i></div><h4>× dan ÷</h4><p>Konversi ke pecahan, operasikan, kembalikan ke desimal.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-book"></i></div><h4>Soal Cerita</h4><p>Baca, identifikasi, pilih operasi, hitung, tafsirkan.</p></div>
+      <div class="conclusion-card"><div class="ic"><i class="fas fa-globe"></i></div><h4>Dunia Nyata</h4><p>Desimal ada di mana-mana: harga, suhu, ukuran, waktu.</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="15">
+    <div class="slide-header">
+      <div><div class="slide-num">Refleksi Diri</div><h2 class="slide-title">Berpikir tentang Pembelajaran</h2></div>
+      <div class="slide-icon"><i class="fas fa-brain"></i></div>
+    </div>
+    <p style="font-size:17px;color:var(--fg-dim);line-height:1.7;max-width:800px">Pembelajaran yang baik tidak berhenti pada "tahu", melainkan sampai pada "sadar akan apa yang diketahui". Luangkan waktu untuk merenungkan pertanyaan berikut. Jawabanmu akan disimpan di perangkatmu.</p>
+    <div class="reflection-box">
+      <h4><i class="fas fa-1"></i> Konsep mana yang paling melekat di benakmu?</h4>
+      <textarea id="ref1" placeholder="Tulis jawabanmu di sini..."></textarea>
+    </div>
+    <div class="reflection-box">
+      <h4><i class="fas fa-2"></i> Bagian mana yang masih membuatmu bingung? Apa rencanamu untuk memperbaikinya?</h4>
+      <textarea id="ref2" placeholder="Tulis jawabanmu di sini..."></textarea>
+    </div>
+    <div class="reflection-box">
+      <h4><i class="fas fa-3"></i> Di situasi kehidupan nyata mana kamu akan menggunakan desimal minggu ini?</h4>
+      <textarea id="ref3" placeholder="Tulis jawabanmu di sini..."></textarea>
+    </div>
+    <div class="reflection-box">
+      <h4><i class="fas fa-4"></i> Apakah game refleksi membantumu memahami nilai tempat lebih baik? Jelaskan!</h4>
+      <textarea id="ref4" placeholder="Tulis jawabanmu di sini..."></textarea>
+    </div>
+    <button class="btn btn-primary" id="saveRefBtn"><i class="fas fa-floppy-disk"></i> Simpan Refleksi</button>
+  </section>
+
+  <section class="slide thankyou" data-slide="16">
+    <div class="float-decimals" id="floatDecimals2"></div>
+    <div class="badge"><i class="fas fa-sparkles"></i> Akhir Petualangan</div>
+    <h1>Terima<br>Kasih</h1>
+    <p class="quote">"Matematika bukan tentang angka, persamaan, atau algoritma. Ia tentang memahami." — William Paul Thurston</p>
+    <p style="font-size:16px;color:var(--fg-dim);max-width:600px;margin-bottom:30px">Semoga petualangan ini membuat angka di balik koma tak lagi menjadi misteri, melainkan jendela untuk membaca dunia dengan lebih presisi.</p>
+    <div class="signature">Sampai jumpa di petualangan berikutnya</div>
+  </section>
+
+</div>
+
+<nav class="nav">
+  <button id="prevBtn" type="button"><i class="fas fa-chevron-left"></i></button>
+  <div class="info"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">17</span></div>
+  <button id="nextBtn" type="button"><i class="fas fa-chevron-right"></i></button>
+</nav>
+
+<button class="menu-toggle" id="menuToggle" type="button"><i class="fas fa-list"></i></button>
+<aside class="menu-panel" id="menuPanel">
+  <h3>Daftar Isi</h3>
+  <div id="menuList"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ============ UTIL: Escape HTML ============ */
+  function escapeHTML(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ============ SLIDE NAVIGATION ============ */
+  var totalSlides = document.querySelectorAll('.slide').length;
+  var currentSlideIdx = 0;
+  document.getElementById('totalSlides').textContent = totalSlides;
+
+  function showSlide(idx){
+    if(idx<0||idx>=totalSlides) return;
+    var slides = document.querySelectorAll('.slide');
+    for(var i=0;i<slides.length;i++){
+      slides[i].classList.remove('active','prev');
+      if(i===idx) slides[i].classList.add('active');
+      else if(i<idx) slides[i].classList.add('prev');
+    }
+    currentSlideIdx = idx;
+    document.getElementById('currentSlide').textContent = idx+1;
+    document.getElementById('progressFill').style.width = ((idx+1)/totalSlides*100)+'%';
+    document.getElementById('prevBtn').disabled = (idx===0);
+    document.getElementById('nextBtn').disabled = (idx===totalSlides-1);
+    updateMenuActive();
+    if(slides[idx]) slides[idx].scrollTop = 0;
+  }
+
+  function nextSlide(){ showSlide(currentSlideIdx+1); }
+  function prevSlide(){ showSlide(currentSlideIdx-1); }
+
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT') return;
+    if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextSlide(); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); prevSlide(); }
+  });
+
+  /* ============ MENU ============ */
+  var menuItems = [
+    {t:'Cover',n:''},{t:'Pertanyaan Pemantik',n:''},{t:'Tujuan Pembelajaran',n:''},
+    {t:'Definisi & Notasi Desimal',n:'01'},{t:'Nilai Tempat',n:'02'},
+    {t:'Membulatkan Desimal',n:'03'},{t:'Membandingkan Desimal',n:'04'},
+    {t:'Mengurutkan Desimal',n:'05'},{t:'Pecahan → Desimal',n:'06'},
+    {t:'Desimal → Pecahan',n:'07'},{t:'Penjumlahan & Pengurangan',n:'08'},
+    {t:'Perkalian & Pembagian',n:'09'},{t:'Soal Cerita Kontekstual',n:'10'},
+    {t:'Game Refleksi',n:''},{t:'Kesimpulan',n:''},{t:'Refleksi Diri',n:''},{t:'Terima Kasih',n:''}
+  ];
+  var menuList = document.getElementById('menuList');
+  menuItems.forEach(function(m,i){
+    var btn = document.createElement('button');
+    btn.className='menu-item';btn.type='button';
+    btn.innerHTML = (m.n?'<span class="num">'+m.n+'</span>':'')+m.t;
+    btn.addEventListener('click', function(){
+      showSlide(i);
+      toggleMenu();
+    });
+    menuList.appendChild(btn);
+  });
+
+  function toggleMenu(){ document.getElementById('menuPanel').classList.toggle('open'); }
+  document.getElementById('menuToggle').addEventListener('click', toggleMenu);
+
+  function updateMenuActive(){
+    var items = document.querySelectorAll('.menu-item');
+    for(var i=0;i<items.length;i++){
+      items[i].classList.toggle('active', i===currentSlideIdx);
+    }
+  }
+
+  /* ============ FLOATING DECIMALS ============ */
+  function makeFloatDecimals(container){
+    var c = document.getElementById(container);
+    if(!c) return;
+    c.innerHTML='';
+    var decimals = ['0,5','1,25','3,14','2,718','0,75','1,618','0,333','2,5','0,1','4,44','9,81','6,28'];
+    for(var i=0;i<15;i++){
+      var s = document.createElement('span');
+      s.textContent = decimals[Math.floor(Math.random()*decimals.length)];
+      s.style.left = Math.random()*100+'%';
+      s.style.fontSize = (16+Math.random()*28)+'px';
+      s.style.animationDuration = (10+Math.random()*15)+'s';
+      s.style.animationDelay = (Math.random()*15)+'s';
+      c.appendChild(s);
+    }
+  }
+  makeFloatDecimals('floatDecimals');
+  makeFloatDecimals('floatDecimals2');
+
+  /* ============ FRACTION VISUAL ============ */
+  var f7 = document.getElementById('frac7');
+  if(f7){
+    for(var i=0;i<10;i++){
+      var d = document.createElement('div');
+      d.style.aspectRatio='1';
+      d.style.borderRadius='4px';
+      d.style.background = (i<7) ? 'var(--accent)' : 'rgba(255,255,255,.08)';
+      f7.appendChild(d);
+    }
+  }
+  var f5 = document.getElementById('frac5');
+  if(f5){
+    for(var j=0;j<100;j++){
+      var d2 = document.createElement('div');
+      d2.style.aspectRatio='1';
+      d2.style.borderRadius='2px';
+      d2.style.background = (j<5) ? 'var(--accent-2)' : 'rgba(255,255,255,.05)';
+      f5.appendChild(d2);
+    }
+  }
+
+  /* ============ PLACE VALUE INTERACTIVE ============ */
+  var pvCells = document.querySelectorAll('.pv-cell');
+  var pvInfo = document.getElementById('pvInfo');
+  for(var k=0;k<pvCells.length;k++){
+    pvCells[k].addEventListener('click', function(){
+      for(var m=0;m<pvCells.length;m++) pvCells[m].classList.remove('active');
+      this.classList.add('active');
+      var digit = this.querySelector('.digit').textContent;
+      var label = this.querySelector('.label').textContent;
+      var val = this.getAttribute('data-val');
+      pvInfo.innerHTML = 'Digit <strong style="color:var(--accent)">'+digit+'</strong> pada posisi <strong style="color:var(--accent)">'+label+'</strong> bernilai = <strong style="color:var(--accent-3)">'+val+'</strong>';
+    });
+  }
+
+  /* ============ ROUNDING DEMO ============ */
+  var roundPrec = 0;
+  var roundOpts = document.querySelectorAll('#roundOpts button');
+  for(var r=0;r<roundOpts.length;r++){
+    roundOpts[r].addEventListener('click', function(){
+      for(var x=0;x<roundOpts.length;x++) roundOpts[x].classList.remove('active');
+      this.classList.add('active');
+      roundPrec = parseInt(this.getAttribute('data-prec'));
+      updateRounding();
+    });
+  }
+  function updateRounding(){
+    var inp = document.getElementById('roundInput').value.replace('.',',');
+    var num = parseFloat(inp.replace(',','.'));
+    if(isNaN(num)){ document.getElementById('roundResult').textContent='—'; return; }
+    var rounded = Math.round(num * Math.pow(10,roundPrec)) / Math.pow(10,roundPrec);
+    var res = roundPrec===0 ? rounded.toString() : rounded.toFixed(roundPrec).replace('.',',');
+    document.getElementById('roundResult').textContent = res;
+    var digits = inp.split(',')[1] || '';
+    var explain = roundPrec===0
+      ? 'Bulatkan ke satuan: lihat digit pertama setelah koma ('+(digits[0]||'0')+'). '+(parseInt(digits[0]||0)>=5?'≥5 → bulatkan ke atas':'<5 → tetap')+'.'
+      : 'Bulatkan ke '+roundPrec+' desimal: lihat digit ke-'+(roundPrec+1)+' ('+(digits[roundPrec]||'0')+'). '+(parseInt(digits[roundPrec]||0)>=5?'≥5 → naikkan digit batas':'<5 → tetap')+'.';
+    document.getElementById('roundExplain').innerHTML = explain;
+  }
+  document.getElementById('roundInput').addEventListener('input', updateRounding);
+
+  /* ============ COMPARE DEMO ============ */
+  var cmpPairs = [
+    ['0,75','0,8','<'],['0,5','0,50','='],['1,25','1,3','<'],
+    ['0,99','1','<'],['2,4','2,39','>'],['0,07','0,7','<'],
+    ['0,6','0,59','>'],['1,5','1,45','>'],['0,3','0,299','>'],
+    ['0,4','0,40','='],['3,14','3,15','<'],['0,9','0,91','<']
+  ];
+  var cmpIdx = 0;
+  function loadCompare(){
+    var pair = cmpPairs[cmpIdx];
+    document.getElementById('cmpA').textContent = pair[0];
+    document.getElementById('cmpB').textContent = pair[1];
+    document.getElementById('cmpOp').textContent = '?';
+    document.getElementById('cmpOp').style.color = 'var(--accent)';
+    document.getElementById('cmpFeedback').textContent = '';
+  }
+  function checkCompare(op){
+    var pair = cmpPairs[cmpIdx];
+    var correct = pair[2];
+    var fb = document.getElementById('cmpFeedback');
+    if(op===correct){
+      document.getElementById('cmpOp').textContent = op;
+      document.getElementById('cmpOp').style.color = 'var(--accent-3)';
+      fb.innerHTML = '<span style="color:var(--accent-3)"><i class="fas fa-check"></i> Benar!</span>';
+    } else {
+      document.getElementById('cmpOp').textContent = op;
+      document.getElementById('cmpOp').style.color = 'var(--accent-2)';
+      fb.innerHTML = '<span style="color:var(--accent-2)"><i class="fas fa-xmark"></i> Belum tepat. Coba samakan panjang: '+pair[0]+'0 vs '+pair[1]+'0</span>';
+    }
+  }
+  function nextCompare(){
+    cmpIdx = (cmpIdx+1)%cmpPairs.length;
+    loadCompare();
+  }
+  document.getElementById('cmpGtBtn').addEventListener('click', function(){ checkCompare('>'); });
+  document.getElementById('cmpLtBtn').addEventListener('click', function(){ checkCompare('<'); });
+  document.getElementById('cmpEqBtn').addEventListener('click', function(){ checkCompare('='); });
+  document.getElementById('cmpNextBtn').addEventListener('click', nextCompare);
+  loadCompare();
+
+  /* ============ ORDERING DEMO ============ */
+  var orderData = ['0,42','0,38','0,415','0,4','0,399'];
+  var orderItems = orderData.slice();
+  function renderOrder(){
+    var list = document.getElementById('orderList');
+    list.innerHTML='';
+    orderItems.forEach(function(v,i){
+      var item = document.createElement('div');
+      item.className='order-item';item.draggable=true;item.setAttribute('data-idx',i);
+      item.innerHTML = '<span>'+v+'</span><span class="handle"><i class="fas fa-grip-vertical"></i></span>';
+      list.appendChild(item);
+    });
+    attachDragHandlers();
+  }
+  var dragSrc = null;
+  function attachDragHandlers(){
+    var items = document.querySelectorAll('.order-item');
+    for(var i=0;i<items.length;i++){
+      (function(item){
+        item.addEventListener('dragstart', function(e){
+          dragSrc = item;
+          item.classList.add('dragging');
+          if(e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+        });
+        item.addEventListener('dragend', function(){ item.classList.remove('dragging'); });
+        item.addEventListener('dragover', function(e){ e.preventDefault(); });
+        item.addEventListener('drop', function(e){
+          e.preventDefault();
+          if(dragSrc && dragSrc!==item){
+            var srcIdx = parseInt(dragSrc.getAttribute('data-idx'));
+            var tgtIdx = parseInt(item.getAttribute('data-idx'));
+            var tmp = orderItems[srcIdx];
+            orderItems[srcIdx] = orderItems[tgtIdx];
+            orderItems[tgtIdx] = tmp;
+            renderOrder();
+          }
+        });
+      })(items[i]);
+    }
+  }
+  function checkOrder(){
+    var sorted = orderData.slice().sort(function(a,b){
+      return parseFloat(a.replace(',','.')) - parseFloat(b.replace(',','.'));
+    });
+    var correct = orderItems.every(function(v,i){
+      return parseFloat(v.replace(',','.')) === parseFloat(sorted[i].replace(',','.'));
+    });
+    var fb = document.getElementById('orderFeedback');
+    if(correct){
+      fb.innerHTML = '<span style="color:var(--accent-3)"><i class="fas fa-check"></i> Sempurna! Urutan sudah benar.</span>';
+    } else {
+      fb.innerHTML = '<span style="color:var(--accent-2)"><i class="fas fa-xmark"></i> Belum tepat. Urutan benar: 0,38 &lt; 0,399 &lt; 0,4 &lt; 0,415 &lt; 0,42</span>';
+    }
+  }
+  function shuffleOrder(){
+    orderItems = orderData.slice().sort(function(){ return Math.random()-0.5; });
+    renderOrder();
+    document.getElementById('orderFeedback').textContent='';
+  }
+  document.getElementById('orderCheckBtn').addEventListener('click', checkOrder);
+  document.getElementById('orderShuffleBtn').addEventListener('click', shuffleOrder);
+  shuffleOrder();
+
+  /* ============ FRACTION TO DECIMAL CALC ============ */
+  function calcFraction(){
+    var n = parseInt(document.getElementById('numIn').value);
+    var d = parseInt(document.getElementById('denIn').value);
+    if(!d || isNaN(n)){ document.getElementById('fracRes').textContent='—'; return; }
+    var res = n/d;
+    document.getElementById('fracRes').textContent = res.toString().replace('.',',');
+    var steps = n+' ÷ '+d;
+    if(d===10||d===100||d===1000){
+      steps += ' = '+res.toString().replace('.',',');
+    } else if([2,4,5,8,20,25,50].indexOf(d)!==-1){
+      steps += ' = '+res.toString().replace('.',',');
+    } else {
+      steps += ' ≈ '+res.toFixed(4).replace('.',',');
+    }
+    document.getElementById('fracSteps').innerHTML = steps;
+  }
+  document.getElementById('calcFracBtn').addEventListener('click', calcFraction);
+
+  /* ============ DECIMAL TO FRACTION ============ */
+  function gcd(a,b){ return b ? gcd(b,a%b) : a; }
+  function convertDec(){
+    var inp = document.getElementById('decIn').value.replace('.',',');
+    var num = parseFloat(inp.replace(',','.'));
+    if(isNaN(num)){ document.getElementById('decResult').innerHTML='—'; return; }
+    var decDigits = (inp.split(',')[1]||'').length;
+    var denom = Math.pow(10,decDigits);
+    var numer = Math.round(num*denom);
+    var g = gcd(numer,denom);
+    var sn = numer/g, sd = denom/g;
+    document.getElementById('decResult').innerHTML =
+      '<span class="frac"><span class="top">'+numer+'</span><span class="bot">'+denom+'</span></span>'+
+      '<span style="color:var(--fg-dim);margin:0 10px">=</span>'+
+      '<span class="frac"><span class="top">'+sn+'</span><span class="bot">'+sd+'</span></span>';
+    document.getElementById('decSteps').innerHTML = inp+' → '+numer+'/'+denom+' → sederhanakan (÷'+g+') → <strong style="color:var(--accent-3)">'+sn+'/'+sd+'</strong>';
+  }
+  document.getElementById('decIn').addEventListener('input', convertDec);
+
+  /* ============ QUESTION BANK ============ */
+  var questions = {
+    t1: [
+      ['"Tujuh persepuluh" dalam notasi desimal adalah...',['0,7','0,07','7,0','0,007'],0,'7 persepuluh = 7/10 = 0,7. Satu angka di belakang koma berarti persepuluhan.'],
+      ['Bilangan "tiga koma lima" ditulis...',['3,5','3.5','35','0,35'],0,'Tiga koma lima = 3 + 5/10 = 3,5.'],
+      ['0,25 dibaca...',['nol koma dua lima','nol koma dua lima perempat','nol dua lima','dua puluh lima'],0,'Bagian setelah koma dibaca angka per angka: nol koma dua lima.'],
+      ['Notasi desimal dari 2 + 3/10 + 4/100 adalah...',['2,34','2,43','23,4','0,234'],0,'2 satuan + 3 persepuluh + 4 perseratus = 2,34.'],
+      ['Bilangan "lima belas koma nol dua" ditulis...',['15,02','15,2','15,20','1,502'],0,'Lima belas = 15, nol dua = 0,02 → 15,02.'],
+      ['1,8 artinya...',['1 + 8/10','1 + 8/100','18/100','1 + 8'],0,'1,8 = 1 satuan + 8 persepuluh = 1 + 8/10.'],
+      ['Notasi desimal dari 5/100 adalah...',['0,05','0,5','0,005','5,00'],0,'5 per 100 = 5 dibagi 100 = 0,05 (dua angka di belakang koma).'],
+      ['"Empat puluh dan sepersepuluh" dalam desimal = ?',['40,1','4,01','401','0,401'],0,'40 + 1/10 = 40,1.'],
+      ['Bilangan 0,9 dibaca...',['nol koma sembilan','sembilan persepuluh','nol sembilan','sembilan koma nol'],0,'0,9 dibaca "nol koma sembilan" atau "sembilan persepuluh".'],
+      ['Notasi desimal dari 12 + 5/10 + 0/100 + 3/1000 = ...',['12,503','12,53','12,035','12,305'],0,'12 + 0,5 + 0,00 + 0,003 = 12,503.'],
+      ['Bilangan 7,75 dibaca...',['tujuh koma tujuh lima','tujuh koma tujuh puluh lima','tujuh tujuh lima','tujuh dan tiga perempat'],0,'Setelah koma dibaca angka per angka: tujuh koma tujuh lima.'],
+      ['0,006 sama dengan...',['6/1000','6/100','6/10','6/6'],0,'Tiga angka di belakang koma berarti perseribuan: 6/1000.'],
+      ['Notasi desimal 9 + 0/10 + 4/100 adalah...',['9,04','9,4','0,94','90,4'],0,'9 + 0/10 + 4/100 = 9,04.'],
+      ['"Nol koma lima puluh tiga" ditulis...',['0,503','0,53','0,053','503'],0,'Nol koma lima nol tiga = 0,503.'],
+      ['Hasil 3/10 + 5/100 dalam desimal = ...',['0,35','0,53','0,305','0,035'],0,'3/10 = 0,3 dan 5/100 = 0,05 → 0,3 + 0,05 = 0,35.'],
+      ['Bilangan 2,5 dibaca...',['dua koma lima','dua setengah','dua lima','dua dan lima'],0,'2,5 dibaca "dua koma lima".'],
+      ['Notasi 4 satuan 6 persepuluh 2 perseratus adalah...',['4,62','4,26','46,2','0,462'],0,'4 + 6/10 + 2/100 = 4 + 0,6 + 0,02 = 4,62.'],
+      ['0,1 dibaca...',['nol koma satu','satu persepuluh','nol satu','satu desimal'],0,'0,1 dapat dibaca "nol koma satu" atau "satu persepuluh".'],
+      ['"Tiga perempat" dalam desimal = ...',['0,75','0,34','0,3/4','3,4'],0,'3/4 = 0,75 (3 dibagi 4 = 0,75).'],
+      ['Manakah yang merupakan notasi desimal?',['3,14','3/14','3:14','3-14'],0,'Notasi desimal menggunakan tanda koma (di Indonesia) atau titik (internasional) sebagai pemisah.']
+    ],
+    t2: [
+      ['Pada 45,67, angka 6 bernilai...',['6/10','6/100','6','60'],0,'Angka 6 berada di posisi persepuluhan, bernilai 6/10 = 0,6.'],
+      ['Nilai tempat angka 3 pada 23,45 adalah...',['3','30','300','0,3'],0,'Angka 3 pada posisi satuan, bernilai 3.'],
+      ['Pada 0,824, angka 2 bernilai...',['2/100','2/10','2/1000','20'],0,'Angka 2 di posisi perseratusan bernilai 2/100 = 0,02.'],
+      ['Nilai angka 7 pada 7,25 adalah...',['7','70','0,7','900'],0,'7 di posisi satuan, bernilai 7.'],
+      ['Pada 12,345, angka di posisi perseperseribuan adalah...',['5','4','3','2'],0,'Tiga angka di belakang koma = perseribuan. Angka terakhir (5) ada di posisi perseperseribuan.'],
+      ['Pada 8,09, angka 9 bernilai...',['9/100','9/10','9','90'],0,'9 berada di posisi perseratusan (karena ada 2 angka di belakang koma).'],
+      ['Nilai tempat angka 4 pada 4,56 adalah...',['4','40','0,4','400'],0,'4 ada di posisi satuan, bernilai 4.'],
+      ['Pada 0,007, angka 7 bernilai...',['7/1000','7/100','7/10','7'],0,'7 di posisi ke-3 di belakang koma = perseperseribuan = 7/1000.'],
+      ['Pada 56,21, angka 5 bernilai...',['50','5','500','0,5'],0,'5 di posisi puluhan, bernilai 50.'],
+      ['Nilai tempat angka 1 pada 0,312 adalah...',['1/100','1/10','1/1000','1'],0,'1 di posisi perseratusan (digit kedua setelah koma) = 1/100.'],
+      ['Pada 9,40, angka 4 bernilai...',['4/10','4/100','40','4'],0,'4 di posisi persepuluhan = 4/10 = 0,4.'],
+      ['Pada 123,456, angka 2 bernilai...',['20','2','200','0,2'],0,'2 di posisi puluhan = 20.'],
+      ['Nilai tempat angka 5 pada 0,05 adalah...',['5/100','5/10','5','50'],0,'5 di posisi perseratusan = 5/100.'],
+      ['Pada 6,789, angka 8 bernilai...',['8/100','8/10','8/1000','80'],0,'8 di posisi perseratusan = 8/100.'],
+      ['Pada 0,4, angka 4 bernilai...',['4/10','4/100','4','40'],0,'4 di posisi persepuluhan = 4/10.'],
+      ['Pada 17,283, angka 2 bernilai...',['2/10','2/100','2/1000','20'],0,'2 di posisi pertama setelah koma = persepuluhan = 2/10.'],
+      ['Nilai angka 9 pada 9,01 adalah...',['9','90','0,9','900'],0,'9 di posisi satuan = 9.'],
+      ['Pada 0,125, angka 1 bernilai...',['1/10','1/100','1/1000','1'],0,'1 di posisi pertama setelah koma = persepuluhan = 1/10.'],
+      ['Pada 50,7, angka 5 bernilai...',['50','5','500','0,5'],0,'5 di posisi puluhan = 50.'],
+      ['Pada 3,46, angka 4 bernilai...',['4/10','4/100','40','4'],0,'4 di posisi persepuluhan = 4/10 = 0,4.']
+    ],
+    t3: [
+      ['Bulatkan 3,47 ke bilangan bulat terdekat.',['3','4','3,5','3,4'],0,'Lihat angka pertama setelah koma (4). Karena 4<5, bulatkan ke bawah → 3.'],
+      ['Bulatkan 7,6 ke bilangan bulat terdekat.',['8','7','7,5','6'],0,'Angka setelah koma (6) ≥5, bulatkan ke atas → 8.'],
+      ['Bulatkan 2,34 ke 1 desimal.',['2,3','2,4','2','2,35'],0,'Lihat digit ke-2 (4). Karena 4<5, digit batas tetap → 2,3.'],
+      ['Bulatkan 5,678 ke 2 desimal.',['5,68','5,67','5,7','5,680'],0,'Lihat digit ke-3 (8). Karena 8≥5, naikkan digit batas → 5,68.'],
+      ['Bulatkan 9,049 ke 1 desimal.',['9,0','9,1','9','9,5'],0,'Lihat digit ke-2 (4). Karena 4<5, tetap → 9,0.'],
+      ['Bulatkan 12,5 ke bilangan bulat.',['13','12','12,5','11'],0,'Angka setelah koma (5) → aturan ≥5, bulatkan ke atas → 13.'],
+      ['Bulatkan 0,083 ke 2 desimal.',['0,08','0,09','0,1','0,083'],0,'Lihat digit ke-3 (3). Karena 3<5, tetap → 0,08.'],
+      ['Bulatkan 4,25 ke 1 desimal.',['4,3','4,2','4,25','4'],0,'Lihat digit ke-2 (5). Karena 5≥5, naikkan → 4,3.'],
+      ['Bulatkan 6,999 ke 2 desimal.',['7,00','6,99','7','6,90'],0,'Lihat digit ke-3 (9). 9≥5, naikkan: 6,99→7,00.'],
+      ['Bulatkan 0,5 ke bilangan bulat.',['1','0','0,5','5'],0,'5 ≥ 5 → bulatkan ke atas → 1.'],
+      ['Bulatkan 8,15 ke 1 desimal.',['8,2','8,1','8','8,15'],0,'Lihat digit ke-2 (5). 5≥5, naikkan → 8,2.'],
+      ['Bulatkan 3,14159 ke 3 desimal.',['3,142','3,141','3,14','3,150'],0,'Lihat digit ke-4 (5). 5≥5, naikkan → 3,142.'],
+      ['Bulatkan 0,625 ke 2 desimal.',['0,63','0,62','0,6','0,625'],0,'Lihat digit ke-3 (5). 5≥5, naikkan → 0,63.'],
+      ['Bulatkan 17,48 ke bilangan bulat.',['17','18','17,5','20'],0,'Digit pertama setelah koma (4) <5 → tetap 17.'],
+      ['Bulatkan 2,718 ke 2 desimal.',['2,72','2,71','2,7','2,80'],0,'Lihat digit ke-3 (8). 8≥5, naikkan → 2,72.'],
+      ['Bulatkan 0,049 ke 1 desimal.',['0,0','0,1','0,05','0'],0,'Lihat digit ke-2 (4). 4<5 → tetap 0,0.'],
+      ['Bulatkan 5,555 ke 2 desimal.',['5,56','5,55','5,6','5,57'],0,'Lihat digit ke-3 (5). 5≥5, naikkan → 5,56.'],
+      ['Bulatkan 99,99 ke 1 desimal.',['100,0','99,9','100','99,99'],0,'Lihat digit ke-2 (9). 9≥5, naikkan 99,9→100,0.'],
+      ['Bulatkan 1,2345 ke 3 desimal.',['1,235','1,234','1,23','1,24'],0,'Lihat digit ke-4 (5). 5≥5, naikkan → 1,235.'],
+      ['Bulatkan 0,95 ke bilangan bulat.',['1','0','0,9','10'],0,'9≥5, bulatkan ke atas → 1.']
+    ],
+    t4: [
+      ['Bandingkan: 0,5 ... 0,8',['<','>','≈','='],0,'0,5 < 0,8 karena 5 < 8 di posisi persepuluhan.'],
+      ['Bandingkan: 0,50 ... 0,5',['=','>','<','≠'],0,'0,50 = 0,5 (menambahkan nol di akhir tidak mengubah nilai).'],
+      ['Bandingkan: 1,25 ... 1,3',['<','>','≈','='],0,'Samakan: 1,25 vs 1,30 → 25<30 → 1,25 < 1,3.'],
+      ['Bandingkan: 0,9 ... 0,11',['>','<','≈','='],0,'0,9 = 0,90 dan 0,11. 90>11 → 0,9 > 0,11.'],
+      ['Bandingkan: 0,3 ... 0,30',['=','>','<','≠'],0,'0,3 = 0,30 (nol di akhir tidak mengubah nilai).'],
+      ['Bandingkan: 2,4 ... 2,39',['>','<','≈','='],0,'Samakan: 2,40 vs 2,39 → 40>39 → 2,4 > 2,39.'],
+      ['Bandingkan: 0,07 ... 0,7',['<','>','≈','='],0,'0,07 vs 0,70 → 7<70 → 0,07 < 0,7.'],
+      ['Bandingkan: 1,5 ... 1,45',['>','<','≈','='],0,'Samakan: 1,50 vs 1,45 → 50>45 → 1,5 > 1,45.'],
+      ['Bandingkan: 0,4 ... 0,40',['=','>','<','≠'],0,'0,4 = 0,40.'],
+      ['Bandingkan: 0,6 ... 0,59',['>','<','≈','='],0,'0,60 vs 0,59 → 60>59 → 0,6 > 0,59.'],
+      ['Bandingkan: 0,99 ... 1,0',['<','>','≈','='],0,'0,99 < 1,0 (0,99 < 1,00).'],
+      ['Bandingkan: 3,14 ... 3,15',['<','>','≈','='],0,'3,14 < 3,15 (14<15).'],
+      ['Bandingkan: 0,3 ... 0,299',['>','<','≈','='],0,'0,300 vs 0,299 → 300>299 → 0,3 > 0,299.'],
+      ['Bandingkan: 2,05 ... 2,1',['<','>','≈','='],0,'2,05 vs 2,10 → 05<10 → 2,05 < 2,1.'],
+      ['Bandingkan: 0,75 ... 0,8',['<','>','≈','='],0,'0,75 vs 0,80 → 75<80 → 0,75 < 0,8.'],
+      ['Bandingkan: 4,4 ... 4,40',['=','>','<','≠'],0,'4,4 = 4,40.'],
+      ['Bandingkan: 0,25 ... 0,250',['=','>','<','≠'],0,'0,25 = 0,250.'],
+      ['Bandingkan: 1,9 ... 1,89',['>','<','≈','='],0,'1,90 vs 1,89 → 90>89 → 1,9 > 1,89.'],
+      ['Bandingkan: 0,1 ... 0,099',['>','<','≈','='],0,'0,100 vs 0,099 → 100>99 → 0,1 > 0,099.'],
+      ['Bandingkan: 5,5 ... 5,55',['<','>','≈','='],0,'5,50 vs 5,55 → 50<55 → 5,5 < 5,55.']
+    ],
+    t5: [
+      ['Urutkan dari terkecil: 0,4 ; 0,38 ; 0,42 ; 0,41',['0,38 ; 0,4 ; 0,41 ; 0,42','0,4 ; 0,38 ; 0,41 ; 0,42','0,42 ; 0,41 ; 0,4 ; 0,38','0,38 ; 0,42 ; 0,4 ; 0,41'],0,'Samakan: 0,40 ; 0,38 ; 0,42 ; 0,41. Urut: 0,38 ; 0,40 ; 0,41 ; 0,42.'],
+      ['Urutkan dari terbesar: 0,5 ; 0,55 ; 0,45 ; 0,4',['0,55 ; 0,5 ; 0,45 ; 0,4','0,4 ; 0,45 ; 0,5 ; 0,55','0,5 ; 0,55 ; 0,45 ; 0,4','0,55 ; 0,45 ; 0,5 ; 0,4'],0,'0,55 > 0,50 > 0,45 > 0,40.'],
+      ['Urutkan dari terkecil: 0,1 ; 0,01 ; 0,001 ; 0,11',['0,001 ; 0,01 ; 0,1 ; 0,11','0,1 ; 0,01 ; 0,001 ; 0,11','0,11 ; 0,1 ; 0,01 ; 0,001','0,001 ; 0,01 ; 0,11 ; 0,1'],0,'0,001 < 0,01 < 0,10 < 0,11.'],
+      ['Urutkan dari terbesar: 0,9 ; 0,89 ; 0,91 ; 0,899',['0,91 ; 0,9 ; 0,899 ; 0,89','0,9 ; 0,91 ; 0,899 ; 0,89','0,89 ; 0,899 ; 0,9 ; 0,91','0,91 ; 0,899 ; 0,9 ; 0,89'],0,'0,910 > 0,900 > 0,899 > 0,890.'],
+      ['Urutkan dari terkecil: 1,2 ; 1,02 ; 1,23 ; 1,003',['1,003 ; 1,02 ; 1,2 ; 1,23','1,2 ; 1,02 ; 1,003 ; 1,23','1,003 ; 1,2 ; 1,02 ; 1,23','1,23 ; 1,2 ; 1,02 ; 1,003'],0,'1,003 < 1,020 < 1,200 < 1,230.'],
+      ['Urutkan dari terbesar: 0,7 ; 0,71 ; 0,69 ; 0,701',['0,71 ; 0,701 ; 0,7 ; 0,69','0,7 ; 0,71 ; 0,701 ; 0,69','0,69 ; 0,7 ; 0,701 ; 0,71','0,71 ; 0,7 ; 0,701 ; 0,69'],0,'0,710 > 0,701 > 0,700 > 0,690.'],
+      ['Urutkan dari terkecil: 0,25 ; 0,5 ; 0,2 ; 0,52',['0,2 ; 0,25 ; 0,5 ; 0,52','0,2 ; 0,5 ; 0,25 ; 0,52','0,52 ; 0,5 ; 0,25 ; 0,2','0,25 ; 0,2 ; 0,5 ; 0,52'],0,'0,20 < 0,25 < 0,50 < 0,52.'],
+      ['Urutkan dari terbesar: 2,5 ; 2,55 ; 2,45 ; 2,4',['2,55 ; 2,5 ; 2,45 ; 2,4','2,4 ; 2,45 ; 2,5 ; 2,55','2,55 ; 2,45 ; 2,5 ; 2,4','2,5 ; 2,55 ; 2,45 ; 2,4'],0,'2,550 > 2,500 > 2,450 > 2,400.'],
+      ['Urutkan dari terkecil: 0,3 ; 0,33 ; 0,303 ; 0,033',['0,033 ; 0,3 ; 0,303 ; 0,33','0,3 ; 0,33 ; 0,303 ; 0,033','0,033 ; 0,303 ; 0,3 ; 0,33','0,033 ; 0,3 ; 0,33 ; 0,303'],0,'0,033 < 0,300 < 0,303 < 0,330.'],
+      ['Urutkan dari terbesar: 0,8 ; 0,81 ; 0,79 ; 0,801',['0,81 ; 0,801 ; 0,8 ; 0,79','0,8 ; 0,81 ; 0,801 ; 0,79','0,79 ; 0,8 ; 0,801 ; 0,81','0,81 ; 0,8 ; 0,801 ; 0,79'],0,'0,810 > 0,801 > 0,800 > 0,790.'],
+      ['Urutkan dari terkecil: 0,6 ; 0,66 ; 0,06 ; 0,606',['0,06 ; 0,6 ; 0,606 ; 0,66','0,6 ; 0,66 ; 0,06 ; 0,606','0,06 ; 0,606 ; 0,6 ; 0,66','0,66 ; 0,606 ; 0,6 ; 0,06'],0,'0,060 < 0,600 < 0,606 < 0,660.'],
+      ['Urutkan dari terbesar: 1,5 ; 1,55 ; 1,45 ; 1,4',['1,55 ; 1,5 ; 1,45 ; 1,4','1,4 ; 1,45 ; 1,5 ; 1,55','1,55 ; 1,45 ; 1,5 ; 1,4','1,5 ; 1,55 ; 1,45 ; 1,4'],0,'1,550 > 1,500 > 1,450 > 1,400.'],
+      ['Urutkan dari terkecil: 0,12 ; 0,012 ; 0,21 ; 0,121',['0,012 ; 0,12 ; 0,121 ; 0,21','0,12 ; 0,012 ; 0,121 ; 0,21','0,21 ; 0,121 ; 0,12 ; 0,012','0,012 ; 0,121 ; 0,12 ; 0,21'],0,'0,012 < 0,120 < 0,121 < 0,210.'],
+      ['Urutkan dari terbesar: 0,4 ; 0,42 ; 0,38 ; 0,405',['0,42 ; 0,405 ; 0,4 ; 0,38','0,4 ; 0,42 ; 0,405 ; 0,38','0,38 ; 0,4 ; 0,405 ; 0,42','0,42 ; 0,4 ; 0,405 ; 0,38'],0,'0,420 > 0,405 > 0,400 > 0,380.'],
+      ['Urutkan dari terkecil: 0,5 ; 0,49 ; 0,505 ; 0,499',['0,49 ; 0,499 ; 0,5 ; 0,505','0,5 ; 0,49 ; 0,499 ; 0,505','0,505 ; 0,5 ; 0,499 ; 0,49','0,49 ; 0,5 ; 0,499 ; 0,505'],0,'0,490 < 0,499 < 0,500 < 0,505.'],
+      ['Urutkan dari terbesar: 3,14 ; 3,2 ; 3,141 ; 3,1',['3,2 ; 3,141 ; 3,14 ; 3,1','3,14 ; 3,141 ; 3,2 ; 3,1','3,1 ; 3,14 ; 3,141 ; 3,2','3,2 ; 3,14 ; 3,141 ; 3,1'],0,'3,200 > 3,141 > 3,140 > 3,100.'],
+      ['Urutkan dari terkecil: 0,9 ; 0,99 ; 0,89 ; 0,999',['0,89 ; 0,9 ; 0,99 ; 0,999','0,9 ; 0,99 ; 0,89 ; 0,999','0,999 ; 0,99 ; 0,9 ; 0,89','0,89 ; 0,99 ; 0,9 ; 0,999'],0,'0,890 < 0,900 < 0,990 < 0,999.'],
+      ['Urutkan dari terbesar: 0,55 ; 0,5 ; 0,555 ; 0,505',['0,555 ; 0,55 ; 0,505 ; 0,5','0,5 ; 0,505 ; 0,55 ; 0,555','0,55 ; 0,555 ; 0,505 ; 0,5','0,555 ; 0,505 ; 0,55 ; 0,5'],0,'0,555 > 0,550 > 0,505 > 0,500.'],
+      ['Urutkan dari terkecil: 0,4 ; 0,04 ; 0,44 ; 0,404',['0,04 ; 0,4 ; 0,404 ; 0,44','0,4 ; 0,04 ; 0,404 ; 0,44','0,44 ; 0,404 ; 0,4 ; 0,04','0,04 ; 0,404 ; 0,4 ; 0,44'],0,'0,040 < 0,400 < 0,404 < 0,440.'],
+      ['Urutkan dari terbesar: 1,9 ; 1,95 ; 1,85 ; 1,905',['1,95 ; 1,905 ; 1,9 ; 1,85','1,9 ; 1,95 ; 1,905 ; 1,85','1,85 ; 1,9 ; 1,905 ; 1,95','1,95 ; 1,9 ; 1,905 ; 1,85'],0,'1,950 > 1,905 > 1,900 > 1,850.']
+    ],
+    t6: [
+      ['3/4 dalam desimal = ...',['0,75','0,34','0,25','3,4'],0,'3÷4 = 0,75. Atau: 3/4 = 75/100 = 0,75.'],
+      ['1/2 dalam desimal = ...',['0,5','0,2','1,2','0,12'],0,'1÷2 = 0,5. Atau: 1/2 = 5/10 = 0,5.'],
+      ['2/5 dalam desimal = ...',['0,4','0,25','0,5','2,5'],0,'2/5 = 4/10 = 0,4.'],
+      ['7/10 dalam desimal = ...',['0,7','0,07','7,0','0,17'],0,'Penyebut 10 → langsung 0,7.'],
+      ['1/4 dalam desimal = ...',['0,25','0,4','0,04','1,4'],0,'1÷4 = 0,25. Atau 1/4 = 25/100 = 0,25.'],
+      ['3/5 dalam desimal = ...',['0,6','0,35','0,5','0,3'],0,'3/5 = 6/10 = 0,6.'],
+      ['1/5 dalam desimal = ...',['0,2','0,5','0,15','2,0'],0,'1/5 = 2/10 = 0,2.'],
+      ['9/10 dalam desimal = ...',['0,9','0,09','9,0','0,19'],0,'Penyebut 10 → 0,9.'],
+      ['3/10 dalam desimal = ...',['0,3','0,03','3,0','0,13'],0,'Penyebut 10 → 0,3.'],
+      ['1/8 dalam desimal = ...',['0,125','0,18','0,8','0,018'],0,'1÷8 = 0,125.'],
+      ['5/8 dalam desimal = ...',['0,625','0,58','0,5','0,875'],0,'5÷8 = 0,625.'],
+      ['1/20 dalam desimal = ...',['0,05','0,2','0,5','0,02'],0,'1/20 = 5/100 = 0,05.'],
+      ['3/8 dalam desimal = ...',['0,375','0,38','0,8','0,35'],0,'3÷8 = 0,375.'],
+      ['7/8 dalam desimal = ...',['0,875','0,78','0,7','0,87'],0,'7÷8 = 0,875.'],
+      ['1/25 dalam desimal = ...',['0,04','0,25','0,4','0,025'],0,'1/25 = 4/100 = 0,04.'],
+      ['11/20 dalam desimal = ...',['0,55','0,11','0,2','0,5'],0,'11/20 = 55/100 = 0,55.'],
+      ['2/25 dalam desimal = ...',['0,08','0,25','0,2','0,8'],0,'2/25 = 8/100 = 0,08.'],
+      ['1/3 dalam desimal = ...',['0,333...','0,3','0,13','0,30'],0,'1÷3 = 0,333... (desimal berulang).'],
+      ['2/4 dalam desimal = ...',['0,5','0,4','0,2','0,25'],0,'2/4 = 1/2 = 0,5.'],
+      ['17/20 dalam desimal = ...',['0,85','0,17','0,8','0,75'],0,'17/20 = 85/100 = 0,85.']
+    ],
+    t7: [
+      ['0,5 dalam pecahan = ...',['1/2','5/10','1/5','5/100'],0,'0,5 = 5/10 = 1/2 (dibagi 5).'],
+      ['0,25 dalam pecahan = ...',['1/4','25/100','1/25','1/40'],0,'0,25 = 25/100 = 1/4 (dibagi 25).'],
+      ['0,75 dalam pecahan = ...',['3/4','75/100','3/25','7,5'],0,'0,75 = 75/100 = 3/4 (dibagi 25).'],
+      ['0,2 dalam pecahan = ...',['1/5','2/10','1/2','2/100'],0,'0,2 = 2/10 = 1/5 (dibagi 2).'],
+      ['0,4 dalam pecahan = ...',['2/5','4/10','1/4','0,4'],0,'0,4 = 4/10 = 2/5 (dibagi 2).'],
+      ['0,6 dalam pecahan = ...',['3/5','6/10','1/6','6/100'],0,'0,6 = 6/10 = 3/5 (dibagi 2).'],
+      ['0,8 dalam pecahan = ...',['4/5','8/10','1/8','8/100'],0,'0,8 = 8/10 = 4/5 (dibagi 2).'],
+      ['0,125 dalam pecahan = ...',['1/8','125/1000','1/125','1/4'],0,'0,125 = 125/1000 = 1/8 (dibagi 125).'],
+      ['0,05 dalam pecahan = ...',['1/20','5/100','1/5','1/50'],0,'0,05 = 5/100 = 1/20 (dibagi 5).'],
+      ['0,1 dalam pecahan = ...',['1/10','1/100','1','1/1'],0,'0,1 = 1/10.'],
+      ['0,35 dalam pecahan = ...',['7/20','35/100','1/35','7/100'],0,'0,35 = 35/100 = 7/20 (dibagi 5).'],
+      ['0,45 dalam pecahan = ...',['9/20','45/100','9/100','1/45'],0,'0,45 = 45/100 = 9/20 (dibagi 5).'],
+      ['0,55 dalam pecahan = ...',['11/20','55/100','11/100','1/55'],0,'0,55 = 55/100 = 11/20 (dibagi 5).'],
+      ['0,65 dalam pecahan = ...',['13/20','65/100','13/100','1/65'],0,'0,65 = 65/100 = 13/20 (dibagi 5).'],
+      ['0,85 dalam pecahan = ...',['17/20','85/100','17/100','1/85'],0,'0,85 = 85/100 = 17/20 (dibagi 5).'],
+      ['0,95 dalam pecahan = ...',['19/20','95/100','19/100','1/95'],0,'0,95 = 95/100 = 19/20 (dibagi 5).'],
+      ['0,04 dalam pecahan = ...',['1/25','4/100','1/4','1/100'],0,'0,04 = 4/100 = 1/25 (dibagi 4).'],
+      ['0,08 dalam pecahan = ...',['2/25','8/100','1/8','2/100'],0,'0,08 = 8/100 = 2/25 (dibagi 4).'],
+      ['0,625 dalam pecahan = ...',['5/8','625/1000','5/100','1/8'],0,'0,625 = 625/1000 = 5/8 (dibagi 125).'],
+      ['0,875 dalam pecahan = ...',['7/8','875/1000','7/100','1/8'],0,'0,875 = 875/1000 = 7/8 (dibagi 125).']
+    ],
+    t8: [
+      ['2,5 + 1,4 = ...',['3,9','3,5','2,9','3,4'],0,'2,5+1,4 = 3,9. Sejajarkan koma, jumlahkan.'],
+      ['5,8 - 2,3 = ...',['3,5','3,8','2,5','8,1'],0,'5,8-2,3 = 3,5.'],
+      ['3,75 + 2,4 = ...',['6,15','6,1','5,79','6,05'],0,'Samakan: 3,75 + 2,40 = 6,15.'],
+      ['5,8 - 2,36 = ...',['3,44','3,42','3,54','3,46'],0,'5,80 - 2,36 = 3,44.'],
+      ['0,5 + 0,25 = ...',['0,75','0,30','0,7','0,55'],0,'0,50 + 0,25 = 0,75.'],
+      ['4,2 - 1,75 = ...',['2,45','2,55','2,5','3,45'],0,'4,20 - 1,75 = 2,45.'],
+      ['1,1 + 2,2 = ...',['3,3','3,2','3,4','3,5'],0,'1,1 + 2,2 = 3,3.'],
+      ['6,5 - 3,5 = ...',['3,0','3,5','3,1','4,0'],0,'6,5 - 3,5 = 3,0.'],
+      ['7,25 + 1,5 = ...',['8,75','8,7','8,5','9,25'],0,'7,25 + 1,50 = 8,75.'],
+      ['10 - 3,4 = ...',['6,6','7,6','6,4','7,4'],0,'10,0 - 3,4 = 6,6.'],
+      ['0,1 + 0,9 = ...',['1,0','0,10','0,1','0,19'],0,'0,1 + 0,9 = 1,0.'],
+      ['2,5 + 3,75 = ...',['6,25','6,3','5,80','6,05'],0,'2,50 + 3,75 = 6,25.'],
+      ['8,4 - 5,75 = ...',['2,65','2,75','2,6','3,65'],0,'8,40 - 5,75 = 2,65.'],
+      ['0,25 + 0,75 = ...',['1,0','0,10','1,25','0,100'],0,'0,25 + 0,75 = 1,00.'],
+      ['12,5 + 3,75 = ...',['16,25','16,3','15,80','16,05'],0,'12,50 + 3,75 = 16,25.'],
+      ['9,8 - 4,95 = ...',['4,85','4,75','4,9','5,85'],0,'9,80 - 4,95 = 4,85.'],
+      ['0,3 + 0,03 = ...',['0,33','0,6','0,36','0,033'],0,'0,30 + 0,03 = 0,33.'],
+      ['15,5 - 7,25 = ...',['8,25','8,3','8,5','8,75'],0,'15,50 - 7,25 = 8,25.'],
+      ['4,5 + 4,5 = ...',['9,0','8,10','9,5','4,10'],0,'4,5 + 4,5 = 9,0.'],
+      ['7,1 - 3,85 = ...',['3,25','3,3','3,75','3,15'],0,'7,10 - 3,85 = 3,25.']
+    ],
+    t9: [
+      ['0,5 × 0,5 = ... (via pecahan)',['0,25','0,10','2,5','5'],0,'1/2 × 1/2 = 1/4 = 0,25.'],
+      ['0,25 × 0,4 = ... (via pecahan)',['0,1','0,65','1,0','0,010'],0,'1/4 × 2/5 = 2/20 = 1/10 = 0,1.'],
+      ['0,75 ÷ 0,5 = ... (via pecahan)',['1,5','0,25','1,25','0,4'],0,'3/4 ÷ 1/2 = 3/4 × 2/1 = 6/4 = 3/2 = 1,5.'],
+      ['0,5 × 0,8 = ... (via pecahan)',['0,4','0,13','0,45','4,0'],0,'1/2 × 4/5 = 4/10 = 0,4.'],
+      ['0,6 ÷ 0,2 = ... (via pecahan)',['3','0,3','0,12','1,2'],0,'3/5 ÷ 1/5 = 3/5 × 5/1 = 3.'],
+      ['0,25 × 0,8 = ... (via pecahan)',['0,2','0,16','2,5','0,33'],0,'1/4 × 4/5 = 4/20 = 1/5 = 0,2.'],
+      ['0,5 × 0,2 = ... (via pecahan)',['0,1','0,10','0,25','1,0'],0,'1/2 × 1/5 = 1/10 = 0,1.'],
+      ['0,4 ÷ 0,8 = ... (via pecahan)',['0,5','0,32','2,0','0,05'],0,'2/5 ÷ 4/5 = 2/5 × 5/4 = 10/20 = 1/2 = 0,5.'],
+      ['0,75 × 0,4 = ... (via pecahan)',['0,3','0,30','3,0','0,115'],0,'3/4 × 2/5 = 6/20 = 3/10 = 0,3.'],
+      ['0,8 ÷ 0,4 = ... (via pecahan)',['2','0,2','0,32','0,5'],0,'4/5 ÷ 2/5 = 4/5 × 5/2 = 20/10 = 2.'],
+      ['0,2 × 0,3 = ... (via pecahan)',['0,06','0,6','0,5','0,23'],0,'1/5 × 3/10 = 3/50 = 0,06.'],
+      ['0,9 ÷ 0,3 = ... (via pecahan)',['3','0,3','0,27','0,12'],0,'9/10 ÷ 3/10 = 9/10 × 10/3 = 90/30 = 3.'],
+      ['0,25 × 0,2 = ... (via pecahan)',['0,05','0,5','0,45','0,022'],0,'1/4 × 1/5 = 1/20 = 0,05.'],
+      ['0,6 × 0,5 = ... (via pecahan)',['0,3','0,30','0,56','3,0'],0,'3/5 × 1/2 = 3/10 = 0,3.'],
+      ['0,8 ÷ 0,2 = ... (via pecahan)',['4','0,4','0,16','0,5'],0,'4/5 ÷ 1/5 = 4/5 × 5 = 4.'],
+      ['0,1 × 0,1 = ... (via pecahan)',['0,01','0,1','0,2','1,0'],0,'1/10 × 1/10 = 1/100 = 0,01.'],
+      ['0,5 ÷ 0,25 = ... (via pecahan)',['2','0,5','1,25','0,125'],0,'1/2 ÷ 1/4 = 1/2 × 4 = 2.'],
+      ['0,125 × 0,8 = ... (via pecahan)',['0,1','0,128','1,0','0,0125'],0,'1/8 × 4/5 = 4/40 = 1/10 = 0,1.'],
+      ['0,4 × 0,4 = ... (via pecahan)',['0,16','0,8','0,44','0,4'],0,'2/5 × 2/5 = 4/25 = 16/100 = 0,16.'],
+      ['0,6 ÷ 0,4 = ... (via pecahan)',['1,5','0,24','1,0','0,15'],0,'3/5 ÷ 2/5 = 3/5 × 5/2 = 15/10 = 3/2 = 1,5.']
+    ],
+    t10: [
+      ['Ibu membeli 2,5 kg gula @ Rp 14.500. Berapa total harganya?',['Rp 36.250','Rp 17.000','Rp 36.000','Rp 12.500'],0,'2,5 × 14.500 = 36.250.'],
+      ['Tinggi Andi 1,45 m, tinggi Budi 0,12 m lebih pendek. Berapa tinggi Budi?',['1,33 m','1,57 m','1,55 m','1,30 m'],0,'1,45 - 0,12 = 1,33 m.'],
+      ['Sebuah mobil menempuh 12,5 km dalam 0,5 jam. Berapa kecepatannya?',['25 km/jam','6,25 km/jam','12 km/jam','62,5 km/jam'],0,'12,5 ÷ 0,5 = 25 km/jam.'],
+      ['Harga 0,5 kg apel Rp 7.500. Berapa harga 1 kg?',['Rp 15.000','Rp 3.750','Rp 7.500','Rp 22.500'],0,'0,5 kg = Rp 7.500 → 1 kg = 7.500 × 2 = Rp 15.000.'],
+      ['Suhu pagi 24,5°C, naik 3,75°C siang. Suhu siang?',['28,25°C','28,15°C','27,25°C','28,75°C'],0,'24,5 + 3,75 = 28,25°C.'],
+      ['5,5 liter air dibagi ke 11 botol sama rata. Kapasitas tiap botol?',['0,5 liter','0,55 liter','5 liter','1,1 liter'],0,'5,5 ÷ 11 = 0,5 liter.'],
+      ['Ayah membeli 3,75 kg beras dan 2,5 kg tepung. Total berat?',['6,25 kg','6,75 kg','5,75 kg','6,50 kg'],0,'3,75 + 2,5 = 6,25 kg.'],
+      ['Sebuah roti seberat 0,125 kg. Berat 8 roti?',['1 kg','1,5 kg','0,8 kg','1,25 kg'],0,'0,125 × 8 = 1 kg.'],
+      ['Jarak rumah-sekolah 2,75 km. Andi pulang-perg. Total jarak?',['5,5 km','5,75 km','2,75 km','4,5 km'],0,'2,75 × 2 = 5,5 km.'],
+      ['Harga 1 buku Rp 4.500. Beli 2,5 lusin. Berapa total? (1 lusin=12)',['Rp 135.000','Rp 11.250','Rp 54.000','Rp 4.500'],0,'2,5 lusin = 30 buah. 30 × 4.500 = Rp 135.000.'],
+      ['Tabungan Rp 50.000, bunga 2,5% per bulan. Bunga bulan ini?',['Rp 1.250','Rp 12.500','Rp 500','Rp 2.500'],0,'2,5% × 50.000 = 0,025 × 50.000 = Rp 1.250.'],
+      ['Panjang tali 4,5 m dipotong 1,75 m. Sisa?',['2,75 m','2,25 m','3,25 m','6,25 m'],0,'4,5 - 1,75 = 2,75 m.'],
+      ['Berat badan 45,5 kg naik 2,25 kg. Berat sekarang?',['47,75 kg','47,25 kg','48 kg','47,5 kg'],0,'45,5 + 2,25 = 47,75 kg.'],
+      ['0,4 kg permen dibagi ke 8 anak. Tiap anak dapat?',['0,05 kg','0,4 kg','0,32 kg','0,5 kg'],0,'0,4 ÷ 8 = 0,05 kg.'],
+      ['Bensin 12,5 liter, habis 0,5 liter per km. Jarak tempuh?',['25 km','6,25 km','12 km','62,5 km'],0,'12,5 ÷ 0,5 = 25 km.'],
+      ['Harga 0,25 kg daging Rp 22.500. Harga 1 kg?',['Rp 90.000','Rp 5.625','Rp 22.500','Rp 45.000'],0,'0,25 kg = Rp 22.500 → 1 kg = 22.500 × 4 = Rp 90.000.'],
+      ['0,5 liter susu untuk 4 gelas sama rata. Isi tiap gelas?',['0,125 liter','0,5 liter','2 liter','0,25 liter'],0,'0,5 ÷ 4 = 0,125 liter.'],
+      ['Lari 0,75 km dalam 0,05 jam. Kecepatan?',['15 km/jam','0,15 km/jam','0,0375 km/jam','7,5 km/jam'],0,'0,75 ÷ 0,05 = 15 km/jam.'],
+      ['Buah 2,5 kg @ Rp 8.000. Berapa total?',['Rp 20.000','Rp 12.000','Rp 24.000','Rp 8.000'],0,'2,5 × 8.000 = Rp 20.000.'],
+      ['Tabungan 4 bulan Rp 125.000. Rata-rata per bulan?',['Rp 31.250','Rp 31.000','Rp 30.000','Rp 41.667'],0,'125.000 ÷ 4 = Rp 31.250.']
+    ]
+  };
+
+  /* ============ RENDER QUESTIONS DENGAN PENGACAKAN OPSI ============ */
+  function renderQuestions(topic, containerId){
+    var container = document.getElementById(containerId);
+    if(!container || !questions[topic]) return;
+    container.innerHTML='';
+    questions[topic].forEach(function(q,i){
+      var question = q[0];
+      var originalOptions = q[1];
+      var originalCorrectIdx = q[2];
+      var explanation = q[3];
+
+      // === ACAK OPSI JAWABAN (Fisher-Yates Shuffle) ===
+      var correctValue = originalOptions[originalCorrectIdx];
+      var options = originalOptions.slice();
+      for(var j = options.length - 1; j > 0; j--){
+        var k = Math.floor(Math.random() * (j + 1));
+        var temp = options[j];
+        options[j] = options[k];
+        options[k] = temp;
+      }
+      // Lacak posisi BARU jawaban benar setelah pengacakan
+      var correctIdx = options.indexOf(correctValue);
+
+      // Render kartu soal
+      var card = document.createElement('div');
+      card.className = 'q-card';
+      card.setAttribute('data-topic', topic);
+      card.setAttribute('data-qidx', i);
+
+      var optsHtml = options.map(function(opt, j){
+        return '<div class="q-opt" data-idx="' + j + '">' +
+                 '<div class="marker">' + String.fromCharCode(65 + j) + '</div>' +
+                 '<div>' + escapeHTML(opt) + '</div>' +
+               '</div>';
+      }).join('');
+
+      card.innerHTML =
+        '<div class="q-num">Soal ' + (i + 1) + '</div>' +
+        '<div class="q-text">' + escapeHTML(question) + '</div>' +
+        '<div class="q-options">' + optsHtml + '</div>' +
+        '<div class="q-actions">' +
+          '<button class="btn btn-primary" disabled><i class="fas fa-check"></i> Cek Jawaban</button>' +
+          '<button class="btn btn-ghost"><i class="fas fa-lightbulb"></i> Pembahasan</button>' +
+        '</div>' +
+        '<div class="q-feedback"></div>' +
+        '<div class="q-explanation"><strong>Pembahasan:</strong> ' + escapeHTML(explanation) + '</div>';
+
+      // Handler klik opsi (pilih jawaban)
+      var opts = card.querySelectorAll('.q-opt');
+      for(var oi = 0; oi < opts.length; oi++){
+        (function(optEl){
+          optEl.addEventListener('click', function(){
+            if(card.classList.contains('answered')) return;
+            for(var m = 0; m < opts.length; m++) opts[m].classList.remove('selected');
+            optEl.classList.add('selected');
+            card.querySelector('.btn-primary').disabled = false;
+          });
+        })(opts[oi]);
+      }
+
+      // Handler Cek Jawaban — gunakan correctIdx yang sudah diacak
+      card.querySelector('.btn-primary').addEventListener('click', function(){
+        if(this.disabled) return;
+        var selected = card.querySelector('.q-opt.selected');
+        if(!selected) return;
+        var selIdx = parseInt(selected.getAttribute('data-idx'));
+        var fb = card.querySelector('.q-feedback');
+        card.classList.add('answered');
+        if(selIdx === correctIdx){
+          card.classList.add('correct');
+          fb.className = 'q-feedback show correct';
+          fb.innerHTML = '<i class="fas fa-check-circle"></i> Tepat sekali!';
+        } else {
+          card.classList.add('wrong');
+          fb.className = 'q-feedback show wrong';
+          fb.innerHTML = '<i class="fas fa-times-circle"></i> Belum tepat. Jawaban benar adalah <strong>' + String.fromCharCode(65 + correctIdx) + '</strong>.';
+          card.querySelectorAll('.q-opt')[correctIdx].classList.add('correct-opt');
+        }
+        this.disabled = true;
+      });
+
+      // Handler toggle Pembahasan
+      card.querySelector('.btn-ghost').addEventListener('click', function(){
+        var exp = card.querySelector('.q-explanation');
+        exp.classList.toggle('show');
+        this.innerHTML = exp.classList.contains('show')
+          ? '<i class="fas fa-eye-slash"></i> Sembunyikan'
+          : '<i class="fas fa-lightbulb"></i> Pembahasan';
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  ['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10'].forEach(function(t){
+    renderQuestions(t, 'q-'+t);
+  });
+
+  /* ============ GAME: DECIMAL BUILDER ============ */
+  var gameTarget = 3.45;
+  var gameCurrent = 0;
+  var gameScore = 0;
+  var gameStreak = 0;
+  var gameTime = 60;
+  var gameTimer = null;
+  var gameActive = false;
+
+  function newTarget(){
+    var targets = [1.25, 2.34, 0.75, 3.45, 4.56, 2.05, 1.15, 0.85, 3.14, 2.78, 5.55, 4.04, 1.78, 2.91, 0.42];
+    gameTarget = targets[Math.floor(Math.random()*targets.length)];
+    gameCurrent = 0;
+    document.getElementById('gameTarget').textContent = gameTarget.toString().replace('.',',');
+    document.getElementById('gameCurrent').textContent = '0';
+    document.getElementById('gameMsg').textContent = '';
+  }
+  function addChip(val){
+    if(!gameActive) return;
+    if(val===-1){ gameCurrent = 0; }
+    else gameCurrent += val;
+    gameCurrent = Math.round(gameCurrent*1000)/1000;
+    document.getElementById('gameCurrent').textContent = gameCurrent.toString().replace('.',',');
+    if(Math.abs(gameCurrent - gameTarget) < 0.0001){
+      gameScore += 10 + Math.floor(gameTime/3);
+      gameStreak++;
+      document.getElementById('gameMsg').innerHTML = '<span style="color:var(--accent-3)"><i class="fas fa-star"></i> Hebat! Target tercapai!</span>';
+      showToast('+ '+(10+Math.floor(gameTime/3))+' poin!');
+      setTimeout(function(){ if(gameActive){ newTarget(); updateGameUI(); } }, 800);
+    } else if(gameCurrent > gameTarget){
+      document.getElementById('gameMsg').innerHTML = '<span style="color:var(--accent-2)"><i class="fas fa-arrow-down"></i> Kelebihan! Tekan Reset.</span>';
+      gameStreak = 0;
+      updateGameUI();
+    } else {
+      document.getElementById('gameMsg').innerHTML = '<span style="color:var(--accent)">Selisih: '+Math.abs(gameCurrent-gameTarget).toFixed(3).replace('.',',')+'</span>';
+    }
+    updateGameUI();
+  }
+  function updateGameUI(){
+    document.getElementById('gameScore').textContent = gameScore;
+    document.getElementById('gameStreak').textContent = gameStreak;
+    document.getElementById('gameTime').textContent = gameTime;
+  }
+  function startGame(){
+    gameActive = true;
+    gameScore = 0; gameStreak = 0; gameTime = 60;
+    newTarget();
+    updateGameUI();
+    if(gameTimer) clearInterval(gameTimer);
+    gameTimer = setInterval(function(){
+      if(!gameActive) return;
+      gameTime--;
+      document.getElementById('gameTime').textContent = gameTime;
+      if(gameTime<=0){ endGame(); }
+    },1000);
+  }
+  function endGame(){
+    gameActive = false;
+    clearInterval(gameTimer);
+    document.getElementById('gameMsg').innerHTML =
+      '<div style="text-align:center">'+
+        '<div style="font-size:20px;color:var(--accent);font-family:Fraunces,serif;margin-bottom:8px">Waktu Habis!</div>'+
+        '<div style="color:var(--fg)">Skor akhir: <strong style="color:var(--accent-3)">'+gameScore+'</strong></div>'+
+      '</div>';
+  }
+
+  var chips = document.querySelectorAll('#gameChips .chip');
+  for(var ci=0;ci<chips.length;ci++){
+    (function(chip){
+      chip.addEventListener('click', function(){
+        var val = parseFloat(chip.getAttribute('data-val'));
+        addChip(val);
+      });
+    })(chips[ci]);
+  }
+  document.getElementById('gameStartBtn').addEventListener('click', startGame);
+
+  /* ============ REFLECTION ============ */
+  function saveReflection(){
+    var ids = ['ref1','ref2','ref3','ref4'];
+    for(var i=0;i<ids.length;i++){
+      var v = document.getElementById(ids[i]).value;
+      try { localStorage.setItem('desimal_'+ids[i], v); } catch(e){}
+    }
+    showToast('Refleksi tersimpan di perangkatmu!');
+    for(var c=0;c<40;c++){
+      var conf = document.createElement('div');
+      conf.className='confetti';
+      var colors = ['#fbbf24','#fb7185','#34d399','#60a5fa'];
+      conf.innerHTML='<span style="left:'+Math.random()*100+'vw;background:'+colors[c%4]+'"></span>';
+      document.body.appendChild(conf);
+      (function(el){ setTimeout(function(){ el.remove(); }, 3000); })(conf);
+    }
+  }
+  document.getElementById('saveRefBtn').addEventListener('click', saveReflection);
+
+  try {
+    var ids2 = ['ref1','ref2','ref3','ref4'];
+    for(var j=0;j<ids2.length;j++){
+      var saved = localStorage.getItem('desimal_'+ids2[j]);
+      if(saved) document.getElementById(ids2[j]).value = saved;
+    }
+  } catch(e){}
+
+  /* ============ TOAST ============ */
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2500);
+  }
+
+  /* ============ START BUTTON ============ */
+  var startBtn = document.getElementById('startBtn');
+  if(startBtn){
+    startBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      nextSlide();
+    });
+  }
+
+  /* ============ SAFE INIT ============ */
+  try {
+    showSlide(0);
+    updateRounding();
+    calcFraction();
+    convertDec();
+    console.log('✓ Presentasi desimal siap. Klik "Mulai Petualangan" untuk memulai.');
+  } catch(err){
+    console.error('Inisialisasi error:', err);
+  }
+})();
+</script>
+</body>
+</html>
