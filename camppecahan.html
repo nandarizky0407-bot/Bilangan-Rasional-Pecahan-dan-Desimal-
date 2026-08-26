@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operasi Hitung Campuran Pecahan — Latihan Berdua</title>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+    svg: { fontCache: 'global' },
+    startup: { typeset: false }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #0f1220;
+  --bg-2: #161a2e;
+  --card: rgba(255,255,255,0.04);
+  --card-2: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.09);
+  --border-2: rgba(255,255,255,0.18);
+  --fg: #e8ebf3;
+  --fg-bright: #ffffff;
+  --muted: #9aa3b8;
+  --dim: #5d6580;
+  --s1: #fbbf24;
+  --s1-bright: #fcd34d;
+  --s1-soft: rgba(251,191,36,0.12);
+  --s1-border: rgba(251,191,36,0.35);
+  --s1-glow: rgba(251,191,36,0.45);
+  --s2: #2dd4bf;
+  --s2-bright: #5eead4;
+  --s2-soft: rgba(45,212,191,0.12);
+  --s2-border: rgba(45,212,191,0.35);
+  --s2-glow: rgba(45,212,191,0.45);
+  --success: #34d399;
+  --error: #f87171;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top left, rgba(251,191,36,0.08), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(45,212,191,0.08), transparent 50%),
+    linear-gradient(180deg, #0f1220 0%, #161a2e 100%);
+  background-attachment: fixed;
+}
+
+.bg-grid {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+}
+
+.bg-symbols {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.bg-symbols span {
+  position: absolute;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  color: rgba(255,255,255,0.04);
+  user-select: none;
+  animation: drift 45s linear infinite;
+}
+@keyframes drift {
+  0% { transform: translateY(110vh) rotate(0deg); }
+  100% { transform: translateY(-20vh) rotate(360deg); }
+}
+
+/* Slide system */
+.slide { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.slide.active { display: block; animation: slideIn 0.6s cubic-bezier(0.16,1,0.3,1); }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: rgba(255,255,255,0.05); z-index: 100;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--s1), var(--s2));
+  transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+  width: 16%;
+}
+
+/* Buttons */
+.btn {
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 14px 28px; border: 1px solid var(--border-2);
+  border-radius: 12px; background: var(--card); color: var(--fg);
+  cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+  backdrop-filter: blur(8px);
+}
+.btn:hover {
+  background: var(--card-2); border-color: rgba(255,255,255,0.35);
+  transform: translateY(-1px);
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  color: #0a0d18; border: none; font-weight: 800; padding: 16px 36px;
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 14px 40px rgba(45,212,191,0.35);
+  transform: translateY(-2px);
+}
+.btn-s1 {
+  background: var(--s1-soft); border-color: var(--s1-border); color: var(--s1-bright);
+}
+.btn-s1:hover { background: var(--s1); color: #0a0d18; }
+.btn-s2 {
+  background: var(--s2-soft); border-color: var(--s2-border); color: var(--s2-bright);
+}
+.btn-s2:hover { background: var(--s2); color: #0a0d18; }
+.btn-ghost { background: transparent; border-color: var(--border); }
+
+/* === WELCOME === */
+.welcome-wrap {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 32px; text-align: center;
+}
+.welcome-eyebrow {
+  font-size: 12px; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 28px; font-weight: 600;
+  display: flex; align-items: center; gap: 16px;
+}
+.welcome-eyebrow::before, .welcome-eyebrow::after {
+  content: ''; width: 48px; height: 1px; background: var(--border-2);
+}
+.welcome-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(40px, 6.5vw, 88px); font-weight: 900;
+  line-height: 0.96; letter-spacing: -0.035em;
+  margin-bottom: 22px; max-width: 1000px;
+}
+.welcome-title .accent {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.welcome-subtitle {
+  font-size: 16px; color: var(--muted);
+  max-width: 580px; line-height: 1.65; margin-bottom: 56px;
+}
+.name-inputs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  max-width: 760px; width: 100%; margin-bottom: 44px;
+}
+.name-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 22px; padding: 30px 26px;
+  text-align: left; position: relative; overflow: hidden;
+  transition: all 0.3s; backdrop-filter: blur(12px);
+}
+.name-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; opacity: 0.8;
+}
+.name-card.s1::before {
+  background: linear-gradient(90deg, transparent, var(--s1), transparent);
+}
+.name-card.s2::before {
+  background: linear-gradient(90deg, transparent, var(--s2), transparent);
+}
+.name-card.s1:focus-within {
+  border-color: var(--s1-border);
+  box-shadow: 0 0 0 4px var(--s1-soft);
+}
+.name-card.s2:focus-within {
+  border-color: var(--s2-border);
+  box-shadow: 0 0 0 4px var(--s2-soft);
+}
+.name-card-head {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+}
+.avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 24px; font-weight: 800;
+  border: 2px dashed var(--border-2); color: var(--dim);
+  transition: all 0.3s;
+}
+.name-card.s1 .avatar.filled {
+  background: var(--s1); color: #0a0d18; border-color: var(--s1);
+  border-style: solid; box-shadow: 0 0 24px var(--s1-glow);
+}
+.name-card.s2 .avatar.filled {
+  background: var(--s2); color: #0a0d18; border-color: var(--s2);
+  border-style: solid; box-shadow: 0 0 24px var(--s2-glow);
+}
+.name-card-label {
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 4px;
+}
+.name-card.s1 .name-card-label { color: var(--s1-bright); }
+.name-card.s2 .name-card-label { color: var(--s2-bright); }
+.name-card-role { font-size: 13px; color: var(--muted); }
+.name-input {
+  width: 100%; background: transparent; border: none;
+  border-bottom: 1.5px solid var(--border-2); padding: 10px 0;
+  color: var(--fg-bright); font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 500; outline: none;
+  transition: border-color 0.2s;
+}
+.name-input::placeholder { color: var(--dim); font-style: italic; }
+.name-card.s1 .name-input:focus { border-color: var(--s1); }
+.name-card.s2 .name-input:focus { border-color: var(--s2); }
+
+/* === MATERIAL === */
+.material-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 32px 60px; }
+.section-eyebrow {
+  font-size: 12px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--s2-bright); font-weight: 700; margin-bottom: 14px;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(34px, 5vw, 56px); font-weight: 800;
+  line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 18px;
+}
+.section-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-desc {
+  font-size: 15px; color: var(--muted); line-height: 1.65;
+  max-width: 720px; margin-bottom: 48px;
+}
+.material-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 22px; margin-bottom: 44px;
+}
+.material-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 30px; backdrop-filter: blur(8px);
+}
+.material-card-title {
+  font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700;
+  margin-bottom: 22px; display: flex; align-items: center; gap: 14px;
+}
+.material-card-title .num {
+  font-size: 13px; width: 32px; height: 32px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--s1-soft); color: var(--s1-bright);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+}
+.material-card.s2 .material-card-title .num {
+  background: var(--s2-soft); color: var(--s2-bright);
+}
+.order-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.order-list li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 13px 16px; background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border); border-radius: 12px;
+  transition: all 0.2s;
+}
+.order-list li:hover {
+  background: rgba(255,255,255,0.045); border-color: var(--border-2);
+  transform: translateX(4px);
+}
+.order-num {
+  font-family: 'Fraunces', serif; font-size: 22px; font-weight: 800;
+  color: var(--s1-bright); min-width: 28px; line-height: 1;
+}
+.material-card.s2 .order-num { color: var(--s2-bright); }
+.order-name { font-weight: 700; margin-bottom: 2px; color: var(--fg-bright); font-size: 15px; }
+.order-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.fr-rule-body { font-size: 14px; color: var(--fg); line-height: 1.7; }
+.fr-rule-body mjx-container { margin: 6px 0 !important; }
+.fr-rule {
+  padding: 16px; background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border); border-radius: 12px;
+}
+.fr-rule-title {
+  font-size: 12px; font-weight: 700; color: var(--s2-bright);
+  text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;
+}
+
+/* === TIMER PANEL === */
+.timer-panel {
+  position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px); max-width: 880px;
+  background: rgba(15,18,32,0.92); backdrop-filter: blur(24px);
+  border: 1px solid var(--border-2); border-radius: 18px;
+  padding: 16px 22px; display: grid;
+  grid-template-columns: 1fr auto 1fr; gap: 20px;
+  align-items: center; z-index: 50;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+.tp-student { display: flex; flex-direction: column; gap: 4px; }
+.tp-student.s1 { align-items: flex-start; }
+.tp-student.s2 { align-items: flex-end; }
+.tps-head { display: flex; align-items: center; gap: 10px; }
+.tps-name {
+  font-size: 14px; font-weight: 700; color: var(--fg-bright);
+  max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tps-tag {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; font-weight: 700;
+}
+.tp-student.s1 .tps-tag { background: var(--s1-soft); color: var(--s1-bright); }
+.tp-student.s2 .tps-tag { background: var(--s2-soft); color: var(--s2-bright); }
+.tps-time {
+  font-family: 'Fraunces', serif; font-size: 30px; font-weight: 800;
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1;
+}
+.tp-student.s1 .tps-time { color: var(--s1-bright); }
+.tp-student.s2 .tps-time { color: var(--s2-bright); }
+.tps-status {
+  font-size: 11px; color: var(--muted); font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.tp-main {
+  text-align: center; padding: 0 20px;
+  border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+}
+.tpm-label {
+  font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px; font-weight: 600;
+}
+.tpm-qnum {
+  font-family: 'Fraunces', serif; font-size: 34px; font-weight: 800;
+  color: var(--fg-bright); font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em; line-height: 1;
+}
+
+/* === QUIZ === */
+.quiz-wrap { padding-top: 170px; padding-bottom: 60px; }
+.quiz-intro {
+  max-width: 900px; margin: 0 auto 40px; padding: 0 32px; text-align: center;
+}
+.quiz-intro h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px, 5vw, 46px); font-weight: 800;
+  letter-spacing: -0.025em; margin-bottom: 14px; line-height: 1.05;
+}
+.quiz-intro h2 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.quiz-intro p {
+  color: var(--muted); line-height: 1.65;
+  max-width: 680px; margin: 0 auto; font-size: 15px;
+}
+.quiz-intro strong { color: var(--fg-bright); }
+
+.q-nav-grid {
+  display: grid; grid-template-columns: repeat(10, 1fr);
+  gap: 8px; max-width: 900px; margin: 0 auto 32px; padding: 0 32px;
+}
+.q-nav-btn {
+  font-family: inherit; aspect-ratio: 1;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--fg); border-radius: 10px; cursor: pointer;
+  font-weight: 700; font-size: 14px; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.q-nav-btn:hover {
+  background: var(--card-2); border-color: var(--border-2);
+  transform: translateY(-2px);
+}
+.q-nav-btn.active {
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  color: #0a0d18; border-color: transparent;
+  box-shadow: 0 6px 20px rgba(45,212,191,0.35);
+}
+.q-nav-btn.locked-s1 {
+  border-color: var(--s1); color: var(--s1-bright);
+  background: var(--s1-soft);
+}
+.q-nav-btn.locked-s2 {
+  border-color: var(--s2); color: var(--s2-bright);
+  background: var(--s2-soft);
+}
+.q-nav-btn.locked-both {
+  border-color: var(--success); color: var(--success);
+  background: rgba(52,211,153,0.12);
+}
+.q-nav-btn.checked::after {
+  content: ''; position: absolute; top: 4px; right: 4px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+}
+
+.question-container {
+  max-width: 900px; margin: 0 auto; padding: 0 32px;
+}
+.question-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 22px; padding: 30px; backdrop-filter: blur(8px);
+  transition: all 0.3s; position: relative;
+}
+.question-card.both-correct {
+  border-color: var(--success) !important;
+  box-shadow: 0 0 0 1px var(--success), 0 0 32px rgba(52,211,153,0.18);
+}
+.q-top {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 18px;
+}
+.q-num {
+  font-family: 'Fraunces', serif; font-size: 36px; font-weight: 800;
+  color: var(--dim); letter-spacing: -0.02em; line-height: 1;
+}
+.q-tag {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 600; color: var(--muted);
+  padding: 6px 12px; background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 8px;
+}
+.q-expr {
+  padding: 24px 20px; background: rgba(255,255,255,0.025);
+  border-radius: 14px; border: 1px solid var(--border);
+  margin-bottom: 22px; text-align: center; font-size: 20px;
+  overflow-x: auto;
+}
+.q-expr mjx-container { margin: 0 !important; }
+.q-options {
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px;
+}
+.q-option {
+  display: grid; grid-template-columns: 36px 1fr auto;
+  gap: 14px; align-items: center; padding: 12px 16px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  border-radius: 12px; transition: all 0.2s;
+}
+.q-option.is-correct {
+  border-color: var(--success);
+  background: rgba(52,211,153,0.08);
+  box-shadow: 0 0 0 1px var(--success), 0 0 20px rgba(52,211,153,0.15);
+}
+.q-option.is-correct .opt-letter {
+  background: var(--success); color: #0a0d18; border-color: var(--success);
+}
+.opt-letter {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  font-weight: 700; font-size: 15px; color: var(--fg); transition: all 0.2s;
+}
+.opt-expr { font-size: 16px; color: var(--fg); }
+.opt-expr mjx-container { margin: 0 !important; }
+.opt-correct-mark {
+  font-size: 11px; font-weight: 700; color: var(--success);
+  letter-spacing: 0.1em; text-transform: uppercase; display: none;
+}
+.q-option.is-correct .opt-correct-mark { display: block; }
+
+.answer-section {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 18px; padding-top: 20px;
+  border-top: 1px dashed var(--border);
+}
+.ans-block {
+  padding: 16px; border-radius: 14px;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+}
+.ans-block.s1 { border-color: var(--s1-border); background: var(--s1-soft); }
+.ans-block.s2 { border-color: var(--s2-border); background: var(--s2-soft); }
+.ans-block-head {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.ans-block-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ans-block.s1 .ans-block-dot { background: var(--s1); box-shadow: 0 0 8px var(--s1-glow); }
+.ans-block.s2 .ans-block-dot { background: var(--s2); box-shadow: 0 0 8px var(--s2-glow); }
+.ans-block-name {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+}
+.ans-block.s1 .ans-block-name { color: var(--s1-bright); }
+.ans-block.s2 .ans-block-name { color: var(--s2-bright); }
+.ans-block-time {
+  font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700;
+  margin-bottom: 12px; font-variant-numeric: tabular-nums;
+}
+.ans-block.s1 .ans-block-time { color: var(--s1-bright); }
+.ans-block.s2 .ans-block-time { color: var(--s2-bright); }
+.lock-btn {
+  font-family: inherit; margin-left: auto;
+  padding: 6px 14px; border-radius: 10px;
+  border: 1px solid var(--border-2); background: var(--card);
+  color: var(--fg); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.lock-btn.s1:hover { background: var(--s1); color: #0a0d18; border-color: var(--s1); }
+.lock-btn.s2:hover { background: var(--s2); color: #0a0d18; border-color: var(--s2); }
+.lock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.lock-btn.locked {
+  background: var(--success); color: #0a0d18; border-color: var(--success);
+  cursor: default; opacity: 1;
+}
+.ans-block-status {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 8px; border-radius: 6px; margin-bottom: 10px;
+}
+.ans-block-status.correct { background: rgba(52,211,153,0.18); color: var(--success); }
+.ans-block-status.wrong { background: rgba(248,113,113,0.18); color: var(--error); }
+.ans-block-status.empty { background: rgba(255,255,255,0.05); color: var(--muted); }
+.opt-row {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+}
+.opt-btn {
+  font-family: inherit; padding: 10px 12px;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.025);
+  color: var(--fg); border-radius: 10px; cursor: pointer;
+  transition: all 0.2s; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.ans-block.s1 .opt-btn:hover { background: var(--s1-soft); border-color: var(--s1); color: var(--s1-bright); }
+.ans-block.s2 .opt-btn:hover { background: var(--s2-soft); border-color: var(--s2); color: var(--s2-bright); }
+.ans-block.s1 .opt-btn.selected {
+  background: var(--s1); color: #0a0d18; border-color: var(--s1);
+  box-shadow: 0 0 16px var(--s1-glow);
+}
+.ans-block.s2 .opt-btn.selected {
+  background: var(--s2); color: #0a0d18; border-color: var(--s2);
+  box-shadow: 0 0 16px var(--s2-glow);
+}
+.opt-btn:disabled { pointer-events: none; opacity: 0.7; }
+.opt-btn-letter {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: rgba(255,255,255,0.1); display: inline-flex;
+  align-items: center; justify-content: center; font-size: 12px;
+}
+.opt-btn.selected .opt-btn-letter { background: rgba(0,0,0,0.2); }
+
+.q-footer {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-top: 18px; padding-top: 16px;
+  border-top: 1px dashed var(--border); flex-wrap: wrap; gap: 10px;
+}
+.q-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-sm { font-size: 12px; padding: 8px 16px; border-radius: 9px; }
+
+.discussion {
+  margin-top: 18px; padding: 20px;
+  background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(45,212,191,0.06));
+  border: 1px solid var(--border-2); border-radius: 14px;
+  display: none; animation: slideIn 0.4s ease;
+}
+.discussion.show { display: block; }
+.discussion-title {
+  font-family: 'Fraunces', serif; font-size: 17px; font-weight: 700;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  color: var(--fg-bright);
+}
+.discussion-title::before {
+  content: '⟶'; color: var(--s2-bright); font-size: 22px;
+}
+.discussion-body { font-size: 14px; line-height: 1.75; color: var(--fg); }
+.discussion-body mjx-container { margin: 4px 0 !important; }
+.discussion-body .answer-final {
+  display: inline-block; margin-top: 12px; padding: 8px 16px;
+  background: var(--success); color: #0a0d18; border-radius: 10px;
+  font-weight: 800;
+}
+
+.q-nav-buttons {
+  display: flex; justify-content: space-between;
+  max-width: 900px; margin: 24px auto 0; padding: 0 32px;
+}
+
+/* === STATS SLIDE === */
+.stats-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 32px 60px; }
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 22px; padding: 32px; backdrop-filter: blur(8px);
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+}
+.stat-card.s1::before { background: linear-gradient(90deg, var(--s1), transparent); }
+.stat-card.s2::before { background: linear-gradient(90deg, var(--s2), transparent); }
+.stat-head {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+}
+.stat-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 28px; font-weight: 800; color: #0a0d18;
+}
+.stat-card.s1 .stat-avatar { background: var(--s1); box-shadow: 0 0 24px var(--s1-glow); }
+.stat-card.s2 .stat-avatar { background: var(--s2); box-shadow: 0 0 24px var(--s2-glow); }
+.stat-name {
+  font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700;
+  color: var(--fg-bright); margin-bottom: 4px;
+}
+.stat-time {
+  font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+.stat-numbers {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px;
+}
+.stat-number {
+  text-align: center; padding: 18px 10px;
+  background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 14px;
+}
+.stat-number-value {
+  font-family: 'Fraunces', serif; font-size: 38px; font-weight: 800;
+  line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+}
+.stat-number-label {
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-top: 6px; font-weight: 600;
+}
+.stat-number.correct .stat-number-value { color: var(--success); }
+.stat-number.wrong .stat-number-value { color: var(--error); }
+.stat-number.acc .stat-number-value {
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-bar-wrap { margin-bottom: 8px; }
+.stat-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted); margin-bottom: 6px;
+}
+.stat-bar { height: 10px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; }
+.stat-bar-fill { height: 100%; border-radius: 6px; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+.stat-card.s1 .stat-bar-fill { background: linear-gradient(90deg, #b45309, var(--s1)); }
+.stat-card.s2 .stat-bar-fill { background: linear-gradient(90deg, #0f766e, var(--s2)); }
+.per-question {
+  margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border);
+}
+.per-question-title {
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-weight: 700; color: var(--muted); margin-bottom: 14px;
+}
+.pq-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; }
+.pq-cell {
+  aspect-ratio: 1; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  transition: transform 0.2s;
+}
+.pq-cell:hover { transform: scale(1.15); }
+.pq-cell.correct { background: var(--success); border-color: var(--success); color: #0a0d18; }
+.pq-cell.wrong { background: var(--error); border-color: var(--error); color: #0a0d18; }
+.pq-cell.empty { background: rgba(255,255,255,0.05); color: var(--dim); }
+
+/* === REFLECTION & THANKS === */
+.reflect-wrap { max-width: 900px; margin: 0 auto; padding: 80px 32px 60px; text-align: center; }
+.reflect-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 22px; padding: 44px 36px; backdrop-filter: blur(8px);
+  margin-bottom: 22px; text-align: left;
+}
+.reflect-card h3 {
+  font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700;
+  margin-bottom: 18px; color: var(--fg-bright);
+  display: flex; align-items: center; gap: 12px;
+}
+.reflect-card h3 .icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--s2-soft); color: var(--s2-bright);
+  font-size: 18px; font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.reflect-card ul { list-style: none; }
+.reflect-card li {
+  padding: 12px 0 12px 28px; position: relative;
+  font-size: 15px; line-height: 1.7; color: var(--fg);
+  border-bottom: 1px dashed var(--border);
+}
+.reflect-card li:last-child { border-bottom: none; }
+.reflect-card li::before {
+  content: '◆'; position: absolute; left: 0; top: 12px;
+  color: var(--s2-bright); font-size: 12px;
+}
+.thanks-wrap {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 32px; text-align: center; position: relative;
+}
+.thanks-eyebrow {
+  font-size: 12px; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 24px; font-weight: 600;
+}
+.thanks-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(56px, 11vw, 140px); font-weight: 900;
+  line-height: 0.9; letter-spacing: -0.045em; margin-bottom: 28px;
+}
+.thanks-title .accent {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.thanks-subtitle {
+  font-size: 18px; color: var(--muted);
+  max-width: 560px; line-height: 1.7; margin-bottom: 44px;
+}
+.thanks-signature {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-size: 20px; color: var(--fg); margin-top: 24px;
+}
+.thanks-decoration { display: flex; gap: 14px; margin: 32px 0; }
+.deco-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+.deco-dot:nth-child(1) { background: var(--s1); animation-delay: 0s; }
+.deco-dot:nth-child(2) { background: var(--s2); animation-delay: 0.2s; }
+.deco-dot:nth-child(3) { background: var(--s1-bright); animation-delay: 0.4s; }
+.deco-dot:nth-child(4) { background: var(--s2-bright); animation-delay: 0.6s; }
+.deco-dot:nth-child(5) { background: var(--success); animation-delay: 0.8s; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+/* Navigation */
+.nav-bar {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; z-index: 60;
+  background: rgba(15,18,32,0.92); backdrop-filter: blur(16px);
+  border: 1px solid var(--border-2); border-radius: 16px; padding: 10px 14px;
+}
+.nav-btn {
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  padding: 10px 20px; border: 1px solid var(--border);
+  background: var(--card); color: var(--fg); border-radius: 10px;
+  cursor: pointer; transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--card-2); border-color: var(--border-2); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nav-btn.primary {
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  color: #0a0d18; border: none; font-weight: 700;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(15,18,32,0.96); backdrop-filter: blur(16px);
+  border: 1px solid var(--border-2); border-radius: 12px;
+  padding: 14px 22px; font-size: 14px; font-weight: 600;
+  color: var(--fg-bright); z-index: 200;
+  opacity: 0; transition: all 0.3s; pointer-events: none;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--success); color: var(--success); }
+.toast.error { border-color: var(--error); color: var(--error); }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .material-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .answer-section { grid-template-columns: 1fr; }
+  .name-inputs { grid-template-columns: 1fr; }
+  .timer-panel { grid-template-columns: 1fr; gap: 12px; padding: 14px 18px; }
+  .tp-main { border: none; padding: 8px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .tp-student.s2 { align-items: flex-start; }
+  .quiz-wrap { padding-top: 280px; }
+  .pq-grid { grid-template-columns: repeat(6, 1fr); }
+  .opt-row { grid-template-columns: 1fr; }
+  .stat-numbers { grid-template-columns: 1fr; }
+  .q-nav-grid { grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 520px) {
+  .q-expr { font-size: 16px; padding: 16px 12px; }
+  .question-card { padding: 20px; }
+  .material-card { padding: 22px; }
+  .stat-card { padding: 22px; }
+  .reflect-card { padding: 28px 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-symbols" id="bgSymbols"></div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- ============ SLIDE 1: WELCOME ============ -->
+<section class="slide active" id="slide-welcome">
+  <div class="welcome-wrap">
+    <div class="welcome-eyebrow">Latihan Matematika · Berdua</div>
+    <h1 class="welcome-title">
+      Operasi Hitung <span class="accent">Campuran</span><br> pada Pecahan
+    </h1>
+    <p class="welcome-subtitle">
+      Tiga puluh soal pilihan ganda. Dua siswa, dua stopwatch per soal, satu perjalanan belajar.
+      Bukan soal siapa lebih cepat — tapi siapa lebih teliti.
+    </p>
+
+    <div class="name-inputs">
+      <div class="name-card s1">
+        <div class="name-card-head">
+          <div class="avatar" id="avatar1">1</div>
+          <div>
+            <div class="name-card-label">Siswa Pertama</div>
+            <div class="name-card-role">Tim Kuning · Mars</div>
+          </div>
+        </div>
+        <input type="text" class="name-input" id="name1" placeholder="Tulis namamu di sini…" maxlength="22">
+      </div>
+      <div class="name-card s2">
+        <div class="name-card-head">
+          <div class="avatar" id="avatar2">2</div>
+          <div>
+            <div class="name-card-label">Siswa Kedua</div>
+            <div class="name-card-role">Tim Tosca · Venus</div>
+          </div>
+        </div>
+        <input type="text" class="name-input" id="name2" placeholder="Tulis namamu di sini…" maxlength="22">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btnStart">Mulai Latihan →</button>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: MATERIAL ============ -->
+<section class="slide" id="slide-material">
+  <div class="material-wrap">
+    <div class="section-eyebrow">Materi Pengantar</div>
+    <h2 class="section-title">Tiga aturan, <em>satu disiplin.</em></h2>
+    <p class="section-desc">
+      Sebelum menghadapi tiga puluh soal, mari kita segarkan kembali fondasi: urutan operasi hitung
+      dan empat operasi dasar pada pecahan. Kuasai ini, dan soal tercampur sekalipun menjadi urutan
+      langkah yang rapi.
+    </p>
+
+    <div class="material-grid">
+      <div class="material-card s1">
+        <div class="material-card-title">
+          <span class="num">01</span> Urutan Operasi Hitung
+        </div>
+        <ul class="order-list">
+          <li>
+            <span class="order-num">1</span>
+            <div>
+              <div class="order-name">Kurung dahulu</div>
+              <div class="order-desc">Selesaikan operasi dalam tanda kurung $(\;)$ terlebih dahulu.</div>
+            </div>
+          </li>
+          <li>
+            <span class="order-num">2</span>
+            <div>
+              <div class="order-name">Perkalian &amp; Pembagian</div>
+              <div class="order-desc">Kerjakan dari kiri ke kanan, setelah kurung.</div>
+            </div>
+          </li>
+          <li>
+            <span class="order-num">3</span>
+            <div>
+              <div class="order-name">Penjumlahan &amp; Pengurangan</div>
+              <div class="order-desc">Terakhir, kerjakan dari kiri ke kanan.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="material-card s2">
+        <div class="material-card-title">
+          <span class="num">02</span> Operasi pada Pecahan
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="fr-rule">
+            <div class="fr-rule-title">Penjumlahan</div>
+            <div class="fr-rule-body">Samakan penyebut, lalu jumlahkan pembilang:<br>$$\frac{a}{c} + \frac{b}{c} = \frac{a+b}{c}$$</div>
+          </div>
+          <div class="fr-rule">
+            <div class="fr-rule-title">Pengurangan</div>
+            <div class="fr-rule-body">Samakan penyebut, lalu kurangkan:<br>$$\frac{a}{c} - \frac{b}{c} = \frac{a-b}{c}$$</div>
+          </div>
+          <div class="fr-rule">
+            <div class="fr-rule-title">Perkalian</div>
+            <div class="fr-rule-body">Kalikan pembilang dan penyebut:<br>$$\frac{a}{b} \times \frac{c}{d} = \frac{a \times c}{b \times d}$$</div>
+          </div>
+          <div class="fr-rule">
+            <div class="fr-rule-title">Pembagian</div>
+            <div class="fr-rule-body">Balik pecahan kedua, lalu kalikan:<br>$$\frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c}$$</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <button class="btn btn-primary" id="btnToQuiz">Lanjut ke Soal →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: QUIZ ============ -->
+<section class="slide" id="slide-quiz">
+  <div class="timer-panel">
+    <div class="tp-student s1">
+      <div class="tps-head">
+        <span class="tps-tag">Siswa 1</span>
+        <span class="tps-name" id="tpName1">—</span>
+      </div>
+      <div class="tps-time" id="tpTime1">00:00</div>
+      <div class="tps-status" id="tpStatus1">Mengerjakan…</div>
+    </div>
+    <div class="tp-main">
+      <div class="tpm-label">Soal Ke-</div>
+      <div class="tpm-qnum" id="tpmQnum">1</div>
+    </div>
+    <div class="tp-student s2">
+      <div class="tps-head">
+        <span class="tps-tag">Siswa 2</span>
+        <span class="tps-name" id="tpName2">—</span>
+      </div>
+      <div class="tps-time" id="tpTime2">00:00</div>
+      <div class="tps-status" id="tpStatus2">Mengerjakan…</div>
+    </div>
+  </div>
+
+  <div class="quiz-wrap">
+    <div class="quiz-intro">
+      <h2>Tiga Puluh Soal, <em>Satu Fokus.</em></h2>
+      <p>
+        Setiap soal memuat <strong>minimal tiga operasi hitung</strong>. Kerjakan dengan tenang,
+        ingat urutan: <strong>kurung → kali/bagi → tambah/kurang</strong>. Klik
+        <strong>Kunci Jawaban</strong> pada masing-masing kolom untuk mengunci dan mencatat waktu.
+      </p>
+    </div>
+
+    <div class="q-nav-grid" id="qNavGrid"></div>
+    
+    <div class="question-container" id="questionContainer"></div>
+
+    <div class="q-nav-buttons">
+      <button class="btn btn-ghost" id="prevQ">← Sebelumnya</button>
+      <button class="btn btn-primary" id="nextQ">Selanjutnya →</button>
+    </div>
+
+    <div style="text-align:center; margin: 40px auto 0; max-width: 900px;">
+      <button class="btn btn-primary" id="btnFinish" style="width:100%;">Finish &amp; Lihat Hasil →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: STATS ============ -->
+<section class="slide" id="slide-stats">
+  <div class="stats-wrap">
+    <div class="section-eyebrow">Statistik Akhir</div>
+    <h2 class="section-title">Bagaimana <em>hasilnya?</em></h2>
+    <p class="section-desc">
+      Bukan tentang siapa menang — tapi tentang apa yang sudah dipahami dan apa yang perlu
+      diperdalam lagi. Pelajari pola jawaban di setiap soal.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card s1">
+        <div class="stat-head">
+          <div class="stat-avatar" id="statAvatar1">1</div>
+          <div>
+            <div class="stat-name" id="statName1">—</div>
+            <div class="stat-time" id="statTime1">Waktu: —</div>
+          </div>
+        </div>
+        <div class="stat-numbers">
+          <div class="stat-number correct">
+            <div class="stat-number-value" id="statCorrect1">0</div>
+            <div class="stat-number-label">Benar</div>
+          </div>
+          <div class="stat-number wrong">
+            <div class="stat-number-value" id="statWrong1">0</div>
+            <div class="stat-number-label">Salah</div>
+          </div>
+          <div class="stat-number acc">
+            <div class="stat-number-value" id="statAcc1">0%</div>
+            <div class="stat-number-label">Akurasi</div>
+          </div>
+        </div>
+        <div class="stat-bar-wrap">
+          <div class="stat-bar-label">
+            <span>Akurasi Jawaban</span>
+            <span id="statAccText1">0%</span>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statBar1" style="width:0%"></div></div>
+        </div>
+        <div class="per-question">
+          <div class="per-question-title">Detail per Soal</div>
+          <div class="pq-grid" id="pqGrid1"></div>
+        </div>
+      </div>
+
+      <div class="stat-card s2">
+        <div class="stat-head">
+          <div class="stat-avatar" id="statAvatar2">2</div>
+          <div>
+            <div class="stat-name" id="statName2">—</div>
+            <div class="stat-time" id="statTime2">Waktu: —</div>
+          </div>
+        </div>
+        <div class="stat-numbers">
+          <div class="stat-number correct">
+            <div class="stat-number-value" id="statCorrect2">0</div>
+            <div class="stat-number-label">Benar</div>
+          </div>
+          <div class="stat-number wrong">
+            <div class="stat-number-value" id="statWrong2">0</div>
+            <div class="stat-number-label">Salah</div>
+          </div>
+          <div class="stat-number acc">
+            <div class="stat-number-value" id="statAcc2">0%</div>
+            <div class="stat-number-label">Akurasi</div>
+          </div>
+        </div>
+        <div class="stat-bar-wrap">
+          <div class="stat-bar-label">
+            <span>Akurasi Jawaban</span>
+            <span id="statAccText2">0%</span>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statBar2" style="width:0%"></div></div>
+        </div>
+        <div class="per-question">
+          <div class="per-question-title">Detail per Soal</div>
+          <div class="pq-grid" id="pqGrid2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <button class="btn btn-primary" id="btnToReflect">Refleksi &amp; Kesimpulan →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: REFLECTION ============ -->
+<section class="slide" id="slide-reflect">
+  <div class="reflect-wrap">
+    <div class="section-eyebrow" style="text-align:center;">Refleksi &amp; Kesimpulan</div>
+    <h2 class="section-title" style="text-align:center;">Apa yang <em>kita pelajari?</em></h2>
+
+    <div class="reflect-card">
+      <h3><span class="icon">✦</span> Refleksi Belajar</h3>
+      <ul>
+        <li>Operasi hitung campuran pada pecahan tidak bisa dikerjakan sembarang urutan — ada hierarki yang harus dihormati: <strong>kurung, lalu kali/bagi, lalu tambah/kurang</strong>.</li>
+        <li>Sebelum menjumlahkan atau mengurangkan pecahan, pastikan <strong>penyebutnya sama</strong>. Jika berbeda, samakan terlebih dahulu menggunakan KPK.</li>
+        <li>Pada perkalian pecahan, kita cukup mengalikan pembilang dengan pembilang, dan penyebut dengan penyebut. Sederhanakan hasil jika memungkinkan.</li>
+        <li>Pada pembagian, ingat trik saktinya: <strong>balikkan pecahan kedua, lalu kalikan</strong>. Ini mengubah soal pembagian menjadi perkalian.</li>
+        <li>Kesalahan paling sering bukan pada hitungan — tapi pada <strong>urutan pengerjaan</strong>. Pelan-pelan di awal akan menghemat waktu di akhir.</li>
+      </ul>
+    </div>
+
+    <div class="reflect-card">
+      <h3><span class="icon">✓</span> Kesimpulan</h3>
+      <ul>
+        <li>Pecahan adalah bilangan, dan aturan operasinya sama seperti bilangan bulat — yang berbeda hanya <strong>cara</strong>.</li>
+        <li>Latihan dengan dua teman membuat kita belajar dari kesalahan satu sama lain. Soal yang satu salah jawab, mungkin benar di teman — dan sebaliknya.</li>
+        <li>Konsistensi lebih penting daripada kecepatan. Akurasi 100% pada 20 soal lebih berharga daripada 30 soal yang setengahnya tebakan.</li>
+        <li>Setiap soal adalah latihan membaca: pahami dulu, baru kerjakan. Bukan sebaliknya.</li>
+      </ul>
+    </div>
+
+    <div style="text-align:center;">
+      <button class="btn btn-primary" id="btnToThanks">Tutup Sesi →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: THANKS ============ -->
+<section class="slide" id="slide-thanks">
+  <div class="thanks-wrap">
+    <div class="thanks-eyebrow">Sesi Selesai</div>
+    <h1 class="thanks-title">
+      Thank You<br><span class="accent">for Today</span>
+    </h1>
+    <div class="thanks-decoration">
+      <div class="deco-dot"></div>
+      <div class="deco-dot"></div>
+      <div class="deco-dot"></div>
+      <div class="deco-dot"></div>
+      <div class="deco-dot"></div>
+    </div>
+    <p class="thanks-subtitle">
+      Terima kasih sudah belajar bersama hari ini. Matematika bukan tentang jawaban yang benar —
+      tapi tentang pertanyaan yang muncul di tengah jalan. Sampai jumpa di pecahan berikutnya.
+    </p>
+    <p class="thanks-signature">— Sampai jumpa di sesi berikutnya —</p>
+  </div>
+</section>
+
+<!-- Navigation -->
+<div class="nav-bar" id="navBar" style="display:none;">
+  <button class="nav-btn" id="navPrev">← Sebelumnya</button>
+  <button class="nav-btn primary" id="navNext">Selanjutnya →</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// =================== DATA SOAL (KUNCI JAWABAN DIACAK) ===================
+const QUESTIONS = [
+  // 1. Hasil 3/4 (B)
+  { expr: "\\dfrac{1}{2} + \\dfrac{1}{3} \\times \\dfrac{3}{4}",
+    options: ["\\dfrac{5}{8}", "\\dfrac{3}{4}", "\\dfrac{1}{2}", "\\dfrac{2}{3}"],
+    correct: 1,
+    discussion: "Kerjakan perkalian terlebih dahulu: $\\frac{1}{3} \\times \\frac{3}{4} = \\frac{3}{12} = \\frac{1}{4}$. Lalu jumlahkan: $\\frac{1}{2} + \\frac{1}{4} = \\frac{2}{4} + \\frac{1}{4} = \\frac{3}{4}$." },
+  // 2. Hasil 1/3 (D)
+  { expr: "\\dfrac{2}{3} - \\dfrac{1}{6} \\div \\dfrac{1}{2}",
+    options: ["\\dfrac{1}{2}", "\\dfrac{1}{6}", "\\dfrac{5}{6}", "\\dfrac{1}{3}"],
+    correct: 3,
+    discussion: "Kerjakan pembagian: $\\frac{1}{6} \\div \\frac{1}{2} = \\frac{1}{6} \\times \\frac{2}{1} = \\frac{2}{6} = \\frac{1}{3}$. Lalu kurangkan: $\\frac{2}{3} - \\frac{1}{3} = \\frac{1}{3}$." },
+  // 3. Hasil 2/5 (C)
+  { expr: "\\dfrac{3}{4} \\times \\dfrac{2}{5} + \\dfrac{1}{10}",
+    options: ["\\dfrac{3}{10}", "\\dfrac{1}{2}", "\\dfrac{2}{5}", "\\dfrac{7}{20}"],
+    correct: 2,
+    discussion: "Perkalian dulu: $\\frac{3}{4} \\times \\frac{2}{5} = \\frac{6}{20} = \\frac{3}{10}$. Lalu jumlahkan: $\\frac{3}{10} + \\frac{1}{10} = \\frac{4}{10} = \\frac{2}{5}$." },
+  // 4. Hasil 2 (B)
+  { expr: "\\dfrac{5}{6} \\div \\dfrac{1}{3} - \\dfrac{1}{2}",
+    options: ["\\dfrac{3}{2}", "2", "\\dfrac{5}{2}", "1"],
+    correct: 1,
+    discussion: "Pembagian: $\\frac{5}{6} \\div \\frac{1}{3} = \\frac{5}{6} \\times \\frac{3}{1} = \\frac{15}{6} = \\frac{5}{2}$. Lalu: $\\frac{5}{2} - \\frac{1}{2} = \\frac{4}{2} = 2$." },
+  // 5. Hasil 1 (D)
+  { expr: "\\left( \\dfrac{1}{2} + \\dfrac{1}{3} \\right) \\times \\dfrac{6}{5}",
+    options: ["\\dfrac{6}{5}", "\\dfrac{2}{5}", "\\dfrac{11}{15}", "1"],
+    correct: 3,
+    discussion: "Kurung dulu: $\\frac{1}{2} + \\frac{1}{3} = \\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}$. Lalu kalikan: $\\frac{5}{6} \\times \\frac{6}{5} = \\frac{30}{30} = 1$." },
+  // 6. Hasil 5/12 (D)
+  { expr: "\\dfrac{1}{4} + \\dfrac{1}{4} \\times \\dfrac{2}{3}",
+    options: ["\\dfrac{3}{8}", "\\dfrac{1}{6}", "\\dfrac{1}{3}", "\\dfrac{5}{12}"],
+    correct: 3,
+    discussion: "Perkalian dulu: $\\frac{1}{4} \\times \\frac{2}{3} = \\frac{2}{12} = \\frac{1}{6}$. Lalu: $\\frac{1}{4} + \\frac{1}{6} = \\frac{3}{12} + \\frac{2}{12} = \\frac{5}{12}$." },
+  // 7. Hasil 1/5 (B)
+  { expr: "\\dfrac{2}{5} \\times \\dfrac{3}{4} - \\dfrac{1}{10}",
+    options: ["\\dfrac{1}{4}", "\\dfrac{1}{5}", "\\dfrac{3}{10}", "\\dfrac{1}{10}"],
+    correct: 1,
+    discussion: "Perkalian: $\\frac{2}{5} \\times \\frac{3}{4} = \\frac{6}{20} = \\frac{3}{10}$. Lalu: $\\frac{3}{10} - \\frac{1}{10} = \\frac{2}{10} = \\frac{1}{5}$." },
+  // 8. Hasil 5/6 (D)
+  { expr: "\\dfrac{3}{4} + \\dfrac{1}{2} \\times \\dfrac{2}{3} - \\dfrac{1}{4}",
+    options: ["\\dfrac{1}{2}", "\\dfrac{2}{3}", "\\dfrac{3}{4}", "\\dfrac{5}{6}"],
+    correct: 3,
+    discussion: "Perkalian: $\\frac{1}{2} \\times \\frac{2}{3} = \\frac{2}{6} = \\frac{1}{3}$. Lalu jumlah dan kurang (kiri ke kanan): $\\frac{3}{4} + \\frac{1}{3} - \\frac{1}{4} = (\\frac{3}{4} - \\frac{1}{4}) + \\frac{1}{3} = \\frac{2}{4} + \\frac{1}{3} = \\frac{1}{2} + \\frac{1}{3} = \\frac{5}{6}$." },
+  // 9. Hasil 13/6 (C)
+  { expr: "\\dfrac{1}{2} \\div \\dfrac{1}{4} + \\dfrac{1}{2} \\times \\dfrac{1}{3}",
+    options: ["2", "\\dfrac{7}{6}", "\\dfrac{13}{6}", "\\dfrac{5}{6}"],
+    correct: 2,
+    discussion: "Pembagian dan perkalian: $\\frac{1}{2} \\div \\frac{1}{4} = 2$ dan $\\frac{1}{2} \\times \\frac{1}{3} = \\frac{1}{6}$. Lalu: $2 + \\frac{1}{6} = \\frac{12}{6} + \\frac{1}{6} = \\frac{13}{6}$." },
+  // 10. Hasil 17/24 (D)
+  { expr: "\\dfrac{7}{8} - \\dfrac{1}{4} \\times \\dfrac{2}{3}",
+    options: ["\\dfrac{5}{8}", "\\dfrac{3}{4}", "\\dfrac{19}{24}", "\\dfrac{17}{24}"],
+    correct: 3,
+    discussion: "Perkalian: $\\frac{1}{4} \\times \\frac{2}{3} = \\frac{2}{12} = \\frac{1}{6}$. Lalu: $\\frac{7}{8} - \\frac{1}{6} = \\frac{21}{24} - \\frac{4}{24} = \\frac{17}{24}$." },
+  // 11. Hasil 13/24 (A)
+  { expr: "\\left( \\dfrac{2}{3} - \\dfrac{1}{4} \\right) \\times \\dfrac{1}{2} + \\dfrac{1}{3}",
+    options: ["\\dfrac{13}{24}", "\\dfrac{5}{12}", "\\dfrac{1}{2}", "\\dfrac{7}{24}"],
+    correct: 0,
+    discussion: "Kurung: $\\frac{2}{3} - \\frac{1}{4} = \\frac{8}{12} - \\frac{3}{12} = \\frac{5}{12}$. Kali: $\\frac{5}{12} \\times \\frac{1}{2} = \\frac{5}{24}$. Tambah: $\\frac{5}{24} + \\frac{1}{3} = \\frac{5}{24} + \\frac{8}{24} = \\frac{13}{24}$." },
+  // 12. Hasil 4/5 (A)
+  { expr: "\\dfrac{3}{5} \\times \\dfrac{2}{3} + \\dfrac{1}{5} \\div \\dfrac{1}{2}",
+    options: ["\\dfrac{4}{5}", "\\dfrac{2}{5}", "\\dfrac{3}{5}", "1"],
+    correct: 0,
+    discussion: "Kali: $\\frac{3}{5} \\times \\frac{2}{3} = \\frac{6}{15} = \\frac{2}{5}$. Bagi: $\\frac{1}{5} \\div \\frac{1}{2} = \\frac{2}{5}$. Tambah: $\\frac{2}{5} + \\frac{2}{5} = \\frac{4}{5}$." },
+  // 13. Hasil 3/4 (D)
+  { expr: "\\dfrac{5}{12} \\div \\dfrac{5}{6} + \\dfrac{1}{2} - \\dfrac{1}{4}",
+    options: ["1", "\\dfrac{5}{6}", "\\dfrac{1}{2}", "\\dfrac{3}{4}"],
+    correct: 3,
+    discussion: "Bagi: $\\frac{5}{12} \\div \\frac{5}{6} = \\frac{5}{12} \\times \\frac{6}{5} = \\frac{30}{60} = \\frac{1}{2}$. Lalu kiri ke kanan: $\\frac{1}{2} + \\frac{1}{2} - \\frac{1}{4} = 1 - \\frac{1}{4} = \\frac{3}{4}$." },
+  // 14. Hasil 5/8 (B)
+  { expr: "\\dfrac{1}{3} + \\dfrac{1}{4} \\times \\dfrac{1}{2} + \\dfrac{1}{6}",
+    options: ["\\dfrac{7}{12}", "\\dfrac{5}{8}", "\\dfrac{3}{8}", "\\dfrac{2}{3}"],
+    correct: 1,
+    discussion: "Kali: $\\frac{1}{4} \\times \\frac{1}{2} = \\frac{1}{8}$. Tambah kiri ke kanan: $\\frac{1}{3} + \\frac{1}{8} + \\frac{1}{6}$. KPK 3, 8, 6 adalah 24: $\\frac{8}{24} + \\frac{3}{24} + \\frac{4}{24} = \\frac{15}{24} = \\frac{5}{8}$." },
+  // 15. Hasil 13/5 (C)
+  { expr: "\\dfrac{4}{5} + \\dfrac{1}{2} \\div \\dfrac{1}{4} - \\dfrac{1}{5}",
+    options: ["3", "\\dfrac{11}{5}", "\\dfrac{13}{5}", "\\dfrac{7}{5}"],
+    correct: 2,
+    discussion: "Bagi: $\\frac{1}{2} \\div \\frac{1}{4} = 2$. Lalu: $\\frac{4}{5} + 2 - \\frac{1}{5} = (\\frac{4}{5} - \\frac{1}{5}) + 2 = \\frac{3}{5} + 2 = \\frac{3}{5} + \\frac{10}{5} = \\frac{13}{5}$." },
+  // 16. Hasil 2/3 (A)
+  { expr: "\\dfrac{2}{3} \\times \\dfrac{3}{4} \\div \\dfrac{1}{2} - \\dfrac{1}{3}",
+    options: ["\\dfrac{2}{3}", "1", "\\dfrac{5}{6}", "\\dfrac{1}{2}"],
+    correct: 0,
+    discussion: "Kiri ke kanan untuk kali/bagi: $\\frac{2}{3} \\times \\frac{3}{4} = \\frac{6}{12} = \\frac{1}{2}$. Lalu $\\frac{1}{2} \\div \\frac{1}{2} = 1$. Terakhir: $1 - \\frac{1}{3} = \\frac{2}{3}$." },
+  // 17. Hasil 11/2 (B)
+  { expr: "\\left( \\dfrac{1}{2} + \\dfrac{1}{4} \\right) \\div \\dfrac{1}{8} - \\dfrac{1}{2}",
+    options: ["5", "\\dfrac{11}{2}", "6", "\\dfrac{9}{2}"],
+    correct: 1,
+    discussion: "Kurung: $\\frac{1}{2} + \\frac{1}{4} = \\frac{3}{4}$. Bagi: $\\frac{3}{4} \\div \\frac{1}{8} = \\frac{3}{4} \\times 8 = 6$. Kurang: $6 - \\frac{1}{2} = \\frac{12}{2} - \\frac{1}{2} = \\frac{11}{2}$." },
+  // 18. Hasil 5/12 (C)
+  { expr: "\\dfrac{5}{6} \\times \\dfrac{3}{10} + \\dfrac{1}{2} \\times \\dfrac{1}{3}",
+    options: ["\\dfrac{1}{3}", "\\dfrac{1}{2}", "\\dfrac{5}{12}", "\\dfrac{7}{12}"],
+    correct: 2,
+    discussion: "Kali pertama: $\\frac{5}{6} \\times \\frac{3}{10} = \\frac{15}{60} = \\frac{1}{4}$. Kali kedua: $\\frac{1}{2} \\times \\frac{1}{3} = \\frac{1}{6}$. Tambah: $\\frac{1}{4} + \\frac{1}{6} = \\frac{3}{12} + \\frac{2}{12} = \\frac{5}{12}$." },
+  // 19. Hasil 7/4 (D)
+  { expr: "\\dfrac{3}{8} + \\dfrac{3}{4} \\div \\dfrac{1}{2} - \\dfrac{1}{8}",
+    options: ["2", "\\dfrac{3}{2}", "\\dfrac{5}{4}", "\\dfrac{7}{4}"],
+    correct: 3,
+    discussion: "Bagi: $\\frac{3}{4} \\div \\frac{1}{2} = \\frac{3}{4} \\times 2 = \\frac{3}{2}$. Lalu kiri ke kanan: $\\frac{3}{8} + \\frac{3}{2} - \\frac{1}{8} = (\\frac{3}{8} - \\frac{1}{8}) + \\frac{3}{2} = \\frac{2}{8} + \\frac{3}{2} = \\frac{1}{4} + \\frac{6}{4} = \\frac{7}{4}$." },
+  // 20. Hasil 1/2 (C)
+  { expr: "\\dfrac{1}{2} \\times \\left( \\dfrac{1}{3} + \\dfrac{1}{6} \\right) + \\dfrac{1}{4}",
+    options: ["\\dfrac{5}{12}", "\\dfrac{1}{4}", "\\dfrac{1}{2}", "\\dfrac{3}{8}"],
+    correct: 2,
+    discussion: "Kurung: $\\frac{1}{3} + \\frac{1}{6} = \\frac{2}{6} + \\frac{1}{6} = \\frac{3}{6} = \\frac{1}{2}$. Kali: $\\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$. Tambah: $\\frac{1}{4} + \\frac{1}{4} = \\frac{1}{2}$." },
+  // 21. Hasil 2/5 (D)
+  { expr: "\\dfrac{2}{5} + \\dfrac{3}{10} \\times \\dfrac{2}{3} - \\dfrac{1}{5}",
+    options: ["\\dfrac{3}{10}", "\\dfrac{1}{2}", "\\dfrac{3}{5}", "\\dfrac{2}{5}"],
+    correct: 3,
+    discussion: "Kali: $\\frac{3}{10} \\times \\frac{2}{3} = \\frac{6}{30} = \\frac{1}{5}$. Lalu kiri ke kanan: $\\frac{2}{5} + \\frac{1}{5} - \\frac{1}{5} = \\frac{3}{5} - \\frac{1}{5} = \\frac{2}{5}$." },
+  // 22. Hasil 13/4 (C)
+  { expr: "\\dfrac{3}{4} \\div \\dfrac{1}{8} \\times \\dfrac{1}{2} + \\dfrac{1}{4}",
+    options: ["3", "\\dfrac{7}{2}", "\\dfrac{13}{4}", "\\dfrac{15}{4}"],
+    correct: 2,
+    discussion: "Kiri ke kanan: $\\frac{3}{4} \\div \\frac{1}{8} = 6$, lalu $6 \\times \\frac{1}{2} = 3$. Tambah: $3 + \\frac{1}{4} = \\frac{12}{4} + \\frac{1}{4} = \\frac{13}{4}$." },
+  // 23. Hasil 1/6 (D)
+  { expr: "\\left( \\dfrac{2}{3} + \\dfrac{1}{6} \\right) \\times \\dfrac{1}{2} - \\dfrac{1}{4}",
+    options: ["\\dfrac{1}{4}", "\\dfrac{5}{12}", "0", "\\dfrac{1}{6}"],
+    correct: 3,
+    discussion: "Kurung: $\\frac{2}{3} + \\frac{1}{6} = \\frac{4}{6} + \\frac{1}{6} = \\frac{5}{6}$. Kali: $\\frac{5}{6} \\times \\frac{1}{2} = \\frac{5}{12}$. Kurang: $\\frac{5}{12} - \\frac{1}{4} = \\frac{5}{12} - \\frac{3}{12} = \\frac{2}{12} = \\frac{1}{6}$." },
+  // 24. Hasil 9/10 (A)
+  { expr: "\\dfrac{7}{10} - \\dfrac{1}{5} \\times \\dfrac{1}{2} + \\dfrac{3}{10}",
+    options: ["\\dfrac{9}{10}", "1", "\\dfrac{4}{5}", "\\dfrac{7}{10}"],
+    correct: 0,
+    discussion: "Kali: $\\frac{1}{5} \\times \\frac{1}{2} = \\frac{1}{10}$. Lalu: $\\frac{7}{10} - \\frac{1}{10} + \\frac{3}{10} = \\frac{6}{10} + \\frac{3}{10} = \\frac{9}{10}$." },
+  // 25. Hasil 1 (C)
+  { expr: "\\dfrac{1}{4} \\div \\dfrac{1}{2} + \\dfrac{3}{4} \\times \\dfrac{2}{3}",
+    options: ["\\dfrac{1}{2}", "\\dfrac{5}{6}", "1", "\\dfrac{3}{4}"],
+    correct: 2,
+    discussion: "Bagi: $\\frac{1}{4} \\div \\frac{1}{2} = \\frac{1}{2}$. Kali: $\\frac{3}{4} \\times \\frac{2}{3} = \\frac{6}{12} = \\frac{1}{2}$. Tambah: $\\frac{1}{2} + \\frac{1}{2} = 1$." },
+  // 26. Hasil 3/5 (D)
+  { expr: "\\dfrac{5}{8} + \\dfrac{1}{4} \\times \\dfrac{2}{5} - \\dfrac{1}{8}",
+    options: ["\\dfrac{1}{2}", "\\dfrac{5}{8}", "\\dfrac{11}{20}", "\\dfrac{3}{5}"],
+    correct: 3,
+    discussion: "Kali: $\\frac{1}{4} \\times \\frac{2}{5} = \\frac{2}{20} = \\frac{1}{10}$. Lalu: $\\frac{5}{8} - \\frac{1}{8} + \\frac{1}{10} = \\frac{4}{8} + \\frac{1}{10} = \\frac{1}{2} + \\frac{1}{10} = \\frac{5}{10} + \\frac{1}{10} = \\frac{6}{10} = \\frac{3}{5}$." },
+  // 27. Hasil 3/2 (B)
+  { expr: "\\left( \\dfrac{3}{4} - \\dfrac{1}{2} \\right) \\div \\dfrac{1}{4} + \\dfrac{1}{2}",
+    options: ["1", "\\dfrac{3}{2}", "2", "\\dfrac{5}{4}"],
+    correct: 1,
+    discussion: "Kurung: $\\frac{3}{4} - \\frac{1}{2} = \\frac{3}{4} - \\frac{2}{4} = \\frac{1}{4}$. Bagi: $\\frac{1}{4} \\div \\frac{1}{4} = 1$. Tambah: $1 + \\frac{1}{2} = \\frac{3}{2}$." },
+  // 28. Hasil 17/6 (C)
+  { expr: "\\dfrac{2}{3} \\times \\dfrac{1}{2} + \\dfrac{5}{6} \\div \\dfrac{1}{3}",
+    options: ["3", "\\dfrac{5}{2}", "\\dfrac{17}{6}", "\\dfrac{7}{3}"],
+    correct: 2,
+    discussion: "Kali: $\\frac{2}{3} \\times \\frac{1}{2} = \\frac{2}{6} = \\frac{1}{3}$. Bagi: $\\frac{5}{6} \\div \\frac{1}{3} = \\frac{5}{6} \\times 3 = \\frac{15}{6} = \\frac{5}{2}$. Tambah: $\\frac{1}{3} + \\frac{5}{2} = \\frac{2}{6} + \\frac{15}{6} = \\frac{17}{6}$." },
+  // 29. Hasil 23/24 (B)
+  { expr: "\\dfrac{1}{2} + \\dfrac{1}{3} + \\dfrac{1}{4} \\times \\dfrac{1}{2}",
+    options: ["\\dfrac{11}{12}", "\\dfrac{23}{24}", "1", "\\dfrac{5}{6}"],
+    correct: 1,
+    discussion: "Kali: $\\frac{1}{4} \\times \\frac{1}{2} = \\frac{1}{8}$. Tambah: $\\frac{1}{2} + \\frac{1}{3} + \\frac{1}{8}$. KPK 2,3,8 = 24: $\\frac{12}{24} + \\frac{8}{24} + \\frac{3}{24} = \\frac{23}{24}$." },
+  // 30. Hasil 35/6 (D)
+  { expr: "\\dfrac{3}{5} \\div \\dfrac{1}{10} - \\dfrac{1}{2} \\times \\dfrac{1}{3}",
+    options: ["6", "\\dfrac{17}{3}", "\\dfrac{11}{2}", "\\dfrac{35}{6}"],
+    correct: 3,
+    discussion: "Bagi: $\\frac{3}{5} \\div \\frac{1}{10} = \\frac{3}{5} \\times 10 = 6$. Kali: $\\frac{1}{2} \\times \\frac{1}{3} = \\frac{1}{6}$. Kurang: $6 - \\frac{1}{6} = \\frac{36}{6} - \\frac{1}{6} = \\frac{35}{6}$." }
+];
+
+// =================== STATE ===================
+const state = {
+  currentSlide: 0,
+  currentQuestion: 0,
+  names: ['', ''],
+  answers: [Array(30).fill(-1), Array(30).fill(-1)],
+  locked: [Array(30).fill(false), Array(30).fill(false)],
+  times: [Array(30).fill(0), Array(30).fill(0)],
+  activeQ: 0,
+  activeSince: null,
+  timerInterval: null,
+  checkedQuestions: new Set()
+};
+
+const SLIDE_ORDER = ['welcome', 'material', 'quiz', 'stats', 'reflect', 'thanks'];
+
+// =================== BACKGROUND SYMBOLS ===================
+function initBgSymbols() {
+  const symbols = ['½', '⅓','¼','¾','×','÷','+','−','ⁿ⁄d','a/b'];
+  const container = document.getElementById('bgSymbols');
+  for (let i = 0; i < 14; i++) {
+    const span = document.createElement('span');
+    span.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    span.style.left = Math.random()*100 + '%';
+    span.style.fontSize = (40 + Math.random()*80) + 'px';
+    span.style.animationDelay = (-Math.random()*45) + 's';
+    span.style.animationDuration = (30 + Math.random()*30) + 's';
+    container.appendChild(span);
+  }
+}
+
+// =================== TOAST ===================
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// =================== SLIDE NAVIGATION ===================
+function goToSlide(idx) {
+  if (idx < 0 || idx >= SLIDE_ORDER.length) return;
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.getElementById('slide-' + SLIDE_ORDER[idx]).classList.add('active');
+  state.currentSlide = idx;
+  updateProgress();
+  updateNavBar();
+  if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const pct = ((state.currentSlide + 1) / SLIDE_ORDER.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function updateNavBar() {
+  const navBar = document.getElementById('navBar');
+  if (state.currentSlide === 0 || state.currentSlide === SLIDE_ORDER.length - 1) {
+    navBar.style.display = 'none';
+    return;
+  }
+  navBar.style.display = 'flex';
+  document.getElementById('navPrev').disabled = state.currentSlide === 0;
+  document.getElementById('navNext').disabled = state.currentSlide === SLIDE_ORDER.length - 1;
+}
+
+// =================== WELCOME ===================
+function initWelcome() {
+  const name1 = document.getElementById('name1');
+  const name2 = document.getElementById('name2');
+  const av1 = document.getElementById('avatar1');
+  const av2 = document.getElementById('avatar2');
+
+  function updateAvatar(input, avatar, idx) {
+    const val = input.value.trim();
+    if (val) {
+      avatar.textContent = val.charAt(0).toUpperCase();
+      avatar.classList.add('filled');
+      state.names[idx] = val;
+    } else {
+      avatar.textContent = (idx+1);
+      avatar.classList.remove('filled');
+      state.names[idx] = '';
+    }
+  }
+
+  name1.addEventListener('input', () => updateAvatar(name1, av1, 0));
+  name2.addEventListener('input', () => updateAvatar(name2, av2, 1));
+
+  document.getElementById('btnStart').addEventListener('click', () => {
+    if (!state.names[0] || !state.names[1]) {
+      showToast('Kedua siswa harus mengisi nama terlebih dahulu!', 'error');
+      return;
+    }
+    if (state.names[0].toLowerCase() === state.names[1].toLowerCase()) {
+      showToast('Gunakan nama yang berbeda untuk setiap siswa.', 'error');
+      return;
+    }
+    document.getElementById('tpName1').textContent = state.names[0];
+    document.getElementById('tpName2').textContent = state.names[1];
+    goToSlide(1);
+  });
+}
+
+// =================== MATERIAL ===================
+function initMaterial() {
+  document.getElementById('btnToQuiz').addEventListener('click', () => {
+    goToSlide(2);
+    if (state.activeSince === null) {
+      state.activeQ = 0;
+      state.activeSince = Date.now();
+      startTimer();
+      renderQuestion(state.activeQ);
+      updateQNav();
+      document.getElementById('tpmQnum').textContent = state.activeQ + 1;
+    }
+  });
+}
+
+// =================== TIMERS ===================
+function startTimer() {
+  state.timerInterval = setInterval(updateTimerDisplay, 200);
+}
+
+function updateTimerDisplay() {
+  if (state.activeSince === null) return;
+  const now = Date.now();
+  const delta = (now - state.activeSince) / 1000;
+  
+  for (let s = 0; s < 2; s++) {
+    let timeToShow = state.times[s][state.activeQ];
+    if (!state.locked[s][state.activeQ]) {
+      timeToShow += delta;
+    }
+    const timeStr = formatTime(Math.floor(timeToShow));
+    document.getElementById('tpTime' + (s+1)).textContent = timeStr;
+    const qTimeEl = document.querySelector(`.ans-block.s${s+1} .ans-block-time`);
+    if (qTimeEl) qTimeEl.textContent = timeStr;
+  }
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2, '0');
+  const s = (sec % 60).toString().padStart(2, '0');
+  return m + ':' + s;
+}
+
+// =================== QUIZ RENDERING ===================
+function goToQuestion(qIdx) {
+  if (qIdx < 0 || qIdx >= 30) return;
+  if (qIdx === state.activeQ) return;
+  
+  // Simpan waktu yang terakumulasi untuk soal lama
+  const now = Date.now();
+  if (state.activeSince) {
+    const delta = (now - state.activeSince) / 1000;
+    for (let s = 0; s < 2; s++) {
+      if (!state.locked[s][state.activeQ]) {
+        state.times[s][state.activeQ] += delta;
+      }
+    }
+  }
+  
+  // Pindah ke soal baru
+  state.activeQ = qIdx;
+  state.activeSince = now;
+  
+  renderQuestion(qIdx);
+  updateQNav();
+  document.getElementById('tpmQnum').textContent = qIdx + 1;
+}
+
+function renderQuestion(qIdx) {
+  const q = QUESTIONS[qIdx];
+  const container = document.getElementById('questionContainer');
+  const letters = ['A','B','C','D'];
+  
+  let optionsHTML = '';
+  q.options.forEach((opt, oi) => {
+    optionsHTML += `
+      <div class="q-option" data-o="${oi}">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-expr">$${opt}$</div>
+        <div class="opt-correct-mark">Jawaban Benar</div>
+      </div>`;
+  });
+  
+  let ansBlocks = '';
+  for (let s = 0; s < 2; s++) {
+    const cls = s === 0 ? 's1' : 's2';
+    const studentName = state.names[s];
+    const isLocked = state.locked[s][qIdx];
+    const selectedAns = state.answers[s][qIdx];
+    const status = getStatus(qIdx, s);
+    
+    let optBtns = '';
+    q.options.forEach((opt, oi) => {
+      const isSelected = selectedAns === oi;
+      optBtns += `<button class="opt-btn ${isSelected ? 'selected' : ''}" data-s="${s}" data-o="${oi}" ${isLocked ? 'disabled' : ''}>
+        <span class="opt-btn-letter">${letters[oi]}</span>
+        <span>$${opt}$</span>
+      </button>`;
+    });
+    
+    ansBlocks += `
+      <div class="ans-block ${cls}" data-s="${s}">
+        <div class="ans-block-head">
+          <div class="ans-block-dot"></div>
+          <div class="ans-block-name">${studentName}</div>
+          <button class="lock-btn ${cls} ${isLocked ? 'locked' : ''}" data-s="${s}" ${isLocked ? 'disabled' : ''}>
+            ${isLocked ? '✓ Terkunci' : 'Kunci Jawaban'}
+          </button>
+        </div>
+        <div class="ans-block-time">00:00</div>
+        <div class="ans-block-status ${status.cls}">${status.text}</div>
+        <div class="opt-row">${optBtns}</div>
+      </div>`;
+  }
+  
+  container.innerHTML = `
+    <div class="question-card" id="qcard-${qIdx}">
+      <div class="q-top">
+        <div class="q-num">${(qIdx+1).toString().padStart(2,'0')}</div>
+        <div class="q-tag">Soal ${qIdx+1} dari 30</div>
+      </div>
+      <div class="q-expr">$$${q.expr}$$</div>
+      <div class="q-options">${optionsHTML}</div>
+      <div class="answer-section">${ansBlocks}</div>
+      <div class="q-footer">
+        <div class="q-actions">
+          <button class="btn btn-sm btn-ghost" data-action="check">Cek Jawaban</button>
+          <button class="btn btn-sm btn-s2" data-action="discuss">Pembahasan</button>
+        </div>
+        <div style="font-size:12px; color: var(--muted);" id="qstatus-${qIdx}">—</div>
+      </div>
+      <div class="discussion" id="disc-${qIdx}">
+        <div class="discussion-title">Pembahasan</div>
+        <div class="discussion-body">$$${q.expr}$$<br><br>${q.discussion}<br><span class="answer-final">Jawaban: ${letters[q.correct]}</span></div>
+      </div>
+    </div>
+  `;
+  
+  // Update top timer panel status
+  for (let s = 0; s < 2; s++) {
+    const statusEl = document.getElementById('tpStatus' + (s+1));
+    if (state.locked[s][qIdx]) {
+      statusEl.textContent = 'Selesai';
+      statusEl.style.color = 'var(--success)';
+    } else {
+      statusEl.textContent = 'Mengerjakan…';
+      statusEl.style.color = 'var(--muted)';
+    }
+  }
+  
+  // Attach listeners
+  container.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = parseInt(btn.dataset.s);
+      const o = parseInt(btn.dataset.o);
+      if (state.locked[s][qIdx]) return;
+      
+      state.answers[s][qIdx] = o;
+      const block = btn.closest('.ans-block');
+      block.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      
+      const status = block.querySelector('.ans-block-status');
+      status.className = 'ans-block-status empty';
+      status.textContent = 'Terpilih: ' + ['A','B','C','D'][o];
+    });
+  });
+  
+  container.querySelectorAll('.lock-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = parseInt(btn.dataset.s);
+      lockStudent(qIdx, s);
+    });
+  });
+  
+  container.querySelector('[data-action="check"]').addEventListener('click', () => checkQuestion(qIdx));
+  container.querySelector('[data-action="discuss"]').addEventListener('click', () => toggleDiscussion(qIdx));
+  
+  // Restore checked state
+  if (state.checkedQuestions.has(qIdx)) {
+    checkQuestion(qIdx, true);
+  }
+  
+  // Typeset MathJax
+  if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]);
+  }
+}
+
+function getStatus(qIdx, s) {
+  const ans = state.answers[s][qIdx];
+  const q = QUESTIONS[qIdx];
+  if (ans === -1) return { cls: 'empty', text: 'Belum dijawab' };
+  if (ans === q.correct) return { cls: 'correct', text: '✓ Benar' };
+  return { cls: 'wrong', text: '✗ Salah' };
+}
+
+function lockStudent(qIdx, sIdx) {
+  if (state.locked[sIdx][qIdx]) return;
+  
+  // Simpan waktu yang terakumulasi untuk semua siswa pada soal ini
+  const now = Date.now();
+  if (state.activeSince) {
+    const delta = (now - state.activeSince) / 1000;
+    for (let s = 0; s < 2; s++) {
+      if (!state.locked[s][qIdx]) {
+        state.times[s][qIdx] += delta;
+      }
+    }
+    state.activeSince = now; // reset base untuk siswa yang masih mengerjakan
+  }
+  
+  state.locked[sIdx][qIdx] = true;
+  
+  // Update UI
+  const btn = document.querySelector(`.ans-block.s${sIdx+1} .lock-btn`);
+  btn.textContent = '✓ Terkunci';
+  btn.classList.add('locked');
+  btn.disabled = true;
+  
+  document.querySelectorAll(`.ans-block.s${sIdx+1} .opt-btn`).forEach(b => {
+    b.style.pointerEvents = 'none';
+    b.style.opacity = '0.7';
+  });
+  
+  document.getElementById('tpStatus' + (sIdx+1)).textContent = 'Selesai';
+  document.getElementById('tpStatus' + (sIdx+1)).style.color = 'var(--success)';
+  
+  updateQNav();
+  showToast(state.names[sIdx] + ' mengunci jawaban soal ' + (qIdx+1) + '!', 'success');
+}
+
+function checkQuestion(qIdx, isRestore = false) {
+  const q = QUESTIONS[qIdx];
+  let results = [false, false];
+
+  for (let s = 0; s < 2; s++) {
+    const ans = state.answers[s][qIdx];
+    const block = document.querySelector(`.ans-block[data-s="${s}"]`);
+    if (!block) continue;
+    const status = block.querySelector('.ans-block-status');
+    if (ans === -1) {
+      status.className = 'ans-block-status empty';
+      status.textContent = 'Belum dijawab';
+    } else if (ans === q.correct) {
+      status.className = 'ans-block-status correct';
+      status.textContent = '✓ Benar';
+      results[s] = true;
+    } else {
+      status.className = 'ans-block-status wrong';
+      status.textContent = '✗ Salah';
+    }
+  }
+
+  const card = document.getElementById('qcard-' + qIdx);
+  if (!card) return;
+  
+  card.querySelectorAll('.q-option').forEach((opt, oi) => {
+    if (oi === q.correct) opt.classList.add('is-correct');
+    else opt.classList.remove('is-correct');
+  });
+
+  const statText = document.getElementById('qstatus-' + qIdx);
+  if (statText) {
+    const correctCount = results.filter(r => r).length;
+    if (correctCount === 2) {
+      card.classList.add('both-correct');
+      statText.innerHTML = '<span style="color: var(--success); font-weight:700;">✓ Keduanya benar!</span>';
+    } else if (correctCount === 1) {
+      const correctName = results[0] ? state.names[0] : state.names[1];
+      statText.innerHTML = `<span style="color: var(--s1-bright); font-weight:700;">Hanya ${correctName} yang benar</span>`;
+    } else {
+      statText.innerHTML = '<span style="color: var(--error); font-weight:700;">Belum ada yang benar — coba lihat pembahasan!</span>';
+    }
+  }
+
+  state.checkedQuestions.add(qIdx);
+  updateQNav();
+  if (!isRestore) showToast('Soal ' + (qIdx+1) + ' dicek.', 'success');
+}
+
+function toggleDiscussion(qIdx) {
+  const disc = document.getElementById('disc-' + qIdx);
+  disc.classList.toggle('show');
+  if (disc.classList.contains('show') && typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+    MathJax.typesetPromise([disc]);
+  }
+}
+
+function updateQNav() {
+  const grid = document.getElementById('qNavGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 30; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'q-nav-btn';
+    btn.textContent = i + 1;
+    
+    if (i === state.activeQ) btn.classList.add('active');
+    
+    const l1 = state.locked[0][i];
+    const l2 = state.locked[1][i];
+    if (l1 && l2) btn.classList.add('locked-both');
+    else if (l1) btn.classList.add('locked-s1');
+    else if (l2) btn.classList.add('locked-s2');
+    
+    if (state.checkedQuestions.has(i)) btn.classList.add('checked');
+    
+    btn.addEventListener('click', () => goToQuestion(i));
+    grid.appendChild(btn);
+  }
+}
+
+// =================== STATS ===================
+function computeStats(s) {
+  let correct = 0, wrong = 0, empty = 0;
+  const perQ = [];
+  let totalTime = 0;
+  
+  QUESTIONS.forEach((q, qi) => {
+    const ans = state.answers[s][qi];
+    if (ans === -1) { empty++; perQ.push('empty'); }
+    else if (ans === q.correct) { correct++; perQ.push('correct'); }
+    else { wrong++; perQ.push('wrong'); }
+    totalTime += state.times[s][qi];
+  });
+  
+  const total = QUESTIONS.length;
+  const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+  return { correct, wrong, empty, perQ, acc, totalTime };
+}
+
+function renderStats() {
+  for (let s = 0; s < 2; s++) {
+    const stats = computeStats(s);
+    document.getElementById('statName' + (s+1)).textContent = state.names[s];
+    document.getElementById('statAvatar' + (s+1)).textContent = state.names[s].charAt(0).toUpperCase();
+
+    const elapsed = Math.floor(stats.totalTime);
+    document.getElementById('statTime' + (s+1)).textContent = 'Total Waktu: ' + formatTime(elapsed);
+
+    document.getElementById('statCorrect' + (s+1)).textContent = stats.correct;
+    document.getElementById('statWrong' + (s+1)).textContent = stats.wrong;
+    document.getElementById('statAcc' + (s+1)).textContent = stats.acc + '%';
+
+    document.getElementById('statBar' + (s+1)).style.width = stats.acc + '%';
+    document.getElementById('statAccText' + (s+1)).textContent = stats.acc + '%';
+
+    const grid = document.getElementById('pqGrid' + (s+1));
+    grid.innerHTML = '';
+    stats.perQ.forEach((status, qi) => {
+      const cell = document.createElement('div');
+      cell.className = 'pq-cell ' + status;
+      cell.textContent = qi + 1;
+      cell.title = 'Soal ' + (qi+1) + ': ' + (status === 'correct' ? 'Benar' : status === 'wrong' ? 'Salah' : 'Kosong');
+      grid.appendChild(cell);
+    });
+  }
+}
+
+// =================== INIT ===================
+function init() {
+  initBgSymbols();
+  initWelcome();
+  initMaterial();
+
+  document.getElementById('prevQ').addEventListener('click', () => goToQuestion(state.activeQ - 1));
+  document.getElementById('nextQ').addEventListener('click', () => goToQuestion(state.activeQ + 1));
+
+  document.getElementById('btnFinish').addEventListener('click', () => {
+    // Simpan waktu soal aktif terakhir
+    const now = Date.now();
+    if (state.activeSince) {
+      const delta = (now - state.activeSince) / 1000;
+      for (let s = 0; s < 2; s++) {
+        if (!state.locked[s][state.activeQ]) {
+          state.times[s][state.activeQ] += delta;
+        }
+      }
+      state.activeSince = null;
+    }
+    clearInterval(state.timerInterval);
+    renderStats();
+    goToSlide(3);
+  });
+
+  document.getElementById('btnToReflect').addEventListener('click', () => goToSlide(4));
+  document.getElementById('btnToThanks').addEventListener('click', () => goToSlide(5));
+
+  document.getElementById('navPrev').addEventListener('click', () => goToSlide(state.currentSlide - 1));
+  document.getElementById('navNext').addEventListener('click', () => goToSlide(state.currentSlide + 1));
+
+  updateNavBar();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
