@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Decimal Adventures ✨ Multiply & Divide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink: #FF6B9D;
+  --hot-pink: #FF4D8D;
+  --purple: #C147E9;
+  --lavender: #E8D5F2;
+  --peach: #FFE5D9;
+  --cream: #FFF8F0;
+  --yellow: #FFD93D;
+  --mint: #C5F0DD;
+  --text: #4A1942;
+  --text-light: #8B5A7A;
+  --bg-1: #FFE5EC;
+  --bg-2: #F8D7E8;
+  --bg-3: #E8D5F2;
+  --card: rgba(255, 255, 255, 0.92);
+  --shadow: 0 8px 32px rgba(255, 107, 157, 0.18);
+  --shadow-hover: 0 12px 40px rgba(255, 107, 157, 0.28);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text);
+  overflow-x: hidden;
+  padding-bottom: 100px;
+}
+.deco-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.deco-bg span { position: absolute; font-size: 28px; opacity: 0.4; animation: floatDeco 15s infinite ease-in-out; }
+@keyframes floatDeco {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-30px) rotate(15deg); }
+  50% { transform: translateY(-15px) rotate(-10deg); }
+  75% { transform: translateY(-25px) rotate(20deg); }
+}
+.presentation { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
+.slide { display: none; animation: slideIn 0.6s ease; }
+.slide.active { display: block; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 5px;
+  background: linear-gradient(90deg, var(--pink), var(--purple));
+  z-index: 200; transition: width 0.5s ease;
+}
+.nav-bar {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--card); backdrop-filter: blur(15px);
+  border-radius: 50px; padding: 10px 20px;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 15px; z-index: 100;
+  border: 2px solid rgba(255, 107, 157, 0.2);
+}
+.nav-btn {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border: none; padding: 10px 20px;
+  border-radius: 30px; font-family: 'Quicksand', sans-serif;
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  transition: all 0.3s; display: flex; align-items: center; gap: 5px;
+}
+.nav-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #ccc; }
+.slide-indicator { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--text); padding: 0 10px; }
+.lang-btn {
+  position: fixed; top: 20px; right: 20px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white; border: none; padding: 10px 20px;
+  border-radius: 30px; font-family: 'Quicksand', sans-serif;
+  font-weight: 600; cursor: pointer; z-index: 100;
+  box-shadow: var(--shadow); transition: all 0.3s; font-size: 14px;
+}
+.lang-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(193, 71, 233, 0.4); }
+.score-badge {
+  position: fixed; top: 20px; left: 20px;
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 10px 20px; border-radius: 30px;
+  box-shadow: var(--shadow); z-index: 100;
+  font-weight: 700; font-size: 14px; display: none;
+  border: 2px solid rgba(255, 217, 61, 0.4);
+}
+.cover {
+  text-align: center; padding: 40px 20px;
+  min-height: 80vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+}
+.cover-badge {
+  background: linear-gradient(135deg, var(--yellow), #FFA500);
+  color: var(--text); padding: 8px 24px;
+  border-radius: 30px; font-weight: 600;
+  font-size: 14px; margin-bottom: 20px; box-shadow: var(--shadow);
+}
+.cover h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 10px; line-height: 1.2;
+}
+.cover .subtitle {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--text-light); margin-bottom: 30px;
+}
+.cover-emojis { font-size: 3rem; margin: 20px 0; animation: bounce 2s infinite; }
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.name-input-section {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 30px; border-radius: var(--radius);
+  box-shadow: var(--shadow); max-width: 400px;
+  width: 100%; margin: 20px auto;
+  border: 2px solid rgba(255, 107, 157, 0.2);
+}
+.name-input-section label {
+  display: block; font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem; margin-bottom: 10px; color: var(--text);
+}
+.name-input-section input {
+  width: 100%; padding: 12px 16px;
+  border: 2px solid var(--lavender);
+  border-radius: var(--radius-sm);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem; margin-bottom: 15px; transition: all 0.3s;
+}
+.name-input-section input:focus {
+  outline: none; border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+}
+.start-btn {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border: none; padding: 14px 40px;
+  border-radius: 30px; font-family: 'Fredoka', sans-serif;
+  font-size: 1.1rem; cursor: pointer; transition: all 0.3s;
+  width: 100%; box-shadow: var(--shadow);
+}
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4); }
+.error-msg {
+  color: #E03131; font-size: 0.85rem; margin-top: -10px; margin-bottom: 10px;
+  display: none; font-weight: 600;
+}
+.error-msg.show { display: block; animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.slide-header { text-align: center; margin-bottom: 30px; padding: 20px; }
+.slide-header h2 {
+  font-family: 'Pacifico', cursive;
+  font-size: clamp(2rem, 4vw, 3rem);
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 10px;
+}
+.slide-header .icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+.slide-header p { color: var(--text-light); font-size: 1.1rem; }
+.trigger-card {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 40px; border-radius: var(--radius);
+  box-shadow: var(--shadow); max-width: 700px; margin: 0 auto;
+  border: 2px solid rgba(255, 107, 157, 0.2); text-align: center;
+}
+.trigger-card .big-question {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.6rem; color: var(--text);
+  margin: 20px 0; line-height: 1.5;
+}
+.trigger-card .scenario {
+  background: linear-gradient(135deg, var(--peach), var(--lavender));
+  padding: 20px; border-radius: var(--radius-sm);
+  margin: 20px 0; font-size: 1.1rem; text-align: left;
+}
+.trigger-card .think-bubble { font-size: 4rem; margin: 20px 0; animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.objectives-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px; max-width: 1000px; margin: 0 auto;
+}
+.objective-card {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 25px; border-radius: var(--radius);
+  box-shadow: var(--shadow); border-left: 5px solid var(--pink);
+  transition: all 0.3s;
+}
+.objective-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+.objective-card .obj-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.objective-card h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem; margin-bottom: 8px; color: var(--text);
+}
+.objective-card p { color: var(--text-light); line-height: 1.5; }
+.review-tabs {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-bottom: 30px;
+}
+.review-tab {
+  background: var(--card); border: 2px solid var(--lavender);
+  padding: 10px 20px; border-radius: 30px; cursor: pointer;
+  font-family: 'Quicksand', sans-serif; font-weight: 600;
+  transition: all 0.3s; color: var(--text); font-size: 14px;
+}
+.review-tab:hover { border-color: var(--pink); transform: translateY(-2px); }
+.review-tab.active {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border-color: transparent;
+}
+.review-content { display: none; }
+.review-content.active { display: block; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.topic-intro {
+  background: linear-gradient(135deg, var(--peach), var(--mint));
+  padding: 20px; border-radius: var(--radius);
+  margin-bottom: 20px; font-size: 1.05rem; line-height: 1.6;
+}
+.question-card {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 20px; border-radius: var(--radius);
+  box-shadow: var(--shadow); margin-bottom: 15px;
+  border: 2px solid rgba(255, 107, 157, 0.15);
+  transition: all 0.3s;
+}
+.question-card:hover { box-shadow: var(--shadow-hover); }
+.q-number {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; width: 30px; height: 30px;
+  border-radius: 50%; text-align: center; line-height: 30px;
+  font-weight: 700; font-size: 14px; margin-right: 10px;
+  vertical-align: middle;
+}
+.q-text { font-size: 1.1rem; margin-bottom: 12px; display: inline; vertical-align: middle; }
+.q-options {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px; margin: 12px 0;
+}
+.q-option {
+  background: white; border: 2px solid var(--lavender);
+  padding: 10px 15px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.3s;
+  font-family: 'Quicksand', sans-serif; font-size: 0.95rem;
+}
+.q-option:hover { border-color: var(--pink); background: var(--bg-1); }
+.q-option.selected {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border-color: transparent;
+}
+.q-option.correct-answer {
+  background: linear-gradient(135deg, #51CF66, #37B24D);
+  color: white; border-color: transparent;
+}
+.q-option.wrong-answer {
+  background: linear-gradient(135deg, #FF6B6B, #E03131);
+  color: white; border-color: transparent;
+}
+.q-input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.q-input {
+  padding: 8px 14px; border: 2px solid var(--lavender);
+  border-radius: var(--radius-sm);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem; flex: 1; min-width: 100px;
+}
+.q-input:focus {
+  outline: none; border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+}
+.check-btn {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border: none; padding: 8px 20px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Quicksand', sans-serif; font-weight: 600;
+  transition: all 0.3s; white-space: nowrap;
+}
+.check-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3); }
+.feedback {
+  margin-top: 10px; padding: 10px;
+  border-radius: var(--radius-sm); font-weight: 600;
+  display: none;
+}
+.feedback.show { display: block; animation: popIn 0.4s ease; }
+.feedback.correct { background: linear-gradient(135deg, #D3F9D8, #B2F2BB); color: #2B8A3E; }
+.feedback.wrong { background: linear-gradient(135deg, #FFE0E0, #FFCCCC); color: #C92A2A; }
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.explanation {
+  margin-top: 10px;
+  background: linear-gradient(135deg, var(--cream), var(--peach));
+  padding: 15px; border-radius: var(--radius-sm);
+  border-left: 4px solid var(--purple);
+  display: none; white-space: pre-line; line-height: 1.6;
+}
+.explanation.show { display: block; animation: popIn 0.4s ease; }
+.explanation h4 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: 8px; color: var(--purple);
+}
+.method-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 15px; margin-top: 10px;
+}
+@media (max-width: 768px) { .method-grid { grid-template-columns: 1fr; } }
+.method-box {
+  background: white; padding: 15px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--lavender);
+}
+.method-box h5 {
+  font-family: 'Fredoka', sans-serif; color: var(--purple);
+  margin-bottom: 8px; font-size: 0.95rem;
+}
+.method-box .method-content {
+  white-space: pre-line; font-size: 0.9rem;
+  line-height: 1.5; color: var(--text);
+}
+.pagination {
+  display: flex; justify-content: center; align-items: center;
+  gap: 8px; margin: 20px 0; flex-wrap: wrap;
+}
+.page-btn {
+  background: var(--card); border: 2px solid var(--lavender);
+  min-width: 40px; height: 40px; border-radius: 50%;
+  cursor: pointer; font-family: 'Quicksand', sans-serif;
+  font-weight: 600; transition: all 0.3s; padding: 0 10px;
+}
+.page-btn:hover { border-color: var(--pink); }
+.page-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; border-color: transparent;
+}
+.problem-card {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 20px; border-radius: var(--radius);
+  box-shadow: var(--shadow); margin-bottom: 15px;
+  border-left: 5px solid var(--purple);
+}
+.problem-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white; padding: 3px 12px;
+  border-radius: 15px; font-size: 0.8rem;
+  font-weight: 600; margin-bottom: 8px;
+}
+.conclusion-card {
+  background: var(--card); backdrop-filter: blur(10px);
+  padding: 40px; border-radius: var(--radius);
+  box-shadow: var(--shadow); max-width: 800px;
+  margin: 0 auto; text-align: center;
+}
+.summary-points { display: grid; gap: 15px; margin: 20px 0; text-align: left; }
+.summary-point {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: linear-gradient(135deg, var(--cream), var(--peach));
+  padding: 15px; border-radius: var(--radius-sm);
+}
+.summary-point .point-icon { font-size: 1.5rem; flex-shrink: 0; }
+.reflection-box {
+  background: linear-gradient(135deg, var(--mint), var(--lavender));
+  padding: 20px; border-radius: var(--radius);
+  margin: 20px 0; text-align: left;
+}
+.reflection-box h3 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: 10px; color: var(--text);
+}
+.thank-you {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin: 20px 0;
+  animation: sparkle 2s infinite;
+}
+@keyframes sparkle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.theory-section {
+  background: linear-gradient(135deg, var(--lavender), var(--peach));
+  padding: 25px; border-radius: var(--radius); margin-bottom: 20px;
+}
+.theory-section h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.5rem; margin-bottom: 15px; color: var(--purple);
+}
+.method-demo {
+  background: white; padding: 20px;
+  border-radius: var(--radius-sm); margin: 10px 0;
+  border-left: 4px solid var(--pink);
+}
+.method-demo h4 {
+  font-family: 'Fredoka', sans-serif;
+  color: var(--pink); margin-bottom: 10px;
+}
+.method-demo pre {
+  font-family: 'Quicksand', sans-serif;
+  white-space: pre-line; line-height: 1.6; font-size: 0.95rem;
+}
+.confetti {
+  position: fixed; pointer-events: none; z-index: 1000;
+  animation: confettiFall 3s ease-out forwards;
+  font-size: 20px;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+@media (max-width: 768px) {
+  .presentation { padding: 10px; }
+  .slide { padding: 10px; }
+  .cover h1 { font-size: 2.5rem; }
+  .nav-bar { padding: 8px 12px; gap: 8px; }
+  .nav-btn { padding: 8px 12px; font-size: 12px; }
+  .lang-btn { padding: 8px 12px; font-size: 12px; top: 10px; right: 10px; }
+  .score-badge { padding: 8px 12px; font-size: 12px; top: 10px; left: 10px; }
+  .trigger-card { padding: 20px; }
+  .trigger-card .big-question { font-size: 1.3rem; }
+  .thank-you { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 14.28%"></div>
+<div class="deco-bg" id="decoBg"></div>
+
+<div class="score-badge" id="scoreBadge">
+  ⭐ <span id="correctCount">0</span> / <span id="totalCount">0</span>
+</div>
+
+<button class="lang-btn" onclick="toggleLang()" id="langBtn">
+  🇮🇩 <span data-en="Bahasa Indonesia" data-id="English">Bahasa Indonesia</span>
+</button>
+
+<div class="presentation">
+
+<!-- SLIDE 1: COVER -->
+<section class="slide active" data-slide="1">
+  <div class="cover">
+    <div class="cover-badge">📚 Cambridge Curriculum · Grade 5 Mathematics</div>
+    <div class="cover-emojis">✨🧁💖🌸✨</div>
+    <h1 data-en="Decimal Adventures" data-id="Petualangan Desimal">Decimal Adventures</h1>
+    <p class="subtitle" data-en="Multiplying & Dividing Decimals" data-id="Perkalian & Pembagian Desimal">Multiplying & Dividing Decimals</p>
+    
+    <div class="name-input-section">
+      <label for="studentName" data-en="What's your name, lovely learner?" data-id="Siapa namamu, pembelajar yang manis?">What's your name, lovely learner?</label>
+      <input type="text" id="studentName" placeholder="Type your name here..." onkeypress="if(event.key==='Enter') startAdventure()">
+      <div class="error-msg" id="nameError" data-en="Please enter your name first! 💕" data-id="Silakan masukkan namamu dulu! 💕">Please enter your name first! 💕</div>
+      <button class="start-btn" onclick="startAdventure()" data-en="Start My Adventure ✨" data-id="Mulai Petualanganku ✨">Start My Adventure ✨</button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: TRIGGER QUESTION -->
+<section class="slide" data-slide="2">
+  <div class="slide-header">
+    <span class="icon">🤔</span>
+    <h2 data-en="A Sparkly Question" data-id="Sebuah Pertanyaan Cerah">A Sparkly Question</h2>
+  </div>
+  
+  <div class="trigger-card">
+    <div class="think-bubble">💭</div>
+    <div class="big-question" data-en="If you have $2.50 and want to buy cupcakes that cost $0.75 each, how many cupcakes can you buy? And how much change will you get back?" data-id="Jika kamu punya $2,50 dan ingin membeli cupcake yang harganya $0,75 setiap satu, berapa cupcake yang bisa kamu beli? Dan berapa kembalian yang kamu dapat?">
+      If you have $2.50 and want to buy cupcakes that cost $0.75 each, how many cupcakes can you buy? And how much change will you get back?
+    </div>
+    
+    <div class="scenario">
+      <p>🧁 <strong data-en="Think about it:" data-id="Pikirkanlah:">Think about it:</strong></p>
+      <p data-en="Decimals aren't just numbers on a page — they help us shop, bake, share, and solve real problems every day! When we multiply and divide decimals, we're using the same skills as a shopkeeper, a baker, or a scientist." data-id="Desimal bukan sekadar angka di halaman buku — mereka membantu kita belanja, memasak, berbagi, dan memecahkan masalah nyata setiap hari! Saat kita mengalikan dan membagi desimal, kita menggunakan keterampilan yang sama seperti penjual, koki, atau ilmuwan.">
+        Decimals aren't just numbers on a page — they help us shop, bake, share, and solve real problems every day! When we multiply and divide decimals, we're using the same skills as a shopkeeper, a baker, or a scientist.
+      </p>
+    </div>
+    
+    <p style="font-style: italic; color: var(--text-light);" data-en="Don't worry if you're not sure yet! By the end of this adventure, you'll be a decimal superhero! 🦸‍♀️" data-id="Jangan khawatir jika belum yakin! Di akhir petualangan ini, kamu akan menjadi superhero desimal! 🦸‍♀️">
+      Don't worry if you're not sure yet! By the end of this adventure, you'll be a decimal superhero! 🦸‍♀️
+    </p>
+  </div>
+</section>
+
+<!-- SLIDE 3: LEARNING OBJECTIVES -->
+<section class="slide" data-slide="3">
+  <div class="slide-header">
+    <span class="icon">🎯</span>
+    <h2 data-en="Our Learning Goals" data-id="Tujuan Pembelajaran Kita">Our Learning Goals</h2>
+    <p data-en="By the end of this adventure, you will be able to:" data-id="Di akhir petualangan ini, kamu akan dapat:">By the end of this adventure, you will be able to:</p>
+  </div>
+  
+  <div class="objectives-grid">
+    <div class="objective-card">
+      <div class="obj-icon">🔍</div>
+      <h3 data-en="Review Decimals" data-id="Review Desimal">Review Decimals</h3>
+      <p data-en="Remember what decimals are, place values, rounding, and converting between fractions and decimals." data-id="Ingat apa itu desimal, nilai tempat, pembulatan, dan cara mengubah antara pecahan dan desimal.">Remember what decimals are, place values, rounding, and converting between fractions and decimals.</p>
+    </div>
+    <div class="objective-card">
+      <div class="obj-icon">✖️</div>
+      <h3 data-en="Multiply Decimals" data-id="Perkalian Desimal">Multiply Decimals</h3>
+      <p data-en="Learn two amazing methods: converting to fractions first, and multiplying directly like a pro!" data-id="Pelajari dua metode keren: mengubah ke pecahan dulu, dan mengalikan langsung seperti pro!">Learn two amazing methods: converting to fractions first, and multiplying directly like a pro!</p>
+    </div>
+    <div class="objective-card">
+      <div class="obj-icon">➗</div>
+      <h3 data-en="Divide Decimals" data-id="Pembagian Desimal">Divide Decimals</h3>
+      <p data-en="Master decimal division using the fraction method and the direct division method." data-id="Kuasai pembagian desimal dengan metode pecahan dan metode pembagian langsung.">Master decimal division using the fraction method and the direct division method.</p>
+    </div>
+    <div class="objective-card">
+      <div class="obj-icon">🌟</div>
+      <h3 data-en="Problem Solve" data-id="Pemecahan Masalah">Problem Solve</h3>
+      <p data-en="Use your decimal skills to solve real-world problems and think critically like a mathematician!" data-id="Gunakan keterampilan desimalmu untuk memecahkan masalah dunia nyata dan berpikir kritis seperti ahli matematika!">Use your decimal skills to solve real-world problems and think critically like a mathematician!</p>
+    </div>
+    <div class="objective-card">
+      <div class="obj-icon">🧠</div>
+      <h3 data-en="Think Critically" data-id="Berpikir Kritis">Think Critically</h3>
+      <p data-en="Compare methods, explain your thinking, and choose the best strategy for each problem." data-id="Bandingkan metode, jelaskan pikiranmu, dan pilih strategi terbaik untuk setiap masalah.">Compare methods, explain your thinking, and choose the best strategy for each problem.</p>
+    </div>
+    <div class="objective-card">
+      <div class="obj-icon">💪</div>
+      <h3 data-en="Build Confidence" data-id="Bangun Kepercayaan Diri">Build Confidence</h3>
+      <p data-en="Practice with lots of examples and grow your math confidence with every question you try!" data-id="Berlatih dengan banyak contoh dan tingkatkan kepercayaan matematikamu di setiap soal yang kamu coba!">Practice with lots of examples and grow your math confidence with every question you try!</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: REVIEW MATERIAL -->
+<section class="slide" data-slide="4">
+  <div class="slide-header">
+    <span class="icon">📖</span>
+    <h2 data-en="Review Time! 🌸" data-id="Waktu Review! 🌸">Review Time! 🌸</h2>
+    <p data-en="Let's refresh our decimal knowledge with 6 fun topics — 20 questions each!" data-id="Mari segarkan pengetahuan desimal kita dengan 6 topik seru — 20 soal untuk setiap topik!">Let's refresh our decimal knowledge with 6 fun topics — 20 questions each!</p>
+  </div>
+  
+  <div class="review-tabs" id="reviewTabs"></div>
+  <div id="reviewContent"></div>
+</section>
+
+<!-- SLIDE 5: CORE MATERIAL -->
+<section class="slide" data-slide="5">
+  <div class="slide-header">
+    <span class="icon">🌟</span>
+    <h2 data-en="Core Adventure: Multiply & Divide" data-id="Petualangan Inti: Kalikan & Bagi">Core Adventure: Multiply & Divide</h2>
+    <p data-en="Time to learn the main skills with 50 practice questions each!" data-id="Saatnya mempelajari keterampilan utama dengan 50 soal latihan masing-masing!">Time to learn the main skills with 50 practice questions each!</p>
+  </div>
+  
+  <div class="theory-section">
+    <h3 data-en="✖️ Multiplying Decimals — Two Methods" data-id="✖️ Perkalian Desimal — Dua Metode">✖️ Multiplying Decimals — Two Methods</h3>
+    
+    <div class="method-demo">
+      <h4 data-en="Method 1: Fraction Method" data-id="Metode 1: Metode Pecahan">Method 1: Fraction Method</h4>
+      <pre data-en="Example: 0.3 × 0.4 = ?
+
+Step 1: Convert to fractions
+  0.3 = 3/10
+  0.4 = 4/10
+
+Step 2: Multiply numerators and denominators directly
+  (do NOT simplify yet!)
+  3/10 × 4/10 = (3×4)/(10×10) = 12/100
+
+Step 3: Convert back to decimal
+  12/100 = 0.12
+
+So, 0.3 × 0.4 = 0.12 💖" data-id="Contoh: 0,3 × 0,4 = ?
+
+Langkah 1: Ubah ke pecahan
+  0,3 = 3/10
+  0,4 = 4/10
+
+Langkah 2: Kalikan pembilang dan penyebut langsung
+  (jangan disederhanakan dulu!)
+  3/10 × 4/10 = (3×4)/(10×10) = 12/100
+
+Langkah 3: Ubah kembali ke desimal
+  12/100 = 0,12
+
+Jadi, 0,3 × 0,4 = 0,12 💖">Example: 0.3 × 0.4 = ?
+
+Step 1: Convert to fractions
+  0.3 = 3/10
+  0.4 = 4/10
+
+Step 2: Multiply numerators and denominators directly
+  (do NOT simplify yet!)
+  3/10 × 4/10 = (3×4)/(10×10) = 12/100
+
+Step 3: Convert back to decimal
+  12/100 = 0.12
+
+So, 0.3 × 0.4 = 0.12 💖</pre>
+    </div>
+    
+    <div class="method-demo">
+      <h4 data-en="Method 2: Direct Method" data-id="Metode 2: Metode Langsung">Method 2: Direct Method</h4>
+      <pre data-en="Example: 0.3 × 0.4 = ?
+
+Step 1: Multiply the numbers (ignore decimal points)
+  3 × 4 = 12
+
+Step 2: Count total decimal places
+  0.3 has 1 decimal place
+  0.4 has 1 decimal place
+  Total: 1 + 1 = 2 decimal places
+
+Step 3: Place the decimal point 2 places from the right
+  12 → 0.12
+
+So, 0.3 × 0.4 = 0.12 ✨" data-id="Contoh: 0,3 × 0,4 = ?
+
+Langkah 1: Kalikan angkanya (abaikan koma desimal)
+  3 × 4 = 12
+
+Langkah 2: Hitung total angka di belakang koma
+  0,3 punya 1 angka di belakang koma
+  0,4 punya 1 angka di belakang koma
+  Total: 1 + 1 = 2 angka di belakang koma
+
+Langkah 3: Letakkan koma 2 tempat dari kanan
+  12 → 0,12
+
+Jadi, 0,3 × 0,4 = 0,12 ✨">Example: 0.3 × 0.4 = ?
+
+Step 1: Multiply the numbers (ignore decimal points)
+  3 × 4 = 12
+
+Step 2: Count total decimal places
+  0.3 has 1 decimal place
+  0.4 has 1 decimal place
+  Total: 1 + 1 = 2 decimal places
+
+Step 3: Place the decimal point 2 places from the right
+  12 → 0.12
+
+So, 0.3 × 0.4 = 0.12 ✨</pre>
+    </div>
+  </div>
+  
+  <div id="multQuestions"></div>
+  <div class="pagination" id="multPagination"></div>
+  
+  <div class="theory-section" style="margin-top: 30px;">
+    <h3 data-en="➗ Dividing Decimals — Two Methods" data-id="➗ Pembagian Desimal — Dua Metode">➗ Dividing Decimals — Two Methods</h3>
+    
+    <div class="method-demo">
+      <h4 data-en="Method 1: Fraction Method" data-id="Metode 1: Metode Pecahan">Method 1: Fraction Method</h4>
+      <pre data-en="Example: 0.8 ÷ 0.2 = ?
+
+Step 1: Convert to fractions
+  0.8 = 8/10
+  0.2 = 2/10
+
+Step 2: Divide fractions (multiply by reciprocal)
+  8/10 ÷ 2/10 = 8/10 × 10/2
+  = (8×10)/(10×2) = 80/20
+
+Step 3: Simplify
+  80/20 = 4
+
+So, 0.8 ÷ 0.2 = 4 💫" data-id="Contoh: 0,8 ÷ 0,2 = ?
+
+Langkah 1: Ubah ke pecahan
+  0,8 = 8/10
+  0,2 = 2/10
+
+Langkah 2: Bagi pecahan (kalikan dengan kebalikan)
+  8/10 ÷ 2/10 = 8/10 × 10/2
+  = (8×10)/(10×2) = 80/20
+
+Langkah 3: Sederhanakan
+  80/20 = 4
+
+Jadi, 0,8 ÷ 0,2 = 4 💫">Example: 0.8 ÷ 0.2 = ?
+
+Step 1: Convert to fractions
+  0.8 = 8/10
+  0.2 = 2/10
+
+Step 2: Divide fractions (multiply by reciprocal)
+  8/10 ÷ 2/10 = 8/10 × 10/2
+  = (8×10)/(10×2) = 80/20
+
+Step 3: Simplify
+  80/20 = 4
+
+So, 0.8 ÷ 0.2 = 4 💫</pre>
+    </div>
+    
+    <div class="method-demo">
+      <h4 data-en="Method 2: Direct Division" data-id="Metode 2: Pembagian Langsung">Method 2: Direct Division</h4>
+      <pre data-en="Example: 0.8 ÷ 0.2 = ?
+
+Step 1: Make the divisor a whole number
+  Multiply both by 10:
+  0.8 × 10 = 8
+  0.2 × 10 = 2
+
+Step 2: Divide normally
+  8 ÷ 2 = 4
+
+So, 0.8 ÷ 0.2 = 4 🌟" data-id="Contoh: 0,8 ÷ 0,2 = ?
+
+Langkah 1: Buat pembagi menjadi bilangan bulat
+  Kalikan keduanya dengan 10:
+  0,8 × 10 = 8
+  0,2 × 10 = 2
+
+Langkah 2: Bagi seperti biasa
+  8 ÷ 2 = 4
+
+Jadi, 0,8 ÷ 0,2 = 4 🌟">Example: 0.8 ÷ 0.2 = ?
+
+Step 1: Make the divisor a whole number
+  Multiply both by 10:
+  0.8 × 10 = 8
+  0.2 × 10 = 2
+
+Step 2: Divide normally
+  8 ÷ 2 = 4
+
+So, 0.8 ÷ 0.2 = 4 🌟</pre>
+    </div>
+  </div>
+  
+  <div id="divQuestions"></div>
+  <div class="pagination" id="divPagination"></div>
+</section>
+
+<!-- SLIDE 6: PROBLEM SOLVING -->
+<section class="slide" data-slide="6">
+  <div class="slide-header">
+    <span class="icon">🧩</span>
+    <h2 data-en="Problem Solving Quest" data-id="Misi Pemecahan Masalah">Problem Solving Quest</h2>
+    <p data-en="30 real-world challenges to test your decimal superpowers! 🦸‍♀️" data-id="30 tantangan dunia nyata untuk menguji kekuatan super desimalmu! 🦸‍♀️">30 real-world challenges to test your decimal superpowers! 🦸‍♀️</p>
+  </div>
+  
+  <div id="problemQuestions"></div>
+</section>
+
+<!-- SLIDE 7: CONCLUSION -->
+<section class="slide" data-slide="7">
+  <div class="slide-header">
+    <span class="icon">🎉</span>
+    <h2 data-en="You Did It!" data-id="Kamu Berhasil!">You Did It!</h2>
+  </div>
+  
+  <div class="conclusion-card">
+    <div style="font-size: 3rem; margin-bottom: 15px;">🌟🏆🌟</div>
+    
+    <h3 style="font-family: 'Fredoka', sans-serif; font-size: 1.5rem; margin-bottom: 20px;" data-en="What We Learned Today" data-id="Yang Kita Pelajari Hari Ini">What We Learned Today</h3>
+    
+    <div class="summary-points">
+      <div class="summary-point">
+        <span class="point-icon">✖️</span>
+        <div data-en="Decimals can be multiplied by converting to fractions first, then multiplying numerators directly (without simplifying) before converting back." data-id="Desimal dapat dikalikan dengan mengubah ke pecahan dulu, lalu mengalikan pembilangnya langsung (tanpa menyederhanakan) sebelum dikembalikan ke desimal.">Decimals can be multiplied by converting to fractions first, then multiplying numerators directly (without simplifying) before converting back.</div>
+      </div>
+      <div class="summary-point">
+        <span class="point-icon">🔢</span>
+        <div data-en="Direct multiplication: multiply the numbers ignoring decimals, then count total decimal places to place the point correctly." data-id="Perkalian langsung: kalikan angka tanpa memperhatikan koma, lalu hitung total angka di belakang koma untuk meletakkan titik dengan benar.">Direct multiplication: multiply the numbers ignoring decimals, then count total decimal places to place the point correctly.</div>
+      </div>
+      <div class="summary-point">
+        <span class="point-icon">➗</span>
+        <div data-en="Decimals can be divided by converting to fractions and multiplying by the reciprocal." data-id="Desimal dapat dibagi dengan mengubah ke pecahan dan mengalikan dengan kebalikannya.">Decimals can be divided by converting to fractions and multiplying by the reciprocal.</div>
+      </div>
+      <div class="summary-point">
+        <span class="point-icon">💪</span>
+        <div data-en="Direct division: make the divisor a whole number by multiplying both numbers, then divide normally." data-id="Pembagian langsung: buat pembagi menjadi bilangan bulat dengan mengalikan kedua angka, lalu bagi seperti biasa.">Direct division: make the divisor a whole number by multiplying both numbers, then divide normally.</div>
+      </div>
+    </div>
+    
+    <div class="reflection-box">
+      <h3 data-en="💫 Time to Reflect" data-id="💫 Saatnya Refleksi">💫 Time to Reflect</h3>
+      <p data-en="Take a moment to think about your learning journey:" data-id="Luangkan waktu untuk memikirkan perjalanan belajarmu:">Take a moment to think about your learning journey:</p>
+      <ul style="margin: 10px 0 0 25px; line-height: 1.8;">
+        <li data-en="Which method did you like better — fraction or direct? Why?" data-id="Metode mana yang lebih kamu suka — pecahan atau langsung? Mengapa?">Which method did you like better — fraction or direct? Why?</li>
+        <li data-en="What was the trickiest part about multiplying or dividing decimals?" data-id="Bagian apa yang paling sulit tentang mengalikan atau membagi desimal?">What was the trickiest part about multiplying or dividing decimals?</li>
+        <li data-en="How will you use decimals in your everyday life?" data-id="Bagaimana kamu akan menggunakan desimal dalam kehidupan sehari-hari?">How will you use decimals in your everyday life?</li>
+        <li data-en="What is one thing you're proud of learning today?" data-id="Apa satu hal yang kamu banggakan dari belajar hari ini?">What is one thing you're proud of learning today?</li>
+      </ul>
+    </div>
+    
+    <div class="thank-you" data-en="Thank you for today!" data-id="Terima kasih untuk hari ini!">Thank you for today!</div>
+    
+    <p style="font-size: 1.2rem; color: var(--text-light);" data-en="You're a decimal superhero," data-id="Kamu adalah superhero desimal,">You're a decimal superhero,</p>
+    <p style="font-family: 'Pacifico', cursive; font-size: 1.8rem; color: var(--pink);" id="finalName"></p>
+    
+    <div style="font-size: 2rem; margin-top: 20px;">💖✨🌸✨💖</div>
+  </div>
+</section>
+
+</div>
+
+<nav class="nav-bar">
+  <button class="nav-btn prev" onclick="prevSlide()" id="prevBtn">
+    ← <span data-en="Back" data-id="Kembali">Back</span>
+  </button>
+  <span class="slide-indicator"><span id="currentSlideNum">1</span> / 7</span>
+  <button class="nav-btn next" onclick="nextSlide()" id="nextBtn">
+    <span data-en="Next" data-id="Lanjut">Next</span> →
+  </button>
+</nav>
+
+<script>
+// ============ STATE ============
+let currentSlide = 1;
+let currentLang = 'en';
+let studentName = '';
+let correctCount = 0;
+let totalCount = 0;
+let currentReviewTab = 0;
+let currentMultPage = 1;
+let currentDivPage = 1;
+const PER_PAGE = 10;
+
+// ============ DECORATIONS ============
+const decoEmojis = ['💖','🌸','✨','⭐','🧁','🌺','💕','🌟','🦋','🌷'];
+const decoBg = document.getElementById('decoBg');
+for (let i = 0; i < 20; i++) {
+  const span = document.createElement('span');
+  span.textContent = decoEmojis[i % decoEmojis.length];
+  span.style.left = Math.random() * 100 + '%';
+  span.style.top = Math.random() * 100 + '%';
+  span.style.animationDelay = Math.random() * 15 + 's';
+  span.style.animationDuration = (10 + Math.random() * 10) + 's';
+  decoBg.appendChild(span);
+}
+
+// ============ HELPERS ============
+function dp(n) {
+  const s = parseFloat(n).toString();
+  return s.indexOf('.') === -1 ? 0 : s.split('.')[1].length;
+}
+function toFrac(n) {
+  const d = dp(n);
+  return { num: Math.round(n * Math.pow(10, d)), den: Math.pow(10, d) };
+}
+function fmt(n) {
+  const r = Math.round(n * 10000) / 10000;
+  return r.toString();
+}
+function multExplain(a, b) {
+  const af = toFrac(a), bf = toFrac(b);
+  const adp = dp(a), bdp = dp(b);
+  const tdp = adp + bdp;
+  const res = a * b;
+  const resStr = fmt(res);
+  const aw = Math.round(a * Math.pow(10, adp));
+  const bw = Math.round(b * Math.pow(10, bdp));
+  const prod = aw * bw;
+  const np = af.num * bf.num;
+  const dp2 = af.den * bf.den;
+  return {
+    answer: resStr,
+    m1: {
+      en: 'Convert to fractions:\n' + a + ' = ' + af.num + '/' + af.den + '\n' + b + ' = ' + bf.num + '/' + bf.den + '\n\nMultiply numerators and denominators directly (don\'t simplify yet!):\n' + af.num + '/' + af.den + ' × ' + bf.num + '/' + bf.den + ' = ' + np + '/' + dp2 + '\n\nConvert back to decimal:\n' + np + '/' + dp2 + ' = ' + resStr,
+      id: 'Ubah ke pecahan:\n' + a + ' = ' + af.num + '/' + af.den + '\n' + b + ' = ' + bf.num + '/' + bf.den + '\n\nKalikan pembilang dan penyebut langsung (jangan disederhanakan dulu!):\n' + af.num + '/' + af.den + ' × ' + bf.num + '/' + bf.den + ' = ' + np + '/' + dp2 + '\n\nUbah kembali ke desimal:\n' + np + '/' + dp2 + ' = ' + resStr
+    },
+    m2: {
+      en: 'Step 1: Multiply the numbers (ignore decimal points)\n' + aw + ' × ' + bw + ' = ' + prod + '\n\nStep 2: Count decimal places\n' + a + ' has ' + adp + ' decimal place(s)\n' + b + ' has ' + bdp + ' decimal place(s)\nTotal: ' + tdp + ' decimal place(s)\n\nStep 3: Place the decimal point ' + tdp + ' place(s) from the right\n' + prod + ' → ' + resStr,
+      id: 'Langkah 1: Kalikan angka (abaikan koma desimal)\n' + aw + ' × ' + bw + ' = ' + prod + '\n\nLangkah 2: Hitung angka di belakang koma\n' + a + ' memiliki ' + adp + ' angka di belakang koma\n' + b + ' memiliki ' + bdp + ' angka di belakang koma\nTotal: ' + tdp + ' angka di belakang koma\n\nLangkah 3: Letakkan koma ' + tdp + ' tempat dari kanan\n' + prod + ' → ' + resStr
+    }
+  };
+}
+function divExplain(a, b) {
+  const af = toFrac(a), bf = toFrac(b);
+  const bdp2 = dp(b);
+  const mult = Math.pow(10, bdp2);
+  const res = a / b;
+  const resStr = fmt(res);
+  const newA = fmt(a * mult);
+  const newB = fmt(b * mult);
+  const nr = af.num * bf.den;
+  const dr = af.den * bf.num;
+  return {
+    answer: resStr,
+    m1: {
+      en: 'Convert to fractions:\n' + a + ' = ' + af.num + '/' + af.den + '\n' + b + ' = ' + bf.num + '/' + bf.den + '\n\nDivide fractions (multiply by reciprocal):\n' + af.num + '/' + af.den + ' ÷ ' + bf.num + '/' + bf.den + '\n= ' + af.num + '/' + af.den + ' × ' + bf.den + '/' + bf.num + '\n= ' + nr + '/' + dr + '\n\nSimplify:\n' + nr + '/' + dr + ' = ' + resStr,
+      id: 'Ubah ke pecahan:\n' + a + ' = ' + af.num + '/' + af.den + '\n' + b + ' = ' + bf.num + '/' + bf.den + '\n\nBagi pecahan (kalikan dengan kebalikan):\n' + af.num + '/' + af.den + ' ÷ ' + bf.num + '/' + bf.den + '\n= ' + af.num + '/' + af.den + ' × ' + bf.den + '/' + bf.num + '\n= ' + nr + '/' + dr + '\n\nSederhanakan:\n' + nr + '/' + dr + ' = ' + resStr
+    },
+    m2: {
+      en: 'Step 1: Make the divisor a whole number\nMultiply both by ' + mult + ':\n' + a + ' × ' + mult + ' = ' + newA + '\n' + b + ' × ' + mult + ' = ' + newB + '\n\nStep 2: Divide normally\n' + newA + ' ÷ ' + newB + ' = ' + resStr,
+      id: 'Langkah 1: Buat pembagi menjadi bilangan bulat\nKalikan keduanya dengan ' + mult + ':\n' + a + ' × ' + mult + ' = ' + newA + '\n' + b + ' × ' + mult + ' = ' + newB + '\n\nLangkah 2: Bagi seperti biasa\n' + newA + ' ÷ ' + newB + ' = ' + resStr
+    }
+  };
+}
+function normalizeAns(s) {
+  return s.toString().trim().toLowerCase()
+    .replace(/\$/g, '').replace(/,/g, '.')
+    .replace(/[^0-9.\-]/g, '')
+    .replace(/^0+(?=\d)/, '')
+    .replace(/(\.\d*?)0+$/, '$1')
+    .replace(/\.$/, '');
+}
+function matchAns(input, correct, accept) {
+  const ni = normalizeAns(input);
+  if (ni === '') return false;
+  const accepted = accept || [correct];
+  return accepted.some(a => {
+    const na = normalizeAns(a);
+    if (ni === na) return true;
+    const fi = parseFloat(ni), fa = parseFloat(na);
+    if (!isNaN(fi) && !isNaN(fa)) return Math.abs(fi - fa) < 0.001;
+    return false;
+  });
+}
+
+// ============ MULTIPLICATION QUESTION PAIRS ============
+const multPairs = [
+  [0.3,4],[0.5,6],[0.7,3],[0.4,8],[0.9,5],[0.2,7],[0.6,4],[0.8,5],[0.1,9],[0.5,8],
+  [0.25,4],[0.12,5],[0.34,3],[0.56,2],[0.78,5],[0.15,6],[0.45,4],[0.83,3],[0.27,5],[0.64,7],
+  [0.3,0.4],[0.5,0.6],[0.7,0.8],[0.2,0.9],[0.4,0.5],[0.6,0.7],[0.8,0.3],[0.9,0.4],[0.1,0.5],[0.5,0.5],
+  [0.25,0.4],[0.12,0.5],[0.34,0.6],[0.56,0.3],[0.78,0.2],[0.15,0.8],[0.45,0.4],[0.83,0.5],[0.27,0.6],[0.64,0.3],
+  [1.5,3],[2.4,5],[3.6,4],[4.5,6],[5.2,3],[1.2,1.5],[2.5,1.4],[3.4,2.5],[4.5,1.2],[5.5,2.0]
+];
+const divPairs = [
+  [0.8,2],[0.6,3],[0.9,3],[1.2,4],[1.5,5],[2.4,6],[3.5,7],[4.8,8],[6.3,9],[8.4,4],
+  [0.8,0.2],[0.6,0.3],[0.9,0.3],[1.2,0.4],[1.5,0.5],[2.4,0.6],[3.5,0.7],[4.8,0.8],[6.3,0.9],[5.4,0.6],
+  [4,0.5],[6,0.2],[9,0.3],[10,0.5],[12,0.4],[15,0.5],[20,0.4],[25,0.5],[30,0.6],[40,0.8],
+  [0.75,0.25],[0.48,0.12],[0.56,0.14],[0.84,0.21],[0.96,0.16],[1.44,0.24],[1.68,0.28],[2.16,0.36],[2.88,0.48],[3.36,0.56],
+  [12.6,3],[15.5,5],[24.8,4],[36.9,3],[42.5,5],[7.5,1.5],[12.8,3.2],[18.9,2.7],[24.6,4.1],[32.4,5.4]
+];
+
+function genMultQs() {
+  return multPairs.map(function(pair, i) {
+    const ex = multExplain(pair[0], pair[1]);
+    return { id: i, q: { en: 'Calculate: ' + pair[0] + ' × ' + pair[1] + ' = ?', id: 'Hitunglah: ' + pair[0] + ' × ' + pair[1] + ' = ?' }, answer: ex.answer, m1: ex.m1, m2: ex.m2 };
+  });
+}
+function genDivQs() {
+  return divPairs.map(function(pair, i) {
+    const ex = divExplain(pair[0], pair[1]);
+    return { id: i, q: { en: 'Calculate: ' + pair[0] + ' ÷ ' + pair[1] + ' = ?', id: 'Hitunglah: ' + pair[0] + ' ÷ ' + pair[1] + ' = ?' }, answer: ex.answer, m1: ex.m1, m2: ex.m2 };
+  });
+}
+
+// ============ REVIEW DATA ============
+const reviewData = [
+  {
+    title: { en: '1. What is a Decimal?', id: '1. Apa itu Desimal?' }, icon: '🔍',
+    intro: { en: 'A decimal shows part of a whole using a point (.). Numbers before the point are whole numbers; numbers after show the fraction part. Example: 3.25 = 3 wholes and 25 hundredths.',
+           id: 'Desimal menunjukkan bagian dari keseluruhan menggunakan titik (.). Angka sebelum titik adalah bilangan bulat; angka setelahnya menunjukkan bagian pecahan. Contoh: 3,25 = 3 utuh dan 25 per seratus.' },
+    questions: [
+      { type: 'mc', q: { en: 'Which is a decimal number?', id: 'Mana yang merupakan bilangan desimal?' }, options: ['3/4','0.75','75%','Three'], correct: 1, ex: { en: '0.75 uses a decimal point to show part of a whole.', id: '0,75 menggunakan titik desimal untuk menunjukkan bagian dari keseluruhan.' } },
+      { type: 'mc', q: { en: 'What does the dot in 3.14 separate?', id: 'Apa yang dipisahkan titik pada 3,14?' }, options: ['Whole and fraction parts','Two numbers','Dollars and cents','Nothing'], correct: 0, ex: { en: 'The decimal point separates whole numbers from fraction parts.', id: 'Titik desimal memisahkan bilangan bulat dari bagian pecahan.' } },
+      { type: 'mc', q: { en: 'Is 1/2 = 0.5?', id: 'Apakah 1/2 = 0,5?' }, options: ['Yes','No','Sometimes','Cannot tell'], correct: 0, ex: { en: 'Yes! 1/2 = 0.5 because half of 1 is 0.5.', id: 'Ya! 1/2 = 0,5 karena setengah dari 1 adalah 0,5.' } },
+      { type: 'mc', q: { en: 'How do you read 0.1?', id: 'Bagaimana membaca 0,1?' }, options: ['One tenth','One hundredth','One whole','Ten'], correct: 0, ex: { en: '0.1 = 1/10, read as "one tenth".', id: '0,1 = 1/10, dibaca "satu per sepuluh".' } },
+      { type: 'mc', q: { en: 'What does 2.5 mean?', id: 'Apa arti 2,5?' }, options: ['2 and 5 tenths','25 wholes','2 and 5 hundredths','2.5 wholes'], correct: 0, ex: { en: '2.5 = 2 wholes and 5 tenths.', id: '2,5 = 2 utuh dan 5 per sepuluh.' } },
+      { type: 'mc', q: { en: 'Is 0.50 = 0.5?', id: 'Apakah 0,50 = 0,5?' }, options: ['Yes, they are equal','No','Only sometimes','Never'], correct: 0, ex: { en: 'Trailing zeros after the decimal do not change the value.', id: 'Nol di akhir setelah koma tidak mengubah nilai.' } },
+      { type: 'mc', q: { en: 'What is the whole number part of 4.25?', id: 'Apa bagian bilangan bulat dari 4,25?' }, options: ['25','4','425','0.25'], correct: 1, ex: { en: 'The whole number part is before the decimal point: 4.', id: 'Bagian bilangan bulat ada sebelum titik desimal: 4.' } },
+      { type: 'mc', q: { en: 'Which is bigger: 0.7 or 0.5?', id: 'Mana lebih besar: 0,7 atau 0,5?' }, options: ['0.7','0.5','Equal','Cannot tell'], correct: 0, ex: { en: '0.7 > 0.5 because 7 tenths is more than 5 tenths.', id: '0,7 > 0,5 karena 7 per sepuluh lebih banyak dari 5 per sepuluh.' } },
+      { type: 'mc', q: { en: 'Write "three tenths" as a decimal:', id: 'Tulis "tiga per sepuluh" sebagai desimal:' }, options: ['0.3','3.0','0.03','30'], correct: 0, ex: { en: 'Three tenths = 3/10 = 0.3', id: 'Tiga per sepuluh = 3/10 = 0,3' } },
+      { type: 'mc', q: { en: 'Write "seven hundredths" as a decimal:', id: 'Tulis "tujuh per seratus" sebagai desimal:' }, options: ['0.7','0.07','7.0','0.007'], correct: 1, ex: { en: 'Seven hundredths = 7/100 = 0.07', id: 'Tujuh per seratus = 7/100 = 0,07' } },
+      { type: 'mc', q: { en: 'Is 0.3 > 0.30?', id: 'Apakah 0,3 > 0,30?' }, options: ['No, they are equal','Yes','Only in math','Cannot tell'], correct: 0, ex: { en: '0.3 = 0.30. Adding a zero at the end does not change the value.', id: '0,3 = 0,30. Menambahkan nol di akhir tidak mengubah nilai.' } },
+      { type: 'mc', q: { en: 'What is 0.99 closest to?', id: '0,99 paling dekat dengan?' }, options: ['0','0.5','1','0.9'], correct: 2, ex: { en: '0.99 is very close to 1 (just 0.01 away).', id: '0,99 sangat dekat dengan 1 (hanya beda 0,01).' } },
+      { type: 'mc', q: { en: 'What is 0.5 of 10?', id: 'Berapa 0,5 dari 10?' }, options: ['2','5','10','0.5'], correct: 1, ex: { en: '0.5 of 10 = 5 (half of 10).', id: '0,5 dari 10 = 5 (setengah dari 10).' } },
+      { type: 'mc', q: { en: '0.25 is the same as how many quarters?', id: '0,25 sama dengan berapa kuartal?' }, options: ['1 quarter','2 quarters','3 quarters','4 quarters'], correct: 0, ex: { en: '0.25 = 1/4, so it is one quarter.', id: '0,25 = 1/4, jadi satu kuartal.' } },
+      { type: 'mc', q: { en: 'How do you read 1.5?', id: 'Bagaimana membaca 1,5?' }, options: ['One and five tenths','Fifteen','One point five','One five'], correct: 0, ex: { en: '1.5 is "one and five tenths".', id: '1,5 dibaca "satu dan lima per sepuluh".' } },
+      { type: 'mc', q: { en: 'Is 0.1 = 1/10?', id: 'Apakah 0,1 = 1/10?' }, options: ['Yes','No','Sometimes','Cannot tell'], correct: 0, ex: { en: 'Yes! 0.1 means 1/10 (one tenth).', id: 'Ya! 0,1 berarti 1/10 (satu per sepuluh).' } },
+      { type: 'mc', q: { en: 'What is 5.0 equal to?', id: '5,0 sama dengan?' }, options: ['0','5','50','0.5'], correct: 1, ex: { en: '5.0 = 5. The .0 means no fraction part.', id: '5,0 = 5. Bagian ,0 berarti tidak ada bagian pecahan.' } },
+      { type: 'mc', q: { en: 'The decimal 0.001 is how many thousandths?', id: 'Desimal 0,001 adalah berapa per seribu?' }, options: ['1','10','100','0'], correct: 0, ex: { en: '0.001 = 1/1000, so 1 thousandth.', id: '0,001 = 1/1000, jadi 1 per seribu.' } },
+      { type: 'mc', q: { en: 'Which shows "two and three tenths"?', id: 'Mana yang menunjukkan "dua dan tiga per sepuluh"?' }, options: ['2.3','23','0.23','2.03'], correct: 0, ex: { en: 'Two and three tenths = 2 + 3/10 = 2.3', id: 'Dua dan tiga per sepuluh = 2 + 3/10 = 2,3' } },
+      { type: 'mc', q: { en: 'What is the decimal part of 7.89?', id: 'Apa bagian desimal dari 7,89?' }, options: ['7','89','0.89','7.89'], correct: 2, ex: { en: 'The decimal part is 0.89 (after the decimal point).', id: 'Bagian desimal adalah 0,89 (setelah titik desimal).' } }
+    ]
+  },
+  {
+    title: { en: '2. Place Value in Decimals', id: '2. Nilai Tempat pada Desimal' }, icon: '📊',
+    intro: { en: 'In a decimal, each place has a value. Going right from the decimal point: tenths (1/10), hundredths (1/100), thousandths (1/1000). Example: in 3.456, the 4 is in tenths, 5 in hundredths, 6 in thousandths.',
+           id: 'Dalam desimal, setiap tempat memiliki nilai. Bergerak ke kanan dari titik desimal: per sepuluh (1/10), per seratus (1/100), per seribu (1/1000). Contoh: pada 3,456, angka 4 di per sepuluh, 5 di per seratus, 6 di per seribu.' },
+    questions: [
+      { type: 'mc', q: { en: 'In 3.14, what place is the 1 in?', id: 'Pada 3,14, di tempat apa angka 1?' }, options: ['Ones','Tenths','Hundredths','Tens'], correct: 1, ex: { en: 'The 1 is in the tenths place (first position after the decimal point).', id: 'Angka 1 berada di tempat per sepuluh (posisi pertama setelah titik desimal).' } },
+      { type: 'mc', q: { en: 'In 5.678, what place is the 8 in?', id: 'Pada 5,678, di tempat apa angka 8?' }, options: ['Tenths','Hundredths','Thousandths','Ones'], correct: 2, ex: { en: 'The 8 is in the thousandths place (third position after the point).', id: 'Angka 8 berada di tempat per seribu (posisi ketiga setelah titik).' } },
+      { type: 'mc', q: { en: 'In 0.45, what is the value of the 4?', id: 'Pada 0,45, berapa nilai angka 4?' }, options: ['4','0.4','0.04','40'], correct: 1, ex: { en: 'The 4 is in the tenths place, so its value is 0.4 (four tenths).', id: 'Angka 4 berada di tempat per sepuluh, jadi nilainya 0,4 (empat per sepuluh).' } },
+      { type: 'mc', q: { en: 'In 2.03, what is the value of the 3?', id: 'Pada 2,03, berapa nilai angka 3?' }, options: ['3','0.3','0.03','30'], correct: 2, ex: { en: 'The 3 is in the hundredths place, so its value is 0.03.', id: 'Angka 3 berada di tempat per seratus, jadi nilainya 0,03.' } },
+      { type: 'mc', q: { en: 'In 12.456, what place is the 5 in?', id: 'Pada 12,456, di tempat apa angka 5?' }, options: ['Tenths','Hundredths','Thousandths','Tens'], correct: 1, ex: { en: 'The 5 is in the hundredths place.', id: 'Angka 5 berada di tempat per seratus.' } },
+      { type: 'mc', q: { en: 'Write 3 tenths as a decimal:', id: 'Tulis 3 per sepuluh sebagai desimal:' }, options: ['0.3','0.03','3.0','30'], correct: 0, ex: { en: '3 tenths = 3/10 = 0.3', id: '3 per sepuluh = 3/10 = 0,3' } },
+      { type: 'mc', q: { en: 'Write 7 hundredths as a decimal:', id: 'Tulis 7 per seratus sebagai desimal:' }, options: ['0.7','0.07','7.0','0.007'], correct: 1, ex: { en: '7 hundredths = 7/100 = 0.07', id: '7 per seratus = 7/100 = 0,07' } },
+      { type: 'mc', q: { en: 'In 0.123, which digit is in the thousandths place?', id: 'Pada 0,123, angka mana yang di tempat per seribu?' }, options: ['1','2','3','0'], correct: 2, ex: { en: 'The 3 is in the thousandths place (third after the point).', id: 'Angka 3 berada di tempat per seribu (ketiga setelah titik).' } },
+      { type: 'mc', q: { en: 'What is the value of 2 in 0.02?', id: 'Berapa nilai 2 pada 0,02?' }, options: ['2','0.2','0.02','20'], correct: 2, ex: { en: 'The 2 is in the hundredths place, value = 0.02.', id: 'Angka 2 berada di tempat per seratus, nilai = 0,02.' } },
+      { type: 'mc', q: { en: 'In 45.67, the 6 is in which place?', id: 'Pada 45,67, angka 6 di tempat apa?' }, options: ['Ones','Tenths','Hundredths','Tens'], correct: 1, ex: { en: 'The 6 is in the tenths place (first after the point).', id: 'Angka 6 berada di tempat per sepuluh (pertama setelah titik).' } },
+      { type: 'mc', q: { en: 'In 8.924, what is the value of 2?', id: 'Pada 8,924, berapa nilai 2?' }, options: ['0.2','0.02','0.002','2'], correct: 1, ex: { en: 'The 2 is in the hundredths place, value = 0.02.', id: 'Angka 2 berada di tempat per seratus, nilai = 0,02.' } },
+      { type: 'mc', q: { en: 'Which digit in 6.318 is in the tenths place?', id: 'Angka mana pada 6,318 yang di tempat per sepuluh?' }, options: ['6','3','1','8'], correct: 1, ex: { en: 'The 3 is in the tenths place.', id: 'Angka 3 berada di tempat per sepuluh.' } },
+      { type: 'mc', q: { en: 'Write 9 thousandths as a decimal:', id: 'Tulis 9 per seribu sebagai desimal:' }, options: ['0.9','0.09','0.009','9.0'], correct: 2, ex: { en: '9 thousandths = 9/1000 = 0.009', id: '9 per seribu = 9/1000 = 0,009' } },
+      { type: 'mc', q: { en: 'In 0.555, the three 5s have:', id: 'Pada 0,555, ketiga angka 5 memiliki:' }, options: ['Same value','Different values','No value','Equal to 5'], correct: 1, ex: { en: 'They have different values: 0.5, 0.05, and 0.005.', id: 'Mereka memiliki nilai berbeda: 0,5; 0,05; dan 0,005.' } },
+      { type: 'mc', q: { en: 'In 7.034, the 0 is in which place?', id: 'Pada 7,034, angka 0 di tempat apa?' }, options: ['Ones','Tenths','Hundredths','Thousandths'], correct: 1, ex: { en: 'The 0 is in the tenths place (value 0.0).', id: 'Angka 0 berada di tempat per sepuluh (nilai 0,0).' } },
+      { type: 'mc', q: { en: 'What is the value of 5 in 15.67?', id: 'Berapa nilai 5 pada 15,67?' }, options: ['5','50','0.5','0.05'], correct: 0, ex: { en: 'The 5 is in the ones place, value = 5.', id: 'Angka 5 berada di tempat satuan, nilai = 5.' } },
+      { type: 'mc', q: { en: 'In 3.141, what is the value of 1 (the last digit)?', id: 'Pada 3,141, berapa nilai 1 (angka terakhir)?' }, options: ['0.1','0.01','0.001','1'], correct: 2, ex: { en: 'The last 1 is in the thousandths place, value = 0.001.', id: 'Angka 1 terakhir berada di tempat per seribu, nilai = 0,001.' } },
+      { type: 'mc', q: { en: 'Which number has 4 in the hundredths place?', id: 'Angka mana yang memiliki 4 di tempat per seratus?' }, options: ['0.4','0.04','4.0','40'], correct: 1, ex: { en: '0.04 has 4 in the hundredths place.', id: '0,04 memiliki 4 di tempat per seratus.' } },
+      { type: 'mc', q: { en: 'In 2.50, the 5 is in which place?', id: 'Pada 2,50, angka 5 di tempat apa?' }, options: ['Tenths','Hundredths','Ones','Tens'], correct: 0, ex: { en: 'The 5 is in the tenths place.', id: 'Angka 5 berada di tempat per sepuluh.' } },
+      { type: 'mc', q: { en: 'What is 0.7 written as a place value?', id: '0,7 ditulis sebagai nilai tempat?' }, options: ['7 tenths','7 hundredths','7 ones','7 tens'], correct: 0, ex: { en: '0.7 = 7 tenths.', id: '0,7 = 7 per sepuluh.' } }
+    ]
+  },
+  {
+    title: { en: '3. Rounding Decimals', id: '3. Membulatkan Desimal' }, icon: '📐',
+    intro: { en: 'To round a decimal: look at the digit to the RIGHT of the place you are rounding to. If it is 5 or more, round UP. If it is 4 or less, round DOWN (keep the same).',
+           id: 'Untuk membulatkan desimal: lihat angka di KANAN tempat yang akan dibulatkan. Jika 5 atau lebih, bulatkan KE ATAS. Jika 4 atau kurang, bulatkan KE BAWAH (tetap sama).' },
+    questions: [
+      { type: 'mc', q: { en: 'Round 3.14 to the nearest whole number:', id: 'Bulatkan 3,14 ke bilangan bulat terdekat:' }, options: ['3','4','3.1','3.5'], correct: 0, ex: { en: 'The digit after the decimal is 1 (less than 5), so round down to 3.', id: 'Angka setelah koma adalah 1 (kurang dari 5), jadi dibulatkan ke bawah menjadi 3.' } },
+      { type: 'mc', q: { en: 'Round 5.67 to the nearest whole number:', id: 'Bulatkan 5,67 ke bilangan bulat terdekat:' }, options: ['5','6','5.7','5.5'], correct: 1, ex: { en: 'The digit after the decimal is 6 (5 or more), so round up to 6.', id: 'Angka setelah koma adalah 6 (5 atau lebih), jadi dibulatkan ke atas menjadi 6.' } },
+      { type: 'mc', q: { en: 'Round 2.5 to the nearest whole number:', id: 'Bulatkan 2,5 ke bilangan bulat terdekat:' }, options: ['2','3','2.5','2 or 3'], correct: 1, ex: { en: '5 or more rounds up, so 2.5 → 3.', id: '5 atau lebih dibulatkan ke atas, jadi 2,5 → 3.' } },
+      { type: 'mc', q: { en: 'Round 0.34 to the nearest tenth:', id: 'Bulatkan 0,34 ke per sepuluh terdekat:' }, options: ['0.3','0.4','0.34','0.35'], correct: 0, ex: { en: 'The hundredths digit is 4 (less than 5), so 0.34 → 0.3.', id: 'Angka per seratus adalah 4 (kurang dari 5), jadi 0,34 → 0,3.' } },
+      { type: 'mc', q: { en: 'Round 0.67 to the nearest tenth:', id: 'Bulatkan 0,67 ke per sepuluh terdekat:' }, options: ['0.6','0.7','0.67','0.5'], correct: 1, ex: { en: 'The hundredths digit is 7 (5 or more), so 0.67 → 0.7.', id: 'Angka per seratus adalah 7 (5 atau lebih), jadi 0,67 → 0,7.' } },
+      { type: 'mc', q: { en: 'Round 1.234 to the nearest hundredth:', id: 'Bulatkan 1,234 ke per seratus terdekat:' }, options: ['1.23','1.24','1.2','1.3'], correct: 0, ex: { en: 'The thousandths digit is 4 (less than 5), so 1.234 → 1.23.', id: 'Angka per seribu adalah 4 (kurang dari 5), jadi 1,234 → 1,23.' } },
+      { type: 'mc', q: { en: 'Round 4.567 to the nearest hundredth:', id: 'Bulatkan 4,567 ke per seratus terdekat:' }, options: ['4.56','4.57','4.5','4.6'], correct: 1, ex: { en: 'The thousandths digit is 7 (5 or more), so 4.567 → 4.57.', id: 'Angka per seribu adalah 7 (5 atau lebih), jadi 4,567 → 4,57.' } },
+      { type: 'mc', q: { en: 'Round 9.99 to the nearest whole number:', id: 'Bulatkan 9,99 ke bilangan bulat terdekat:' }, options: ['9','10','9.9','9.5'], correct: 1, ex: { en: 'The tenths digit is 9 (5 or more), round up: 9.99 → 10.', id: 'Angka per sepuluh adalah 9 (5 atau lebih), bulatkan ke atas: 9,99 → 10.' } },
+      { type: 'mc', q: { en: 'Round 0.05 to the nearest tenth:', id: 'Bulatkan 0,05 ke per sepuluh terdekat:' }, options: ['0.0','0.1','0.05','0.5'], correct: 1, ex: { en: 'The hundredths digit is 5 (5 or more), so 0.05 → 0.1.', id: 'Angka per seratus adalah 5 (5 atau lebih), jadi 0,05 → 0,1.' } },
+      { type: 'mc', q: { en: 'Round 7.45 to the nearest whole number:', id: 'Bulatkan 7,45 ke bilangan bulat terdekat:' }, options: ['7','8','7.4','7.5'], correct: 0, ex: { en: 'The tenths digit is 4 (less than 5), so 7.45 → 7.', id: 'Angka per sepuluh adalah 4 (kurang dari 5), jadi 7,45 → 7.' } },
+      { type: 'mc', q: { en: 'Round 6.82 to the nearest tenth:', id: 'Bulatkan 6,82 ke per sepuluh terdekat:' }, options: ['6.8','6.9','7.0','6.7'], correct: 0, ex: { en: 'The hundredths digit is 2 (less than 5), so 6.82 → 6.8.', id: 'Angka per seratus adalah 2 (kurang dari 5), jadi 6,82 → 6,8.' } },
+      { type: 'mc', q: { en: 'Round 3.456 to the nearest tenth:', id: 'Bulatkan 3,456 ke per sepuluh terdekat:' }, options: ['3.4','3.5','3.45','3.46'], correct: 1, ex: { en: 'The hundredths digit is 5 (5 or more), so 3.456 → 3.5.', id: 'Angka per seratus adalah 5 (5 atau lebih), jadi 3,456 → 3,5.' } },
+      { type: 'mc', q: { en: 'Round 12.345 to the nearest hundredth:', id: 'Bulatkan 12,345 ke per seratus terdekat:' }, options: ['12.34','12.35','12.3','12.4'], correct: 1, ex: { en: 'The thousandths digit is 5 (5 or more), so 12.345 → 12.35.', id: 'Angka per seribu adalah 5 (5 atau lebih), jadi 12,345 → 12,35.' } },
+      { type: 'mc', q: { en: 'Round 8.91 to the nearest whole:', id: 'Bulatkan 8,91 ke bilangan bulat:' }, options: ['8','9','8.9','10'], correct: 1, ex: { en: 'The tenths digit is 9 (5 or more), so 8.91 → 9.', id: 'Angka per sepuluh adalah 9 (5 atau lebih), jadi 8,91 → 9.' } },
+      { type: 'mc', q: { en: 'Round 0.99 to the nearest tenth:', id: 'Bulatkan 0,99 ke per sepuluh terdekat:' }, options: ['0.9','1.0','0.99','1'], correct: 1, ex: { en: 'The hundredths digit is 9 (5 or more), so 0.99 → 1.0.', id: 'Angka per seratus adalah 9 (5 atau lebih), jadi 0,99 → 1,0.' } },
+      { type: 'mc', q: { en: 'Round 5.555 to the nearest hundredth:', id: 'Bulatkan 5,555 ke per seratus terdekat:' }, options: ['5.55','5.56','5.5','5.6'], correct: 1, ex: { en: 'The thousandths digit is 5 (5 or more), so 5.555 → 5.56.', id: 'Angka per seribu adalah 5 (5 atau lebih), jadi 5,555 → 5,56.' } },
+      { type: 'mc', q: { en: 'Round 2.04 to the nearest tenth:', id: 'Bulatkan 2,04 ke per sepuluh terdekat:' }, options: ['2.0','2.1','2.04','2.5'], correct: 0, ex: { en: 'The hundredths digit is 4 (less than 5), so 2.04 → 2.0.', id: 'Angka per seratus adalah 4 (kurang dari 5), jadi 2,04 → 2,0.' } },
+      { type: 'mc', q: { en: 'Round 19.96 to the nearest whole:', id: 'Bulatkan 19,96 ke bilangan bulat:' }, options: ['19','20','19.9','19.5'], correct: 1, ex: { en: 'The tenths digit is 9 (5 or more), so 19.96 → 20.', id: 'Angka per sepuluh adalah 9 (5 atau lebih), jadi 19,96 → 20.' } },
+      { type: 'mc', q: { en: 'Round 0.625 to the nearest hundredth:', id: 'Bulatkan 0,625 ke per seratus terdekat:' }, options: ['0.62','0.63','0.6','0.65'], correct: 1, ex: { en: 'The thousandths digit is 5 (5 or more), so 0.625 → 0.63.', id: 'Angka per seribu adalah 5 (5 atau lebih), jadi 0,625 → 0,63.' } },
+      { type: 'mc', q: { en: 'Round 7.3459 to the nearest thousandth:', id: 'Bulatkan 7,3459 ke per seribu terdekat:' }, options: ['7.345','7.346','7.35','7.3'], correct: 1, ex: { en: 'The ten-thousandths digit is 9 (5 or more), so 7.3459 → 7.346.', id: 'Angka per sepuluh ribu adalah 9 (5 atau lebih), jadi 7,3459 → 7,346.' } }
+    ]
+  },
+  {
+    title: { en: '4. Fraction to Decimal', id: '4. Pecahan ke Desimal' }, icon: '🔄',
+    intro: { en: 'To convert a fraction to a decimal, divide the numerator by the denominator. Example: 3/4 = 3 ÷ 4 = 0.75. Some fractions convert to terminating decimals (like 1/4 = 0.25), others repeat (like 1/3 = 0.333...).',
+           id: 'Untuk mengubah pecahan ke desimal, bagi pembilang dengan penyebut. Contoh: 3/4 = 3 ÷ 4 = 0,75. Beberapa pecahan menjadi desimal berakhir (seperti 1/4 = 0,25), lainnya berulang (seperti 1/3 = 0,333...).' },
+    questions: [
+      { type: 'mc', q: { en: 'Convert 1/2 to a decimal:', id: 'Ubah 1/2 ke desimal:' }, options: ['0.5','0.2','0.1','1.2'], correct: 0, ex: { en: '1/2 = 1 ÷ 2 = 0.5', id: '1/2 = 1 ÷ 2 = 0,5' } },
+      { type: 'mc', q: { en: 'Convert 1/4 to a decimal:', id: 'Ubah 1/4 ke desimal:' }, options: ['0.25','0.4','0.14','1.4'], correct: 0, ex: { en: '1/4 = 1 ÷ 4 = 0.25', id: '1/4 = 1 ÷ 4 = 0,25' } },
+      { type: 'mc', q: { en: 'Convert 3/4 to a decimal:', id: 'Ubah 3/4 ke desimal:' }, options: ['0.75','0.34','0.43','0.7'], correct: 0, ex: { en: '3/4 = 3 ÷ 4 = 0.75', id: '3/4 = 3 ÷ 4 = 0,75' } },
+      { type: 'mc', q: { en: 'Convert 1/10 to a decimal:', id: 'Ubah 1/10 ke desimal:' }, options: ['0.1','0.01','1.0','0.10'], correct: 0, ex: { en: '1/10 = 1 ÷ 10 = 0.1', id: '1/10 = 1 ÷ 10 = 0,1' } },
+      { type: 'mc', q: { en: 'Convert 1/5 to a decimal:', id: 'Ubah 1/5 ke desimal:' }, options: ['0.2','0.5','0.15','1.5'], correct: 0, ex: { en: '1/5 = 1 ÷ 5 = 0.2', id: '1/5 = 1 ÷ 5 = 0,2' } },
+      { type: 'mc', q: { en: 'Convert 2/5 to a decimal:', id: 'Ubah 2/5 ke desimal:' }, options: ['0.4','0.25','0.5','0.2'], correct: 0, ex: { en: '2/5 = 2 ÷ 5 = 0.4', id: '2/5 = 2 ÷ 5 = 0,4' } },
+      { type: 'mc', q: { en: 'Convert 3/5 to a decimal:', id: 'Ubah 3/5 ke desimal:' }, options: ['0.6','0.35','0.5','0.3'], correct: 0, ex: { en: '3/5 = 3 ÷ 5 = 0.6', id: '3/5 = 3 ÷ 5 = 0,6' } },
+      { type: 'mc', q: { en: 'Convert 4/5 to a decimal:', id: 'Ubah 4/5 ke desimal:' }, options: ['0.8','0.45','0.5','0.4'], correct: 0, ex: { en: '4/5 = 4 ÷ 5 = 0.8', id: '4/5 = 4 ÷ 5 = 0,8' } },
+      { type: 'mc', q: { en: 'Convert 1/100 to a decimal:', id: 'Ubah 1/100 ke desimal:' }, options: ['0.01','0.1','0.001','1.0'], correct: 0, ex: { en: '1/100 = 1 ÷ 100 = 0.01', id: '1/100 = 1 ÷ 100 = 0,01' } },
+      { type: 'mc', q: { en: 'Convert 7/10 to a decimal:', id: 'Ubah 7/10 ke desimal:' }, options: ['0.7','0.07','0.17','7.0'], correct: 0, ex: { en: '7/10 = 7 ÷ 10 = 0.7', id: '7/10 = 7 ÷ 10 = 0,7' } },
+      { type: 'mc', q: { en: 'Convert 3/10 to a decimal:', id: 'Ubah 3/10 ke desimal:' }, options: ['0.3','0.03','0.13','3.0'], correct: 0, ex: { en: '3/10 = 3 ÷ 10 = 0.3', id: '3/10 = 3 ÷ 10 = 0,3' } },
+      { type: 'mc', q: { en: 'Convert 9/10 to a decimal:', id: 'Ubah 9/10 ke desimal:' }, options: ['0.9','0.09','0.19','9.0'], correct: 0, ex: { en: '9/10 = 9 ÷ 10 = 0.9', id: '9/10 = 9 ÷ 10 = 0,9' } },
+      { type: 'mc', q: { en: 'Convert 1/20 to a decimal:', id: 'Ubah 1/20 ke desimal:' }, options: ['0.05','0.2','0.5','0.02'], correct: 0, ex: { en: '1/20 = 1 ÷ 20 = 0.05', id: '1/20 = 1 ÷ 20 = 0,05' } },
+      { type: 'mc', q: { en: 'Convert 3/8 to a decimal:', id: 'Ubah 3/8 ke desimal:' }, options: ['0.375','0.38','0.83','0.3'], correct: 0, ex: { en: '3/8 = 3 ÷ 8 = 0.375', id: '3/8 = 3 ÷ 8 = 0,375' } },
+      { type: 'mc', q: { en: 'Convert 5/8 to a decimal:', id: 'Ubah 5/8 ke desimal:' }, options: ['0.625','0.58','0.85','0.5'], correct: 0, ex: { en: '5/8 = 5 ÷ 8 = 0.625', id: '5/8 = 5 ÷ 8 = 0,625' } },
+      { type: 'mc', q: { en: 'Convert 7/8 to a decimal:', id: 'Ubah 7/8 ke desimal:' }, options: ['0.875','0.78','0.87','0.8'], correct: 0, ex: { en: '7/8 = 7 ÷ 8 = 0.875', id: '7/8 = 7 ÷ 8 = 0,875' } },
+      { type: 'mc', q: { en: 'Convert 2/10 to a decimal:', id: 'Ubah 2/10 ke desimal:' }, options: ['0.2','0.02','0.12','2.0'], correct: 0, ex: { en: '2/10 = 2 ÷ 10 = 0.2', id: '2/10 = 2 ÷ 10 = 0,2' } },
+      { type: 'mc', q: { en: 'Convert 11/100 to a decimal:', id: 'Ubah 11/100 ke desimal:' }, options: ['0.11','0.011','1.1','0.101'], correct: 0, ex: { en: '11/100 = 11 ÷ 100 = 0.11', id: '11/100 = 11 ÷ 100 = 0,11' } },
+      { type: 'mc', q: { en: 'Convert 1/8 to a decimal:', id: 'Ubah 1/8 ke desimal:' }, options: ['0.125','0.18','0.8','0.12'], correct: 0, ex: { en: '1/8 = 1 ÷ 8 = 0.125', id: '1/8 = 1 ÷ 8 = 0,125' } },
+      { type: 'mc', q: { en: 'Convert 2/4 to a decimal:', id: 'Ubah 2/4 ke desimal:' }, options: ['0.5','0.25','0.4','0.2'], correct: 0, ex: { en: '2/4 = 2 ÷ 4 = 0.5 (same as 1/2)', id: '2/4 = 2 ÷ 4 = 0,5 (sama dengan 1/2)' } }
+    ]
+  },
+  {
+    title: { en: '5. Decimal to Fraction', id: '5. Desimal ke Pecahan' }, icon: '🔢',
+    intro: { en: 'To convert a decimal to a fraction: write the decimal as the numerator, use the place value as the denominator, then simplify. Example: 0.75 = 75/100 = 3/4.',
+           id: 'Untuk mengubah desimal ke pecahan: tulis desimal sebagai pembilang, gunakan nilai tempat sebagai penyebut, lalu sederhanakan. Contoh: 0,75 = 75/100 = 3/4.' },
+    questions: [
+      { type: 'mc', q: { en: 'Convert 0.5 to a fraction:', id: 'Ubah 0,5 ke pecahan:' }, options: ['1/2','5/10','1/5','5/1'], correct: 0, ex: { en: '0.5 = 5/10 = 1/2 (simplified).', id: '0,5 = 5/10 = 1/2 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.25 to a fraction:', id: 'Ubah 0,25 ke pecahan:' }, options: ['1/4','25/100','1/25','25/1'], correct: 0, ex: { en: '0.25 = 25/100 = 1/4 (simplified).', id: '0,25 = 25/100 = 1/4 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.75 to a fraction:', id: 'Ubah 0,75 ke pecahan:' }, options: ['3/4','75/100','3/5','7/10'], correct: 0, ex: { en: '0.75 = 75/100 = 3/4 (simplified).', id: '0,75 = 75/100 = 3/4 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.1 to a fraction:', id: 'Ubah 0,1 ke pecahan:' }, options: ['1/10','1/100','1/1','10/1'], correct: 0, ex: { en: '0.1 = 1/10 (already simplest form).', id: '0,1 = 1/10 (sudah bentuk tersederhana).' } },
+      { type: 'mc', q: { en: 'Convert 0.2 to a fraction:', id: 'Ubah 0,2 ke pecahan:' }, options: ['1/5','2/10','1/2','2/1'], correct: 0, ex: { en: '0.2 = 2/10 = 1/5 (simplified).', id: '0,2 = 2/10 = 1/5 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.4 to a fraction:', id: 'Ubah 0,4 ke pecahan:' }, options: ['2/5','4/10','1/4','2/4'], correct: 0, ex: { en: '0.4 = 4/10 = 2/5 (simplified).', id: '0,4 = 4/10 = 2/5 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.6 to a fraction:', id: 'Ubah 0,6 ke pecahan:' }, options: ['3/5','6/10','2/3','6/1'], correct: 0, ex: { en: '0.6 = 6/10 = 3/5 (simplified).', id: '0,6 = 6/10 = 3/5 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.8 to a fraction:', id: 'Ubah 0,8 ke pecahan:' }, options: ['4/5','8/10','4/8','8/1'], correct: 0, ex: { en: '0.8 = 8/10 = 4/5 (simplified).', id: '0,8 = 8/10 = 4/5 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.125 to a fraction:', id: 'Ubah 0,125 ke pecahan:' }, options: ['1/8','125/1000','1/125','1/4'], correct: 0, ex: { en: '0.125 = 125/1000 = 1/8 (simplified).', id: '0,125 = 125/1000 = 1/8 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.05 to a fraction:', id: 'Ubah 0,05 ke pecahan:' }, options: ['1/20','5/100','1/5','5/1'], correct: 0, ex: { en: '0.05 = 5/100 = 1/20 (simplified).', id: '0,05 = 5/100 = 1/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.35 to a fraction:', id: 'Ubah 0,35 ke pecahan:' }, options: ['7/20','35/100','7/10','1/3'], correct: 0, ex: { en: '0.35 = 35/100 = 7/20 (simplified).', id: '0,35 = 35/100 = 7/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.45 to a fraction:', id: 'Ubah 0,45 ke pecahan:' }, options: ['9/20','45/100','9/10','4/5'], correct: 0, ex: { en: '0.45 = 45/100 = 9/20 (simplified).', id: '0,45 = 45/100 = 9/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.55 to a fraction:', id: 'Ubah 0,55 ke pecahan:' }, options: ['11/20','55/100','11/10','5/9'], correct: 0, ex: { en: '0.55 = 55/100 = 11/20 (simplified).', id: '0,55 = 55/100 = 11/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.65 to a fraction:', id: 'Ubah 0,65 ke pecahan:' }, options: ['13/20','65/100','13/10','2/3'], correct: 0, ex: { en: '0.65 = 65/100 = 13/20 (simplified).', id: '0,65 = 65/100 = 13/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.85 to a fraction:', id: 'Ubah 0,85 ke pecahan:' }, options: ['17/20','85/100','17/10','8/9'], correct: 0, ex: { en: '0.85 = 85/100 = 17/20 (simplified).', id: '0,85 = 85/100 = 17/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.95 to a fraction:', id: 'Ubah 0,95 ke pecahan:' }, options: ['19/20','95/100','19/10','9/10'], correct: 0, ex: { en: '0.95 = 95/100 = 19/20 (simplified).', id: '0,95 = 95/100 = 19/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.3 to a fraction:', id: 'Ubah 0,3 ke pecahan:' }, options: ['3/10','1/3','3/100','30/1'], correct: 0, ex: { en: '0.3 = 3/10 (already simplest).', id: '0,3 = 3/10 (sudah tersederhana).' } },
+      { type: 'mc', q: { en: 'Convert 0.7 to a fraction:', id: 'Ubah 0,7 ke pecahan:' }, options: ['7/10','1/7','7/100','7/1'], correct: 0, ex: { en: '0.7 = 7/10 (already simplest).', id: '0,7 = 7/10 (sudah tersederhana).' } },
+      { type: 'mc', q: { en: 'Convert 0.15 to a fraction:', id: 'Ubah 0,15 ke pecahan:' }, options: ['3/20','15/100','1/15','3/10'], correct: 0, ex: { en: '0.15 = 15/100 = 3/20 (simplified).', id: '0,15 = 15/100 = 3/20 (disederhanakan).' } },
+      { type: 'mc', q: { en: 'Convert 0.02 to a fraction:', id: 'Ubah 0,02 ke pecahan:' }, options: ['1/50','2/100','1/2','2/10'], correct: 0, ex: { en: '0.02 = 2/100 = 1/50 (simplified).', id: '0,02 = 2/100 = 1/50 (disederhanakan).' } }
+    ]
+  },
+  {
+    title: { en: '6. Adding & Subtracting Decimals', id: '6. Penjumlahan & Pengurangan Desimal' }, icon: '➕',
+    intro: { en: 'To add or subtract decimals: line up the decimal points, fill in zeros if needed, then add or subtract normally. Keep the decimal point in the same place in the answer.',
+           id: 'Untuk menjumlah atau mengurangkan desimal: sejajarkan titik desimal, tambahkan nol jika perlu, lalu jumlahkan atau kurangkan seperti biasa. Tetap pertahankan titik desimal di tempat yang sama pada jawaban.' },
+    questions: [
+      { type: 'mc', q: { en: 'Calculate: 0.3 + 0.4 = ?', id: 'Hitung: 0,3 + 0,4 = ?' }, options: ['0.7','0.12','0.34','7.0'], correct: 0, ex: { en: '0.3 + 0.4 = 0.7 (line up decimals, add normally).', id: '0,3 + 0,4 = 0,7 (sejajarkan desimal, jumlahkan seperti biasa).' } },
+      { type: 'mc', q: { en: 'Calculate: 0.5 + 0.5 = ?', id: 'Hitung: 0,5 + 0,5 = ?' }, options: ['1.0','0.10','0.55','1.5'], correct: 0, ex: { en: '0.5 + 0.5 = 1.0 (two halves make one whole).', id: '0,5 + 0,5 = 1,0 (dua setengah menjadi satu utuh).' } },
+      { type: 'mc', q: { en: 'Calculate: 0.8 - 0.3 = ?', id: 'Hitung: 0,8 - 0,3 = ?' }, options: ['0.5','0.11','0.3','5.0'], correct: 0, ex: { en: '0.8 - 0.3 = 0.5 (line up decimals, subtract).', id: '0,8 - 0,3 = 0,5 (sejajarkan desimal, kurangkan).' } },
+      { type: 'mc', q: { en: 'Calculate: 1.5 + 2.3 = ?', id: 'Hitung: 1,5 + 2,3 = ?' }, options: ['3.8','1.8','2.8','3.5'], correct: 0, ex: { en: '1.5 + 2.3 = 3.8 (1+2=3, 0.5+0.3=0.8).', id: '1,5 + 2,3 = 3,8 (1+2=3, 0,5+0,3=0,8).' } },
+      { type: 'mc', q: { en: 'Calculate: 3.7 - 1.2 = ?', id: 'Hitung: 3,7 - 1,2 = ?' }, options: ['2.5','2.7','1.5','4.9'], correct: 0, ex: { en: '3.7 - 1.2 = 2.5 (3-1=2, 0.7-0.2=0.5).', id: '3,7 - 1,2 = 2,5 (3-1=2, 0,7-0,2=0,5).' } },
+      { type: 'mc', q: { en: 'Calculate: 0.25 + 0.25 = ?', id: 'Hitung: 0,25 + 0,25 = ?' }, options: ['0.50','0.30','0.25','0.10'], correct: 0, ex: { en: '0.25 + 0.25 = 0.50 (add hundredths).', id: '0,25 + 0,25 = 0,50 (jumlahkan per seratus).' } },
+      { type: 'mc', q: { en: 'Calculate: 0.75 - 0.25 = ?', id: 'Hitung: 0,75 - 0,25 = ?' }, options: ['0.50','0.55','0.25','0.95'], correct: 0, ex: { en: '0.75 - 0.25 = 0.50.', id: '0,75 - 0,25 = 0,50.' } },
+      { type: 'mc', q: { en: 'Calculate: 1.1 + 0.9 = ?', id: 'Hitung: 1,1 + 0,9 = ?' }, options: ['2.0','1.10','0.2','1.19'], correct: 0, ex: { en: '1.1 + 0.9 = 2.0 (0.1+0.9=1.0, plus 1 = 2.0).', id: '1,1 + 0,9 = 2,0 (0,1+0,9=1,0, plus 1 = 2,0).' } },
+      { type: 'mc', q: { en: 'Calculate: 5.6 - 2.4 = ?', id: 'Hitung: 5,6 - 2,4 = ?' }, options: ['3.2','3.4','7.8','2.2'], correct: 0, ex: { en: '5.6 - 2.4 = 3.2.', id: '5,6 - 2,4 = 3,2.' } },
+      { type: 'mc', q: { en: 'Calculate: 0.1 + 0.9 = ?', id: 'Hitung: 0,1 + 0,9 = ?' }, options: ['1.0','0.10','0.19','0.01'], correct: 0, ex: { en: '0.1 + 0.9 = 1.0.', id: '0,1 + 0,9 = 1,0.' } },
+      { type: 'mc', q: { en: 'Calculate: 2.45 + 1.3 = ?', id: 'Hitung: 2,45 + 1,3 = ?' }, options: ['3.75','2.58','3.45','3.48'], correct: 0, ex: { en: '2.45 + 1.30 = 3.75 (line up decimals, add zeros).', id: '2,45 + 1,30 = 3,75 (sejajarkan desimal, tambahkan nol).' } },
+      { type: 'mc', q: { en: 'Calculate: 4.5 - 2.75 = ?', id: 'Hitung: 4,5 - 2,75 = ?' }, options: ['1.75','2.25','2.75','1.25'], correct: 0, ex: { en: '4.50 - 2.75 = 1.75 (add zero to 4.5 first).', id: '4,50 - 2,75 = 1,75 (tambahkan nol ke 4,5 dulu).' } },
+      { type: 'mc', q: { en: 'Calculate: 0.05 + 0.15 = ?', id: 'Hitung: 0,05 + 0,15 = ?' }, options: ['0.20','0.65','0.15','0.10'], correct: 0, ex: { en: '0.05 + 0.15 = 0.20.', id: '0,05 + 0,15 = 0,20.' } },
+      { type: 'mc', q: { en: 'Calculate: 3.14 - 1.14 = ?', id: 'Hitung: 3,14 - 1,14 = ?' }, options: ['2.00','2.14','4.28','2.28'], correct: 0, ex: { en: '3.14 - 1.14 = 2.00.', id: '3,14 - 1,14 = 2,00.' } },
+      { type: 'mc', q: { en: 'Calculate: 0.6 + 0.04 = ?', id: 'Hitung: 0,6 + 0,04 = ?' }, options: ['0.64','0.10','0.60','0.46'], correct: 0, ex: { en: '0.60 + 0.04 = 0.64.', id: '0,60 + 0,04 = 0,64.' } },
+      { type: 'mc', q: { en: 'Calculate: 1 - 0.3 = ?', id: 'Hitung: 1 - 0,3 = ?' }, options: ['0.7','0.97','1.3','0.3'], correct: 0, ex: { en: '1.0 - 0.3 = 0.7.', id: '1,0 - 0,3 = 0,7.' } },
+      { type: 'mc', q: { en: 'Calculate: 2.5 + 3.75 = ?', id: 'Hitung: 2,5 + 3,75 = ?' }, options: ['6.25','5.80','5.75','6.30'], correct: 0, ex: { en: '2.50 + 3.75 = 6.25.', id: '2,50 + 3,75 = 6,25.' } },
+      { type: 'mc', q: { en: 'Calculate: 10 - 3.5 = ?', id: 'Hitung: 10 - 3,5 = ?' }, options: ['6.5','7.5','9.65','3.5'], correct: 0, ex: { en: '10.0 - 3.5 = 6.5.', id: '10,0 - 3,5 = 6,5.' } },
+      { type: 'mc', q: { en: 'Calculate: 0.99 + 0.01 = ?', id: 'Hitung: 0,99 + 0,01 = ?' }, options: ['1.00','0.100','0.991','1.99'], correct: 0, ex: { en: '0.99 + 0.01 = 1.00.', id: '0,99 + 0,01 = 1,00.' } },
+      { type: 'mc', q: { en: 'Calculate: 7.25 - 3.5 = ?', id: 'Hitung: 7,25 - 3,5 = ?' }, options: ['3.75','4.25','3.50','4.75'], correct: 0, ex: { en: '7.25 - 3.50 = 3.75.', id: '7,25 - 3,50 = 3,75.' } }
+    ]
+  }
+];
+
+// ============ PROBLEM SOLVING DATA ============
+const problems = [
+  { q: { en: 'Emma buys 2.5 kg of strawberries at $3.20 per kg. How much does she pay?', id: 'Emma membeli 2,5 kg stroberi dengan harga $3,20 per kg. Berapa yang harus dibayarnya?' }, answer: '8', accept: ['8','8.0','8.00','$8','$8.00','$8.0'],
+    steps: { en: 'Multiply: 2.5 × 3.20\nMethod 1 (Fraction): 25/10 × 320/100 = 8000/1000 = 8\nMethod 2 (Direct): 25 × 320 = 8000, decimal places: 1+2=3 → 8.000 = 8\nAnswer: $8.00', id: 'Kalikan: 2,5 × 3,20\nMetode 1 (Pecahan): 25/10 × 320/100 = 8000/1000 = 8\nMetode 2 (Langsung): 25 × 320 = 8000, angka di belakang koma: 1+2=3 → 8,000 = 8\nJawaban: $8,00' } },
+  { q: { en: 'Lily has $15.75. She buys ribbons at $0.25 each. How many ribbons can she buy?', id: 'Lily punya $15,75. Dia membeli pita seharga $0,25 setiap helai. Berapa helai pita yang bisa dibelinya?' }, answer: '63', accept: ['63'],
+    steps: { en: 'Divide: 15.75 ÷ 0.25\nMethod 1 (Fraction): 1575/100 ÷ 25/100 = 1575/100 × 100/25 = 157500/2500 = 63\nMethod 2 (Direct): Multiply both by 100 → 1575 ÷ 25 = 63\nAnswer: 63 ribbons', id: 'Bagi: 15,75 ÷ 0,25\nMetode 1 (Pecahan): 1575/100 ÷ 25/100 = 1575/100 × 100/25 = 157500/2500 = 63\nMetode 2 (Langsung): Kalikan keduanya dengan 100 → 1575 ÷ 25 = 63\nJawaban: 63 helai pita' } },
+  { q: { en: 'A recipe needs 0.75 cups of flour for one cake. If Sophia makes 8 cakes, how much flour does she need?', id: 'Resep membutuhkan 0,75 cangkir tepung untuk satu kue. Jika Sophia membuat 8 kue, berapa banyak tepung yang dibutuhkan?' }, answer: '6', accept: ['6','6.0','6.00'],
+    steps: { en: 'Multiply: 0.75 × 8\nMethod 1 (Fraction): 75/100 × 8/1 = 600/100 = 6\nMethod 2 (Direct): 75 × 8 = 600, decimal places: 2 → 6.00 = 6\nAnswer: 6 cups', id: 'Kalikan: 0,75 × 8\nMetode 1 (Pecahan): 75/100 × 8/1 = 600/100 = 6\nMetode 2 (Langsung): 75 × 8 = 600, angka di belakang koma: 2 → 6,00 = 6\nJawaban: 6 cangkir' } },
+  { q: { en: 'A ribbon is 12.6 m long. If cut into 4 equal pieces, how long is each piece?', id: 'Sebuah pita sepanjang 12,6 m. Jika dipotong menjadi 4 bagian sama panjang, berapa panjang setiap potongan?' }, answer: '3.15', accept: ['3.15','3,15'],
+    steps: { en: 'Divide: 12.6 ÷ 4\nMethod 1 (Fraction): 126/10 ÷ 4/1 = 126/10 × 1/4 = 126/40 = 3.15\nMethod 2 (Direct): 12.6 ÷ 4 = 3.15 (divide normally, keep decimal)\nAnswer: 3.15 m', id: 'Bagi: 12,6 ÷ 4\nMetode 1 (Pecahan): 126/10 ÷ 4/1 = 126/10 × 1/4 = 126/40 = 3,15\nMetode 2 (Langsung): 12,6 ÷ 4 = 3,15 (bagi seperti biasa, pertahankan koma)\nJawaban: 3,15 m' } },
+  { q: { en: 'Mia walks 2.3 km each day for 5 days. What is the total distance she walked?', id: 'Mia berjalan 2,3 km setiap hari selama 5 hari. Berapa total jarak yang ditempuhnya?' }, answer: '11.5', accept: ['11.5','11,5'],
+    steps: { en: 'Multiply: 2.3 × 5\nMethod 1 (Fraction): 23/10 × 5/1 = 115/10 = 11.5\nMethod 2 (Direct): 23 × 5 = 115, decimal places: 1 → 11.5\nAnswer: 11.5 km', id: 'Kalikan: 2,3 × 5\nMetode 1 (Pecahan): 23/10 × 5/1 = 115/10 = 11,5\nMetode 2 (Langsung): 23 × 5 = 115, angka di belakang koma: 1 → 11,5\nJawaban: 11,5 km' } },
+  { q: { en: 'A water bottle holds 0.5 L. How many bottles are needed to fill a 4.5 L container?', id: 'Botol air menampung 0,5 L. Berapa botol yang dibutuhkan untuk mengisi wadah 4,5 L?' }, answer: '9', accept: ['9','9.0'],
+    steps: { en: 'Divide: 4.5 ÷ 0.5\nMethod 1 (Fraction): 45/10 ÷ 5/10 = 45/10 × 10/5 = 450/50 = 9\nMethod 2 (Direct): Multiply both by 10 → 45 ÷ 5 = 9\nAnswer: 9 bottles', id: 'Bagi: 4,5 ÷ 0,5\nMetode 1 (Pecahan): 45/10 ÷ 5/10 = 45/10 × 10/5 = 450/50 = 9\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 45 ÷ 5 = 9\nJawaban: 9 botol' } },
+  { q: { en: 'Ava has $24.00. She buys a book for $6.50 and a pen for $3.25. How much money is left?', id: 'Ava punya $24,00. Dia membeli buku seharga $6,50 dan pena seharga $3,25. Berapa uang yang tersisa?' }, answer: '14.25', accept: ['14.25','14,25','$14.25','$14,25'],
+    steps: { en: 'Step 1: Total spent = 6.50 + 3.25 = 9.75\nStep 2: Money left = 24.00 - 9.75 = 14.25\nAnswer: $14.25', id: 'Langkah 1: Total belanja = 6,50 + 3,25 = 9,75\nLangkah 2: Uang tersisa = 24,00 - 9,75 = 14,25\nJawaban: $14,25' } },
+  { q: { en: 'A pencil costs $0.45. How much do 12 pencils cost?', id: 'Sebuah pensil harganya $0,45. Berapa biaya 12 pensil?' }, answer: '5.40', accept: ['5.40','5,40','$5.40','$5,40'],
+    steps: { en: 'Multiply: 0.45 × 12\nMethod 1 (Fraction): 45/100 × 12/1 = 540/100 = 5.40\nMethod 2 (Direct): 45 × 12 = 540, decimal places: 2 → 5.40\nAnswer: $5.40', id: 'Kalikan: 0,45 × 12\nMetode 1 (Pecahan): 45/100 × 12/1 = 540/100 = 5,40\nMetode 2 (Langsung): 45 × 12 = 540, angka di belakang koma: 2 → 5,40\nJawaban: $5,40' } },
+  { q: { en: 'Zoe has a 6.4 m ribbon. She cuts it into 0.8 m pieces. How many pieces does she get?', id: 'Zoe punya pita 6,4 m. Dia memotong menjadi potongan 0,8 m. Berapa potong yang didapatnya?' }, answer: '8', accept: ['8','8.0'],
+    steps: { en: 'Divide: 6.4 ÷ 0.8\nMethod 1 (Fraction): 64/10 ÷ 8/10 = 64/10 × 10/8 = 640/80 = 8\nMethod 2 (Direct): Multiply both by 10 → 64 ÷ 8 = 8\nAnswer: 8 pieces', id: 'Bagi: 6,4 ÷ 0,8\nMetode 1 (Pecahan): 64/10 ÷ 8/10 = 64/10 × 10/8 = 640/80 = 8\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 64 ÷ 8 = 8\nJawaban: 8 potong' } },
+  { q: { en: 'A bakery uses 0.4 kg of sugar for each cake. How much sugar is needed for 15 cakes?', id: 'Toko kue menggunakan 0,4 kg gula untuk setiap kue. Berapa gula yang dibutuhkan untuk 15 kue?' }, answer: '6', accept: ['6','6.0','6.00'],
+    steps: { en: 'Multiply: 0.4 × 15\nMethod 1 (Fraction): 4/10 × 15/1 = 60/10 = 6\nMethod 2 (Direct): 4 × 15 = 60, decimal places: 1 → 6.0 = 6\nAnswer: 6 kg', id: 'Kalikan: 0,4 × 15\nMetode 1 (Pecahan): 4/10 × 15/1 = 60/10 = 6\nMetode 2 (Langsung): 4 × 15 = 60, angka di belakang koma: 1 → 6,0 = 6\nJawaban: 6 kg' } },
+  { q: { en: 'A bag contains 2.5 kg of rice. If used 0.25 kg per day, how many days will it last?', id: 'Sebuah kantong berisi 2,5 kg beras. Jika dipakai 0,25 kg per hari, berapa hari akan habis?' }, answer: '10', accept: ['10','10.0'],
+    steps: { en: 'Divide: 2.5 ÷ 0.25\nMethod 1 (Fraction): 25/10 ÷ 25/100 = 25/10 × 100/25 = 2500/250 = 10\nMethod 2 (Direct): Multiply both by 100 → 250 ÷ 25 = 10\nAnswer: 10 days', id: 'Bagi: 2,5 ÷ 0,25\nMetode 1 (Pecahan): 25/10 ÷ 25/100 = 25/10 × 100/25 = 2500/250 = 10\nMetode 2 (Langsung): Kalikan keduanya dengan 100 → 250 ÷ 25 = 10\nJawaban: 10 hari' } },
+  { q: { en: 'Chloe buys 3.5 m of fabric at $4.20 per meter. What is the total cost?', id: 'Chloe membeli 3,5 m kain dengan harga $4,20 per meter. Berapa total biayanya?' }, answer: '14.70', accept: ['14.70','14,70','$14.70','$14,70'],
+    steps: { en: 'Multiply: 3.5 × 4.20\nMethod 1 (Fraction): 35/10 × 420/100 = 14700/1000 = 14.70\nMethod 2 (Direct): 35 × 420 = 14700, decimal places: 1+2=3 → 14.700 = 14.70\nAnswer: $14.70', id: 'Kalikan: 3,5 × 4,20\nMetode 1 (Pecahan): 35/10 × 420/100 = 14700/1000 = 14,70\nMetode 2 (Langsung): 35 × 420 = 14700, angka di belakang koma: 1+2=3 → 14,700 = 14,70\nJawaban: $14,70' } },
+  { q: { en: 'A train travels 65.5 km in 1 hour. How far does it travel in 4 hours?', id: 'Kereta menempuh 65,5 km dalam 1 jam. Berapa jauh yang ditempuh dalam 4 jam?' }, answer: '262', accept: ['262','262.0','262.00'],
+    steps: { en: 'Multiply: 65.5 × 4\nMethod 1 (Fraction): 655/10 × 4/1 = 2620/10 = 262\nMethod 2 (Direct): 655 × 4 = 2620, decimal places: 1 → 262.0 = 262\nAnswer: 262 km', id: 'Kalikan: 65,5 × 4\nMetode 1 (Pecahan): 655/10 × 4/1 = 2620/10 = 262\nMetode 2 (Langsung): 655 × 4 = 2620, angka di belakang koma: 1 → 262,0 = 262\nJawaban: 262 km' } },
+  { q: { en: 'A bottle holds 1.5 L of juice. If poured into 0.3 L cups, how many cups are filled?', id: 'Botol berisi 1,5 L jus. Jika dituang ke cup 0,3 L, berapa cup yang terisi?' }, answer: '5', accept: ['5','5.0'],
+    steps: { en: 'Divide: 1.5 ÷ 0.3\nMethod 1 (Fraction): 15/10 ÷ 3/10 = 15/10 × 10/3 = 150/30 = 5\nMethod 2 (Direct): Multiply both by 10 → 15 ÷ 3 = 5\nAnswer: 5 cups', id: 'Bagi: 1,5 ÷ 0,3\nMetode 1 (Pecahan): 15/10 ÷ 3/10 = 15/10 × 10/3 = 150/30 = 5\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 15 ÷ 3 = 5\nJawaban: 5 cup' } },
+  { q: { en: 'Olivia saves $2.75 each week. How much will she save in 9 weeks?', id: 'Olivia menabung $2,75 setiap minggu. Berapa yang akan ditabung dalam 9 minggu?' }, answer: '24.75', accept: ['24.75','24,75','$24.75','$24,75'],
+    steps: { en: 'Multiply: 2.75 × 9\nMethod 1 (Fraction): 275/100 × 9/1 = 2475/100 = 24.75\nMethod 2 (Direct): 275 × 9 = 2475, decimal places: 2 → 24.75\nAnswer: $24.75', id: 'Kalikan: 2,75 × 9\nMetode 1 (Pecahan): 275/100 × 9/1 = 2475/100 = 24,75\nMetode 2 (Langsung): 275 × 9 = 2475, angka di belakang koma: 2 → 24,75\nJawaban: $24,75' } },
+  { q: { en: 'A pizza is cut into 8 slices. Each slice weighs 0.125 kg. What is the total weight?', id: 'Pizza dipotong menjadi 8 potong. Setiap potong beratnya 0,125 kg. Berapa total beratnya?' }, answer: '1', accept: ['1','1.0','1.00'],
+    steps: { en: 'Multiply: 0.125 × 8\nMethod 1 (Fraction): 125/1000 × 8/1 = 1000/1000 = 1\nMethod 2 (Direct): 125 × 8 = 1000, decimal places: 3 → 1.000 = 1\nAnswer: 1 kg', id: 'Kalikan: 0,125 × 8\nMetode 1 (Pecahan): 125/1000 × 8/1 = 1000/1000 = 1\nMetode 2 (Langsung): 125 × 8 = 1000, angka di belakang koma: 3 → 1,000 = 1\nJawaban: 1 kg' } },
+  { q: { en: 'A 7.5 m rope is cut into 0.5 m pieces. How many pieces are made?', id: 'Tali sepanjang 7,5 m dipotong menjadi potongan 0,5 m. Berapa potong yang dihasilkan?' }, answer: '15', accept: ['15','15.0'],
+    steps: { en: 'Divide: 7.5 ÷ 0.5\nMethod 1 (Fraction): 75/10 ÷ 5/10 = 75/10 × 10/5 = 750/50 = 15\nMethod 2 (Direct): Multiply both by 10 → 75 ÷ 5 = 15\nAnswer: 15 pieces', id: 'Bagi: 7,5 ÷ 0,5\nMetode 1 (Pecahan): 75/10 ÷ 5/10 = 75/10 × 10/5 = 750/50 = 15\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 75 ÷ 5 = 15\nJawaban: 15 potong' } },
+  { q: { en: 'A car uses 0.8 L of fuel per km. How much fuel is used for 50 km?', id: 'Mobil menggunakan 0,8 L bahan bakar per km. Berapa bahan bakar yang digunakan untuk 50 km?' }, answer: '40', accept: ['40','40.0','40.00'],
+    steps: { en: 'Multiply: 0.8 × 50\nMethod 1 (Fraction): 8/10 × 50/1 = 400/10 = 40\nMethod 2 (Direct): 8 × 50 = 400, decimal places: 1 → 40.0 = 40\nAnswer: 40 L', id: 'Kalikan: 0,8 × 50\nMetode 1 (Pecahan): 8/10 × 50/1 = 400/10 = 40\nMetode 2 (Langsung): 8 × 50 = 400, angka di belakang koma: 1 → 40,0 = 40\nJawaban: 40 L' } },
+  { q: { en: 'Grace has $20.00. She buys 3 ice creams at $2.75 each. How much is left?', id: 'Grace punya $20,00. Dia membeli 3 es krim seharga $2,75 setiap satu. Berapa yang tersisa?' }, answer: '11.75', accept: ['11.75','11,75','$11.75','$11,75'],
+    steps: { en: 'Step 1: Total cost = 2.75 × 3 = 8.25\nStep 2: Money left = 20.00 - 8.25 = 11.75\nAnswer: $11.75', id: 'Langkah 1: Total biaya = 2,75 × 3 = 8,25\nLangkah 2: Uang tersisa = 20,00 - 8,25 = 11,75\nJawaban: $11,75' } },
+  { q: { en: 'A garden is 6.5 m long and 3.2 m wide. What is the area?', id: 'Kebun panjang 6,5 m dan lebar 3,2 m. Berapa luasnya?' }, answer: '20.8', accept: ['20.8','20,80','20.80','20,8'],
+    steps: { en: 'Multiply: 6.5 × 3.2\nMethod 1 (Fraction): 65/10 × 32/10 = 2080/100 = 20.80\nMethod 2 (Direct): 65 × 32 = 2080, decimal places: 1+1=2 → 20.80 = 20.8\nAnswer: 20.8 m²', id: 'Kalikan: 6,5 × 3,2\nMetode 1 (Pecahan): 65/10 × 32/10 = 2080/100 = 20,80\nMetode 2 (Langsung): 65 × 32 = 2080, angka di belakang koma: 1+1=2 → 20,80 = 20,8\nJawaban: 20,8 m²' } },
+  { q: { en: 'A bag of candy weighs 0.6 kg. How much do 7 bags weigh?', id: 'Satu kantong permen beratnya 0,6 kg. Berapa berat 7 kantong?' }, answer: '4.2', accept: ['4.2','4,2'],
+    steps: { en: 'Multiply: 0.6 × 7\nMethod 1 (Fraction): 6/10 × 7/1 = 42/10 = 4.2\nMethod 2 (Direct): 6 × 7 = 42, decimal places: 1 → 4.2\nAnswer: 4.2 kg', id: 'Kalikan: 0,6 × 7\nMetode 1 (Pecahan): 6/10 × 7/1 = 42/10 = 4,2\nMetode 2 (Langsung): 6 × 7 = 42, angka di belakang koma: 1 → 4,2\nJawaban: 4,2 kg' } },
+  { q: { en: 'A jar has 3.6 L of honey. If poured into 0.4 L jars, how many jars are filled?', id: 'Toples berisi 3,6 L madu. Jika dituang ke toples 0,4 L, berapa toples yang terisi?' }, answer: '9', accept: ['9','9.0'],
+    steps: { en: 'Divide: 3.6 ÷ 0.4\nMethod 1 (Fraction): 36/10 ÷ 4/10 = 36/10 × 10/4 = 360/40 = 9\nMethod 2 (Direct): Multiply both by 10 → 36 ÷ 4 = 9\nAnswer: 9 jars', id: 'Bagi: 3,6 ÷ 0,4\nMetode 1 (Pecahan): 36/10 ÷ 4/10 = 36/10 × 10/4 = 360/40 = 9\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 36 ÷ 4 = 9\nJawaban: 9 toples' } },
+  { q: { en: 'A book costs $4.85. How much do 6 books cost?', id: 'Sebuah buku harganya $4,85. Berapa biaya 6 buku?' }, answer: '29.10', accept: ['29.10','29,10','$29.10','$29,10'],
+    steps: { en: 'Multiply: 4.85 × 6\nMethod 1 (Fraction): 485/100 × 6/1 = 2910/100 = 29.10\nMethod 2 (Direct): 485 × 6 = 2910, decimal places: 2 → 29.10\nAnswer: $29.10', id: 'Kalikan: 4,85 × 6\nMetode 1 (Pecahan): 485/100 × 6/1 = 2910/100 = 29,10\nMetode 2 (Langsung): 485 × 6 = 2910, angka di belakang koma: 2 → 29,10\nJawaban: $29,10' } },
+  { q: { en: 'A package weighs 12.5 kg. If split equally into 5 boxes, how much in each box?', id: 'Paket beratnya 12,5 kg. Jika dibagi sama ke 5 kotak, berapa berat setiap kotak?' }, answer: '2.5', accept: ['2.5','2,5'],
+    steps: { en: 'Divide: 12.5 ÷ 5\nMethod 1 (Fraction): 125/10 ÷ 5/1 = 125/10 × 1/5 = 125/50 = 2.5\nMethod 2 (Direct): 12.5 ÷ 5 = 2.5 (divide normally)\nAnswer: 2.5 kg', id: 'Bagi: 12,5 ÷ 5\nMetode 1 (Pecahan): 125/10 ÷ 5/1 = 125/10 × 1/5 = 125/50 = 2,5\nMetode 2 (Langsung): 12,5 ÷ 5 = 2,5 (bagi seperti biasa)\nJawaban: 2,5 kg' } },
+  { q: { en: 'Sara runs 0.75 km in 1 minute. How far does she run in 8 minutes?', id: 'Sara berlari 0,75 km dalam 1 menit. Berapa jauh dia berlari dalam 8 menit?' }, answer: '6', accept: ['6','6.0','6.00'],
+    steps: { en: 'Multiply: 0.75 × 8\nMethod 1 (Fraction): 75/100 × 8/1 = 600/100 = 6\nMethod 2 (Direct): 75 × 8 = 600, decimal places: 2 → 6.00 = 6\nAnswer: 6 km', id: 'Kalikan: 0,75 × 8\nMetode 1 (Pecahan): 75/100 × 8/1 = 600/100 = 6\nMetode 2 (Langsung): 75 × 8 = 600, angka di belakang koma: 2 → 6,00 = 6\nJawaban: 6 km' } },
+  { q: { en: 'A bottle has 0.9 L of milk. If poured into 0.15 L cups, how many cups are filled?', id: 'Botol berisi 0,9 L susu. Jika dituang ke cup 0,15 L, berapa cup yang terisi?' }, answer: '6', accept: ['6','6.0'],
+    steps: { en: 'Divide: 0.9 ÷ 0.15\nMethod 1 (Fraction): 9/10 ÷ 15/100 = 9/10 × 100/15 = 900/150 = 6\nMethod 2 (Direct): Multiply both by 100 → 90 ÷ 15 = 6\nAnswer: 6 cups', id: 'Bagi: 0,9 ÷ 0,15\nMetode 1 (Pecahan): 9/10 ÷ 15/100 = 9/10 × 100/15 = 900/150 = 6\nMetode 2 (Langsung): Kalikan keduanya dengan 100 → 90 ÷ 15 = 6\nJawaban: 6 cup' } },
+  { q: { en: 'A bottle of shampoo costs $3.45. How much do 4 bottles cost?', id: 'Sebotol shampoo harganya $3,45. Berapa biaya 4 botol?' }, answer: '13.80', accept: ['13.80','13,80','$13.80','$13,80'],
+    steps: { en: 'Multiply: 3.45 × 4\nMethod 1 (Fraction): 345/100 × 4/1 = 1380/100 = 13.80\nMethod 2 (Direct): 345 × 4 = 1380, decimal places: 2 → 13.80\nAnswer: $13.80', id: 'Kalikan: 3,45 × 4\nMetode 1 (Pecahan): 345/100 × 4/1 = 1380/100 = 13,80\nMetode 2 (Langsung): 345 × 4 = 1380, angka di belakang koma: 2 → 13,80\nJawaban: $13,80' } },
+  { q: { en: 'Lily has a 9.6 m ribbon. She uses 1.2 m for each gift. How many gifts can she decorate?', id: 'Lily punya pita 9,6 m. Dia menggunakan 1,2 m untuk setiap kado. Berapa kado yang bisa dihiasinya?' }, answer: '8', accept: ['8','8.0'],
+    steps: { en: 'Divide: 9.6 ÷ 1.2\nMethod 1 (Fraction): 96/10 ÷ 12/10 = 96/10 × 10/12 = 960/120 = 8\nMethod 2 (Direct): Multiply both by 10 → 96 ÷ 12 = 8\nAnswer: 8 gifts', id: 'Bagi: 9,6 ÷ 1,2\nMetode 1 (Pecahan): 96/10 ÷ 12/10 = 96/10 × 10/12 = 960/120 = 8\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 96 ÷ 12 = 8\nJawaban: 8 kado' } },
+  { q: { en: 'A bag of flour weighs 2.5 kg. A baker uses 0.5 kg for each loaf of bread. How many loaves can be made?', id: 'Satu kantong tepung beratnya 2,5 kg. Tukang roti menggunakan 0,5 kg untuk setiap roti. Berapa roti yang bisa dibuat?' }, answer: '5', accept: ['5','5.0'],
+    steps: { en: 'Divide: 2.5 ÷ 0.5\nMethod 1 (Fraction): 25/10 ÷ 5/10 = 25/10 × 10/5 = 250/50 = 5\nMethod 2 (Direct): Multiply both by 10 → 25 ÷ 5 = 5\nAnswer: 5 loaves', id: 'Bagi: 2,5 ÷ 0,5\nMetode 1 (Pecahan): 25/10 ÷ 5/10 = 25/10 × 10/5 = 250/50 = 5\nMetode 2 (Langsung): Kalikan keduanya dengan 10 → 25 ÷ 5 = 5\nJawaban: 5 roti' } },
+  { q: { en: 'Maya buys 0.8 kg of apples at $2.50 per kg. How much does she pay?', id: 'Maya membeli 0,8 kg apel dengan harga $2,50 per kg. Berapa yang harus dibayarnya?' }, answer: '2', accept: ['2','2.0','2.00','$2','$2.00','$2.0'],
+    steps: { en: 'Multiply: 0.8 × 2.50\nMethod 1 (Fraction): 8/10 × 250/100 = 2000/1000 = 2\nMethod 2 (Direct): 8 × 250 = 2000, decimal places: 1+2=3 → 2.000 = 2\nAnswer: $2.00', id: 'Kalikan: 0,8 × 2,50\nMetode 1 (Pecahan): 8/10 × 250/100 = 2000/1000 = 2\nMetode 2 (Langsung): 8 × 250 = 2000, angka di belakang koma: 1+2=3 → 2,000 = 2\nJawaban: $2,00' } }
+];
+
+// ============ START ADVENTURE ============
+function startAdventure() {
+  const input = document.getElementById('studentName');
+  const error = document.getElementById('nameError');
+  const name = input.value.trim();
+  
+  if (!name) {
+    error.classList.add('show');
+    input.focus();
+    return;
+  }
+  
+  error.classList.remove('show');
+  studentName = name;
+  document.getElementById('scoreBadge').style.display = 'block';
+  goToSlide(2);
+}
+
+// ============ SLIDE NAVIGATION ============
+function goToSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector('[data-slide="' + n + '"]');
+  if (target) {
+    target.classList.add('active');
+    currentSlide = n;
+    document.getElementById('currentSlideNum').textContent = n;
+    document.getElementById('progressBar').style.width = (n / 7 * 100) + '%';
+    
+    document.getElementById('prevBtn').disabled = (n === 1);
+    document.getElementById('nextBtn').disabled = (n === 7);
+    
+    if (n === 7) {
+      document.getElementById('finalName').textContent = studentName + '! 💖';
+      celebrate();
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < 7) goToSlide(currentSlide + 1);
+}
+function prevSlide() {
+  if (currentSlide > 1) goToSlide(currentSlide - 1);
+}
+
+// ============ LANGUAGE TOGGLE ============
+function toggleLang() {
+  currentLang = (currentLang === 'en') ? 'id' : 'en';
+  applyLang();
+  const btn = document.getElementById('langBtn');
+  btn.innerHTML = currentLang === 'en' ? '🇮🇩 Bahasa Indonesia' : '🇬🇧 English';
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const txt = el.getAttribute('data-' + currentLang);
+    if (txt) el.textContent = txt;
+  });
+  renderReviewTab(currentReviewTab);
+  renderMultPage(currentMultPage);
+  renderDivPage(currentDivPage);
+  renderProblems();
+}
+
+function t(obj) {
+  if (!obj) return '';
+  return obj[currentLang] || obj.en || '';
+}
+
+// ============ REVIEW RENDER ============
+function renderReviewTabs() {
+  const container = document.getElementById('reviewTabs');
+  container.innerHTML = '';
+  reviewData.forEach(function(topic, i) {
+    const btn = document.createElement('button');
+    btn.className = 'review-tab' + (i === currentReviewTab ? ' active' : '');
+    btn.textContent = t(topic.title);
+    btn.onclick = function() {
+      currentReviewTab = i;
+      renderReviewTabs();
+      renderReviewTab(i);
+    };
+    container.appendChild(btn);
+  });
+}
+
+function renderReviewTab(i) {
+  const container = document.getElementById('reviewContent');
+  const topic = reviewData[i];
+  let html = '<div class="review-content active">';
+  html += '<div class="topic-intro">' + t(topic.intro) + '</div>';
+  topic.questions.forEach(function(q, qi) {
+    html += '<div class="question-card">';
+    html += '<span class="q-number">' + (qi + 1) + '</span>';
+    html += '<span class="q-text">' + t(q.q) + '</span>';
+    if (q.type === 'mc') {
+      html += '<div class="q-options" id="opts-r-' + i + '-' + qi + '">';
+      q.options.forEach(function(opt, oi) {
+        html += '<div class="q-option" onclick="selectReview(' + i + ',' + qi + ',' + oi + ')" data-oi="' + oi + '">' + opt + '</div>';
+      });
+      html += '</div>';
+      html += '<button class="check-btn" onclick="checkReview(' + i + ',' + qi + ')">' + (currentLang === 'en' ? 'Check Answer' : 'Periksa Jawaban') + '</button>';
+    }
+    html += '<div class="feedback" id="fb-r-' + i + '-' + qi + '"></div>';
+    html += '<div class="explanation" id="ex-r-' + i + '-' + qi + '"><h4>' + (currentLang === 'en' ? '💡 Explanation' : '💡 Pembahasan') + '</h4>' + t(q.ex) + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function selectReview(ti, qi, oi) {
+  const opts = document.querySelectorAll('#opts-r-' + ti + '-' + qi + ' .q-option');
+  opts.forEach(function(o) { o.classList.remove('selected'); });
+  opts[oi].classList.add('selected');
+  opts[oi].setAttribute('data-selected', '1');
+}
+
+function checkReview(ti, qi) {
+  const opts = document.querySelectorAll('#opts-r-' + ti + '-' + qi + ' .q-option');
+  let selected = -1;
+  opts.forEach(function(o, i) {
+    if (o.classList.contains('selected')) selected = i;
+  });
+  const q = reviewData[ti].questions[qi];
+  const fb = document.getElementById('fb-r-' + ti + '-' + qi);
+  const ex = document.getElementById('ex-r-' + ti + '-' + qi);
+  
+  if (selected === -1) {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? 'Please select an answer first! 💕' : 'Silakan pilih jawaban dulu! 💕';
+    return;
+  }
+  
+  totalCount++;
+  if (selected === q.correct) {
+    fb.className = 'feedback correct show';
+    fb.textContent = currentLang === 'en' ? '🎉 Correct! Well done!' : '🎉 Benar! Kerja bagus!';
+    opts[selected].classList.add('correct-answer');
+    correctCount++;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? '❌ Not quite. The correct answer is highlighted in green.' : '❌ Belum tepat. Jawaban benar disorot hijau.';
+    opts[selected].classList.add('wrong-answer');
+    opts[q.correct].classList.add('correct-answer');
+  }
+  ex.classList.add('show');
+  updateScore();
+}
+
+// ============ MULTIPLICATION RENDER ============
+function renderMultPage(page) {
+  currentMultPage = page;
+  const all = genMultQs();
+  const start = (page - 1) * PER_PAGE;
+  const end = start + PER_PAGE;
+  const slice = all.slice(start, end);
+  
+  const container = document.getElementById('multQuestions');
+  let html = '<h3 style="font-family:Fredoka,sans-serif;color:var(--purple);margin:20px 0;">✖️ ' + (currentLang === 'en' ? 'Multiplication Practice' : 'Latihan Perkalian') + ' (' + (start+1) + '-' + Math.min(end, all.length) + ')</h3>';
+  slice.forEach(function(q) {
+    html += '<div class="question-card">';
+    html += '<span class="q-number">' + (start + q.id + 1) + '</span>';
+    html += '<span class="q-text">' + t(q.q) + '</span>';
+    html += '<div class="q-input-row">';
+    html += '<input type="text" class="q-input" id="in-m-' + q.id + '" placeholder="' + (currentLang === 'en' ? 'Your answer' : 'Jawabanmu') + '">';
+    html += '<button class="check-btn" onclick="checkMult(' + q.id + ')">' + (currentLang === 'en' ? 'Check' : 'Periksa') + '</button>';
+    html += '</div>';
+    html += '<div class="feedback" id="fb-m-' + q.id + '"></div>';
+    html += '<div class="explanation" id="ex-m-' + q.id + '">';
+    html += '<h4>' + (currentLang === 'en' ? '💡 Solution' : '💡 Pembahasan') + '</h4>';
+    html += '<div class="method-grid">';
+    html += '<div class="method-box"><h5>' + (currentLang === 'en' ? 'Method 1: Fraction' : 'Metode 1: Pecahan') + '</h5><div class="method-content">' + t(q.m1) + '</div></div>';
+    html += '<div class="method-box"><h5>' + (currentLang === 'en' ? 'Method 2: Direct' : 'Metode 2: Langsung') + '</h5><div class="method-content">' + t(q.m2) + '</div></div>';
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+  
+  renderPagination('multPagination', Math.ceil(all.length / PER_PAGE), page, function(p) { renderMultPage(p); });
+}
+
+function checkMult(id) {
+  const input = document.getElementById('in-m-' + id);
+  const fb = document.getElementById('fb-m-' + id);
+  const ex = document.getElementById('ex-m-' + id);
+  const val = input.value;
+  
+  if (!val.trim()) {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? 'Please enter your answer! 💕' : 'Silakan masukkan jawabanmu! 💕';
+    return;
+  }
+  
+  const all = genMultQs();
+  const q = all[id];
+  totalCount++;
+  
+  if (matchAns(val, q.answer)) {
+    fb.className = 'feedback correct show';
+    fb.textContent = currentLang === 'en' ? '🎉 Correct! You got it!' : '🎉 Benar! Kamu berhasil!';
+    correctCount++;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? '❌ Not quite. The answer is ' + q.answer + '.' : '❌ Belum tepat. Jawabannya ' + q.answer + '.';
+  }
+  ex.classList.add('show');
+  updateScore();
+}
+
+// ============ DIVISION RENDER ============
+function renderDivPage(page) {
+  currentDivPage = page;
+  const all = genDivQs();
+  const start = (page - 1) * PER_PAGE;
+  const end = start + PER_PAGE;
+  const slice = all.slice(start, end);
+  
+  const container = document.getElementById('divQuestions');
+  let html = '<h3 style="font-family:Fredoka,sans-serif;color:var(--purple);margin:20px 0;">➗ ' + (currentLang === 'en' ? 'Division Practice' : 'Latihan Pembagian') + ' (' + (start+1) + '-' + Math.min(end, all.length) + ')</h3>';
+  slice.forEach(function(q) {
+    html += '<div class="question-card">';
+    html += '<span class="q-number">' + (start + q.id + 1) + '</span>';
+    html += '<span class="q-text">' + t(q.q) + '</span>';
+    html += '<div class="q-input-row">';
+    html += '<input type="text" class="q-input" id="in-d-' + q.id + '" placeholder="' + (currentLang === 'en' ? 'Your answer' : 'Jawabanmu') + '">';
+    html += '<button class="check-btn" onclick="checkDiv(' + q.id + ')">' + (currentLang === 'en' ? 'Check' : 'Periksa') + '</button>';
+    html += '</div>';
+    html += '<div class="feedback" id="fb-d-' + q.id + '"></div>';
+    html += '<div class="explanation" id="ex-d-' + q.id + '">';
+    html += '<h4>' + (currentLang === 'en' ? '💡 Solution' : '💡 Pembahasan') + '</h4>';
+    html += '<div class="method-grid">';
+    html += '<div class="method-box"><h5>' + (currentLang === 'en' ? 'Method 1: Fraction' : 'Metode 1: Pecahan') + '</h5><div class="method-content">' + t(q.m1) + '</div></div>';
+    html += '<div class="method-box"><h5>' + (currentLang === 'en' ? 'Method 2: Direct' : 'Metode 2: Langsung') + '</h5><div class="method-content">' + t(q.m2) + '</div></div>';
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+  
+  renderPagination('divPagination', Math.ceil(all.length / PER_PAGE), page, function(p) { renderDivPage(p); });
+}
+
+function checkDiv(id) {
+  const input = document.getElementById('in-d-' + id);
+  const fb = document.getElementById('fb-d-' + id);
+  const ex = document.getElementById('ex-d-' + id);
+  const val = input.value;
+  
+  if (!val.trim()) {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? 'Please enter your answer! 💕' : 'Silakan masukkan jawabanmu! 💕';
+    return;
+  }
+  
+  const all = genDivQs();
+  const q = all[id];
+  totalCount++;
+  
+  if (matchAns(val, q.answer)) {
+    fb.className = 'feedback correct show';
+    fb.textContent = currentLang === 'en' ? '🎉 Correct! You got it!' : '🎉 Benar! Kamu berhasil!';
+    correctCount++;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? '❌ Not quite. The answer is ' + q.answer + '.' : '❌ Belum tepat. Jawabannya ' + q.answer + '.';
+  }
+  ex.classList.add('show');
+  updateScore();
+}
+
+// ============ PROBLEM SOLVING RENDER ============
+function renderProblems() {
+  const container = document.getElementById('problemQuestions');
+  let html = '';
+  problems.forEach(function(p, i) {
+    html += '<div class="problem-card">';
+    html += '<span class="problem-badge">' + (currentLang === 'en' ? 'Problem' : 'Soal') + ' ' + (i + 1) + '</span>';
+    html += '<div class="q-text">' + t(p.q) + '</div>';
+    html += '<div class="q-input-row">';
+    html += '<input type="text" class="q-input" id="in-p-' + i + '" placeholder="' + (currentLang === 'en' ? 'Your answer' : 'Jawabanmu') + '">';
+    html += '<button class="check-btn" onclick="checkProblem(' + i + ')">' + (currentLang === 'en' ? 'Check & Explain' : 'Periksa & Bahas') + '</button>';
+    html += '</div>';
+    html += '<div class="feedback" id="fb-p-' + i + '"></div>';
+    html += '<div class="explanation" id="ex-p-' + i + '"><h4>' + (currentLang === 'en' ? '💡 Step-by-Step Solution' : '💡 Pembahasan Langkah demi Langkah') + '</h4>' + t(p.steps) + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function checkProblem(i) {
+  const input = document.getElementById('in-p-' + i);
+  const fb = document.getElementById('fb-p-' + i);
+  const ex = document.getElementById('ex-p-' + i);
+  const val = input.value;
+  
+  if (!val.trim()) {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? 'Please enter your answer! 💕' : 'Silakan masukkan jawabanmu! 💕';
+    return;
+  }
+  
+  const p = problems[i];
+  totalCount++;
+  
+  if (matchAns(val, p.answer, p.accept)) {
+    fb.className = 'feedback correct show';
+    fb.textContent = currentLang === 'en' ? '🎉 Correct! Amazing thinking!' : '🎉 Benar! Pemikiran yang luar biasa!';
+    correctCount++;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.textContent = currentLang === 'en' ? '❌ Not quite. The answer is ' + p.answer + '. Check the explanation below!' : '❌ Belum tepat. Jawabannya ' + p.answer + '. Lihat pembahasan di bawah!';
+  }
+  ex.classList.add('show');
+  updateScore();
+}
+
+// ============ PAGINATION ============
+function renderPagination(containerId, totalPages, currentPage, onClick) {
+  const container = document.getElementById(containerId);
+  let html = '';
+  for (let i = 1; i <= totalPages; i++) {
+    html += '<button class="page-btn' + (i === currentPage ? ' active' : '') + '" onclick="window.__pageClick_' + containerId + '(' + i + ')">' + i + '</button>';
+  }
+  container.innerHTML = html;
+  window['__pageClick_' + containerId] = onClick;
+}
+
+// ============ SCORE ============
+function updateScore() {
+  document.getElementById('correctCount').textContent = correctCount;
+  document.getElementById('totalCount').textContent = totalCount;
+  if (correctCount > 0 && correctCount % 5 === 0) {
+    miniCelebrate();
+  }
+}
+
+function celebrate() {
+  const emojis = ['🎉','✨','💖','🌸','⭐','🧁','💕','🌟'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(function() {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.textContent = emojis[i % emojis.length];
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top = '-20px';
+      c.style.fontSize = (15 + Math.random() * 20) + 'px';
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(c);
+      setTimeout(function() { c.remove(); }, 3500);
+    }, i * 80);
+  }
+}
+
+function miniCelebrate() {
+  const emojis = ['✨','💖','⭐','💕'];
+  for (let i = 0; i < 15; i++) {
+    setTimeout(function() {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.textContent = emojis[i % emojis.length];
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top = '-20px';
+      document.body.appendChild(c);
+      setTimeout(function() { c.remove(); }, 3500);
+    }, i * 50);
+  }
+}
+
+// ============ INIT ============
+window.addEventListener('DOMContentLoaded', function() {
+  renderReviewTabs();
+  renderReviewTab(0);
+  renderMultPage(1);
+  renderDivPage(1);
+  renderProblems();
+});
+
+// Allow Enter key on input name
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'studentName') {
+    startAdventure();
+  }
+});
+</script>
+</body>
+</html>
