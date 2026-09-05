@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operasi Hitung Campuran Desimal - Matematika Interaktif</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+:root{
+  --bg:#0f172a; --bg-2:#1e293b; --surface:rgba(255,255,255,.04); --surface-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.08); --border-2:rgba(255,255,255,.16);
+  --fg:#f1f5f9; --fg-muted:#94a3b8; --fg-dim:#64748b;
+  --indigo:#818cf8; --indigo-2:#6366f1; --indigo-glow:rgba(129,140,248,.35);
+  --success:#34d399; --danger:#f87171; --info:#38bdf8; --amber:#fbbf24;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg); color:var(--fg); min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99,102,241,.15), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(56,189,248,.06), transparent 60%),
+    linear-gradient(180deg, #0f172a 0%, #0b1120 100%);
+  background-attachment:fixed; overflow-x:hidden;
+}
+.display{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.mono{font-family:'JetBrains Mono',monospace}
+
+.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.5;z-index:0;pointer-events:none}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle, rgba(129,140,248,.3), transparent 70%);top:-150px;right:-100px;animation:float 20s ease-in-out infinite}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle, rgba(56,189,248,.2), transparent 70%);bottom:-100px;left:-100px;animation:float 25s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,40px)}}
+
+/* Header */
+.app-header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(24px) saturate(1.5);
+  -webkit-backdrop-filter:blur(24px) saturate(1.5);
+  background:rgba(15,23,42,.8); border-bottom:1px solid var(--border);
+}
+.header-progress{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.header-progress-bar{height:100%;background:linear-gradient(90deg, var(--indigo), var(--info));border-radius:99px;transition:width .4s ease;box-shadow:0 0 12px var(--indigo-glow)}
+
+/* Tombol */
+.btn{
+  font-family:inherit;font-weight:600;border:none;cursor:pointer;
+  transition:all .2s ease;display:inline-flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:10px;font-size:14px;text-decoration:none;white-space:nowrap;
+}
+.btn-primary{background:linear-gradient(135deg, var(--indigo), var(--indigo-2));color:white}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px var(--indigo-glow)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed}
+.btn-secondary{background:rgba(255,255,255,.06);color:var(--fg);border:1px solid var(--border-2)}
+.btn-secondary:hover:not(:disabled){background:rgba(255,255,255,.1);transform:translateY(-1px)}
+.btn-success{background:linear-gradient(135deg, #34d399, #10b981);color:#0f172a}
+.btn-success:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(52,211,153,.25)}
+.btn-ghost{background:transparent;color:var(--fg-muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--fg);border-color:var(--border-2);background:rgba(255,255,255,.04)}
+
+/* Kartu Materi */
+.material-card{
+  background:linear-gradient(180deg, var(--surface), rgba(255,255,255,.02));
+  border:1px solid var(--border);border-radius:20px;padding:24px;
+  transition:all .3s ease;position:relative;overflow:hidden;height:100%;
+}
+.material-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, var(--indigo), transparent);
+}
+.material-icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:20px;margin-bottom:16px}
+.material-title{font-size:18px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;margin-bottom:10px}
+.material-body{font-size:14px;line-height:1.6;color:var(--fg-muted)}
+.material-body strong{color:var(--fg)}
+.material-body code{font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;font-size:13px;color:var(--info)}
+
+/* Navigator Soal */
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(44px, 1fr));gap:8px;padding:18px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
+.qn-btn{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--fg-muted);position:relative}
+.qn-btn:hover{background:rgba(255,255,255,.08);color:var(--fg);transform:translateY(-2px)}
+.qn-btn.answered{background:rgba(56,189,248,.15);color:var(--info);border-color:rgba(56,189,248,.3)}
+.qn-btn.correct{background:rgba(52,211,153,.18);color:var(--success);border-color:rgba(52,211,153,.4)}
+.qn-btn.wrong{background:rgba(248,113,113,.18);color:var(--danger);border-color:rgba(248,113,113,.4)}
+.qn-btn.current{background:var(--indigo);color:white;border-color:var(--indigo);box-shadow:0 0 0 3px rgba(129,140,248,.25), 0 8px 20px var(--indigo-glow);transform:scale(1.08)}
+
+/* Kartu Soal */
+.question-card{background:linear-gradient(180deg, var(--surface), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .3s ease;position:relative;overflow:hidden}
+.question-card.correct{border-color:rgba(52,211,153,.45);box-shadow:0 0 36px rgba(52,211,153,.1)}
+.question-card.wrong{border-color:rgba(248,113,113,.45);box-shadow:0 0 36px rgba(248,113,113,.1)}
+
+.q-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.q-num{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg, rgba(129,140,248,.2), rgba(99,102,241,.1));border:1px solid rgba(129,140,248,.3);color:var(--indigo);display:grid;place-items:center;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;font-size:16px}
+.q-text{font-size:20px;line-height:1.55;color:var(--fg);font-weight:500;margin:18px 0 22px;letter-spacing:-.01em}
+
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+@media (max-width:640px){.q-options{grid-template-columns:1fr}}
+.option{display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s ease;user-select:none}
+.option:hover{background:rgba(255,255,255,.05);border-color:var(--border-2);transform:translateX(4px)}
+.option.selected{background:rgba(129,140,248,.1);border-color:var(--indigo)}
+.option.correct-answer{background:rgba(52,211,153,.12);border-color:var(--success)}
+.option.wrong-answer{background:rgba(248,113,113,.12);border-color:var(--danger)}
+.option.disabled{cursor:not-allowed}
+.option.disabled:hover{transform:none}
+.option-letter{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.option.selected .option-letter{background:var(--indigo);color:white}
+.option.correct-answer .option-letter{background:var(--success);color:#0f172a}
+.option.wrong-answer .option-letter{background:var(--danger);color:white}
+
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.status-correct{background:rgba(52,211,153,.15);color:var(--success);border:1px solid rgba(52,211,153,.3)}
+.status-wrong{background:rgba(248,113,113,.15);color:var(--danger);border:1px solid rgba(248,113,113,.3)}
+.status-unanswered{background:rgba(255,255,255,.06);color:var(--fg-muted);border:1px solid var(--border)}
+
+/* Pembahasan */
+.explanation{margin-top:18px;padding:18px;border-radius:14px;background:linear-gradient(135deg, rgba(56,189,248,.06), rgba(56,189,248,.02));border:1px solid rgba(56,189,248,.2);font-size:14px;line-height:1.65;animation:slideIn .4s ease}
+.explanation.correct-exp{background:linear-gradient(135deg, rgba(52,211,153,.08), rgba(52,211,153,.02));border-color:rgba(52,211,153,.3)}
+.explanation.wrong-exp{background:linear-gradient(135deg, rgba(248,113,113,.08), rgba(248,113,113,.02));border-color:rgba(248,113,113,.3)}
+.exp-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.exp-title{font-weight:700;font-size:15px}
+.exp-body strong{color:var(--amber)}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(5,8,20,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.active{opacity:1;pointer-events:auto}
+.modal{background:linear-gradient(180deg, #1e293b, #0f172a);border:1px solid var(--border-2);border-radius:24px;max-width:920px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.5);transform:scale(.95) translateY(20px);transition:transform .3s ease}
+.modal-overlay.active .modal{transform:scale(1) translateY(0)}
+.modal-header{padding:28px 32px;border-bottom:1px solid var(--border);position:sticky;top:0;background:linear-gradient(180deg, #1e293b, rgba(30,41,59,.95));backdrop-filter:blur(20px);z-index:10;border-radius:24px 24px 0 0;display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:32px}
+.modal-close{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--fg-muted);cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.modal-close:hover{background:rgba(248,113,113,.15);color:var(--danger);border-color:rgba(248,113,113,.3)}
+
+/* Hasil */
+.score-circle{width:180px;height:180px;border-radius:50%;background:conic-gradient(var(--indigo) 0deg, var(--indigo) 0deg, rgba(255,255,255,.06) 0deg);display:grid;place-items:center;position:relative;margin:0 auto}
+.score-circle::before{content:'';position:absolute;inset:14px;border-radius:50%;background:linear-gradient(180deg, #1e293b, #0f172a);border:1px solid var(--border)}
+.score-inner{position:relative;z-index:1;text-align:center}
+.score-num{font-size:48px;font-weight:800;font-family:'Bricolage Grotesque',sans-serif;line-height:1;background:linear-gradient(135deg, #fff, var(--indigo));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.score-lbl{font-size:12px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;font-weight:600}
+.result-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:640px){.result-stat-grid{grid-template-columns:1fr}}
+.result-stat{padding:18px;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg, var(--surface), rgba(255,255,255,.01));text-align:center}
+.result-stat .num{font-size:32px;font-weight:800;font-family:'Bricolage Grotesque',sans-serif;line-height:1}
+.result-stat .lbl{font-size:12px;color:var(--fg-muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.result-stat.correct{border-color:rgba(52,211,153,.3);background:linear-gradient(180deg, rgba(52,211,153,.08), transparent)} .result-stat.correct .num{color:var(--success)}
+.result-stat.wrong{border-color:rgba(248,113,113,.3);background:linear-gradient(180deg, rgba(248,113,113,.08), transparent)} .result-stat.wrong .num{color:var(--danger)}
+.result-stat.unanswered .num{color:var(--fg-muted)}
+
+/* Nav Soal */
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--fg)}
+.nav-btn:hover:not(:disabled){background:rgba(255,255,255,.08);transform:translateY(-1px)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn.primary{background:linear-gradient(135deg, var(--indigo), var(--indigo-2));color:white;border-color:transparent}
+
+#toastContainer{position:fixed;top:80px;right:24px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{background:rgba(30,41,59,.95);backdrop-filter:blur(12px);border:1px solid var(--border-2);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;box-shadow:0 12px 32px rgba(0,0,0,.4);animation:toastIn .3s ease;min-width:240px;max-width:360px}
+.toast.success{border-left:3px solid var(--success)} .toast.error{border-left:3px solid var(--danger)} .toast.warning{border-left:3px solid var(--amber)} .toast.info{border-left:3px solid var(--info)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+.hero-title{font-size:clamp(36px, 6vw, 56px);font-weight:800;line-height:1.05;background:linear-gradient(135deg, #fff 0%, #818cf8 50%, #38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.03em}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<header class="app-header">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 py-4">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl grid place-items-center text-white font-bold" style="background:linear-gradient(135deg, var(--indigo), var(--indigo-2))">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <div>
+          <div class="display font-bold text-lg leading-tight">Operasi Hitung Campuran Desimal</div>
+          <div class="text-xs text-slate-400">Matematika Interaktif - 50 Soal</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="btn btn-ghost" onclick="scrollToTop()">
+          <i class="fas fa-book-open"></i><span class="hidden sm:inline">Materi</span>
+        </button>
+        <button class="btn btn-success" onclick="confirmFinishExam()">
+          <i class="fas fa-flag-checkered"></i> Selesai
+        </button>
+      </div>
+    </div>
+    <div class="header-progress mt-3"><div class="header-progress-bar" id="progressBar" style="width:0%"></div></div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-5 lg:px-8 py-10 relative" style="z-index:1">
+
+  <!-- Hero & Materi -->
+  <section class="mb-12">
+    <div class="mb-8 text-center">
+      <h1 class="display hero-title">Operasi Hitung Campuran Desimal</h1>
+      <p class="text-slate-400 text-lg mt-4 max-w-2xl mx-auto">Pelajari konsep urutan operasi hitung pada pecahan desimal, lalu uji pemahamanmu dengan 50 soal interaktif berikut.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="material-card">
+        <div class="material-icon" style="background:rgba(129,140,248,.15);color:var(--indigo)"><i class="fas fa-list-ol"></i></div>
+        <div class="material-title">1. Urutan Operasi</div>
+        <div class="material-body">
+          Gunakan aturan <strong>KuKaBaTa</strong>:
+          <br>1. <strong>Kurung</strong> dikerjakan pertama.
+          <br>2. <strong>Kali</strong> dan <strong>Bagi</strong> dikerjakan berurutan dari kiri.
+          <br>3. <strong>Tambah</strong> dan <strong>Kurang</strong> dikerjakan terakhir.
+        </div>
+      </div>
+      <div class="material-card">
+        <div class="material-icon" style="background:rgba(56,189,248,.15);color:var(--info)"><i class="fas fa-plus-minus"></i></div>
+        <div class="material-title">2. Penjumlahan & Pengurangan</div>
+        <div class="material-body">
+          <strong>Sejajarkan koma!</strong><br>
+          <code> 9,20</code><br>
+          <code>-0,36</code><br>
+          <code>------</code><br>
+          <code> 8,84</code>
+        </div>
+      </div>
+      <div class="material-card">
+        <div class="material-icon" style="background:rgba(251,191,36,.15);color:var(--amber)"><i class="fas fa-times"></i></div>
+        <div class="material-title">3. Perkalian</div>
+        <div class="material-body">
+          Kalikan seperti biasa, lalu hitung total angka di belakang koma.
+          <br><code>1,8 (1 angka)</code>
+          <br><code>x 0,2 (1 angka)</code>
+          <br>Total: 2 angka -> <code>0,36</code>
+        </div>
+      </div>
+      <div class="material-card">
+        <div class="material-icon" style="background:rgba(52,211,153,.15);color:var(--success)"><i class="fas fa-divide"></i></div>
+        <div class="material-title">4. Pembagian</div>
+        <div class="material-body">
+          Geser koma pada pembagi dan pembilang hingga pembagi menjadi bilangan bulat.
+          <br><code>0,68 : 0,4</code>
+          <br>Ubah jadi -> <code>6,8 : 4</code>
+          <br>Hasil -> <code>1,7</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigator & Soal -->
+  <section class="mb-8">
+    <div class="text-xs text-slate-400 mb-2 font-semibold uppercase tracking-wider">Klik nomor soal untuk berpindah</div>
+    <div class="q-grid" id="qGrid"></div>
+  </section>
+
+  <section id="quizContent"></section>
+
+</section>
+
+<footer class="text-center py-10 text-slate-500 text-sm border-t border-white/5 mt-10">
+  Platform Latihan Matematika Interaktif
+</footer>
+
+<!-- Modal Hasil -->
+<div class="modal-overlay" id="resultsModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <div>
+        <h3 class="display text-xl font-bold">Hasil Latihan</h3>
+        <p class="text-sm text-slate-400 mt-1">Ringkasan pengerjaan 50 soal desimal</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('resultsModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="resultsBody"></div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-body text-center">
+      <div class="w-16 h-16 rounded-full mx-auto mb-4 grid place-items-center" style="background:rgba(52,211,153,.15);color:var(--success)">
+        <i class="fas fa-flag-checkered text-2xl"></i>
+      </div>
+      <h3 class="display text-2xl font-bold mb-2">Selesaikan Latihan?</h3>
+      <p class="text-slate-400 mb-6">Pastikan semua soal sudah kamu kerjakan. Kamu bisa melihat hasilnya di akhir.</p>
+      <div class="flex gap-3">
+        <button class="btn btn-secondary flex-1" onclick="closeModal('confirmModal')">Kerjakan Lagi</button>
+        <button class="btn btn-success flex-1" onclick="finishExam()"><i class="fas fa-check"></i> Lihat Hasil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script>
+const examData = [
+  {q:"9,2 + 1,8 × 0,2 = ...", o:["2,2","9,46","9,56","10,56"], c:2, e:"Kerjakan perkalian terlebih dahulu: 1,8 × 0,2 = 0,36. Kemudian jumlahkan: 9,2 + 0,36 = <strong>9,56</strong>."},
+  {q:"6,2 - 0,68 ÷ 0,4 = ...", o:["3,5","13,8","4,6","4,5"], c:3, e:"Kerjakan pembagian terlebih dahulu: 0,68 ÷ 0,4 = 1,7. Kemudian kurangkan: 6,2 - 1,7 = <strong>4,5</strong>."},
+  {q:"(1,3 + 1,2) × 0,3 = ...", o:["0,65","0,85","0,75","1,66"], c:2, e:"Kerjakan operasi dalam kurung terlebih dahulu: 1,3 + 1,2 = 2,5. Kemudian kalikan: 2,5 × 0,3 = <strong>0,75</strong>."},
+  {q:"4,6 × 0,5 - 2,1 = ...", o:["1,2","7,36","0,2","0,1"], c:2, e:"Kerjakan perkalian terlebih dahulu: 4,6 × 0,5 = 2,3. Kemudian kurangkan: 2,3 - 2,1 = <strong>0,2</strong>."},
+  {q:"0,66 ÷ 0,6 + 2,1 = ...", o:["3,2","3,3","0,244","2,2"], c:0, e:"Kerjakan pembagian terlebih dahulu: 0,66 ÷ 0,6 = 1,1. Kemudian jumlahkan: 1,1 + 2,1 = <strong>3,2</strong>."},
+  {q:"3 + 2,4 × 0,7 = ...", o:["5,68","3,78","4,58","4,68"], c:3, e:"Kerjakan perkalian terlebih dahulu: 2,4 × 0,7 = 1,68. Kemudian jumlahkan: 3 + 1,68 = <strong>4,68</strong>."},
+  {q:"6,6 - 0,99 ÷ 0,3 = ...", o:["2,3","18,7","3,3","3,4"], c:2, e:"Kerjakan pembagian terlebih dahulu: 0,99 ÷ 0,3 = 3,3. Kemudian kurangkan: 6,6 - 3,3 = <strong>3,3</strong>."},
+  {q:"(4,5 + 1,8) × 0,8 = ...", o:["4,94","5,94","5,14","5,04"], c:3, e:"Kerjakan operasi dalam kurung terlebih dahulu: 4,5 + 1,8 = 6,3. Kemudian kalikan: 6,3 × 0,8 = <strong>5,04</strong>."},
+  {q:"5 × 0,7 - 1,3 = ...", o:["3","3,2","2,1","2,2"], c:3, e:"Kerjakan perkalian terlebih dahulu: 5 × 0,7 = 3,5. Kemudian kurangkan: 3,5 - 1,3 = <strong>2,2</strong>."},
+  {q:"0,96 ÷ 0,6 + 2,5 = ...", o:["3,1","4,2","0,31","4,1"], c:3, e:"Kerjakan pembagian terlebih dahulu: 0,96 ÷ 0,6 = 1,6. Kemudian jumlahkan: 1,6 + 2,5 = <strong>4,1</strong>."},
+  {q:"6,9 + 3,4 × 0,4 = ...", o:["8,16","8,26","4,12","9,26"], c:1, e:"Kerjakan perkalian terlebih dahulu: 3,4 × 0,4 = 1,36. Kemudian jumlahkan: 6,9 + 1,36 = <strong>8,26</strong>."},
+  {q:"6,4 - 0,9 ÷ 0,6 = ...", o:["3,9","4,9","5","9,167"], c:1, e:"Kerjakan pembagian terlebih dahulu: 0,9 ÷ 0,6 = 1,5. Kemudian kurangkan: 6,4 - 1,5 = <strong>4,9</strong>."},
+  {q:"(2,1 + 4) × 0,8 = ...", o:["5,3","4,88","4,78","4,98"], c:1, e:"Kerjakan operasi dalam kurung terlebih dahulu: 2,1 + 4 = 6,1. Kemudian kalikan: 6,1 × 0,8 = <strong>4,88</strong>."},
+  {q:"3,1 × 0,2 - 0,2 = ...", o:["0,32","1,42","0","0,42"], c:3, e:"Kerjakan perkalian terlebih dahulu: 3,1 × 0,2 = 0,62. Kemudian kurangkan: 0,62 - 0,2 = <strong>0,42</strong>."},
+  {q:"0,9 ÷ 0,6 + 2,4 = ...", o:["2,9","0,3","3,9","4"], c:2, e:"Kerjakan pembagian terlebih dahulu: 0,9 ÷ 0,6 = 1,5. Kemudian jumlahkan: 1,5 + 2,4 = <strong>3,9</strong>."},
+  {q:"6,1 + 4 × 0,4 = ...", o:["4,04","7,6","7,7","8,7"], c:2, e:"Kerjakan perkalian terlebih dahulu: 4 × 0,4 = 1,6. Kemudian jumlahkan: 6,1 + 1,6 = <strong>7,7</strong>."},
+  {q:"8,6 - 2,88 ÷ 0,6 = ...", o:["3,9","3,8","9,533","2,8"], c:1, e:"Kerjakan pembagian terlebih dahulu: 2,88 ÷ 0,6 = 4,8. Kemudian kurangkan: 8,6 - 4,8 = <strong>3,8</strong>."},
+  {q:"(1,9 + 4,3) × 0,9 = ...", o:["5,77","5,68","5,48","5,58"], c:3, e:"Kerjakan operasi dalam kurung terlebih dahulu: 1,9 + 4,3 = 6,2. Kemudian kalikan: 6,2 × 0,9 = <strong>5,58</strong>."},
+  {q:"2 × 0,4 - 0,7 = ...", o:["0,6","0,1","1,1","0"], c:1, e:"Kerjakan perkalian terlebih dahulu: 2 × 0,4 = 0,8. Kemudian kurangkan: 0,8 - 0,7 = <strong>0,1</strong>."},
+  {q:"2,8 ÷ 0,8 + 4,9 = ...", o:["8,4","0,491","8,5","7,4"], c:0, e:"Kerjakan pembagian terlebih dahulu: 2,8 ÷ 0,8 = 3,5. Kemudian jumlahkan: 3,5 + 4,9 = <strong>8,4</strong>."},
+  {q:"8,1 + 1,1 × 0,3 = ...", o:["8,43","2,76","8,33","9,43"], c:0, e:"Kerjakan perkalian terlebih dahulu: 1,1 × 0,3 = 0,33. Kemudian jumlahkan: 8,1 + 0,33 = <strong>8,43</strong>."},
+  {q:"6,7 - 0,87 ÷ 0,3 = ...", o:["3,9","3,8","2,8","19,433"], c:1, e:"Kerjakan pembagian terlebih dahulu: 0,87 ÷ 0,3 = 2,9. Kemudian kurangkan: 6,7 - 2,9 = <strong>3,8</strong>."},
+  {q:"(2,7 + 4,3) × 0,4 = ...", o:["2,7","4,42","2,9","2,8"], c:3, e:"Kerjakan operasi dalam kurung terlebih dahulu: 2,7 + 4,3 = 7. Kemudian kalikan: 7 × 0,4 = <strong>2,8</strong>."},
+  {q:"4,3 × 0,5 - 0,5 = ...", o:["0","1,55","1,65","2,65"], c:2, e:"Kerjakan perkalian terlebih dahulu: 4,3 × 0,5 = 2,15. Kemudian kurangkan: 2,15 - 0,5 = <strong>1,65</strong>."},
+  {q:"2,94 ÷ 0,7 + 1,2 = ...", o:["4,4","1,547","5,5","5,4"], c:3, e:"Kerjakan pembagian terlebih dahulu: 2,94 ÷ 0,7 = 4,2. Kemudian jumlahkan: 4,2 + 1,2 = <strong>5,4</strong>."},
+  {q:"4,1 + 1,4 × 0,5 = ...", o:["5,8","2,75","4,7","4,8"], c:3, e:"Kerjakan perkalian terlebih dahulu: 1,4 × 0,5 = 0,7. Kemudian jumlahkan: 4,1 + 0,7 = <strong>4,8</strong>."},
+  {q:"6,4 - 1,35 ÷ 0,3 = ...", o:["1,9","0,9","2","16,833"], c:0, e:"Kerjakan pembagian terlebih dahulu: 1,35 ÷ 0,3 = 4,5. Kemudian kurangkan: 6,4 - 4,5 = <strong>1,9</strong>."},
+  {q:"(4,6 + 2,1) × 0,6 = ...", o:["5,86","4,12","4,02","3,92"], c:2, e:"Kerjakan operasi dalam kurung terlebih dahulu: 4,6 + 2,1 = 6,7. Kemudian kalikan: 6,7 × 0,6 = <strong>4,02</strong>."},
+  {q:"3 × 0,8 - 2,2 = ...", o:["0,2","0,1","4,2","1,2"], c:0, e:"Kerjakan perkalian terlebih dahulu: 3 × 0,8 = 2,4. Kemudian kurangkan: 2,4 - 2,2 = <strong>0,2</strong>."},
+  {q:"0,78 ÷ 0,3 + 2,5 = ...", o:["5,2","4,1","0,279","5,1"], c:3, e:"Kerjakan pembagian terlebih dahulu: 0,78 ÷ 0,3 = 2,6. Kemudian jumlahkan: 2,6 + 2,5 = <strong>5,1</strong>."},
+  {q:"8,6 + 4,6 × 0,5 = ...", o:["10,8","10,9","11,9","6,6"], c:1, e:"Kerjakan perkalian terlebih dahulu: 4,6 × 0,5 = 2,3. Kemudian jumlahkan: 8,6 + 2,3 = <strong>10,9</strong>."},
+  {q:"4 - 0,5 ÷ 0,2 = ...", o:["1,6","0,5","17,5","1,5"], c:3, e:"Kerjakan pembagian terlebih dahulu: 0,5 ÷ 0,2 = 2,5. Kemudian kurangkan: 4 - 2,5 = <strong>1,5</strong>."},
+  {q:"(4,3 + 2,6) × 0,6 = ...", o:["5,86","4,24","4,14","4,04"], c:2, e:"Kerjakan operasi dalam kurung terlebih dahulu: 4,3 + 2,6 = 6,9. Kemudian kalikan: 6,9 × 0,6 = <strong>4,14</strong>."},
+  {q:"4,7 × 0,9 - 1,6 = ...", o:["3,63","2,63","3,29","2,53"], c:1, e:"Kerjakan perkalian terlebih dahulu: 4,7 × 0,9 = 4,23. Kemudian kurangkan: 4,23 - 1,6 = <strong>2,63</strong>."},
+  {q:"0,51 ÷ 0,3 + 3,8 = ...", o:["5,5","4,5","0,124","5,6"], c:0, e:"Kerjakan pembagian terlebih dahulu: 0,51 ÷ 0,3 = 1,7. Kemudian jumlahkan: 1,7 + 3,8 = <strong>5,5</strong>."},
+  {q:"7 + 1,4 × 0,3 = ...", o:["7,32","8,42","2,52","7,42"], c:3, e:"Kerjakan perkalian terlebih dahulu: 1,4 × 0,3 = 0,42. Kemudian jumlahkan: 7 + 0,42 = <strong>7,42</strong>."},
+  {q:"4,9 - 0,78 ÷ 0,3 = ...", o:["2,3","1,3","2,4","13,733"], c:0, e:"Kerjakan pembagian terlebih dahulu: 0,78 ÷ 0,3 = 2,6. Kemudian kurangkan: 4,9 - 2,6 = <strong>2,3</strong>."},
+  {q:"(1,9 + 3,8) × 0,4 = ...", o:["2,18","2,28","3,42","2,38"], c:1, e:"Kerjakan operasi dalam kurung terlebih dahulu: 1,9 + 3,8 = 5,7. Kemudian kalikan: 5,7 × 0,4 = <strong>2,28</strong>."},
+  {q:"1,5 × 0,9 - 0,9 = ...", o:["0","1,45","0,35","0,45"], c:3, e:"Kerjakan perkalian terlebih dahulu: 1,5 × 0,9 = 1,35. Kemudian kurangkan: 1,35 - 0,9 = <strong>0,45</strong>."},
+  {q:"0,78 ÷ 0,3 + 2,1 = ...", o:["4,7","4,8","0,325","3,7"], c:0, e:"Kerjakan pembagian terlebih dahulu: 0,78 ÷ 0,3 = 2,6. Kemudian jumlahkan: 2,6 + 2,1 = <strong>4,7</strong>."},
+  {q:"3,8 + 3,6 × 0,2 = ...", o:["5,52","4,52","4,42","1,48"], c:1, e:"Kerjakan perkalian terlebih dahulu: 3,6 × 0,2 = 0,72. Kemudian jumlahkan: 3,8 + 0,72 = <strong>4,52</strong>."},
+  {q:"6,7 - 2,16 ÷ 0,8 = ...", o:["4","3","5,675","4,1"], c:0, e:"Kerjakan pembagian terlebih dahulu: 2,16 ÷ 0,8 = 2,7. Kemudian kurangkan: 6,7 - 2,7 = <strong>4</strong>."},
+  {q:"(2 + 2,3) × 0,6 = ...", o:["2,48","2,68","2,58","3,38"], c:2, e:"Kerjakan operasi dalam kurung terlebih dahulu: 2 + 2,3 = 4,3. Kemudian kalikan: 4,3 × 0,6 = <strong>2,58</strong>."},
+  {q:"3,1 × 0,2 - 0,1 = ...", o:["0,31","0,52","1,52","0,42"], c:1, e:"Kerjakan perkalian terlebih dahulu: 3,1 × 0,2 = 0,62. Kemudian kurangkan: 0,62 - 0,1 = <strong>0,52</strong>."},
+  {q:"0,86 ÷ 0,2 + 1,6 = ...", o:["4,9","6","5,9","0,478"], c:2, e:"Kerjakan pembagian terlebih dahulu: 0,86 ÷ 0,2 = 4,3. Kemudian jumlahkan: 4,3 + 1,6 = <strong>5,9</strong>."},
+  {q:"9,7 + 2,6 × 0,8 = ...", o:["9,84","12,78","11,68","11,78"], c:3, e:"Kerjakan perkalian terlebih dahulu: 2,6 × 0,8 = 2,08. Kemudian jumlahkan: 9,7 + 2,08 = <strong>11,78</strong>."},
+  {q:"6,6 - 1 ÷ 0,2 = ...", o:["1,6","28","1,7","0,6"], c:0, e:"Kerjakan pembagian terlebih dahulu: 1 ÷ 0,2 = 5. Kemudian kurangkan: 6,6 - 5 = <strong>1,6</strong>."},
+  {q:"(2,7 + 2,4) × 0,7 = ...", o:["3,57","3,67","3,47","4,38"], c:0, e:"Kerjakan operasi dalam kurung terlebih dahulu: 2,7 + 2,4 = 5,1. Kemudian kalikan: 5,1 × 0,7 = <strong>3,57</strong>."},
+  {q:"1,9 × 0,6 - 0,8 = ...", o:["0,38","0,24","0,34","1,34"], c:2, e:"Kerjakan perkalian terlebih dahulu: 1,9 × 0,6 = 1,14. Kemudian kurangkan: 1,14 - 0,8 = <strong>0,34</strong>."},
+  {q:"4,5 ÷ 0,9 + 4,7 = ...", o:["0,804","8,7","9,8","9,7"], c:3, e:"Kerjakan pembagian terlebih dahulu: 4,5 ÷ 0,9 = 5. Kemudian jumlahkan: 5 + 4,7 = <strong>9,7</strong>."}
+];
+
+const state = {
+  currentQuestion: 0,
+  questions: [],
+  examFinished: false
+};
+
+function initState(){
+  state.questions = examData.map((q, qIdx) => ({
+    qIdx: qIdx,
+    userAnswer: null,
+    status: 'unanswered',
+    locked: false
+  }));
+  state.currentQuestion = 0;
+  state.examFinished = false;
+}
+
+function renderQGrid(){
+  const grid = document.getElementById('qGrid');
+  grid.innerHTML = state.questions.map((qs, qIdx) => {
+    let cls = 'qn-btn';
+    if (qIdx === state.currentQuestion) cls += ' current';
+    if (qs.locked){
+      if (qs.status === 'correct') cls += ' correct';
+      else if (qs.status === 'wrong') cls += ' wrong';
+    } else if (qs.userAnswer !== null) cls += ' answered';
+    return `<div class="${cls}" onclick="goToQuestion(${qIdx})">${qIdx+1}</div>`;
+  }).join('');
+}
+
+function renderQuestion(){
+  const container = document.getElementById('quizContent');
+  const qIdx = state.currentQuestion;
+  const qs = state.questions[qIdx];
+  const qd = examData[qIdx];
+  
+  let statusBadge = '';
+  if (qs.locked){
+    if (qs.status === 'correct') statusBadge = '<span class="status-badge status-correct"><i class="fas fa-check"></i> Benar</span>';
+    else if (qs.status === 'wrong') statusBadge = '<span class="status-badge status-wrong"><i class="fas fa-xmark"></i> Salah</span>';
+  }
+  
+  let optionsHtml = qd.o.map((opt, i) => {
+    let cls = 'option';
+    if (qs.locked){
+      if (i === qd.c) cls += ' correct-answer disabled';
+      else if (i === qs.userAnswer) cls += ' wrong-answer disabled';
+      else cls += ' disabled';
+    } else if (qs.userAnswer === i){
+      cls += ' selected';
+    }
+    return `
+      <div class="${cls}" data-option="${i}">
+        <span class="option-letter">${String.fromCharCode(65+i)}</span>
+        <span class="option-text">${opt}</span>
+      </div>
+    `;
+  }).join('');
+  
+  let explanationHtml = '';
+  if (qs.locked){
+    const isCorrect = qs.status === 'correct';
+    const correctLetter = String.fromCharCode(65 + qd.c);
+    const userLetter = qs.userAnswer !== null ? String.fromCharCode(65 + qs.userAnswer) : '-';
+    
+    let expClass = isCorrect ? 'correct-exp' : 'wrong-exp';
+    let iconClass = isCorrect ? 'fa-circle-check' : 'fa-circle-xmark';
+    let title = isCorrect ? 'Jawaban Benar!' : 'Jawaban Kurang Tepat';
+    let userTagClass = isCorrect ? 'tag-yours-correct' : 'tag-yours-wrong';
+    
+    explanationHtml = `
+      <div class="explanation ${expClass}" style="display:block">
+        <div class="exp-header">
+          <i class="fas ${iconClass} ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}" style="font-size:18px"></i>
+          <span class="exp-title">${title}</span>
+        </div>
+        <div class="exp-body">
+          <p style="margin-bottom:8px">
+            Jawaban kamu: <span class="font-bold ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">${userLetter}</span> &nbsp;|&nbsp; Jawaban benar: <span class="font-bold text-emerald-400">${correctLetter}</span>
+          </p>
+          <p><strong>Pembahasan:</strong> ${qd.e}</p>
+        </div>
+      </div>
+    `;
+  }
+  
+  container.innerHTML = `
+    <div class="question-card ${qs.status === 'correct' ? 'correct' : qs.status === 'wrong' ? 'wrong' : ''}" id="questionCard">
+      <div class="q-header">
+        <div class="q-num">${qIdx+1}</div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="status-badge status-unanswered"><i class="fas fa-list-ol"></i> Soal ${qIdx+1} dari 50</span>
+          ${statusBadge}
+        </div>
+      </div>
+      <p class="q-text">${qd.q}</p>
+      <div class="q-options">
+        ${optionsHtml}
+      </div>
+      <div class="flex items-center justify-between gap-3 flex-wrap mb-4">
+        <button class="btn btn-primary" id="checkBtn" ${qs.userAnswer === null || qs.locked ? 'disabled' : ''}>
+          <i class="fas fa-circle-check"></i> Cek Jawaban
+        </button>
+        <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" ${qIdx === 49 ? 'disabled' : ''}>
+          Soal Berikutnya <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      ${explanationHtml}
+    </div>
+    
+    <div class="flex items-center justify-between gap-3 flex-wrap mt-8">
+      <button class="btn btn-ghost" onclick="prevQuestion()" ${qIdx === 0 ? 'disabled' : ''}>
+        <i class="fas fa-arrow-left"></i> Sebelumnya
+      </button>
+      <button class="btn btn-success" onclick="confirmFinishExam()">
+        <i class="fas fa-flag-checkered"></i> Selesaikan Latihan
+      </button>
+    </div>
+  `;
+  
+  attachListeners();
+}
+
+function attachListeners(){
+  const card = document.getElementById('questionCard');
+  if (!card) return;
+  
+  card.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (opt.classList.contains('disabled')) return;
+      handleOptionClick(+opt.dataset.option);
+    });
+  });
+  
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) checkBtn.addEventListener('click', checkAnswer);
+}
+
+function handleOptionClick(optIdx){
+  const qs = state.questions[state.currentQuestion];
+  if (qs.locked) return;
+  
+  qs.userAnswer = optIdx;
+  
+  const card = document.getElementById('questionCard');
+  const options = card.querySelectorAll('.option');
+  options.forEach((opt, i) => {
+    opt.classList.remove('selected');
+    if (i === optIdx) opt.classList.add('selected');
+  });
+  
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) checkBtn.disabled = false;
+  
+  updateProgress();
+  renderQGrid();
+}
+
+function checkAnswer(){
+  const qs = state.questions[state.currentQuestion];
+  if (qs.locked) return;
+  if (qs.userAnswer === null){
+    showToast('Pilih jawaban terlebih dahulu!', 'warning');
+    return;
+  }
+  
+  qs.locked = true;
+  const correct = examData[state.currentQuestion].c;
+  qs.status = qs.userAnswer === correct ? 'correct' : 'wrong';
+  
+  renderQuestion();
+  renderQGrid();
+  updateProgress();
+  
+  if (qs.status === 'correct'){
+    showToast('Jawaban benar! Kerja bagus! 🎉', 'success');
+  } else {
+    showToast('Jawaban kurang tepat. Lihat pembahasan ya.', 'error');
+  }
+}
+
+function goToQuestion(qIdx){
+  if (qIdx === state.currentQuestion) return;
+  state.currentQuestion = qIdx;
+  renderQGrid();
+  renderQuestion();
+  window.scrollTo({top: document.getElementById('quizContent').offsetTop - 100, behavior: 'smooth'});
+}
+
+function prevQuestion(){
+  if (state.currentQuestion > 0) goToQuestion(state.currentQuestion - 1);
+}
+
+function nextQuestion(){
+  if (state.currentQuestion < 49) goToQuestion(state.currentQuestion + 1);
+}
+
+function updateProgress(){
+  const stats = getOverallStats();
+  const pct = (stats.correct + stats.wrong) / stats.total * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function getOverallStats(){
+  let total = state.questions.length, correct = 0, wrong = 0, unanswered = 0;
+  state.questions.forEach(q => {
+    if (q.status === 'correct') correct++;
+    else if (q.status === 'wrong') wrong++;
+    else unanswered++;
+  });
+  return {total, correct, wrong, unanswered};
+}
+
+function confirmFinishExam(){
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+function finishExam(){
+  closeModal('confirmModal');
+  state.examFinished = true;
+  renderResults();
+  document.getElementById('resultsModal').classList.add('active');
+}
+
+function renderResults(){
+  const stats = getOverallStats();
+  const score = Math.round(stats.correct / stats.total * 100);
+  
+  let html = `
+    <div class="text-center mb-8">
+      <div class="score-circle" id="scoreCircle">
+        <div class="score-inner">
+          <div class="score-num" id="scoreNum">0</div>
+          <div class="score-lbl">Skor Akhir</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="result-stat-grid mb-6">
+      <div class="result-stat correct"><div class="num">${stats.correct}</div><div class="lbl">Jawaban Benar</div></div>
+      <div class="result-stat wrong"><div class="num">${stats.wrong}</div><div class="lbl">Jawaban Salah</div></div>
+      <div class="result-stat unanswered"><div class="num">${stats.unanswered}</div><div class="lbl">Tidak Dijawab</div></div>
+    </div>
+    
+    <div class="p-4 rounded-xl text-center mb-6" style="background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2)">
+      <p class="text-slate-300 text-sm">
+        ${score >= 80 ? 'Luar biasa! Kamu sudah sangat memahami operasi hitung campuran desimal.' : 
+          score >= 60 ? 'Cukup baik. Terus berlatih agar semakin mahir menyelesaikan soal desimal.' : 
+          'Jangan menyerah. Pelajari kembali materi di atas dan coba ulangi latihannya.'}
+      </p>
+    </div>
+    
+    <div class="flex gap-3 flex-wrap">
+      <button class="btn btn-primary flex-1" onclick="closeModal('resultsModal')"><i class="fas fa-book"></i> Tinjau Jawaban</button>
+      <button class="btn btn-secondary" onclick="restartExam()"><i class="fas fa-rotate-right"></i> Ulangi Latihan</button>
+    </div>
+  `;
+  
+  document.getElementById('resultsBody').innerHTML = html;
+  setTimeout(() => animateScore(score), 200);
+}
+
+function animateScore(target){
+  const circle = document.getElementById('scoreCircle');
+  const numEl = document.getElementById('scoreNum');
+  if (!circle || !numEl) return;
+  
+  let current = 0;
+  const duration = 1500;
+  const steps = 60;
+  const inc = target / steps;
+  const interval = duration / steps;
+  
+  const timer = setInterval(() => {
+    current += inc;
+    if (current >= target){
+      current = target;
+      clearInterval(timer);
+    }
+    const deg = (current / 100) * 360;
+    const scoreColor = target >= 80 ? '#34d399' : target >= 60 ? '#818cf8' : '#f87171';
+    circle.style.background = `conic-gradient(${scoreColor} ${deg}deg, rgba(255,255,255,.06) ${deg}deg)`;
+    numEl.textContent = Math.round(current);
+  }, interval);
+}
+
+function restartExam(){
+  closeModal('resultsModal');
+  initState();
+  renderQGrid();
+  renderQuestion();
+  updateProgress();
+  showToast('Latihan dimulai ulang. Semangat!', 'info');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
+}
+
+function scrollToTop(){
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function showToast(msg, type = 'info'){
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icons = {success:'fa-circle-check', error:'fa-circle-xmark', warning:'fa-triangle-exclamation', info:'fa-circle-info'};
+  const colors = {success:'text-emerald-400', error:'text-rose-400', warning:'text-amber-400', info:'text-blue-400'};
+  toast.innerHTML = `<i class="fas ${icons[type]} ${colors[type]}"></i> <span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(40px)';
+    toast.style.transition = 'all .3s';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Init
+initState();
+renderQGrid();
+renderQuestion();
+updateProgress();
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  if (e.key === 'ArrowRight' && !document.querySelector('.modal-overlay.active')) nextQuestion();
+  if (e.key === 'ArrowLeft' && !document.querySelector('.modal-overlay.active')) prevQuestion();
+});
+</script>
+</body>
+</html>
