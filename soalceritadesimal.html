@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operasi Hitung Desimal — Soal Cerita Interaktif Kelas 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #FFFBF5;
+    --bg-2: #FFF7ED;
+    --bg-3: #FEF3C7;
+    --fg: #1C1917;
+    --fg-2: #44403C;
+    --muted: #78716C;
+    --muted-2: #A8A29E;
+    --primary: #EA580C;
+    --primary-dark: #C2410C;
+    --primary-light: #FB923C;
+    --primary-glow: rgba(234, 88, 12, 0.25);
+    --secondary: #0D9488;
+    --secondary-glow: rgba(13, 148, 136, 0.25);
+    --accent: #F59E0B;
+    --purple: #8B5CF6;
+    --blue: #3B82F6;
+    --danger: #DC2626;
+    --success: #16A34A;
+    --card: #FFFFFF;
+    --border: rgba(28, 25, 23, 0.08);
+    --border-strong: rgba(28, 25, 23, 0.15);
+    --shadow: 0 10px 30px -10px rgba(0,0,0,0.12);
+    --shadow-lg: 0 20px 50px -15px rgba(0,0,0,0.18);
+  }
+  
+  body {
+    background: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    color: var(--fg);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 10% 0%, rgba(234, 88, 12, 0.12), transparent 60%),
+      radial-gradient(ellipse 50% 50% at 90% 100%, rgba(13, 148, 136, 0.12), transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245, 158, 11, 0.06), transparent 70%);
+    z-index: -2;
+    pointer-events: none;
+  }
+  
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(28, 25, 23, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    mask-image: linear-gradient(180deg, transparent, black 20%, black 80%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, black 20%, black 80%, transparent);
+  }
+  
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  
+  /* Slide system */
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 50px 0 80px;
+    animation: slideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slide.active { display: block; }
+  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Typography */
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  h1 { font-size: clamp(48px, 7vw, 88px); font-weight: 900; }
+  h2 { font-size: clamp(36px, 5vw, 56px); }
+  h3 { font-size: 24px; font-weight: 700; }
+  
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--primary);
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 36px; height: 2px;
+    background: var(--primary);
+  }
+  
+  .lead {
+    font-size: 19px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 720px;
+    line-height: 1.65;
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 24px -8px var(--primary-glow);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--primary-dark);
+    box-shadow: 0 12px 32px -8px var(--primary-glow);
+  }
+  .btn-secondary {
+    background: var(--secondary);
+    color: white;
+    box-shadow: 0 8px 24px -8px var(--secondary-glow);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: #0F766E;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1.5px solid var(--border-strong);
+  }
+  .btn-ghost:hover { background: rgba(0,0,0,0.04); border-color: var(--fg); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  
+  /* Progress bar */
+  .progress-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: rgba(0,0,0,0.06);
+    z-index: 100;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    width: 0;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 12px var(--primary-glow);
+  }
+  
+  /* COVER */
+  .cover {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    min-height: calc(100vh - 130px);
+  }
+  .cover-title em {
+    font-style: italic;
+    color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .cover-subtitle {
+    font-size: 22px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    font-weight: 400;
+    max-width: 540px;
+    line-height: 1.5;
+  }
+  
+  .name-input-group {
+    background: white;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 24px;
+    padding: 28px 32px;
+    max-width: 500px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .name-input-group::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+  }
+  .name-input-group label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .name-input {
+    width: 100%;
+    border: none;
+    border-bottom: 2.5px solid var(--border-strong);
+    background: transparent;
+    padding: 10px 0;
+    font-size: 28px;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--fg);
+    transition: all 0.2s;
+  }
+  .name-input:focus {
+    outline: none;
+    border-bottom-color: var(--primary);
+  }
+  .name-input::placeholder { color: var(--muted-2); font-style: italic; }
+  
+  .cover-illustration {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .decimal-bubble {
+    position: absolute;
+    background: white;
+    border: 2px solid var(--border-strong);
+    border-radius: 22px;
+    padding: 18px 26px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 800;
+    box-shadow: var(--shadow-lg);
+    animation: float 6s ease-in-out infinite;
+  }
+  .decimal-bubble.b1 { top: 8%; left: 8%; color: var(--primary); border-color: var(--primary); animation-delay: 0s; }
+  .decimal-bubble.b2 { top: 18%; right: 5%; color: var(--blue); border-color: var(--blue); animation-delay: 1.2s; }
+  .decimal-bubble.b3 { bottom: 28%; left: 3%; color: var(--purple); border-color: var(--purple); animation-delay: 2.4s; }
+  .decimal-bubble.b4 { bottom: 8%; right: 12%; color: var(--secondary); border-color: var(--secondary); animation-delay: 3.6s; }
+  .decimal-bubble.b5 { top: 48%; left: 42%; color: var(--accent); border-color: var(--accent); animation-delay: 4.8s; font-size: 36px; padding: 22px 30px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-18px) rotate(3deg); }
+  }
+  
+  /* WHY SLIDE */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 40px 0;
+  }
+  .why-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 32px;
+    transition: all 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--primary);
+  }
+  .why-card:nth-child(2)::before { background: var(--secondary); }
+  .why-card:nth-child(3)::before { background: var(--accent); }
+  .why-card:nth-child(4)::before { background: var(--purple); }
+  
+  .why-icon {
+    width: 60px; height: 60px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+  }
+  .why-card:nth-child(1) .why-icon { background: rgba(234, 88, 12, 0.1); }
+  .why-card:nth-child(2) .why-icon { background: rgba(13, 148, 136, 0.1); }
+  .why-card:nth-child(3) .why-icon { background: rgba(245, 158, 11, 0.1); }
+  .why-card:nth-child(4) .why-icon { background: rgba(139, 92, 246, 0.1); }
+  
+  .why-title {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Fraunces', serif;
+  }
+  .why-desc { color: var(--muted); font-size: 15px; line-height: 1.65; }
+  
+  .objective-card {
+    margin-top: 40px;
+    background: white;
+    border-left: 5px solid var(--primary);
+    border-radius: 18px;
+    padding: 30px 36px;
+    box-shadow: var(--shadow);
+  }
+  .objective-list { list-style: none; padding: 0; margin-top: 16px; }
+  .objective-list li {
+    display: flex;
+    gap: 14px;
+    margin: 12px 0;
+    align-items: start;
+    font-size: 16px;
+    color: var(--fg-2);
+  }
+  .objective-list li::before {
+    content: '→';
+    color: var(--primary);
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  
+  /* MATERI SLIDE */
+  .materi-tabs {
+    display: flex;
+    gap: 6px;
+    background: white;
+    padding: 6px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    margin: 30px 0;
+    width: fit-content;
+    box-shadow: var(--shadow);
+    flex-wrap: wrap;
+  }
+  .materi-tab {
+    padding: 11px 26px;
+    border-radius: 100px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.25s;
+  }
+  .materi-tab:hover { color: var(--fg); }
+  .materi-tab.active { color: white; }
+  .materi-tab.t1.active { background: var(--primary); box-shadow: 0 4px 12px -4px var(--primary-glow); }
+  .materi-tab.t2.active { background: var(--blue); box-shadow: 0 4px 12px -4px rgba(59, 130, 246, 0.4); }
+  .materi-tab.t3.active { background: var(--purple); box-shadow: 0 4px 12px -4px rgba(139, 92, 246, 0.4); }
+  .materi-tab.t4.active { background: var(--secondary); box-shadow: 0 4px 12px -4px var(--secondary-glow); }
+  
+  .materi-content { display: none; animation: fadeIn 0.4s; }
+  .materi-content.active { display: block; }
+  
+  .materi-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+  }
+  
+  .materi-rule {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    background: var(--bg-2);
+    border-radius: 16px;
+    border-left: 4px solid var(--primary);
+  }
+  .materi-rule strong { color: var(--primary); }
+  .materi-content[data-color="blue"] .materi-rule { border-left-color: var(--blue); }
+  .materi-content[data-color="blue"] .materi-rule strong { color: var(--blue); }
+  .materi-content[data-color="purple"] .materi-rule { border-left-color: var(--purple); }
+  .materi-content[data-color="purple"] .materi-rule strong { color: var(--purple); }
+  .materi-content[data-color="teal"] .materi-rule { border-left-color: var(--secondary); }
+  .materi-content[data-color="teal"] .materi-rule strong { color: var(--secondary); }
+  
+  .materi-visual {
+    background: linear-gradient(135deg, var(--bg-2), white);
+    border-radius: 18px;
+    padding: 32px;
+    margin: 24px 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .calc-stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    font-size: 24px;
+  }
+  .calc-row {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .calc-digit {
+    width: 42px; text-align: center;
+    padding: 10px 0;
+    background: white;
+    border-radius: 10px;
+    border: 1.5px solid var(--border-strong);
+    font-weight: 800;
+  }
+  .calc-digit.comma {
+    width: 20px;
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 900;
+    font-size: 30px;
+  }
+  .calc-digit.empty {
+    color: var(--muted-2);
+    background: transparent;
+    border: 1.5px dashed var(--border-strong);
+  }
+  .calc-op { color: var(--primary); font-weight: 900; font-size: 28px; padding: 0 8px; }
+  .calc-result-row { border-top: 3px solid var(--fg); padding-top: 8px; margin-top: 4px; }
+  
+  .materi-example {
+    background: var(--bg-2);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .materi-example strong { color: var(--primary); }
+  
+  /* QUIZ LAYOUT */
+  .quiz-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  
+  .quiz-sidebar { position: sticky; top: 24px; }
+  
+  .info-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .info-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+  .info-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--fg);
+    margin-top: 6px;
+    font-family: 'Fraunces', serif;
+  }
+  
+  .stopwatch-card {
+    background: linear-gradient(135deg, #1C1917, #44403C);
+    color: white;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .stopwatch-card::before {
+    content: '';
+    position: absolute;
+    top: -30%; right: -30%;
+    width: 80%; height: 160%;
+    background: radial-gradient(ellipse, rgba(245, 158, 11, 0.25), transparent 70%);
+  }
+  .stopwatch-card > * { position: relative; z-index: 1; }
+  .stopwatch-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stopwatch-dot {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: blink 1s infinite;
+  }
+  .stopwatch-card.stopped .stopwatch-dot {
+    background: var(--muted-2);
+    box-shadow: none;
+    animation: none;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .stopwatch-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stopwatch-status {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  
+  .qnav-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    margin: 4px 0 12px;
+  }
+  .qnav-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .qnav-btn {
+    aspect-ratio: 1;
+    border: 1.5px solid var(--border-strong);
+    background: white;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--fg);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .qnav-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px -4px var(--primary-glow);
+  }
+  .qnav-btn.current {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 6px 16px -4px var(--primary-glow);
+  }
+  .qnav-btn.answered.correct {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+  .qnav-btn.answered.wrong {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+  
+  /* QUESTION CARD */
+  .qcard {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 36px 40px;
+    box-shadow: var(--shadow);
+    min-height: 560px;
+  }
+  .qheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .qnumber {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .qnumber strong {
+    color: var(--primary);
+    font-size: 20px;
+  }
+  .qoperasi {
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .qoperasi.add { color: var(--primary); background: rgba(234, 88, 12, 0.1); }
+  .qoperasi.sub { color: var(--blue); background: rgba(59, 130, 246, 0.1); }
+  .qoperasi.mul { color: var(--purple); background: rgba(139, 92, 246, 0.1); }
+  .qoperasi.div { color: var(--secondary); background: rgba(13, 148, 136, 0.1); }
+  
+  .qtext {
+    font-size: 22px;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    line-height: 1.55;
+    margin-bottom: 28px;
+    color: var(--fg);
+  }
+  
+  .qoptions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .qoption {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 17px;
+    font-weight: 500;
+    user-select: none;
+  }
+  .qoption:hover:not(.disabled) {
+    border-color: var(--primary);
+    background: white;
+    transform: translateX(4px);
+  }
+  .qoption.selected {
+    border-color: var(--primary);
+    background: rgba(234, 88, 12, 0.06);
+  }
+  .qoption.correct {
+    border-color: var(--success);
+    background: rgba(22, 163, 74, 0.08);
+  }
+  .qoption.wrong {
+    border-color: var(--danger);
+    background: rgba(220, 38, 38, 0.08);
+  }
+  .qoption.disabled { cursor: not-allowed; }
+  .qoption-letter {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: white;
+    border: 1.5px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--fg);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .qoption.selected .qoption-letter { background: var(--primary); color: white; border-color: var(--primary); }
+  .qoption.correct .qoption-letter { background: var(--success); color: white; border-color: var(--success); }
+  .qoption.wrong .qoption-letter { background: var(--danger); color: white; border-color: var(--danger); }
+  
+  .qfeedback {
+    margin-top: 22px;
+    padding: 22px 24px;
+    border-radius: 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    display: none;
+    animation: fadeIn 0.35s;
+  }
+  .qfeedback.show { display: block; }
+  .qfeedback.correct { background: rgba(22, 163, 74, 0.06); border-color: rgba(22, 163, 74, 0.3); }
+  .qfeedback.wrong { background: rgba(220, 38, 38, 0.06); border-color: rgba(220, 38, 38, 0.3); }
+  .qfeedback-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-family: 'Fraunces', serif;
+  }
+  .qfeedback.correct .qfeedback-title { color: var(--success); }
+  .qfeedback.wrong .qfeedback-title { color: var(--danger); }
+  .qfeedback-body { color: var(--fg-2); font-size: 15px; line-height: 1.7; }
+  .qfeedback-body strong { color: var(--primary); font-family: 'JetBrains Mono', monospace; }
+  .qfeedback-time {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .qfeedback-time strong { color: var(--fg); }
+  
+  .qactions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  
+  /* RESULT SLIDE */
+  .result-hero {
+    background: linear-gradient(135deg, white, var(--bg-2));
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 48px;
+    text-align: center;
+    margin: 40px 0;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 70%; height: 220%;
+    background: radial-gradient(ellipse, var(--primary-glow), transparent 60%);
+    z-index: 0;
+  }
+  .result-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -50%; right: -10%;
+    width: 70%; height: 220%;
+    background: radial-gradient(ellipse, var(--secondary-glow), transparent 60%);
+    z-index: 0;
+  }
+  .result-hero > * { position: relative; z-index: 1; }
+  
+  .result-name {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .result-score {
+    font-family: 'Fraunces', serif;
+    font-size: 128px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin: 12px 0;
+  }
+  .result-score small {
+    font-size: 40px;
+    color: var(--muted);
+    -webkit-text-fill-color: var(--muted);
+    font-weight: 700;
+  }
+  .result-message {
+    font-size: 18px;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 40px 0;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+  }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .stat-icon {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  .stat-value-big {
+    font-family: 'Fraunces', serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .stat-value-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .stat-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+  
+  /* CLOSING */
+  .closing { max-width: 820px; margin: 30px auto; }
+  .closing-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 40px 44px;
+    box-shadow: var(--shadow);
+    margin: 26px 0;
+  }
+  .closing-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .closing-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--fg-2);
+  }
+  .closing-text strong { color: var(--fg); font-weight: 700; }
+  .closing-list { margin: 16px 0; padding-left: 22px; }
+  .closing-list li { margin: 10px 0; }
+  .closing-list strong { color: var(--primary); font-family: 'JetBrains Mono', monospace; }
+  
+  .reflection-list { list-style: none; margin: 18px 0; padding: 0; }
+  .reflection-item {
+    background: var(--bg-2);
+    border-left: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: var(--fg-2);
+    line-height: 1.6;
+  }
+  .reflection-item:nth-child(2) { border-left-color: var(--secondary); }
+  .reflection-item:nth-child(3) { border-left-color: var(--accent); }
+  .reflection-item:nth-child(4) { border-left-color: var(--purple); }
+  
+  .thanks {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 40px 0 20px;
+    line-height: 1.05;
+    text-align: center;
+    font-style: italic;
+  }
+  
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: var(--fg);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 15px;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .cover { grid-template-columns: 1fr; gap: 40px; }
+    .cover-illustration { height: 280px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .quiz-layout { grid-template-columns: 1fr; }
+    .quiz-sidebar { position: static; }
+    .qoptions { grid-template-columns: 1fr; }
+    .result-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .qcard { padding: 24px; }
+    .qtext { font-size: 18px; }
+    .result-score { font-size: 80px; }
+    .materi-card { padding: 24px; }
+    .closing-card { padding: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- SLIDE 1: COVER -->
+<section class="slide active" id="slide-cover">
+  <div class="container">
+    <div class="cover">
+      <div class="cover-content">
+        <div class="eyebrow">Matematika Kelas 4 SD · Soal Cerita</div>
+        <h1 class="cover-title">Operasi Hitung <em>Desimal</em></h1>
+        <p class="cover-subtitle">Penjumlahan, pengurangan, perkalian, dan pembagian desimal lewat 25 soal cerita interaktif dengan stopwatch pengerjaan dan pembahasan lengkap.</p>
+        
+        <div class="name-input-group">
+          <label for="namaSiswa">Nama Siswa</label>
+          <input type="text" id="namaSiswa" class="name-input" placeholder="Ketik namamu di sini..." autocomplete="off" />
+        </div>
+        
+        <div style="display:flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="btnStart">Mulai Belajar</button>
+          <button class="btn btn-ghost" id="btnSkipToMateri">Langsung ke Materi</button>
+        </div>
+      </div>
+      
+      <div class="cover-illustration">
+        <div class="decimal-bubble b1">2,5 + 1,3</div>
+        <div class="decimal-bubble b2">4,8 − 2,3</div>
+        <div class="decimal-bubble b3">3 × 1,5</div>
+        <div class="decimal-bubble b4">8,4 ÷ 4</div>
+        <div class="decimal-bubble b5">3,57</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: WHY DECIMAL -->
+<section class="slide" id="slide-why">
+  <div class="container">
+    <div class="eyebrow">02 · Mengapa Belajar Desimal?</div>
+    <h2>Desimal ada di mana-mana<br>dalam hidup kita</h2>
+    <p class="lead" style="margin-top: 20px;">Bilangan desimal bukan teori yang jauh dari keseharian. Setiap hari kita bertemu desimal tanpa sadar. Menguasainya berarti kita siap menghadapi situasi nyata.</p>
+    
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🛒</div>
+        <div class="why-title">Belanja &amp; Transaksi</div>
+        <div class="why-desc">Harga Rp3.250, berat 0,5 kg daging, kembalian Rp2.750. Uang selalu pakai desimal dalam hitungan sehari-hari.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📏</div>
+        <div class="why-title">Pengukuran</div>
+        <div class="why-desc">Tinggi 1,32 m, panjang 4,8 m, volume 1,5 L. Semua alat ukur memakai desimal untuk ketelitian.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🍳</div>
+        <div class="why-title">Resep Memasak</div>
+        <div class="why-desc">0,5 sdt garam, 1,25 kg tepung, 0,25 L susu. Resep butuh ketelitian desimal agar pas.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏃</div>
+        <div class="why-title">Olahraga &amp; Waktu</div>
+        <div class="why-desc">Lari 5,6 km, waktu 12,5 detik, jarak 3,2 m. Semua diukur dengan desimal.</div>
+      </div>
+    </div>
+    
+    <div class="objective-card">
+      <h3>Tujuan Belajar Hari Ini</h3>
+      <ul class="objective-list">
+        <li>Siswa mampu menjumlahkan dan mengurangkan bilangan desimal dalam konteks soal cerita.</li>
+        <li>Siswa mampu mengalikan dan membagi desimal dengan bilangan bulat.</li>
+        <li>Siswa dapat memilih operasi yang tepat untuk menyelesaikan masalah kontekstual sehari-hari.</li>
+        <li>Siswa terbiasa mengerjakan soal dengan ketelitian dan kecepatan lewat bantuan stopwatch.</li>
+      </ul>
+    </div>
+    
+    <div style="margin-top: 30px;">
+      <button class="btn btn-primary" onclick="goToSlide('materi')">Lanjut: Ingat Materi →</button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: MATERI -->
+<section class="slide" id="slide-materi">
+  <div class="container">
+    <div class="eyebrow">03 · Ingat Kembali</div>
+    <h2>Cara Operasi Hitung Desimal</h2>
+    <p class="lead" style="margin-top: 20px;">Empat operasi dasar pada desimal. Pahami dulu aturannya, lalu kita masuk ke latihan soal cerita.</p>
+    
+    <div class="materi-tabs">
+      <button class="materi-tab t1 active" data-tab="add">Penjumlahan</button>
+      <button class="materi-tab t2" data-tab="sub">Pengurangan</button>
+      <button class="materi-tab t3" data-tab="mul">Perkalian</button>
+      <button class="materi-tab t4" data-tab="div">Pembagian</button>
+    </div>
+    
+    <div class="materi-content active" id="materi-add" data-color="orange">
+      <div class="materi-card">
+        <h3 style="color: var(--primary); margin-bottom: 18px;">Penjumlahan Desimal</h3>
+        <div class="materi-rule">
+          <strong>Aturan:</strong> Luruskan tanda koma, lalu jumlahkan seperti bilangan bulat biasa. Jika angka di belakang koma tidak sama panjang, tambahkan nol di belakangnya.
+        </div>
+        <div class="materi-visual">
+          <div class="calc-stack">
+            <div class="calc-row"><span class="calc-digit">2</span><span class="calc-digit comma">,</span><span class="calc-digit">5</span></div>
+            <div class="calc-row"><span class="calc-op">+</span><span class="calc-digit">1</span><span class="calc-digit comma">,</span><span class="calc-digit">3</span></div>
+            <div class="calc-row calc-result-row"><span class="calc-digit">3</span><span class="calc-digit comma">,</span><span class="calc-digit">8</span></div>
+          </div>
+        </div>
+        <div class="materi-example">
+          <strong>Contoh:</strong> 2,5 + 1,3 = ? Luruskan koma, lalu jumlahkan: 5+3=8 (di belakang koma), 2+1=3 (di depan koma). Hasilnya <strong>3,8</strong>.
+        </div>
+      </div>
+    </div>
+    
+    <div class="materi-content" id="materi-sub" data-color="blue">
+      <div class="materi-card">
+        <h3 style="color: var(--blue); margin-bottom: 18px;">Pengurangan Desimal</h3>
+        <div class="materi-rule">
+          <strong>Aturan:</strong> Sama seperti penjumlahan, luruskan koma dulu. Jika angka di belakang koma berbeda panjang, tambahkan nol. Kurangkan dari kanan ke kiri.
+        </div>
+        <div class="materi-visual">
+          <div class="calc-stack">
+            <div class="calc-row"><span class="calc-digit">4</span><span class="calc-digit comma">,</span><span class="calc-digit">8</span></div>
+            <div class="calc-row"><span class="calc-op" style="color: var(--blue)">−</span><span class="calc-digit">2</span><span class="calc-digit comma">,</span><span class="calc-digit">3</span></div>
+            <div class="calc-row calc-result-row"><span class="calc-digit">2</span><span class="calc-digit comma">,</span><span class="calc-digit">5</span></div>
+          </div>
+        </div>
+        <div class="materi-example">
+          <strong style="color: var(--blue);">Contoh:</strong> 4,8 − 2,3 = ? Luruskan koma. Kurangkan: 8−3=5, 4−2=2. Hasilnya <strong style="color: var(--blue);">2,5</strong>.
+        </div>
+      </div>
+    </div>
+    
+    <div class="materi-content" id="materi-mul" data-color="purple">
+      <div class="materi-card">
+        <h3 style="color: var(--purple); margin-bottom: 18px;">Perkalian Desimal</h3>
+        <div class="materi-rule">
+          <strong>Aturan:</strong> Kalikan seperti bilangan bulat biasa. Lalu hitung total angka di belakang koma dari kedua faktor. Letakkan koma pada hasil sebanyak jumlah tersebut.
+        </div>
+        <div class="materi-visual">
+          <div style="font-size: 22px; line-height: 1.8;">
+            <div>3 × 1,5 = ?</div>
+            <div style="color: var(--muted); margin-top: 8px;">↓ Kalikan 3 × 15 = 45</div>
+            <div style="color: var(--muted);">↓ Ada 1 angka di belakang koma</div>
+            <div style="color: var(--purple); font-size: 30px; font-weight: 800; margin-top: 8px;">= 4,5</div>
+          </div>
+        </div>
+        <div class="materi-example">
+          <strong style="color: var(--purple);">Contoh:</strong> 4 × 0,25 = ? 4 × 25 = 100. Ada 2 angka di belakang koma (dari 0,25). Hasilnya <strong style="color: var(--purple);">1,00 = 1</strong>.
+        </div>
+      </div>
+    </div>
+    
+    <div class="materi-content" id="materi-div" data-color="teal">
+      <div class="materi-card">
+        <h3 style="color: var(--secondary); margin-bottom: 18px;">Pembagian Desimal</h3>
+        <div class="materi-rule">
+          <strong>Aturan:</strong> Untuk pembagian desimal dengan bilangan bulat, bagi seperti biasa. Posisi koma pada hasil langsung di bawah koma pada bilangan yang dibagi.
+        </div>
+        <div class="materi-visual">
+          <div style="font-size: 22px; line-height: 1.8;">
+            <div>8,4 ÷ 4 = ?</div>
+            <div style="color: var(--muted); margin-top: 8px;">↓ Bagi satu per satu: 8÷4=2, 4÷4=1</div>
+            <div style="color: var(--secondary); font-size: 30px; font-weight: 800; margin-top: 8px;">= 2,1</div>
+          </div>
+        </div>
+        <div class="materi-example">
+          <strong style="color: var(--secondary);">Contoh:</strong> 3,9 ÷ 3 = ? 3 ÷ 3 = 1, 9 ÷ 3 = 3. Letakkan koma di antara hasil. Hasilnya <strong style="color: var(--secondary);">1,3</strong>.
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+      <button class="btn btn-primary" id="btnStartQuiz">Mulai Latihan Soal →</button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: QUIZ -->
+<section class="slide" id="slide-quiz">
+  <div class="container">
+    <div class="quiz-layout">
+      <aside class="quiz-sidebar">
+        <div class="info-card">
+          <div class="info-label">Siswa</div>
+          <div class="info-value" id="displayName">—</div>
+        </div>
+        
+        <div class="stopwatch-card" id="stopwatchCard">
+          <div class="stopwatch-label"><span class="stopwatch-dot"></span>Stopwatch Soal</div>
+          <div class="stopwatch-display" id="stopwatchDisplay">00:00.00</div>
+          <div class="stopwatch-status" id="stopwatchStatus">Berjalan untuk soal ini...</div>
+        </div>
+        
+        <div class="qnav-label">Navigasi Soal</div>
+        <div class="qnav-grid" id="qnavGrid"></div>
+        
+        <button class="btn btn-secondary" style="width: 100%; justify-content: center;" id="btnFinish">Finish Exam</button>
+      </aside>
+      
+      <main class="qcard" id="qcard"></main>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: RESULT -->
+<section class="slide" id="slide-result">
+  <div class="container">
+    <div class="eyebrow">05 · Hasil Ujian</div>
+    
+    <div class="result-hero">
+      <div class="result-name" id="resultName">Siswa</div>
+      <div class="result-score" id="resultScore">0<small>/100</small></div>
+      <div class="result-message" id="resultMessage">Selamat sudah menyelesaikan latihan!</div>
+    </div>
+    
+    <div class="result-stats">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: var(--success);">✓</div>
+        <div class="stat-value-big" style="color: var(--success);" id="statCorrect">0</div>
+        <div class="stat-label">Jawaban Benar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(220, 38, 38, 0.1); color: var(--danger);">✗</div>
+        <div class="stat-value-big" style="color: var(--danger);" id="statWrong">0</div>
+        <div class="stat-label">Jawaban Salah</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent);">?</div>
+        <div class="stat-value-big" style="color: var(--accent);" id="statUnanswered">25</div>
+        <div class="stat-label">Belum Terjawab</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(13, 148, 136, 0.1); color: var(--secondary);">⏱</div>
+        <div class="stat-value-mono" style="color: var(--secondary);" id="statAvgTime">00:00.00</div>
+        <div class="stat-label">Rata-rata Waktu</div>
+      </div>
+    </div>
+    
+    <div style="display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
+      <button class="btn btn-primary" onclick="goToSlide('closing')">Lihat Penutup →</button>
+      <button class="btn btn-ghost" onclick="restartExam()">Ulangi Latihan</button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: CLOSING -->
+<section class="slide" id="slide-closing">
+  <div class="container">
+    <div class="closing">
+      <div class="eyebrow" style="justify-content: center; display: flex;">06 · Penutup</div>
+      <h2 style="text-align: center; margin-bottom: 30px;">Kesimpulan &amp; Refleksi</h2>
+      
+      <div class="closing-card">
+        <div class="closing-title">Kesimpulan</div>
+        <div class="closing-text">
+          Hari ini kita sudah berlatih <strong>operasi hitung desimal</strong> lewat 25 soal cerita. Kamu belajar bahwa:
+          <ul class="closing-list">
+            <li>Penjumlahan &amp; pengurangan desimal: <strong>luruskan koma</strong> dulu, lalu hitung seperti biasa.</li>
+            <li>Perkalian desimal: kalikan biasa, lalu <strong>hitung total angka di belakang koma</strong> dari kedua faktor.</li>
+            <li>Pembagian desimal: bagi seperti biasa, <strong>koma pada hasil</strong> tepat di bawah koma bilangan yang dibagi.</li>
+            <li>Desimal hadir di banyak situasi nyata: belanja, masak, ukur, dan olahraga.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="closing-card">
+        <div class="closing-title">Refleksi Diri</div>
+        <div class="closing-text">
+          Tanyakan pada dirimu, dan jawab jujur di dalam hati:
+          <ul class="reflection-list">
+            <li class="reflection-item">Operasi mana yang masih terasa sulit bagiku? Apa yang membuatnya sulit?</li>
+            <li class="reflection-item">Soal cerita mana yang paling kusukai? Mengapa?</li>
+            <li class="reflection-item">Bagaimana perasaanku saat menjawab dengan stopwatch berjalan? Apakah aku tetap tenang?</li>
+            <li class="reflection-item">Apa yang akan kulakukan agar lebih cepat dan tepat di kesempatan berikutnya?</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="thanks">Thank You for Today</div>
+      <p class="lead" style="text-align: center; margin: 0 auto;">Setiap usaha kecil yang kamu lakukan hari ini adalah benih yang akan tumbuh. Tetap semangat belajar, dan jangan pernah menyerah pada soal yang sulit — karena di situlah ilmu sedang ditanam.</p>
+      
+      <div style="margin-top: 40px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="goToSlide('cover')">Kembali ke Awal</button>
+        <button class="btn btn-ghost" onclick="restartExam()">Coba Lagi</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA 25 SOAL CERITA DESIMAL ============ */
+const soalData = [
+  { no:1, cerita:"Ibu membeli gula pasir seberat 2,5 kg di toko. Sesampainya di rumah, Ayah juga membawa pulang 1,3 kg gula pasir. Berapa kg total gula pasir yang ada sekarang?", opsi:["3,5 kg","3,7 kg","3,8 kg","4,0 kg"], jawaban:2, pembahasan:"Operasi Penjumlahan: Total gula = 2,5 kg + 1,3 kg. Luruskan tanda koma: 2,5 + 1,3 = 3,8 kg.", operasi:"Penjumlahan", kelas:"add" },
+  { no:2, cerita:"Rani memiliki pita hias sepanjang 4,8 meter. Ia menggunakan 2,3 meter pita tersebut untuk menghias kado ulang tahun adiknya. Berapakah sisa pita Rani sekarang?", opsi:["2,5 meter","2,4 meter","2,3 meter","1,5 meter"], jawaban:0, pembahasan:"Operasi Pengurangan: Sisa pita = 4,8 meter − 2,3 meter. Luruskan tanda koma: 4,8 − 2,3 = 2,5 meter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:3, cerita:"Dalam sebuah botol terdapat 1,2 liter air. Paman menuangkan lagi 0,6 liter air ke dalam botol tersebut. Berapa volume air di dalam botol sekarang?", opsi:["1,6 liter","1,7 liter","1,8 liter","2,0 liter"], jawaban:2, pembahasan:"Operasi Penjumlahan: Volume akhir = 1,2 liter + 0,6 liter. Luruskan tanda koma: 1,2 + 0,6 = 1,8 liter.", operasi:"Penjumlahan", kelas:"add" },
+  { no:4, cerita:"Budi memiliki tali sepanjang 7,5 meter. Ia memotong tali tersebut sepanjang 3,2 meter untuk membuat jemuran baju. Berapa meter sisa tali Budi?", opsi:["4,1 meter","4,2 meter","4,3 meter","4,5 meter"], jawaban:2, pembahasan:"Operasi Pengurangan: Sisa tali = 7,5 meter − 3,2 meter. Luruskan tanda koma: 7,5 − 3,2 = 4,3 meter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:5, cerita:"Sebuah botol minyak berisi 0,5 liter minyak goreng. Jika Ibu membeli 4 botol minyak yang sama, berapa liter total minyak goreng yang dibeli Ibu?", opsi:["1,5 liter","2,0 liter","2,2 liter","2,5 liter"], jawaban:1, pembahasan:"Operasi Perkalian: Total minyak = 4 × 0,5 liter. Hitung perkalian bilangan bulat: 4 × 5 = 20. Karena ada 1 angka di belakang koma, menjadi 2,0 liter.", operasi:"Perkalian", kelas:"mul" },
+  { no:6, cerita:"Kakak mempunyai kawat sepanjang 4,8 meter. Kawat tersebut dipotong sama panjang menjadi 2 bagian. Berapa meter panjang setiap potongan kawat?", opsi:["2,2 meter","2,3 meter","2,4 meter","2,6 meter"], jawaban:2, pembahasan:"Operasi Pembagian: Panjang potongan = 4,8 meter ÷ 2. 4 satuan ÷ 2 = 2; 8 persepuluhan ÷ 2 = 4. Hasilnya 2,4 meter.", operasi:"Pembagian", kelas:"div" },
+  { no:7, cerita:"Pak Tani memanen 6,4 kg mangga pada hari pertama dan 3,5 kg mangga pada hari kedua. Berapa kg total mangga yang dipanen selama dua hari?", opsi:["9,8 kg","9,9 kg","10,1 kg","10,9 kg"], jawaban:1, pembahasan:"Operasi Penjumlahan: Total panen mangga = 6,4 kg + 3,5 kg. Luruskan tanda koma: 6,4 + 3,5 = 9,9 kg.", operasi:"Penjumlahan", kelas:"add" },
+  { no:8, cerita:"Edo mengendarai sepeda sejauh 5,6 km dari rumah ke taman kota. Saat kembali pulang, ia baru menempuh jarak 3,1 km lalu berhenti sejenak. Berapa km lagi jarak yang harus ditempuh Edo agar sampai ke rumah?", opsi:["2,3 km","2,4 km","2,5 km","2,7 km"], jawaban:2, pembahasan:"Operasi Pengurangan: Jarak tersisa = 5,6 km − 3,1 km. Luruskan tanda koma: 5,6 − 3,1 = 2,5 km.", operasi:"Pengurangan", kelas:"sub" },
+  { no:9, cerita:"Setiap satu kantong plastik berisi 1,5 kg jeruk segar. Jika Bibi membeli 3 kantong jeruk, berapa kg berat seluruh jeruk tersebut?", opsi:["3,5 kg","4,0 kg","4,5 kg","5,0 kg"], jawaban:2, pembahasan:"Operasi Perkalian: Total berat jeruk = 3 × 1,5 kg. 3 × 15 = 45. Beri 1 angka di belakang koma: 4,5 kg.", operasi:"Perkalian", kelas:"mul" },
+  { no:10, cerita:"Sebuah teko berisi 3,9 liter sirup manis. Sirup tersebut akan dituangkan sama rata ke dalam 3 buah botol kaca. Berapa liter isi sirup pada masing-masing botol?", opsi:["1,2 liter","1,3 liter","1,4 liter","1,5 liter"], jawaban:1, pembahasan:"Operasi Pembagian: Isi tiap botol = 3,9 liter ÷ 3. 3 ÷ 3 = 1; 9 ÷ 3 = 3. Hasilnya 1,3 liter.", operasi:"Pembagian", kelas:"div" },
+  { no:11, cerita:"Lani membawa bekal air minum sebanyak 0,75 liter ke sekolah. Selama berolahraga, ia meminum air tersebut sebanyak 0,35 liter. Berapakah sisa air minum Lani?", opsi:["0,30 liter","0,40 liter","0,45 liter","0,50 liter"], jawaban:1, pembahasan:"Operasi Pengurangan: Sisa air = 0,75 liter − 0,35 liter. 75 perseratusan − 35 perseratusan = 40 perseratusan = 0,40 liter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:12, cerita:"Kelinci milik Siti beratnya 2,15 kg. Sementara itu, kelinci milik Dayu beratnya 1,42 kg. Berapakah berat gabungan kedua kelinci tersebut jika ditimbang bersama-sama?", opsi:["3,47 kg","3,55 kg","3,57 kg","3,67 kg"], jawaban:2, pembahasan:"Operasi Penjumlahan: Gabungan berat kelinci = 2,15 kg + 1,42 kg. (5+2=7 perseratusan, 1+4=5 persepuluhan, 2+1=3 satuan) = 3,57 kg.", operasi:"Penjumlahan", kelas:"add" },
+  { no:13, cerita:"Paman membeli kayu balok sepanjang 6,75 meter. Kayu tersebut dipotong untuk memperbaiki pagar rumah sepanjang 2,50 meter. Berapa meter sisa kayu milik Paman?", opsi:["4,15 meter","4,20 meter","4,25 meter","4,35 meter"], jawaban:2, pembahasan:"Operasi Pengurangan: Sisa kayu = 6,75 meter − 2,50 meter. (5−0=5 perseratusan, 7−5=2 persepuluhan, 6−2=4 satuan) = 4,25 meter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:14, cerita:"Ibu memasukkan tepung terigu seberat 1,25 kg ke dalam baskom, lalu menambahkan mentega cair seberat 0,50 kg. Berapakah berat total adonan tersebut sekarang?", opsi:["1,65 kg","1,75 kg","1,85 kg","2,25 kg"], jawaban:1, pembahasan:"Operasi Penjumlahan: Berat total adonan = 1,25 kg + 0,50 kg. 1,25 + 0,50 = 1,75 kg.", operasi:"Penjumlahan", kelas:"add" },
+  { no:15, cerita:"Setiap satu kemasan susu kotak berisi 0,25 liter susu cokelat. Jika Udin membeli 4 kotak susu yang sama, berapakah jumlah liter seluruh susu yang dibeli Udin?", opsi:["0,8 liter","1,0 liter","1,2 liter","1,5 liter"], jawaban:1, pembahasan:"Operasi Perkalian: Total susu = 4 × 0,25 liter. 4 × 25 = 100 perseratusan = 1,0 liter.", operasi:"Perkalian", kelas:"mul" },
+  { no:16, cerita:"Ayah mempunyai seutas tali tambang sepanjang 8,4 meter. Tali tersebut akan dibagikan kepada 4 regu pramuka secara sama rata. Berapa meter panjang tali yang diterima setiap regu?", opsi:["2,0 meter","2,1 meter","2,2 meter","2,4 meter"], jawaban:1, pembahasan:"Operasi Pembagian: Panjang tali tiap regu = 8,4 meter ÷ 4. 8 ÷ 4 = 2; 4 ÷ 4 = 1. Hasilnya 2,1 meter.", operasi:"Pembagian", kelas:"div" },
+  { no:17, cerita:"Tinggi badan Danu saat kelas 3 adalah 1,32 meter. Saat diukur kembali di kelas 4, tingginya bertambah 0,08 meter. Berapakah tinggi badan Danu sekarang?", opsi:["1,38 meter","1,40 meter","1,42 meter","1,48 meter"], jawaban:1, pembahasan:"Operasi Penjumlahan: Tinggi sekarang = 1,32 meter + 0,08 meter. 1,32 + 0,08 = 1,40 meter.", operasi:"Penjumlahan", kelas:"add" },
+  { no:18, cerita:"Sebuah jeriken awalnya berisi 9,8 liter bensin. Setelah dipakai untuk mengisi sepeda motor sebanyak 4,6 liter, berapakah sisa bensin di dalam jeriken tersebut?", opsi:["5,0 liter","5,2 liter","5,3 liter","5,4 liter"], jawaban:1, pembahasan:"Operasi Pengurangan: Sisa bensin = 9,8 liter − 4,6 liter. 8 − 6 = 2 persepuluhan; 9 − 4 = 5 satuan. Hasilnya 5,2 liter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:19, cerita:"Seorang penjahit membutuhkan kain sepanjang 2,25 meter untuk membuat satu buah kemeja lengan panjang. Berapa meter kain yang dibutuhkan untuk membuat 2 buah kemeja yang serupa?", opsi:["4,25 meter","4,50 meter","4,75 meter","5,00 meter"], jawaban:1, pembahasan:"Operasi Perkalian: Total kain = 2 × 2,25 meter. 2 × 225 = 450 perseratusan = 4,50 meter.", operasi:"Perkalian", kelas:"mul" },
+  { no:20, cerita:"Sebuah semangka seberat 3,6 kg dibelah menjadi 3 bagian sama besar untuk diberikan kepada tiga orang anak. Berapa kg berat masing-masing potongan semangka tersebut?", opsi:["1,1 kg","1,2 kg","1,3 kg","1,4 kg"], jawaban:1, pembahasan:"Operasi Pembagian: Berat per bagian = 3,6 kg ÷ 3. 36 ÷ 3 = 12. Karena ada satu angka di belakang koma, hasilnya 1,2 kg.", operasi:"Pembagian", kelas:"div" },
+  { no:21, cerita:"Di atas meja terdapat dua buah buku. Buku pertama memiliki tebal 1,8 cm dan buku kedua memiliki tebal 2,4 cm. Jika kedua buku ditumpuk bersama, berapa cm tinggi tumpukan buku tersebut?", opsi:["3,8 cm","4,0 cm","4,2 cm","4,4 cm"], jawaban:2, pembahasan:"Operasi Penjumlahan: Tebal tumpukan buku = 1,8 cm + 2,4 cm. 8 + 4 = 12 (tulis 2, simpan 1); 1 + 1 + 2 = 4. Hasilnya 4,2 cm.", operasi:"Penjumlahan", kelas:"add" },
+  { no:22, cerita:"Sebuah ember dapat menampung air maksimal 10,0 liter. Saat ini, ember tersebut baru terisi 6,5 liter air. Berapa liter air lagi yang harus ditambahkan agar ember tersebut penuh?", opsi:["3,5 liter","3,7 liter","4,0 liter","4,5 liter"], jawaban:0, pembahasan:"Operasi Pengurangan: Air yang harus ditambah = 10,0 liter − 6,5 liter. 10,0 − 6,5 = 3,5 liter.", operasi:"Pengurangan", kelas:"sub" },
+  { no:23, cerita:"Seorang pedagang buah mempunyai 5 bungkus buah anggur. Setiap bungkus memiliki berat 1,2 kg. Berapakah berat keseluruhan 5 bungkus anggur tersebut?", opsi:["5,5 kg","6,0 kg","6,2 kg","6,5 kg"], jawaban:1, pembahasan:"Operasi Perkalian: Total berat anggur = 5 × 1,2 kg. 5 × 12 = 60. Karena ada satu angka di belakang koma, hasilnya 6,0 kg.", operasi:"Perkalian", kelas:"mul" },
+  { no:24, cerita:"Kakak memiliki sebatang pita kado sepanjang 5,5 meter. Pita tersebut ingin dipotong menjadi 5 helai sama panjang. Berapakah panjang masing-masing helai pita tersebut?", opsi:["1,0 meter","1,1 meter","1,2 meter","1,5 meter"], jawaban:1, pembahasan:"Operasi Pembagian: Panjang tiap helai = 5,5 meter ÷ 5. 5 ÷ 5 = 1; 5 ÷ 5 = 1. Hasilnya 1,1 meter.", operasi:"Pembagian", kelas:"div" },
+  { no:25, cerita:"Ibu berbelanja di pasar membeli 2,4 kg beras, 1,5 kg telur ayam, dan 0,6 kg bawang merah. Berapakah berat total belanjaan yang dibawa Ibu?", opsi:["4,2 kg","4,3 kg","4,5 kg","4,8 kg"], jawaban:2, pembahasan:"Operasi Penjumlahan (3 suku): Total belanjaan = 2,4 kg + 1,5 kg + 0,6 kg. 2,4 + 0,6 = 3,0 kg; kemudian 3,0 + 1,5 = 4,5 kg.", operasi:"Penjumlahan", kelas:"add" }
+];
+
+/* ============ STATE ============ */
+let currentQuestion = 0;
+let studentName = "";
+let answers = Array(25).fill(null); // { selected: index, correct: bool, time: ms }
+let stopwatchStart = 0;
+let stopwatchInterval = null;
+let stopwatchRunning = false;
+let stopwatchElapsed = 0;
+let currentQuestionTime = 0;
+
+/* ============ NAVIGATION ============ */
+function goToSlide(id) {
+  const slides = document.querySelectorAll('.slide');
+  const target = document.getElementById('slide-' + id);
+  if (!target) return;
+  slides.forEach(s => s.classList.remove('active'));
+  target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // Update progress bar
+  const slideIds = ['cover', 'why', 'materi', 'quiz', 'result', 'closing'];
+  const idx = slideIds.indexOf(id);
+  const pct = (idx / (slideIds.length - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+document.getElementById('btnStart').addEventListener('click', () => {
+  const name = document.getElementById('namaSiswa').value.trim();
+  if (!name) {
+    showToast('Isi nama dulu yuk!', 'error');
+    document.getElementById('namaSiswa').focus();
+    return;
+  }
+  studentName = name;
+  document.getElementById('displayName').textContent = studentName;
+  document.getElementById('resultName').textContent = studentName;
+  goToSlide('why');
+});
+
+document.getElementById('namaSiswa').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('btnStart').click();
+});
+
+document.getElementById('btnSkipToMateri').addEventListener('click', () => {
+  studentName = document.getElementById('namaSiswa').value.trim() || "Siswa";
+  document.getElementById('displayName').textContent = studentName;
+  document.getElementById('resultName').textContent = studentName;
+  goToSlide('materi');
+});
+
+document.getElementById('btnStartQuiz').addEventListener('click', () => {
+  startQuiz();
+});
+
+document.getElementById('btnFinish').addEventListener('click', () => {
+  finishExam();
+});
+
+/* ============ MATERI TABS ============ */
+document.querySelectorAll('.materi-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.materi-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.materi-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('materi-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ============ QUIZ ============ */
+function startQuiz() {
+  currentQuestion = 0;
+  answers = Array(25).fill(null);
+  buildQnav();
+  renderQuestion();
+  goToSlide('quiz');
+}
+
+function buildQnav() {
+  const grid = document.getElementById('qnavGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'qnav-btn';
+    btn.textContent = i + 1;
+    btn.addEventListener('click', () => goToQuestion(i));
+    grid.appendChild(btn);
+  }
+  updateQnav();
+}
+
+function updateQnav() {
+  const btns = document.querySelectorAll('.qnav-btn');
+  btns.forEach((b, i) => {
+    b.classList.remove('current', 'answered', 'correct', 'wrong');
+    if (i === currentQuestion) b.classList.add('current');
+    if (answers[i]) {
+      b.classList.add('answered');
+      b.classList.add(answers[i].correct ? 'correct' : 'wrong');
+    }
+  });
+}
+
+function goToQuestion(idx) {
+  // Reset stopwatch untuk soal baru
+  currentQuestion = idx;
+  renderQuestion();
+  resetStopwatch();
+  startStopwatch();
+  updateQnav();
+}
+
+function renderQuestion() {
+  const q = soalData[currentQuestion];
+  const card = document.getElementById('qcard');
+  const ans = answers[currentQuestion];
+  
+  card.innerHTML = `
+    <div class="qheader">
+      <div class="qnumber">Soal <strong>${q.no}</strong> dari 25</div>
+      <div class="qoperasi ${q.kelas}">${q.operasi}</div>
+    </div>
+    <div class="qtext">${q.cerita}</div>
+    <div class="qoptions" id="qoptions">
+      ${q.opsi.map((opt, i) => `
+        <div class="qoption ${ans && ans.selected === i ? 'selected' : ''} ${ans && ans.correct && ans.selected === i ? 'correct' : ''} ${ans && !ans.correct && ans.selected === i ? 'wrong' : ''} ${ans && ans.correct && i === q.jawaban ? 'correct' : ''} ${ans ? 'disabled' : ''}" data-idx="${i}">
+          <div class="qoption-letter">${String.fromCharCode(65 + i)}</div>
+          <div>${opt}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="qfeedback ${ans ? 'show ' + (ans.correct ? 'correct' : 'wrong') : ''}" id="qfeedback">
+      ${ans ? `
+        <div class="qfeedback-title">${ans.correct ? '✓ Jawaban Benar!' : '✗ Jawaban Kurang Tepat'}</div>
+        <div class="qfeedback-body"><strong>Pembahasan:</strong> ${q.pembahasan}<br><br>Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.jawaban)}. ${q.opsi[q.jawaban]}</strong></div>
+        <div class="qfeedback-time">Waktu pengerjaan: <strong>${formatTime(ans.time)}</strong></div>
+      ` : ''}
+    </div>
+    <div class="qactions">
+      ${!ans ? `<button class="btn btn-primary" id="btnCekJawaban">Cek Jawaban</button>` : ''}
+      ${currentQuestion > 0 ? `<button class="btn btn-ghost" id="btnPrev">← Soal Sebelumnya</button>` : ''}
+      ${currentQuestion < 24 ? `<button class="btn btn-ghost" id="btnNext">Soal Berikutnya →</button>` : ''}
+      ${currentQuestion === 24 ? `<button class="btn btn-secondary" id="btnFinish2">Finish Exam</button>` : ''}
+    </div>
+  `;
+  
+  // Attach handlers
+  document.querySelectorAll('.qoption').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (answers[currentQuestion]) return; // sudah dijawab
+      document.querySelectorAll('.qoption').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+  
+  const cekBtn = document.getElementById('btnCekJawaban');
+  if (cekBtn) cekBtn.addEventListener('click', checkAnswer);
+  
+  const prevBtn = document.getElementById('btnPrev');
+  if (prevBtn) prevBtn.addEventListener('click', () => goToQuestion(currentQuestion - 1));
+  
+  const nextBtn = document.getElementById('btnNext');
+  if (nextBtn) nextBtn.addEventListener('click', () => goToQuestion(currentQuestion + 1));
+  
+  const finishBtn = document.getElementById('btnFinish2');
+  if (finishBtn) finishBtn.addEventListener('click', finishExam);
+}
+
+function checkAnswer() {
+  const selected = document.querySelector('.qoption.selected');
+  if (!selected) {
+    showToast('Pilih salah satu jawaban dulu!', 'error');
+    return;
+  }
+  
+  // Hentikan stopwatch
+  stopStopwatch();
+  
+  const selectedIdx = parseInt(selected.dataset.idx);
+  const q = soalData[currentQuestion];
+  const isCorrect = selectedIdx === q.jawaban;
+  
+  answers[currentQuestion] = {
+    selected: selectedIdx,
+    correct: isCorrect,
+    time: stopwatchElapsed
+  };
+  
+  // Re-render untuk show feedback
+  renderQuestion();
+  updateQnav();
+  
+  if (isCorrect) {
+    showToast('Jawaban benar! ✓', 'success');
+  } else {
+    showToast('Jawaban kurang tepat. Lihat pembahasan ya.', 'error');
+  }
+}
+
+/* ============ STOPWATCH ============ */
+function startStopwatch() {
+  stopwatchStart = performance.now();
+  stopwatchElapsed = 0;
+  stopwatchRunning = true;
+  document.getElementById('stopwatchCard').classList.remove('stopped');
+  document.getElementById('stopwatchStatus').textContent = 'Berjalan untuk soal ini...';
+  
+  if (stopwatchInterval) clearInterval(stopwatchInterval);
+  stopwatchInterval = setInterval(updateStopwatchDisplay, 33);
+}
+
+function stopStopwatch() {
+  if (!stopwatchRunning) return;
+  stopwatchRunning = false;
+  stopwatchElapsed = performance.now() - stopwatchStart;
+  clearInterval(stopwatchInterval);
+  document.getElementById('stopwatchCard').classList.add('stopped');
+  document.getElementById('stopwatchStatus').textContent = 'Berhenti — jawaban sudah dicek';
+  updateStopwatchDisplay();
+}
+
+function resetStopwatch() {
+  stopwatchRunning = false;
+  stopwatchElapsed = 0;
+  clearInterval(stopwatchInterval);
+  document.getElementById('stopwatchDisplay').textContent = '00:00.00';
+  document.getElementById('stopwatchCard').classList.remove('stopped');
+  document.getElementById('stopwatchStatus').textContent = 'Berjalan untuk soal ini...';
+}
+
+function updateStopwatchDisplay() {
+  if (stopwatchRunning) {
+    stopwatchElapsed = performance.now() - stopwatchStart;
+  }
+  document.getElementById('stopwatchDisplay').textContent = formatTime(stopwatchElapsed);
+}
+
+function formatTime(ms) {
+  const totalMs = Math.floor(ms);
+  const minutes = Math.floor(totalMs / 60000);
+  const seconds = Math.floor((totalMs % 60000) / 1000);
+  const centiseconds = Math.floor((totalMs % 1000) / 10);
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
+}
+
+/* ============ FINISH EXAM ============ */
+function finishExam() {
+  // Stop stopwatch jika masih berjalan
+  if (stopwatchRunning) {
+    stopStopwatch();
+  }
+  
+  const answered = answers.filter(a => a !== null);
+  const correct = answered.filter(a => a.correct).length;
+  const wrong = answered.filter(a => !a.correct).length;
+  const unanswered = 25 - answered.length;
+  const score = Math.round((correct / 25) * 100);
+  
+  // Rata-rata waktu (hanya dari soal yang dijawab)
+  let avgTime = 0;
+  if (answered.length > 0) {
+    const totalTime = answered.reduce((sum, a) => sum + a.time, 0);
+    avgTime = totalTime / answered.length;
+  }
+  
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statUnanswered').textContent = unanswered;
+  document.getElementById('statAvgTime').textContent = formatTime(avgTime);
+  document.getElementById('resultScore').innerHTML = `${score}<small>/100</small>`;
+  
+  let message;
+  if (score === 100) message = 'Sempurna! Kamu menguasai operasi hitung desimal dengan sangat baik!';
+  else if (score >= 80) message = 'Hebat! Pemahamanmu sudah sangat baik. Tinggal sedikit lagi untuk sempurna.';
+  else if (score >= 60) message = 'Bagus! Kamu sudah memahami konsep dasarnya. Ulangi materi yang masih salah ya.';
+  else if (score >= 40) message = 'Cukup baik. Pelajari kembali aturan operasi desimal dan coba lagi.';
+  else message = 'Belum menguasai sepenuhnya. Pelajari materi dari awal, lalu coba ulangi latihannya.';
+  
+  if (answered.length === 0) message = 'Kamu belum menjawab soal apa pun. Yuk coba lagi dari awal!';
+  
+  document.getElementById('resultMessage').textContent = message;
+  goToSlide('result');
+}
+
+function restartExam() {
+  currentQuestion = 0;
+  answers = Array(25).fill(null);
+  resetStopwatch();
+  buildQnav();
+  renderQuestion();
+  startStopwatch();
+  goToSlide('quiz');
+}
+
+/* ============ TOAST ============ */
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function showToast(msg, type = '') {
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
+}
+
+/* ============ INIT ============ */
+// Auto start quiz dari materi slide sudah ada handler
+</script>
+
+</body>
+</html>
