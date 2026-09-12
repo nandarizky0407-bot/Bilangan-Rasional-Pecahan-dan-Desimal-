@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Pecahan - Kelas 3 SD Kurikulum Merdeka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--bg:#FFF8F0;--bg-2:#FFE8D6;--primary:#FF6B4A;--primary-dark:#E04A2A;--primary-light:#FF9F7A;--secondary:#1A9B8E;--secondary-dark:#0F6B62;--secondary-light:#4FC0B5;--accent:#FFC542;--accent-dark:#E5A832;--dark:#3D2817;--muted:#8B6F5C;--card:#FFFFFF;--success:#2BA84A;--danger:#E63946;--border:rgba(61,40,23,0.12)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--dark);margin:0;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+.display-font{font-family:'Fredoka',sans-serif}
+.bg-decoration{position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(255,107,74,0.15) 0%,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(26,155,142,0.12) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(255,197,66,0.08) 0%,transparent 60%),linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%)}
+.bg-shapes{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg-shape{position:absolute;opacity:0.45;animation:float 14s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-30px) rotate(8deg)}}
+.app-header{position:sticky;top:0;z-index:100;background:rgba(255,248,240,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem}
+.slide-container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.slide{display:none;animation:slideIn 0.4s ease}
+.slide.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+h1,h2,h3,h4{font-family:'Fredoka',sans-serif;line-height:1.2}
+.card{background:var(--card);border-radius:24px;box-shadow:0 10px 40px rgba(61,40,23,0.08);border:1px solid var(--border);padding:1.75rem}
+.card-soft{background:rgba(255,255,255,0.7);border-radius:20px;border:1px solid var(--border);padding:1.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;border:none;border-radius:14px;padding:0.75rem 1.5rem;font-weight:600;font-family:'Fredoka',sans-serif;font-size:1rem;cursor:pointer;transition:all 0.15s ease;text-decoration:none;position:relative}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:white;box-shadow:0 5px 0 var(--primary-dark)}
+.btn-primary:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--primary-dark)}
+.btn-primary:not(:disabled):active{transform:translateY(3px);box-shadow:0 2px 0 var(--primary-dark)}
+.btn-secondary{background:var(--secondary);color:white;box-shadow:0 5px 0 var(--secondary-dark)}
+.btn-secondary:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--secondary-dark)}
+.btn-accent{background:var(--accent);color:var(--dark);box-shadow:0 5px 0 var(--accent-dark)}
+.btn-accent:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--accent-dark)}
+.btn-ghost{background:white;color:var(--dark);border:2px solid var(--border);box-shadow:0 3px 0 var(--border)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.text-input{background:white;border:3px solid var(--border);border-radius:14px;padding:0.85rem 1.1rem;font-size:1.05rem;font-family:'Nunito',sans-serif;font-weight:700;width:100%;color:var(--dark);transition:all 0.2s}
+.text-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,107,74,0.15)}
+.answer-input{background:#FFFEF7;border:2.5px dashed var(--primary);border-radius:12px;padding:0.5rem 0.75rem;font-size:1.5rem;font-family:'Fredoka',sans-serif;font-weight:700;text-align:center;width:100%;color:var(--dark);transition:all 0.2s}
+.answer-input:focus{outline:none;background:#FFF8E8;border-style:solid;box-shadow:0 0 0 4px rgba(255,107,74,0.2)}
+.answer-input.s2-input{border-color:var(--secondary)}
+.answer-input.s2-input:focus{background:#EAF7F5;box-shadow:0 0 0 4px rgba(26,155,142,0.2)}
+.topic-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--accent);color:var(--dark);padding:0.4rem 1rem;border-radius:999px;font-weight:700;font-size:0.85rem;font-family:'Fredoka',sans-serif}
+.student-col{background:var(--card);border-radius:24px;padding:1.5rem;box-shadow:0 10px 30px rgba(61,40,23,0.07);position:relative;overflow:hidden}
+.student-col::before{content:'';position:absolute;top:0;left:0;right:0;height:6px}
+.student-col.s1::before{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.student-col.s2::before{background:linear-gradient(90deg,var(--secondary),var(--secondary-light))}
+.student-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem;color:white;flex-shrink:0}
+.avatar-1{background:linear-gradient(135deg,var(--primary),var(--primary-light));box-shadow:0 4px 12px rgba(255,107,74,0.3)}
+.avatar-2{background:linear-gradient(135deg,var(--secondary),var(--secondary-light));box-shadow:0 4px 12px rgba(26,155,142,0.3)}
+.feedback{margin-top:0.75rem;padding:0.85rem 1rem;border-radius:12px;font-weight:700;font-size:0.95rem;display:none}
+.feedback.show{display:block;animation:pop 0.3s ease}
+.feedback.correct{background:rgba(43,168,74,0.15);color:var(--success);border-left:4px solid var(--success)}
+.feedback.wrong{background:rgba(230,57,70,0.15);color:var(--danger);border-left:4px solid var(--danger)}
+@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
+.explanation{margin-top:0.85rem;padding:1.1rem;background:linear-gradient(135deg,#FFF8E8,#FFEFD5);border-radius:14px;border-left:5px solid var(--accent);display:none;font-size:0.95rem;line-height:1.7}
+.explanation.show{display:block;animation:slideDown 0.35s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.fraction-visual{width:160px;height:160px;margin:0 auto}
+.fraction-visual svg{width:100%;height:100%;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.1))}
+.score-circle{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;position:relative;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.score-1{background:linear-gradient(135deg,var(--primary),var(--primary-light))}
+.score-2{background:linear-gradient(135deg,var(--secondary),var(--secondary-light))}
+.confetti-piece{position:fixed;width:12px;height:12px;pointer-events:none;z-index:9999;animation:confetti-fall 3.5s ease-out forwards}
+@keyframes confetti-fall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.compare-btn{background:white;border:2px solid var(--border);border-radius:12px;width:56px;height:56px;font-family:'Fredoka',sans-serif;font-size:1.6rem;font-weight:700;cursor:pointer;transition:all 0.15s;color:var(--dark)}
+.compare-btn:hover{border-color:var(--primary);transform:translateY(-2px)}
+.compare-btn.selected{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 4px 12px rgba(255,107,74,0.3)}
+.compare-btn.s2-btn.selected{background:var(--secondary);border-color:var(--secondary);box-shadow:0 4px 12px rgba(26,155,142,0.3)}
+.tf-btn{background:white;border:2px solid var(--border);border-radius:12px;width:90px;height:50px;font-family:'Fredoka',sans-serif;font-size:1.2rem;font-weight:700;cursor:pointer;transition:all 0.15s;color:var(--dark)}
+.tf-btn:hover{border-color:var(--primary);transform:translateY(-2px)}
+.tf-btn.selected{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 4px 12px rgba(255,107,74,0.3)}
+.tf-btn.s2-btn.selected{background:var(--secondary);border-color:var(--secondary);box-shadow:0 4px 12px rgba(26,155,142,0.3)}
+.fraction-card{background:white;border:2px solid var(--border);border-radius:14px;padding:0.75rem 1rem;font-family:'Fredoka',sans-serif;font-size:1.5rem;font-weight:700;text-align:center;display:inline-block;min-width:60px}
+.order-input{width:50px;height:50px;text-align:center;font-family:'Fredoka',sans-serif;font-size:1.4rem;font-weight:700;border:2.5px dashed var(--primary);border-radius:12px;background:#FFFEF7;color:var(--dark);text-transform:uppercase}
+.order-input:focus{outline:none;border-style:solid;background:#FFF8E8}
+.order-input.s2-input{border-color:var(--secondary)}
+.order-input.s2-input:focus{background:#EAF7F5}
+.grid-students{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:900px){.grid-students{grid-template-columns:1fr}.slide-container{padding:1rem}}
+.reflection-area{width:100%;background:white;border:3px solid var(--border);border-radius:14px;padding:0.85rem 1rem;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;color:var(--dark);resize:vertical;min-height:70px}
+.reflection-area:focus{outline:none;border-color:var(--secondary);box-shadow:0 0 0 4px rgba(26,155,142,0.15)}
+.material-concept{background:white;border-radius:16px;padding:1.25rem;border:2px solid var(--border);transition:all 0.25s}
+.material-concept:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 10px 24px rgba(255,107,74,0.15)}
+.material-concept h4{font-family:'Fredoka',sans-serif;font-size:1.15rem;font-weight:600;color:var(--primary);margin-bottom:0.5rem}
+.final-score-card{background:white;border-radius:24px;padding:2rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(61,40,23,0.07)}
+.final-score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:8px}
+.final-score-card.s1::before{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.final-score-card.s2::before{background:linear-gradient(90deg,var(--secondary),var(--secondary-light))}
+.big-fraction{font-family:'Fredoka',sans-serif;font-weight:700;display:inline-flex;flex-direction:column;align-items:center;line-height:1}
+.big-fraction .num{font-size:4rem;color:var(--primary)}
+.big-fraction .den{font-size:4rem;color:var(--secondary)}
+.big-fraction .bar{width:100%;height:6px;background:var(--dark);margin:0.3rem 0;border-radius:3px}
+.progress-bar{height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 0.5s ease;border-radius:999px}
+.progress-bar-fill.s2{background:linear-gradient(90deg,var(--secondary),var(--secondary-light))}
+.review-item{background:white;border-radius:12px;padding:0.75rem 1rem;border-left:5px solid;display:flex;align-items:center;gap:0.75rem;font-weight:700;font-size:0.9rem;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.review-good{border-color:var(--success)}
+.review-need{border-color:var(--danger)}
+.celebrate-icon{display:inline-block;animation:bounce 1.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--primary);color:white;font-family:'Fredoka',sans-serif;font-weight:700}
+.step-num.s2{background:var(--secondary)}
+.stat-pill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:999px;font-size:0.8rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.nav-footer{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(255,248,240,0.94);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:0.75rem 1.5rem}
+.nav-footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.q-nav-btn{width:38px;height:38px;border-radius:10px;border:2px solid var(--border);background:white;font-family:'Fredoka',sans-serif;font-weight:700;font-size:0.9rem;color:var(--dark);cursor:pointer;transition:all 0.15s;position:relative;display:flex;align-items:center;justify-content:center}
+.q-nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}
+.q-nav-btn.active{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 4px 10px rgba(255,107,74,0.3)}
+.q-nav-btn.active.s2-act{background:var(--secondary);border-color:var(--secondary);box-shadow:0 4px 10px rgba(26,155,142,0.3)}
+.q-nav-btn.correct-1{background:rgba(43,168,74,0.2);color:var(--success);border-color:var(--success)}
+.q-nav-btn.wrong-1{background:rgba(230,57,70,0.2);color:var(--danger);border-color:var(--danger)}
+.q-nav-btn.correct-2{background:rgba(26,155,142,0.2);color:var(--secondary);border-color:var(--secondary)}
+.q-nav-btn.wrong-2{background:rgba(230,57,70,0.2);color:var(--danger);border-color:var(--danger)}
+.q-nav-btn.section-a{border-top:3px solid var(--primary)}
+.q-nav-btn.section-b{border-top:3px solid var(--secondary)}
+.q-nav-btn.section-c{border-top:3px solid var(--accent-dark)}
+.sec-tab{padding:0.5rem 1.2rem;border-radius:12px;border:2px solid var(--border);background:white;font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;transition:all 0.15s}
+.sec-tab:hover{border-color:var(--primary)}
+.sec-tab.active-a{background:var(--primary);color:white;border-color:var(--primary)}
+.sec-tab.active-b{background:var(--secondary);color:white;border-color:var(--secondary)}
+.sec-tab.active-c{background:var(--accent);color:var(--dark);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bg-decoration"></div>
+<div class="bg-shapes" id="bgShapes"></div>
+
+<header class="app-header">
+<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+<div style="display:flex;align-items:center;gap:0.75rem;">
+<div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-family:'Fredoka',sans-serif;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:0 4px 12px rgba(255,107,74,0.3);"><span style="font-size:1.1rem;">½</span></div>
+<div><div class="display-font" style="font-weight:bold;font-size:1.1rem;line-height:1;color:var(--dark);">Petualangan Pecahan</div><div style="font-size:0.75rem;color:var(--muted);">Kelas 3 SD • Kurikulum Merdeka</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:1rem;font-family:'Fredoka',sans-serif;font-weight:bold;font-size:0.9rem;color:var(--muted);">
+<span id="slideLabel">Cover</span> • <span id="slideNum">1/9</span>
+</div>
+</div>
+</header>
+
+<main class="slide-container" id="mainContainer">
+
+<!-- SLIDE 0: COVER -->
+<section class="slide active" data-title="Cover">
+<div style="text-align:center;padding-top:1rem;padding-bottom:2rem;">
+<div style="display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;padding:0.4rem 1rem;border-radius:999px;background:rgba(255,197,66,0.25);color:var(--accent-dark);"><span class="display-font" style="font-weight:700;font-size:0.85rem;">MATEMATIKA KELAS 3 SD</span></div>
+<h1 class="display-font" style="font-weight:700;margin-bottom:0.75rem;font-size:clamp(2.5rem,6vw,4.5rem);color:var(--dark);line-height:1.05;">Petualangan<br><span style="background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;">Pecahan Seru!</span></h1>
+<p style="font-size:1.1rem;margin-bottom:0.5rem;color:var(--muted);max-width:600px;margin-left:auto;margin-right:auto;">60 soal latihan untuk berdua — materi pembilang & penyebut, garis bilangan, membandingkan, mengurutkan, dan pecahan senilai.</p>
+<p style="font-size:1rem;font-weight:700;color:var(--primary);">Kerjakan berdua, saling membantu ya!</p>
+</div>
+<div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:2.5rem;flex-wrap:wrap;">
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;"><div class="fraction-visual" id="heroPie1" style="width:120px;height:120px;"></div><div class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--primary);">1/2</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;"><div class="fraction-visual" id="heroPie2" style="width:120px;height:120px;"></div><div class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--primary);">2/4</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;"><div class="fraction-visual" id="heroPie3" style="width:120px;height:120px;"></div><div class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--primary);">3/6</div></div>
+</div>
+<div class="grid-students" style="margin-bottom:2rem;">
+<div class="card" style="border-top:6px solid var(--primary);">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;"><div class="student-avatar avatar-1">A</div><div><div class="display-font" style="font-weight:bold;font-size:1.1rem;">Siswa 1</div><div style="font-size:0.85rem;color:var(--muted);">Isi namamu di sini</div></div></div>
+<input type="text" class="text-input" id="name1" placeholder="Tulis namamu..." maxlength="20">
+</div>
+<div class="card" style="border-top:6px solid var(--secondary);">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;"><div class="student-avatar avatar-2">B</div><div><div class="display-font" style="font-weight:bold;font-size:1.1rem;">Siswa 2</div><div style="font-size:0.85rem;color:var(--muted);">Isi namamu di sini</div></div></div>
+<input type="text" class="text-input" id="name2" placeholder="Tulis namamu..." maxlength="20">
+</div>
+</div>
+<div style="text-align:center;">
+<button class="btn btn-primary" id="startBtn" disabled style="font-size:1.15rem;padding:1rem 2.5rem;">Mulai Petualangan <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div style="font-size:0.85rem;margin-top:0.75rem;color:var(--muted);" id="startHint">Isi kedua nama dulu untuk memulai</div>
+</div>
+</section>
+
+<!-- SLIDE 1-6: MATERI -->
+<section class="slide" data-title="Pembilang & Penyebut">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Pembilang dan Penyebut</h2><p style="font-size:1.1rem;color:var(--muted);">Mengenal bagian-bagian dari sebuah pecahan</p></div>
+<div class="grid-students" style="margin-bottom:1.5rem;">
+<div class="card" style="text-align:center;">
+<h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;">Struktur Pecahan</h3>
+<div style="display:flex;justify-content:center;margin-bottom:1rem;"><div class="big-fraction"><span class="num">3</span><span class="bar" style="width:110px;"></span><span class="den">4</span></div></div>
+<div style="text-align:left;">
+<div style="display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.5rem;"><span class="stat-pill" style="background:rgba(255,107,74,0.15);color:var(--primary);">Pembilang</span><span style="font-size:0.9rem;">Angka di <b>atas</b> garis → <b>3</b> (bagian yang diambil)</span></div>
+<div style="display:flex;align-items:flex-start;gap:0.5rem;"><span class="stat-pill" style="background:rgba(26,155,142,0.15);color:var(--secondary);">Penyebut</span><span style="font-size:0.9rem;">Angka di <b>bawah</b> garis → <b>4</b> (total bagian)</span></div>
+</div>
+</div>
+<div class="card">
+<h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;">Contoh Nyata</h3>
+<div style="display:flex;justify-content:center;margin-bottom:1rem;"><div class="fraction-visual" id="mat1Pie" style="width:140px;height:140px;"></div></div>
+<p style="text-align:center;font-size:1rem;">Pizza dipotong jadi <b>4 bagian sama</b>.<br><b>3 bagian</b> diambil → ditulis <span class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--primary);">3/4</span></p>
+</div>
+</div>
+<div class="card-soft"><div style="display:flex;align-items:flex-start;gap:0.75rem;"><div class="step-num">!</div><div><h4 class="display-font" style="font-weight:bold;font-size:1.1rem;margin-bottom:0.25rem;">Tips Mengingat</h4><p style="font-size:1rem;"><b>Pembilang</b> di <b>atas</b> (bagian yang diambil). <b>Penyebut</b> di <b>bawah</b> (total bagian keseluruhan).</p></div></div></div>
+</section>
+
+<section class="slide" data-title="Membentuk Pecahan">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Membentuk Pecahan</h2><p style="font-size:1.1rem;color:var(--muted);">Dari gambar dan dari cerita sehari-hari</p></div>
+<div class="grid-students" style="margin-bottom:1.5rem;">
+<div class="card"><div class="topic-badge" style="margin-bottom:0.75rem;">DARI GAMBAR</div><h3 class="display-font" style="font-size:1.2rem;margin-bottom:0.75rem;font-weight:bold;">Lihat bagian yang diarsir</h3><div style="display:flex;justify-content:center;margin-bottom:1rem;"><div class="fraction-visual" id="mat2Pie" style="width:150px;height:150px;"></div></div><div style="font-size:1rem;line-height:1.8;"><p>Lingkaran dibagi → <b>6 bagian sama</b> (penyebut = 6)</p><p>Bagian <b>berwarna</b> → <b>4 bagian</b> (pembilang = 4)</p><p class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--primary);">Jadi pecahannya = 4/6</p></div></div>
+<div class="card"><div class="topic-badge" style="margin-bottom:0.75rem;background:var(--secondary);color:white;">DARI CERITA</div><h3 class="display-font" style="font-size:1.2rem;margin-bottom:0.75rem;font-weight:bold;">Pahami kalimatnya</h3><div style="background:linear-gradient(135deg,#FFF8E8,#FFEFD5);border-radius:12px;padding:1rem;margin-bottom:0.75rem;"><p style="font-size:1rem;font-style:italic;">"Ibu membeli <b>10 mangga</b>. <b>3 mangga</b> diberikan ke tetangga."</p></div><div style="font-size:1rem;line-height:1.8;"><p>Total mangga = 10 → <b>penyebut</b></p><p>Mangga diberikan = 3 → <b>pembilang</b></p><p class="display-font" style="font-weight:bold;font-size:1.2rem;color:var(--secondary);">Pecahan = 3/10</p></div></div>
+</div>
+<div class="card-soft"><h4 class="display-font" style="font-weight:bold;font-size:1.1rem;margin-bottom:0.5rem;">Langkah Menulis Pecahan:</h4><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;"><div style="display:flex;align-items:flex-start;gap:0.5rem;"><div class="step-num">1</div><p style="font-size:0.9rem;padding-top:0.25rem;">Cari <b>total</b> bagian → penyebut</p></div><div style="display:flex;align-items:flex-start;gap:0.5rem;"><div class="step-num">2</div><p style="font-size:0.9rem;padding-top:0.25rem;">Cari <b>bagian</b> yang ditanya → pembilang</p></div><div style="display:flex;align-items:flex-start;gap:0.5rem;"><div class="step-num">3</div><p style="font-size:0.9rem;padding-top:0.25rem;">Tulis: <b>pembilang/penyebut</b></p></div></div></div>
+</section>
+
+<section class="slide" data-title="Garis Bilangan">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Pecahan pada Garis Bilangan</h2><p style="font-size:1.1rem;color:var(--muted);">Letak pecahan di antara bilangan 0 dan 1</p></div>
+<div class="card" style="margin-bottom:1.5rem;"><h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;text-align:center;">Garis Bilangan Pecahan perempatan</h3><div id="mat3Line"></div><p style="text-align:center;margin-top:1rem;font-size:1rem;">Antara 0 dan 1 dibagi <b>4 bagian sama</b>.<br>Setiap bagian = <span class="display-font" style="font-weight:bold;color:var(--primary);">1/4</span>. Titik ke-2 = <span class="display-font" style="font-weight:bold;color:var(--primary);">2/4</span>, titik ke-3 = <span class="display-font" style="font-weight:bold;color:var(--primary);">3/4</span>.</p></div>
+<div class="grid-students"><div class="material-concept"><h4>Cara Membaca</h4><p style="font-size:0.9rem;">Bagian ke-<b>n</b> pada garis yang dibagi <b>b</b> sama → pecahannya <b>n/b</b></p></div><div class="material-concept"><h4>Contoh Lain</h4><p style="font-size:0.9rem;">Garis dibagi 5 sama → titik ke-3 = <b>3/5</b></p></div></div>
+</section>
+
+<section class="slide" data-title="Membandingkan">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Membandingkan Pecahan</h2><p style="font-size:1.1rem;color:var(--muted);">Menggunakan tanda &lt;, &gt;, atau =</p></div>
+<div class="card" style="margin-bottom:1.5rem;"><h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;">Syarat Mudah: Penyebut Sama</h3><p style="font-size:1rem;margin-bottom:1rem;">Kalau penyebutnya sama, kita tinggal <b>bandingkan pembilangnya</b>. Pembilang lebih besar = pecahan lebih besar.</p><div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem;"><div style="text-align:center;"><div class="fraction-visual" id="mat4PieA" style="width:110px;height:110px;"></div><div class="display-font" style="font-weight:bold;font-size:1.1rem;margin-top:0.25rem;">2/5</div></div><div class="display-font" style="font-size:2.5rem;font-weight:bold;color:var(--primary);">&lt;</div><div style="text-align:center;"><div class="fraction-visual" id="mat4PieB" style="width:110px;height:110px;"></div><div class="display-font" style="font-weight:bold;font-size:1.1rem;margin-top:0.25rem;">4/5</div></div></div><div style="background:linear-gradient(135deg,#FFF8E8,#FFEFD5);border-radius:12px;padding:1rem;"><p style="font-size:1rem;">Karena penyebut sama (5), bandingkan pembilang: <b>2 &lt; 4</b> maka <b>2/5 &lt; 4/5</b></p></div></div>
+</section>
+
+<section class="slide" data-title="Mengurutkan">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Mengurutkan Pecahan</h2><p style="font-size:1.1rem;color:var(--muted);">Dari yang terkecil ke yang terbesar</p></div>
+<div class="card" style="margin-bottom:1.5rem;"><h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;">Urutkan: 3/6, 1/6, 5/6, 2/6</h3><p style="font-size:1rem;margin-bottom:1rem;">Semua penyebutnya <b>6</b>. Jadi tinggal urutkan pembilang dari yang terkecil: <b>1, 2, 3, 5</b></p><div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1rem;"><div class="fraction-card" style="background:#FFE8D6;">1/6</div><span class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--primary);">→</span><div class="fraction-card" style="background:#FFE8D6;">2/6</div><span class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--primary);">→</span><div class="fraction-card" style="background:#FFE8D6;">3/6</div><span class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--primary);">→</span><div class="fraction-card" style="background:#FFE8D6;">5/6</div></div><div style="background:linear-gradient(135deg,#FFF8E8,#FFEFD5);border-radius:12px;padding:1rem;"><p style="font-size:1rem;"><b>Hasil:</b> 1/6, 2/6, 3/6, 5/6 (dari terkecil ke terbesar)</p></div></div>
+</section>
+
+<section class="slide" data-title="Pecahan Senilai">
+<div style="text-align:center;margin-bottom:2rem;"><h2 style="font-size:2rem;font-weight:bold;margin-bottom:0.5rem;">Pecahan Senilai</h2><p style="font-size:1.1rem;color:var(--muted);">Pecahan berbeda tapi nilainya sama</p></div>
+<div class="card" style="margin-bottom:1.5rem;"><h3 class="display-font" style="font-size:1.2rem;margin-bottom:1rem;font-weight:bold;text-align:center;">Tiga pecahan ini nilainya SAMA!</h3><div style="display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;"><div style="text-align:center;"><div class="fraction-visual" id="mat6Pie1" style="width:110px;height:110px;"></div><div class="display-font" style="font-weight:bold;font-size:1.1rem;margin-top:0.25rem;color:var(--primary);">1/2</div></div><div class="display-font" style="font-size:2rem;font-weight:bold;color:var(--accent-dark);">=</div><div style="text-align:center;"><div class="fraction-visual" id="mat6Pie2" style="width:110px;height:110px;"></div><div class="display-font" style="font-weight:bold;font-size:1.1rem;margin-top:0.25rem;color:var(--primary);">2/4</div></div><div class="display-font" style="font-size:2rem;font-weight:bold;color:var(--accent-dark);">=</div><div style="text-align:center;"><div class="fraction-visual" id="mat6Pie3" style="width:110px;height:110px;"></div><div class="display-font" style="font-weight:bold;font-size:1.1rem;margin-top:0.25rem;color:var(--primary);">4/8</div></div></div><p style="text-align:center;margin-top:1rem;font-size:1rem;">Lihat bagian berwarnanya — semua <b>setengah</b> dari lingkaran!</p></div>
+<div class="card-soft"><h4 class="display-font" style="font-weight:bold;font-size:1.1rem;margin-bottom:0.5rem;">Cara Mencari Pecahan Senilai:</h4><p style="font-size:1rem;margin-bottom:0.75rem;">Kalikan (atau bagi) pembilang dan penyebut dengan <b>angka yang sama</b>.</p><div style="background:white;border-radius:12px;padding:1rem;"><p style="font-size:1rem;"><b>Contoh:</b> 1/2 = ?/6</p><p style="font-size:1rem;margin-top:0.25rem;">Penyebut 2 jadi 6 → dikali <b>3</b>. Maka pembilang juga dikali 3 → 1 × 3 = <b>3</b></p><p class="display-font" style="font-weight:bold;font-size:1.2rem;margin-top:0.5rem;color:var(--primary);">Jadi 1/2 = 3/6</p></div></div>
+</section>
+
+<!-- SLIDE 7: LATIHAN SOAL -->
+<section class="slide" data-title="Latihan Soal">
+<div style="text-align:center;margin-bottom:1rem;">
+<h2 style="font-size:1.8rem;font-weight:bold;margin-bottom:0.25rem;">Latihan Soal</h2>
+<p style="font-size:1rem;color:var(--muted);">Klik nomor soal untuk mengerjakan. Kerjakan satu per satu, jangan terburu-buru ya!</p>
+</div>
+
+<div class="card" style="padding:1rem;margin-bottom:1rem;">
+<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+<button class="sec-tab active-a" id="tabA" onclick="switchSection('A')">Bagian A (1-20)</button>
+<button class="sec-tab" id="tabB" onclick="switchSection('B')">Bagian B (21-40)</button>
+<button class="sec-tab" id="tabC" onclick="switchSection('C')">Bagian C (41-60)</button>
+</div>
+<div id="qNavGrid" style="display:grid;grid-template-columns:repeat(20,1fr);gap:0.3rem;"></div>
+<div style="display:flex;justify-content:center;gap:1rem;margin-top:1rem;font-size:0.75rem;color:var(--muted);flex-wrap:wrap;">
+<span><span style="display:inline-block;width:10px;height:10px;background:rgba(255,107,74,0.3);border-radius:3px;"></span> Bagian A: Pembilang/Penyebut & Membentuk Pecahan</span>
+<span><span style="display:inline-block;width:10px;height:10px;background:rgba(26,155,142,0.3);border-radius:3px;"></span> Bagian B: Garis Bilangan, Banding, Urut</span>
+<span><span style="display:inline-block;width:10px;height:10px;background:rgba(255,197,66,0.5);border-radius:3px;"></span> Bagian C: Pecahan Senilai</span>
+</div>
+</div>
+
+<div id="questionArea"></div>
+
+<div style="text-align:center;margin-top:1.5rem;">
+<button class="btn btn-accent" onclick="finishExam()" style="font-size:1.1rem;padding:1rem 2.5rem;">Selesai & Lihat Hasil 🎯</button>
+</div>
+</section>
+
+<!-- SLIDE 8: HASIL -->
+<section class="slide" data-title="Hasil">
+<div style="text-align:center;margin-bottom:2rem;">
+<h2 class="display-font" style="font-size:2.5rem;font-weight:bold;margin-bottom:0.5rem;color:var(--primary);">Hasil Latihan Kalian</h2>
+<p style="font-size:1.1rem;color:var(--muted);">60 soal sudah dikerjakan — mari lihat hasilnya!</p>
+</div>
+<div class="grid-students" style="margin-bottom:1.5rem;">
+<div class="final-score-card s1">
+<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-bottom:1rem;"><div class="student-avatar avatar-1" id="resAva1">A</div><div class="display-font" style="font-weight:bold;font-size:1.1rem;" id="resName1">Siswa 1</div></div>
+<div class="score-circle score-1" style="margin-bottom:1rem;"><div class="display-font" style="font-weight:bold;font-size:3rem;line-height:1;" id="score1">0</div><div style="font-size:0.75rem;opacity:0.9;">dari 100</div></div>
+<div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:1rem;">
+<div style="text-align:center;"><div class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--success);" id="correct1">0</div><div style="font-size:0.7rem;font-weight:bold;color:var(--muted);">BENAR</div></div>
+<div style="text-align:center;"><div class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--danger);" id="wrong1">0</div><div style="font-size:0.7rem;font-weight:bold;color:var(--muted);">SALAH</div></div>
+</div>
+<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+<span class="stat-pill" style="background:rgba(255,107,74,0.15);color:var(--primary);">A: <span id="secA1">0</span>/20</span>
+<span class="stat-pill" style="background:rgba(26,155,142,0.15);color:var(--secondary);">B: <span id="secB1">0</span>/20</span>
+<span class="stat-pill" style="background:rgba(255,197,66,0.25);color:var(--accent-dark);">C: <span id="secC1">0</span>/20</span>
+</div>
+<div class="progress-bar" style="margin-bottom:0.5rem;"><div class="progress-bar-fill" id="bar1" style="width:0%;"></div></div>
+<div style="font-size:0.9rem;font-weight:bold;color:var(--muted);" id="evalMsg1">- - -</div>
+</div>
+<div class="final-score-card s2">
+<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-bottom:1rem;"><div class="student-avatar avatar-2" id="resAva2">B</div><div class="display-font" style="font-weight:bold;font-size:1.1rem;" id="resName2">Siswa 2</div></div>
+<div class="score-circle score-2" style="margin-bottom:1rem;"><div class="display-font" style="font-weight:bold;font-size:3rem;line-height:1;" id="score2">0</div><div style="font-size:0.75rem;opacity:0.9;">dari 100</div></div>
+<div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:1rem;">
+<div style="text-align:center;"><div class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--success);" id="correct2">0</div><div style="font-size:0.7rem;font-weight:bold;color:var(--muted);">BENAR</div></div>
+<div style="text-align:center;"><div class="display-font" style="font-weight:bold;font-size:1.5rem;color:var(--danger);" id="wrong2">0</div><div style="font-size:0.7rem;font-weight:bold;color:var(--muted);">SALAH</div></div>
+</div>
+<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+<span class="stat-pill" style="background:rgba(255,107,74,0.15);color:var(--primary);">A: <span id="secA2">0</span>/20</span>
+<span class="stat-pill" style="background:rgba(26,155,142,0.15);color:var(--secondary);">B: <span id="secB2">0</span>/20</span>
+<span class="stat-pill" style="background:rgba(255,197,66,0.25);color:var(--accent-dark);">C: <span id="secC2">0</span>/20</span>
+</div>
+<div class="progress-bar" style="margin-bottom:0.5rem;"><div class="progress-bar-fill s2" id="bar2" style="width:0%;"></div></div>
+<div style="font-size:0.9rem;font-weight:bold;color:var(--muted);" id="evalMsg2">- - -</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:1.5rem;">
+<h3 class="display-font" style="font-size:1.2rem;font-weight:bold;margin-bottom:1rem;text-align:center;">Bagian yang Perlu Diulas Kembali</h3>
+<div class="grid-students">
+<div>
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;"><div class="student-avatar avatar-1" style="width:32px;height:32px;font-size:1rem;">A</div><div class="display-font" style="font-weight:bold;font-size:0.95rem;" id="reviewName1">Siswa 1</div></div>
+<div id="reviewList1" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+</div>
+<div>
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;"><div class="student-avatar avatar-2" style="width:32px;height:32px;font-size:1rem;">B</div><div class="display-font" style="font-weight:bold;font-size:0.95rem;" id="reviewName2">Siswa 2</div></div>
+<div id="reviewList2" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 9: REFLEKSI -->
+<section class="slide" data-title="Refleksi">
+<div style="text-align:center;margin-bottom:2rem;">
+<div class="celebrate-icon" style="display:inline-block;margin-bottom:0.75rem;font-size:2.5rem;">🎉</div>
+<h2 class="display-font" style="font-size:2.5rem;font-weight:bold;margin-bottom:0.5rem;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;">Kesimpulan & Refleksi</h2>
+<p style="font-size:1.1rem;color:var(--muted);">Yuk renungkan apa yang sudah dipelajari hari ini</p>
+</div>
+<div class="card" style="margin-bottom:1.5rem;">
+<h3 class="display-font" style="font-size:1.2rem;font-weight:bold;margin-bottom:0.75rem;">Kesimpulan Hari Ini</h3>
+<div style="font-size:1rem;line-height:1.8;">
+<p>• <b>Pecahan</b> terdiri dari <b>pembilang</b> (atas) dan <b>penyebut</b> (bawah).</p>
+<p>• Pecahan bisa dibentuk dari <b>gambar</b> (bagian berwarna) dan <b>cerita</b> (bagian dari keseluruhan).</p>
+<p>• Pecahan bisa diletakkan pada <b>garis bilangan</b> antara 0 dan 1.</p>
+<p>• <b>Membandingkan</b> & <b>mengurutkan</b> pecahan lebih mudah jika <b>penyebutnya sama</b>.</p>
+<p>• <b>Pecahan senilai</b> = pecahan berbeda tetapi nilai sama (diperoleh dengan mengalikan/membagi angka yang sama).</p>
+</div>
+</div>
+<div class="grid-students" style="margin-bottom:1.5rem;">
+<div class="card">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;"><div class="student-avatar avatar-1" id="reflAva1">A</div><div class="display-font" style="font-weight:bold;font-size:1.1rem;" id="reflName1">Siswa 1</div></div>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">1. Materi pecahan apa yang paling kamu suka?</p><textarea class="reflection-area" id="refl1a" placeholder="Tulis jawabanmu..." style="margin-bottom:0.75rem;"></textarea>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">2. Bagian mana yang masih sulit?</p><textarea class="reflection-area" id="refl1b" placeholder="Tulis jawabanmu..." style="margin-bottom:0.75rem;"></textarea>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">3. Apa yang akan kamu lakukan untuk lebih paham?</p><textarea class="reflection-area" id="refl1c" placeholder="Tulis jawabanmu..."></textarea>
+</div>
+<div class="card">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;"><div class="student-avatar avatar-2" id="reflAva2">B</div><div class="display-font" style="font-weight:bold;font-size:1.1rem;" id="reflName2">Siswa 2</div></div>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">1. Materi pecahan apa yang paling kamu suka?</p><textarea class="reflection-area" id="refl2a" placeholder="Tulis jawabanmu..." style="margin-bottom:0.75rem;"></textarea>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">2. Bagian mana yang masih sulit?</p><textarea class="reflection-area" id="refl2b" placeholder="Tulis jawabanmu..." style="margin-bottom:0.75rem;"></textarea>
+<p style="font-size:0.9rem;margin-bottom:0.5rem;font-weight:bold;">3. Apa yang akan kamu lakukan untuk lebih paham?</p><textarea class="reflection-area" id="refl2c" placeholder="Tulis jawabanmu..."></textarea>
+</div>
+</div>
+<div class="card" style="text-align:center;background:linear-gradient(135deg,#FFF8E8,#FFE8D6);border:2px dashed var(--accent);">
+<div class="celebrate-icon" style="display:inline-block;margin-bottom:0.5rem;font-size:2rem;">💛</div>
+<h3 class="display-font" style="font-size:1.8rem;font-weight:bold;margin-bottom:0.5rem;color:var(--primary);">Thank You for Today!</h3>
+<p style="font-size:1rem;margin-bottom:0.25rem;">Terima kasih sudah belajar pecahan dengan semangat!</p>
+<p style="font-size:1rem;margin-bottom:1rem;">Terus berlatih ya, kalian hebat!</p>
+<button class="btn btn-accent" onclick="restart()">Mulai Lagi dari Awal</button>
+</div>
+</section>
+
+</main>
+
+<footer class="nav-footer">
+<div class="nav-footer-inner">
+<button class="btn btn-ghost" id="prevBtn" onclick="prevSlide()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Kembali</button>
+<button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">Lanjut <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+</footer>
+
+<script>
+const state={currentSlide:0,totalSlides:9,student1Name:'',student2Name:'',answers:{},currentQ:0,currentSec:'A'};
+
+// SVG Helpers
+function pieSVG(num,den,color='#FF6B4A'){
+const cx=50,cy=50,r=42;let p='';
+for(let i=0;i<den;i++){
+const a1=(i*2*Math.PI/den)-Math.PI/2,a2=((i+1)*2*Math.PI/den)-Math.PI/2;
+const x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+const lg=(a2-a1)>Math.PI?1:0;
+const fill=i<num?color:'#FFFFFF';
+p+=`<path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${lg},1 ${x2.toFixed(2)},${y2.toFixed(2)} Z" fill="${fill}" stroke="#3D2817" stroke-width="1.5" stroke-linejoin="round"/>`;
+}
+return `<svg viewBox="0 0 100 100">${p}</svg>`;
+}
+function barSVG(n,d,color){
+const w=240,h=50,pad=6,tw=w-2*pad,pw=tw/d;let s=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:280px;">`;
+for(let i=0;i<d;i++){const x=pad+i*pw;const fill=i<n?color:'#FFFFFF';s+=`<rect x="${x}" y="${pad}" width="${pw}" height="${h-2*pad}" fill="${fill}" stroke="#3D2817" stroke-width="2" rx="2"/>`;}
+s+='</svg>';return s;
+}
+function gridSVG(total,colored,rows,color){
+const cols=Math.ceil(total/rows),cs=22,pad=8,w=cols*cs+2*pad,h=rows*cs+2*pad;let s=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:280px;">`;
+for(let i=0;i<total;i++){const col=i%cols,row=Math.floor(i/cols),cx=pad+col*cs+cs/2,cy=pad+row*cs+cs/2;const fill=i<colored?color:'#FFF8E8';s+=`<circle cx="${cx}" cy="${cy}" r="7" fill="${fill}" stroke="#3D2817" stroke-width="2"/>`;}
+s+='</svg>';return s;
+}
+function numberLineSVG(d,point,color){
+const x0=8,x1=92,y=30;let s=`<svg viewBox="0 0 100 50" style="width:100%;max-width:360px;height:auto;"><line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="#3D2817" stroke-width="2.5" stroke-linecap="round"/>`;
+for(let i=0;i<=d;i++){const x=x0+(x1-x0)*i/d;s+=`<line x1="${x}" y1="${y-7}" x2="${x}" y2="${y+7}" stroke="#3D2817" stroke-width="2"/>`;if(i===0)s+=`<text x="${x}" y="${y+22}" text-anchor="middle" font-family="Fredoka" font-size="7" font-weight="700" fill="#3D2817">0</text>`;if(i===d)s+=`<text x="${x}" y="${y+22}" text-anchor="middle" font-family="Fredoka" font-size="7" font-weight="700" fill="#3D2817">1</text>`;}
+if(point!==null&&point!==undefined){const x=x0+(x1-x0)*point/d;s+=`<circle cx="${x}" cy="${y}" r="5" fill="${color}" stroke="white" stroke-width="2"/>`;s+=`<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" values="9;13;9" dur="2s" repeatCount="indefinite"/></circle>`;}
+s+='</svg>';return s;
+}
+function fractionDisplay(n,d,sid){
+const nc=sid===1?'var(--primary)':'var(--secondary)',dc=sid===1?'var(--secondary)':'var(--primary)';
+return `<div style="display:flex;justify-content:center;margin-bottom:0.75rem;"><div class="big-fraction"><span class="num" style="color:${nc};font-size:3.5rem;">${n}</span><span class="bar" style="width:80px;"></span><span class="den" style="color:${dc};font-size:3.5rem;">${d}</span></div></div>`;
+}
+
+// Render Visual
+function renderVisual(v,sid,qid){
+const color=sid===1?'#FF6B4A':'#1A9B8E';
+if(!v) return '';
+switch(v.t){
+case 'frac':return fractionDisplay(v.n,v.d,sid);
+case 'pie':return `<div style="display:flex;justify-content:center;margin-bottom:0.75rem;"><div class="fraction-visual" style="width:150px;height:150px;">${pieSVG(v.n,v.d,color)}</div></div>`;
+case 'bar':return `<div style="display:flex;justify-content:center;margin-bottom:0.75rem;">${barSVG(v.n,v.d,color)}</div>`;
+case 'grid':return `<div style="display:flex;justify-content:center;margin-bottom:0.75rem;">${gridSVG(v.total,v.colored,v.rows||2,color)}</div>`;
+case 'nline':return `<div style="display:flex;justify-content:center;margin-bottom:0.75rem;">${numberLineSVG(v.d,v.p,color)}</div>`;
+case 'compare':return `<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-bottom:1rem;"><div class="display-font" style="font-weight:bold;font-size:2rem;color:${color};">${v.f1}</div><div class="display-font" style="font-weight:bold;font-size:2rem;color:var(--dark);min-width:40px;text-align:center;" id="cmp-disp-${qid}-${sid}">?</div><div class="display-font" style="font-weight:bold;font-size:2rem;color:${color};">${v.f2}</div></div>`;
+case 'compare-vis':return `<div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem;"><div style="text-align:center;"><div class="fraction-visual" style="width:90px;height:90px;">${pieSVG(v.n1,v.d1,color)}</div><div class="display-font" style="font-weight:bold;margin-top:0.25rem;color:${color};">${v.n1}/${v.d1}</div></div><div class="display-font" style="font-weight:bold;font-size:2rem;color:var(--dark);min-width:40px;text-align:center;" id="cmp-disp-${qid}-${sid}">?</div><div style="text-align:center;"><div class="fraction-visual" style="width:90px;height:90px;">${pieSVG(v.n2,v.d2,color)}</div><div class="display-font" style="font-weight:bold;margin-top:0.25rem;color:${color};">${v.n2}/${v.d2}</div></div></div>`;
+case 'order':{const L=['A','B','C','D'];return `<div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.75rem;flex-wrap:wrap;">${v.fracs.map((f,i)=>`<div style="text-align:center;"><div class="fraction-card">${f}</div><div style="font-size:0.75rem;font-weight:bold;margin-top:0.25rem;">${L[i]}</div></div>`).join('')}</div>`;}
+case 'equiv':return `<div style="display:flex;justify-content:center;margin-bottom:1rem;"><div class="display-font" style="font-weight:bold;font-size:2.5rem;"><span style="color:var(--primary);">${v.a1}</span><span style="color:var(--dark);">/</span><span style="color:var(--secondary);">${v.b1}</span><span style="color:var(--accent-dark);margin:0 0.5rem;">=</span><span style="color:${v.a2==='?'?'var(--danger)':'var(--primary)'};">${v.a2}</span><span style="color:var(--dark);">/</span><span style="color:${v.b2==='?'?'var(--danger)':'var(--secondary)'};">${v.b2}</span></div></div>`;
+case 'equiv-vis':return `<div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem;"><div style="text-align:center;"><div class="fraction-visual" style="width:90px;height:90px;">${pieSVG(v.n1,v.d1,color)}</div><div class="display-font" style="font-weight:bold;margin-top:0.25rem;color:${color};">${v.n1}/${v.d1}</div></div><div class="display-font" style="font-weight:bold;font-size:2rem;color:var(--accent-dark);">?</div><div style="text-align:center;"><div class="fraction-visual" style="width:90px;height:90px;">${pieSVG(v.n2,v.d2,color)}</div><div class="display-font" style="font-weight:bold;margin-top:0.25rem;color:${color};">${v.n2}/${v.d2}</div></div></div>`;
+default:return '';
+}
+}
+
+function renderInput(q,sid){
+const c=sid===2?'s2-input':'',bc=sid===2?'btn-secondary':'btn-primary',chk=`checkAnswer(${q.id},${sid})`,ex=`toggleExplanation(${q.id},${sid})`;
+const exBtn=`<button class="btn btn-ghost" style="margin-top:0.5rem;font-size:0.85rem;width:100%;" onclick="${ex}">Lihat Pembahasan</button><div class="explanation" id="ex${q.id}s${sid}"></div>`;
+switch(q.type){
+case 'direct':return `<div style="display:flex;gap:0.5rem;align-items:flex-end;"><input type="text" class="answer-input ${c}" id="q${q.id}s${sid}" inputmode="numeric" placeholder="?" style="max-width:100px;"><button class="btn ${bc}" onclick="${chk}" style="flex:1;">Cek Jawaban</button></div><div class="feedback" id="fb${q.id}s${sid}"></div>${exBtn}`;
+case 'fraction':return `<div style="display:flex;gap:0.5rem;align-items:flex-end;"><input type="text" class="answer-input ${c}" id="q${q.id}s${sid}" placeholder="contoh: 3/4" style="max-width:160px;"><button class="btn ${bc}" onclick="${chk}" style="flex:1;">Cek Jawaban</button></div><div class="feedback" id="fb${q.id}s${sid}"></div>${exBtn}`;
+case 'compare':return `<div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.75rem;"><button class="compare-btn ${sid===2?'s2-btn':''}" data-cmp="${q.id}-${sid}" onclick="setCompare(${q.id},${sid},'<')">&lt;</button><button class="compare-btn ${sid===2?'s2-btn':''}" data-cmp="${q.id}-${sid}" onclick="setCompare(${q.id},${sid},'>')">&gt;</button><button class="compare-btn ${sid===2?'s2-btn':''}" data-cmp="${q.id}-${sid}" onclick="setCompare(${q.id},${sid},'=')">=</button></div><input type="hidden" id="q${q.id}s${sid}"><button class="btn ${bc}" onclick="${chk}" style="width:100%;">Cek Jawaban</button><div class="feedback" id="fb${q.id}s${sid}"></div>${exBtn}`;
+case 'tf':return `<div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.75rem;"><button class="tf-btn ${sid===2?'s2-btn':''}" data-tf="${q.id}-${sid}" onclick="setTF(${q.id},${sid},'ya')">Ya</button><button class="tf-btn ${sid===2?'s2-btn':''}" data-tf="${q.id}-${sid}" onclick="setTF(${q.id},${sid},'tidak')">Tidak</button></div><input type="hidden" id="q${q.id}s${sid}"><button class="btn ${bc}" onclick="${chk}" style="width:100%;">Cek Jawaban</button><div class="feedback" id="fb${q.id}s${sid}"></div>${exBtn}`;
+case 'order':return `<div style="display:flex;gap:0.5rem;justify-content:center;align-items:flex-end;margin-bottom:0.75rem;">${[0,1,2,3].map(i=>`<div style="text-align:center;"><div style="font-size:0.7rem;margin-bottom:0.25rem;">${i+1}</div><input type="text" class="order-input ${c}" id="q${q.id}s${sid}${'abcd'[i]}" maxlength="1"></div>`).join('')}</div><button class="btn ${bc}" onclick="${chk}" style="width:100%;">Cek Jawaban</button><div class="feedback" id="fb${q.id}s${sid}"></div>${exBtn}`;
+default:return '';
+}
+}
+
+// Data Soal
+const QUESTIONS=[
+{id:1,sec:'A',topic:'Pembilang',type:'direct',s1:{q:'Pada pecahan <b>3/5</b>, berapakah <b>pembilang</b>nya?',v:{t:'frac',n:3,d:5},a:'3',e:'Pembilang adalah angka di <b>atas</b> garis pecahan. Pada 3/5, angka di atas adalah <b>3</b>.'},s2:{q:'Pada pecahan <b>4/7</b>, berapakah <b>pembilang</b>nya?',v:{t:'frac',n:4,d:7},a:'4',e:'Pembilang adalah angka di <b>atas</b> garis pecahan. Pada 4/7, angka di atas adalah <b>4</b>.'}},
+{id:2,sec:'A',topic:'Penyebut',type:'direct',s1:{q:'Pada pecahan <b>2/9</b>, berapakah <b>penyebut</b>nya?',v:{t:'frac',n:2,d:9},a:'9',e:'Penyebut adalah angka di <b>bawah</b> garis pecahan. Pada 2/9, angka di bawah adalah <b>9</b>.'},s2:{q:'Pada pecahan <b>6/8</b>, berapakah <b>penyebut</b>nya?',v:{t:'frac',n:6,d:8},a:'8',e:'Penyebut adalah angka di <b>bawah</b> garis pecahan. Pada 6/8, angka di bawah adalah <b>8</b>.'}},
+{id:3,sec:'A',topic:'Pembilang',type:'direct',s1:{q:'Pada pecahan <b>5/8</b>, berapakah <b>pembilang</b>nya?',v:{t:'frac',n:5,d:8},a:'5',e:'Pembilang adalah angka di <b>atas</b> garis pecahan. Pada 5/8, angka di atas adalah <b>5</b>.'},s2:{q:'Pada pecahan <b>3/10</b>, berapakah <b>pembilang</b>nya?',v:{t:'frac',n:3,d:10},a:'3',e:'Pembilang adalah angka di <b>atas</b> garis pecahan. Pada 3/10, angka di atas adalah <b>3</b>.'}},
+{id:4,sec:'A',topic:'Penyebut',type:'direct',s1:{q:'Pada pecahan <b>7/12</b>, berapakah <b>penyebut</b>nya?',v:{t:'frac',n:7,d:12},a:'12',e:'Penyebut adalah angka di <b>bawah</b> garis pecahan. Pada 7/12, angka di bawah adalah <b>12</b>.'},s2:{q:'Pada pecahan <b>4/9</b>, berapakah <b>penyebut</b>nya?',v:{t:'frac',n:4,d:9},a:'9',e:'Penyebut adalah angka di <b>bawah</b> garis pecahan. Pada 4/9, angka di bawah adalah <b>9</b>.'}},
+{id:5,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari gambar di bawah (bagian yang berwarna):',v:{t:'pie',n:4,d:6},a:'4/6',e:'Lingkaran dibagi <b>6 bagian</b> sama (penyebut=6). Bagian berwarna ada <b>4</b> (pembilang=4). Jadi pecahannya = <b>4/6</b>.'},s2:{q:'Tulis pecahan dari gambar di bawah (bagian yang berwarna):',v:{t:'pie',n:3,d:8},a:'3/8',e:'Lingkaran dibagi <b>8 bagian</b> sama (penyebut=8). Bagian berwarna ada <b>3</b> (pembilang=3). Jadi pecahannya = <b>3/8</b>.'}},
+{id:6,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari gambar balok di bawah (bagian yang berwarna):',v:{t:'bar',n:2,d:5},a:'2/5',e:'Balok dibagi <b>5 bagian</b> sama (penyebut=5). Bagian berwarna ada <b>2</b> (pembilang=2). Jadi pecahannya = <b>2/5</b>.'},s2:{q:'Tulis pecahan dari gambar balok di bawah (bagian yang berwarna):',v:{t:'bar',n:3,d:7},a:'3/7',e:'Balok dibagi <b>7 bagian</b> sama (penyebut=7). Bagian berwarna ada <b>3</b> (pembilang=3). Jadi pecahannya = <b>3/7</b>.'}},
+{id:7,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari gambar titik di bawah (bagian yang berwarna):',v:{t:'grid',total:9,colored:4,rows:3},a:'4/9',e:'Total titik <b>9</b> (penyebut=9). Titik berwarna <b>4</b> (pembilang=4). Jadi pecahannya = <b>4/9</b>.'},s2:{q:'Tulis pecahan dari gambar titik di bawah (bagian yang berwarna):',v:{t:'grid',total:10,colored:3,rows:2},a:'3/10',e:'Total titik <b>10</b> (penyebut=10). Titik berwarna <b>3</b> (pembilang=3). Jadi pecahannya = <b>3/10</b>.'}},
+{id:8,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari gambar di bawah (bagian yang berwarna):',v:{t:'pie',n:5,d:8},a:'5/8',e:'Lingkaran dibagi <b>8 bagian</b> sama (penyebut=8). Bagian berwarna ada <b>5</b> (pembilang=5). Jadi pecahannya = <b>5/8</b>.'},s2:{q:'Tulis pecahan dari gambar di bawah (bagian yang berwarna):',v:{t:'pie',n:2,d:6},a:'2/6',e:'Lingkaran dibagi <b>6 bagian</b> sama (penyebut=6). Bagian berwarna ada <b>2</b> (pembilang=2). Jadi pecahannya = <b>2/6</b>.'}},
+{id:9,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Ibu membawa <b>10 mangga</b>. <b>3 mangga</b> diberikan ke tetangga." Berapakah pecahan mangga yang <b>diberikan</b>?',v:{t:'grid',total:10,colored:3,rows:2},a:'3/10',e:'Total mangga = <b>10</b> (penyebut). Mangga diberikan = <b>3</b> (pembilang). Jadi pecahannya = <b>3/10</b>.'},s2:{q:'"Ayah membawa <b>8 jeruk</b>. <b>2 jeruk</b> dimakan adik." Berapakah pecahan jeruk yang <b>dimakan</b>?',v:{t:'grid',total:8,colored:2,rows:2},a:'2/8',e:'Total jeruk = <b>8</b> (penyebut). Jeruk dimakan = <b>2</b> (pembilang). Jadi pecahannya = <b>2/8</b>.'}},
+{id:10,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Ada <b>6 potong kue</b>. <b>2 potong</b> dimakan Budi." Berapakah pecahan kue yang <b>dimakan Budi</b>?',v:{t:'grid',total:6,colored:2,rows:2},a:'2/6',e:'Total kue = <b>6</b> (penyebut). Kue dimakan = <b>2</b> (pembilang). Jadi pecahannya = <b>2/6</b>.'},s2:{q:'"Ada <b>9 permen</b>. <b>3 permen</b> diberikan ke Doni." Berapakah pecahan permen yang <b>diberikan</b>?',v:{t:'grid',total:9,colored:3,rows:3},a:'3/9',e:'Total permen = <b>9</b> (penyebut). Permen diberikan = <b>3</b> (pembilang). Jadi pecahannya = <b>3/9</b>.'}},
+{id:11,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Di rak ada <b>12 buku</b>. <b>4 buku</b> berwarna merah." Berapakah pecahan buku yang <b>berwarna merah</b>?',v:{t:'grid',total:12,colored:4,rows:3},a:'4/12',e:'Total buku = <b>12</b> (penyebut). Buku merah = <b>4</b> (pembilang). Jadi pecahannya = <b>4/12</b>.'},s2:{q:'"Di rak ada <b>15 pensil</b>. <b>5 pensil</b> berwarna biru." Berapakah pecahan pensil yang <b>berwarna biru</b>?',v:{t:'grid',total:15,colored:5,rows:3},a:'5/15',e:'Total pensil = <b>15</b> (penyebut). Pensil biru = <b>5</b> (pembilang). Jadi pecahannya = <b>5/15</b>.'}},
+{id:12,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Kelas 3 memiliki <b>7 siswa laki-laki</b> dari total <b>20 siswa</b>." Berapakah pecahan siswa <b>laki-laki</b>?',v:null,a:'7/20',e:'Total siswa = <b>20</b> (penyebut). Siswa laki-laki = <b>7</b> (pembilang). Jadi pecahannya = <b>7/20</b>.'},s2:{q:'"Kelas 3 memiliki <b>9 siswa perempuan</b> dari total <b>25 siswa</b>." Berapakah pecahan siswa <b>perempuan</b>?',v:null,a:'9/25',e:'Total siswa = <b>25</b> (penyebut). Siswa perempuan = <b>9</b> (pembilang). Jadi pecahannya = <b>9/25</b>.'}},
+{id:13,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari titik berwarna di bawah:',v:{t:'grid',total:12,colored:5,rows:3},a:'5/12',e:'Total titik = <b>12</b>. Berwarna = <b>5</b>. Pecahannya = <b>5/12</b>.'},s2:{q:'Tulis pecahan dari titik berwarna di bawah:',v:{t:'grid',total:10,colored:4,rows:2},a:'4/10',e:'Total titik = <b>10</b>. Berwarna = <b>4</b>. Pecahannya = <b>4/10</b>.'}},
+{id:14,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Ibu membuat <b>10 kue</b>. <b>4 kue</b> diberikan ke tetangga." Berapa pecahan kue yang <b>tidak diberikan</b>?',v:null,a:'6/10',e:'Total kue = <b>10</b>. Kue diberikan 4, jadi yang tidak diberikan = 10-4 = <b>6</b>. Pecahannya = <b>6/10</b>.'},s2:{q:'"Toko memiliki <b>15 roti</b>. <b>6 roti</b> terjual." Berapa pecahan roti yang <b>belum terjual</b>?',v:null,a:'9/15',e:'Total roti = <b>15</b>. Roti terjual 6, jadi yang belum terjual = 15-6 = <b>9</b>. Pecahannya = <b>9/15</b>.'}},
+{id:15,sec:'A',topic:'Pembilang dari Cerita',type:'direct',s1:{q:'"Dari <b>8 potong pizza</b>, <b>3 potong</b> dimakan." Berapakah <b>pembilang</b> dari pecahan pizza yang dimakan?',v:null,a:'3',e:'Pembilang menunjukkan bagian yang diambil/dimakan, yaitu <b>3</b>.'},s2:{q:'"Dari <b>10 permen</b>, <b>4 permen</b> dimakan." Berapakah <b>pembilang</b> dari pecahan permen yang dimakan?',v:null,a:'4',e:'Pembilang menunjukkan bagian yang diambil/dimakan, yaitu <b>4</b>.'}},
+{id:16,sec:'A',topic:'Penyebut dari Cerita',type:'direct',s1:{q:'"Dari <b>7 apel</b>, <b>2 apel</b> busuk." Berapakah <b>penyebut</b> dari pecahan apel yang busuk?',v:null,a:'7',e:'Penyebut menunjukkan total keseluruhan, yaitu <b>7</b>.'},s2:{q:'"Dari <b>9 murid</b>, <b>5 murid</b> memakai kacamata." Berapakah <b>penyebut</b> dari pecahan murid berkacamata?',v:null,a:'9',e:'Penyebut menunjukkan total keseluruhan, yaitu <b>9</b>.'}},
+{id:17,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari gambar yang berwarna:',v:{t:'pie',n:1,d:4},a:'1/4',e:'Lingkaran dibagi <b>4 bagian</b>. Berwarna <b>1</b>. Pecahannya = <b>1/4</b>.'},s2:{q:'Tulis pecahan dari gambar yang berwarna:',v:{t:'pie',n:1,d:6},a:'1/6',e:'Lingkaran dibagi <b>6 bagian</b>. Berwarna <b>1</b>. Pecahannya = <b>1/6</b>.'}},
+{id:18,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Andi punya <b>9 mobil mainan</b>. <b>4 mobil</b> berwarna merah, sisanya biru." Berapakah pecahan mobil yang <b>biru</b>?',v:null,a:'5/9',e:'Total mobil = <b>9</b>. Merah 4, biru = 9-4 = <b>5</b>. Pecahannya = <b>5/9</b>.'},s2:{q:'"Sari punya <b>11 bola</b>. <b>3 bola</b> putih, sisanya hitam." Berapakah pecahan bola yang <b>hitam</b>?',v:null,a:'8/11',e:'Total bola = <b>11</b>. Putih 3, hitam = 11-3 = <b>8</b>. Pecahannya = <b>8/11</b>.'}},
+{id:19,sec:'A',topic:'Pecahan dari Gambar',type:'fraction',s1:{q:'Tulis pecahan dari balok yang berwarna:',v:{t:'bar',n:5,d:6},a:'5/6',e:'Balok dibagi <b>6 bagian</b>. Berwarna <b>5</b>. Pecahannya = <b>5/6</b>.'},s2:{q:'Tulis pecahan dari balok yang berwarna:',v:{t:'bar',n:4,d:7},a:'4/7',e:'Balok dibagi <b>7 bagian</b>. Berwarna <b>4</b>. Pecahannya = <b>4/7</b>.'}},
+{id:20,sec:'A',topic:'Pecahan dari Cerita',type:'fraction',s1:{q:'"Di kandang ada <b>8 ayam</b>. <b>3 ayam</b> sedang bertelur." Berapakah pecahan ayam yang <b>tidak bertelur</b>?',v:null,a:'5/8',e:'Total ayam = <b>8</b>. Bertelur 3, tidak bertelur = 8-3 = <b>5</b>. Pecahannya = <b>5/8</b>.'},s2:{q:'"Di akuarium ada <b>12 ikan</b>. <b>7 ikan</b> berwarna kuning." Berapakah pecahan ikan yang <b>tidak kuning</b>?',v:null,a:'5/12',e:'Total ikan = <b>12</b>. Kuning 7, tidak kuning = 12-7 = <b>5</b>. Pecahannya = <b>5/12</b>.'}},
+{id:21,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:5,p:2},a:'2/5',e:'Garis dibagi <b>5 bagian</b> sama. Titik di bagian ke-<b>2</b>. Maka pecahannya = <b>2/5</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:6,p:3},a:'3/6',e:'Garis dibagi <b>6 bagian</b> sama. Titik di bagian ke-<b>3</b>. Maka pecahannya = <b>3/6</b>.'}},
+{id:22,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:6,p:4},a:'4/6',e:'Garis dibagi <b>6 bagian</b> sama. Titik di bagian ke-<b>4</b>. Maka pecahannya = <b>4/6</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:7,p:3},a:'3/7',e:'Garis dibagi <b>7 bagian</b> sama. Titik di bagian ke-<b>3</b>. Maka pecahannya = <b>3/7</b>.'}},
+{id:23,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:4,p:2},a:'2/4',e:'Garis dibagi <b>4 bagian</b> sama. Titik di bagian ke-<b>2</b>. Maka pecahannya = <b>2/4</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:3,p:1},a:'1/3',e:'Garis dibagi <b>3 bagian</b> sama. Titik di bagian ke-<b>1</b>. Maka pecahannya = <b>1/3</b>.'}},
+{id:24,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:8,p:3},a:'3/8',e:'Garis dibagi <b>8 bagian</b> sama. Titik di bagian ke-<b>3</b>. Maka pecahannya = <b>3/8</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:8,p:5},a:'5/8',e:'Garis dibagi <b>8 bagian</b> sama. Titik di bagian ke-<b>5</b>. Maka pecahannya = <b>5/8</b>.'}},
+{id:25,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:10,p:3},a:'3/10',e:'Garis dibagi <b>10 bagian</b> sama. Titik di bagian ke-<b>3</b>. Maka pecahannya = <b>3/10</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:12,p:5},a:'5/12',e:'Garis dibagi <b>12 bagian</b> sama. Titik di bagian ke-<b>5</b>. Maka pecahannya = <b>5/12</b>.'}},
+{id:26,sec:'B',topic:'Garis Bilangan',type:'fraction',s1:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:6,p:1},a:'1/6',e:'Garis dibagi <b>6 bagian</b> sama. Titik di bagian ke-<b>1</b>. Maka pecahannya = <b>1/6</b>.'},s2:{q:'Pecahan apa yang ditunjuk titik merah pada garis bilangan di bawah?',v:{t:'nline',d:8,p:2},a:'2/8',e:'Garis dibagi <b>8 bagian</b> sama. Titik di bagian ke-<b>2</b>. Maka pecahannya = <b>2/8</b>.'}},
+{id:27,sec:'B',topic:'Membandingkan',type:'compare',s1:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'2/5',f2:'4/5'},a:'<',e:'Penyebut sama (5). Bandingkan pembilang: <b>2 &lt; 4</b>. Maka <b>2/5 &lt; 4/5</b>.'},s2:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'3/7',f2:'6/7'},a:'<',e:'Penyebut sama (7). Bandingkan pembilang: <b>3 &lt; 6</b>. Maka <b>3/7 &lt; 6/7</b>.'}},
+{id:28,sec:'B',topic:'Membandingkan',type:'compare',s1:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'6/9',f2:'4/9'},a:'>',e:'Penyebut sama (9). Bandingkan pembilang: <b>6 &gt; 4</b>. Maka <b>6/9 &gt; 4/9</b>.'},s2:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'7/10',f2:'3/10'},a:'>',e:'Penyebut sama (10). Bandingkan pembilang: <b>7 &gt; 3</b>. Maka <b>7/10 &gt; 3/10</b>.'}},
+{id:29,sec:'B',topic:'Membandingkan',type:'compare',s1:{q:'Perhatikan gambar. Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare-vis',n1:1,d1:3,n2:2,d2:3},a:'<',e:'Penyebut sama (3). Bandingkan pembilang: <b>1 &lt; 2</b>. Maka <b>1/3 &lt; 2/3</b>.'},s2:{q:'Perhatikan gambar. Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare-vis',n1:2,d1:5,n2:3,d2:5},a:'<',e:'Penyebut sama (5). Bandingkan pembilang: <b>2 &lt; 3</b>. Maka <b>2/5 &lt; 3/5</b>.'}},
+{id:30,sec:'B',topic:'Membandingkan (Cerita)',type:'compare',s1:{q:'"Aldi makan <b>2/8</b> kue, Budi makan <b>3/8</b> kue." Pecahan Aldi dibanding Budi adalah...',v:null,a:'<',e:'Penyebut sama (8). Pembilang Aldi 2, Budi 3. Karena <b>2 &lt; 3</b>, maka <b>2/8 &lt; 3/8</b>. Aldi makan lebih sedikit.'},s2:{q:'"Ana makan <b>4/10</b> pizza, Budi makan <b>6/10</b> pizza." Pecahan Ana dibanding Budi adalah...',v:null,a:'<',e:'Penyebut sama (10). Pembilang Ana 4, Budi 6. Karena <b>4 &lt; 6</b>, maka <b>4/10 &lt; 6/10</b>. Ana makan lebih sedikit.'}},
+{id:31,sec:'B',topic:'Membandingkan',type:'compare',s1:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'5/6',f2:'3/6'},a:'>',e:'Penyebut sama (6). Bandingkan pembilang: <b>5 &gt; 3</b>. Maka <b>5/6 &gt; 3/6</b>.'},s2:{q:'Isi tanda yang tepat: <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>',v:{t:'compare',f1:'4/8',f2:'7/8'},a:'<',e:'Penyebut sama (8). Bandingkan pembilang: <b>4 &lt; 7</b>. Maka <b>4/8 &lt; 7/8</b>.'}},
+{id:32,sec:'B',topic:'Membandingkan (Cerita)',type:'compare',s1:{q:'"Andi menyelesaikan <b>3/5</b> tugas, Budi menyelesaikan <b>3/5</b> tugas." Pecahan Andi dibanding Budi adalah...',v:null,a:'=',e:'Keduanya sama-sama <b>3/5</b>, jadi nilainya sama. Tanda yang tepat adalah <b>=</b>.'},s2:{q:'"Sari minum <b>4/9</b> gelas susu, Rini minum <b>4/9</b> gelas susu." Pecahan Sari dibanding Rini adalah...',v:null,a:'=',e:'Keduanya sama-sama <b>4/9</b>, jadi nilainya sama. Tanda yang tepat adalah <b>=</b>.'}},
+{id:33,sec:'B',topic:'Mengurutkan',type:'order',s1:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['3/6','1/6','5/6','2/6']},a:'BDAC',e:'Penyebut 6 semua. Urutkan pembilang dari kecil: 1, 2, 3, 5 → B(1/6), D(2/6), A(3/6), C(5/6). Jadi urutannya <b>BDAC</b>.'},s2:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['4/9','1/9','7/9','3/9']},a:'BDAC',e:'Penyebut 9 semua. Urutkan pembilang dari kecil: 1, 3, 4, 7 → B(1/9), D(3/9), A(4/9), C(7/9). Jadi urutannya <b>BDAC</b>.'}},
+{id:34,sec:'B',topic:'Mengurutkan',type:'order',s1:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['5/8','2/8','7/8','1/8']},a:'DBAC',e:'Penyebut 8 semua. Urutkan pembilang dari kecil: 1, 2, 5, 7 → D(1/8), B(2/8), A(5/8), C(7/8). Jadi urutannya <b>DBAC</b>.'},s2:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['6/10','3/10','9/10','1/10']},a:'DBAC',e:'Penyebut 10 semua. Urutkan pembilang dari kecil: 1, 3, 6, 9 → D(1/10), B(3/10), A(6/10), C(9/10). Jadi urutannya <b>DBAC</b>.'}},
+{id:35,sec:'B',topic:'Mengurutkan',type:'order',s1:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['4/7','1/7','6/7','2/7']},a:'BDAC',e:'Penyebut 7 semua. Urutkan pembilang dari kecil: 1, 2, 4, 6 → B(1/7), D(2/7), A(4/7), C(6/7). Jadi urutannya <b>BDAC</b>.'},s2:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['5/9','2/9','8/9','3/9']},a:'BDAC',e:'Penyebut 9 semua. Urutkan pembilang dari kecil: 2, 3, 5, 8 → B(2/9), D(3/9), A(5/9), C(8/9). Jadi urutannya <b>BDAC</b>.'}},
+{id:36,sec:'B',topic:'Mengurutkan (Cerita)',type:'order',s1:{q:'"Empat anak memakan kue: A=3/5, B=1/5, C=4/5, D=2/5." Urutkan dari <b>terkecil ke terbesar</b>.',v:{t:'order',fracs:['3/5','1/5','4/5','2/5']},a:'BDAC',e:'Penyebut 5 semua. Urutkan pembilang: 1, 2, 3, 4 → B(1/5), D(2/5), A(3/5), C(4/5). Jadi <b>BDAC</b>.'},s2:{q:'"Empar anak memakan roti: A=4/8, B=1/8, C=6/8, D=2/8." Urutkan dari <b>terkecil ke terbesar</b>.',v:{t:'order',fracs:['4/8','1/8','6/8','2/8']},a:'BDAC',e:'Penyebut 8 semua. Urutkan pembilang: 1, 2, 4, 6 → B(1/8), D(2/8), A(4/8), C(6/8). Jadi <b>BDAC</b>.'}},
+{id:37,sec:'B',topic:'Mengurutkan',type:'order',s1:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['3/10','6/10','1/10','8/10']},a:'CDAB',e:'Penyebut 10 semua. Urutkan pembilang: 1, 3, 6, 8 → C(1/10), A(3/10), B(6/10), D(8/10). Jadi <b>CDAB</b>.'},s2:{q:'Urutkan dari <b>terkecil ke terbesar</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['5/12','1/12','9/12','2/12']},a:'BDAC',e:'Penyebut 12 semua. Urutkan pembilang: 1, 2, 5, 9 → B(1/12), D(2/12), A(5/12), C(9/12). Jadi <b>BDAC</b>.'}},
+{id:38,sec:'B',topic:'Mengurutkan (Terbesar)',type:'order',s1:{q:'Urutkan dari <b>terbesar ke terkecil</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['3/6','1/6','5/6','2/6']},a:'CADB',e:'Penyebut 6 semua. Urutkan pembilang dari besar: 5, 3, 2, 1 → C(5/6), A(3/6), D(2/6), B(1/6). Jadi <b>CADB</b>.'},s2:{q:'Urutkan dari <b>terbesar ke terkecil</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['4/9','1/9','7/9','3/9']},a:'CADB',e:'Penyebut 9 semua. Urutkan pembilang dari besar: 7, 4, 3, 1 → C(7/9), A(4/9), D(3/9), B(1/9). Jadi <b>CADB</b>.'}},
+{id:39,sec:'B',topic:'Mengurutkan (Terbesar)',type:'order',s1:{q:'Urutkan dari <b>terbesar ke terkecil</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['2/8','5/8','1/8','7/8']},a:'DBAC',e:'Penyebut 8 semua. Urutkan pembilang dari besar: 7, 5, 2, 1 → D(7/8), B(5/8), A(2/8), C(1/8). Jadi <b>DBAC</b>.'},s2:{q:'Urutkan dari <b>terbesar ke terkecil</b>! Masukkan huruf pecahan ke kotak yang sesuai.',v:{t:'order',fracs:['3/10','7/10','1/10','9/10']},a:'DBAC',e:'Penyebut 10 semua. Urutkan pembilang dari besar: 9, 7, 3, 1 → D(9/10), B(7/10), A(3/10), C(1/10). Jadi <b>DBAC</b>.'}},
+{id:40,sec:'B',topic:'Mengurutkan (Cerita)',type:'order',s1:{q:'"Tinggi tanuman 4 anak: A=3/4, B=2/4, C=1/4, D=5/4." Urutkan dari <b>terkecil ke terbesar</b>.',v:{t:'order',fracs:['3/4','2/4','1/4','5/4']},a:'CBAD',e:'Penyebut 4 semua. Urutkan pembilang: 1, 2, 3, 5 → C(1/4), B(2/4), A(3/4), D(5/4). Jadi <b>CBAD</b>.'},s2:{q:'"Panjang lompatan 4 anak: A=3/6, B=5/6, C=1/6, D=2/6." Urutkan dari <b>terkecil ke terbesar</b>.',v:{t:'order',fracs:['3/6','5/6','1/6','2/6']},a:'CDAB',e:'Penyebut 6 semua. Urutkan pembilang: 1, 2, 3, 5 → C(1/6), D(2/6), A(3/6), B(5/6). Jadi <b>CDAB</b>.'}},
+{id:41,sec:'C',topic:'Pecahan Senilai',type:'tf',s1:{q:'Apakah pecahan <b>1/2</b> dan <b>2/4</b> senilai?',v:{t:'equiv-vis',n1:1,d1:2,n2:2,d2:4},a:'ya',e:'<b>1/2</b> sama dengan <b>2/4</b> karena jika 1/2 dikalikan 2/2 menjadi 2/4. Jadi <b>Ya</b>, senilai.'},s2:{q:'Apakah pecahan <b>1/3</b> dan <b>2/3</b> senilai?',v:{t:'equiv-vis',n1:1,d1:3,n2:2,d2:3},a:'tidak',e:'<b>1/3</b> tidak sama dengan <b>2/3</b>. Walaupun penyebut sama, pembilangnya beda. Jadi <b>Tidak</b>, tidak senilai.'}},
+{id:42,sec:'C',topic:'Pecahan Senilai',type:'tf',s1:{q:'Apakah pecahan <b>2/4</b> dan <b>4/8</b> senilai?',v:{t:'equiv-vis',n1:2,d1:4,n2:4,d2:8},a:'ya',e:'<b>2/4</b> sama dengan <b>4/8</b> karena jika 2/4 dikalikan 2/2 menjadi 4/8. Jadi <b>Ya</b>, senilai.'},s2:{q:'Apakah pecahan <b>2/4</b> dan <b>4/6</b> senilai?',v:{t:'equiv-vis',n1:2,d1:4,n2:4,d2:6},a:'tidak',e:'<b>2/4</b> tidak sama dengan <b>4/6</b>. Bagian berwarna berbeda. Jadi <b>Tidak</b>, tidak senilai.'}},
+{id:43,sec:'C',topic:'Pecahan Senilai',type:'tf',s1:{q:'Apakah pecahan <b>2/5</b> dan <b>4/10</b> senilai?',v:null,a:'ya',e:'<b>2/5</b> jika dikalikan 2/2 menjadi <b>4/10</b>. Jadi nilainya sama, <b>Ya</b> senilai.'},s2:{q:'Apakah pecahan <b>3/5</b> dan <b>6/10</b> senilai?',v:null,a:'ya',e:'<b>3/5</b> jika dikalikan 2/2 menjadi <b>6/10</b>. Jadi nilainya sama, <b>Ya</b> senilai.'}},
+{id:44,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:2,a2:'?',b2:6},a:'3',e:'1/2 = ?/6. Penyebut 2 jadi 6 → dikali <b>3</b>. Maka pembilang 1 × 3 = <b>3</b>. Jadi 1/2 = <b>3/6</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:3,a2:'?',b2:9},a:'3',e:'1/3 = ?/9. Penyebut 3 jadi 9 → dikali <b>3</b>. Maka pembilang 1 × 3 = <b>3</b>. Jadi 1/3 = <b>3/9</b>.'}},
+{id:45,sec:'C',topic:'Isi Penyebut',type:'direct',s1:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:2,b1:3,a2:4,b2:'?'},a:'6',e:'2/3 = 4/?. Pembilang 2 jadi 4 → dikali <b>2</b>. Maka penyebut 3 × 2 = <b>6</b>. Jadi 2/3 = <b>4/6</b>.'},s2:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:4,a2:2,b2:'?'},a:'8',e:'1/4 = 2/?. Pembilang 1 jadi 2 → dikali <b>2</b>. Maka penyebut 4 × 2 = <b>8</b>. Jadi 1/4 = <b>2/8</b>.'}},
+{id:46,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:3,b1:4,a2:'?',b2:8},a:'6',e:'3/4 = ?/8. Penyebut 4 jadi 8 → dikali <b>2</b>. Maka pembilang 3 × 2 = <b>6</b>. Jadi 3/4 = <b>6/8</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:2,b1:5,a2:'?',b2:10},a:'4',e:'2/5 = ?/10. Penyebut 5 jadi 10 → dikali <b>2</b>. Maka pembilang 2 × 2 = <b>4</b>. Jadi 2/5 = <b>4/10</b>.'}},
+{id:47,sec:'C',topic:'Isi Penyebut',type:'direct',s1:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:2,a2:5,b2:'?'},a:'10',e:'1/2 = 5/?. Pembilang 1 jadi 5 → dikali <b>5</b>. Maka penyebut 2 × 5 = <b>10</b>. Jadi 1/2 = <b>5/10</b>.'},s2:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:3,b1:4,a2:6,b2:'?'},a:'8',e:'3/4 = 6/?. Pembilang 3 jadi 6 → dikali <b>2</b>. Maka penyebut 4 × 2 = <b>8</b>. Jadi 3/4 = <b>6/8</b>.'}},
+{id:48,sec:'C',topic:'Pecahan Senilai (Cerita)',type:'tf',s1:{q:'"Aldi makan <b>1/2</b> kue, Budi makan <b>2/4</b> kue." Apakah mereka makan jumlah yang sama?',v:null,a:'ya',e:'1/2 senilai dengan 2/4. Jadi mereka makan jumlah yang sama. Jawabannya <b>Ya</b>.'},s2:{q:'"Sari minum <b>1/3</b> gelas susu, Rini minum <b>2/6</b> gelas susu." Apakah mereka minum jumlah yang sama?',v:null,a:'ya',e:'1/3 senilai dengan 2/6. Jadi mereka minum jumlah yang sama. Jawabannya <b>Ya</b>.'}},
+{id:49,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:2,b1:5,a2:'?',b2:10},a:'4',e:'2/5 = ?/10. Penyebut 5 jadi 10 → dikali <b>2</b>. Maka pembilang 2 × 2 = <b>4</b>. Jadi 2/5 = <b>4/10</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:3,b1:7,a2:'?',b2:14},a:'6',e:'3/7 = ?/14. Penyebut 7 jadi 14 → dikali <b>2</b>. Maka pembilang 3 × 2 = <b>6</b>. Jadi 3/7 = <b>6/14</b>.'}},
+{id:50,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:4,b1:5,a2:'?',b2:10},a:'8',e:'4/5 = ?/10. Penyebut 5 jadi 10 → dikali <b>2</b>. Maka pembilang 4 × 2 = <b>8</b>. Jadi 4/5 = <b>8/10</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:5,b1:8,a2:'?',b2:16},a:'10',e:'5/8 = ?/16. Penyebut 8 jadi 16 → dikali <b>2</b>. Maka pembilang 5 × 2 = <b>10</b>. Jadi 5/8 = <b>10/16</b>.'}},
+{id:51,sec:'C',topic:'Pecahan Senilai dengan Gambar',type:'tf',s1:{q:'Perhatikan gambar. Apakah kedua pecahan senilai?',v:{t:'equiv-vis',n1:1,d1:2,n2:2,d2:4},a:'ya',e:'Setengah lingkaran (1/2) sama dengan 2/4 bagian lingkaran. Jadi <b>Ya</b>, senilai.'},s2:{q:'Perhatikan gambar. Apakah kedua pecahan senilai?',v:{t:'equiv-vis',n1:1,d1:3,n2:2,d2:6},a:'ya',e:'Sepertiga (1/3) sama dengan 2/6 bagian lingkaran. Jadi <b>Ya</b>, senilai.'}},
+{id:52,sec:'C',topic:'Pecahan Senilai dengan Gambar',type:'tf',s1:{q:'Perhatikan gambar. Apakah kedua pecahan senilai?',v:{t:'equiv-vis',n1:2,d1:3,n2:3,d2:4},a:'tidak',e:'2/3 dan 3/4 memiliki bagian berwarna yang berbeda. Jadi <b>Tidak</b>, tidak senilai.'},s2:{q:'Perhatikan gambar. Apakah kedua pecahan senilai?',v:{t:'equiv-vis',n1:1,d1:2,n2:3,d2:5},a:'tidak',e:'1/2 dan 3/5 memiliki bagian berwarna yang berbeda. Jadi <b>Tidak</b>, tidak senilai.'}},
+{id:53,sec:'C',topic:'Isi Penyebut',type:'direct',s1:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:2,b1:3,a2:8,b2:'?'},a:'12',e:'2/3 = 8/?. Pembilang 2 jadi 8 → dikali <b>4</b>. Maka penyebut 3 × 4 = <b>12</b>. Jadi 2/3 = <b>8/12</b>.'},s2:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:4,b1:5,a2:8,b2:'?'},a:'10',e:'4/5 = 8/?. Pembilang 4 jadi 8 → dikali <b>2</b>. Maka penyebut 5 × 2 = <b>10</b>. Jadi 4/5 = <b>8/10</b>.'}},
+{id:54,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:3,b1:4,a2:'?',b2:12},a:'9',e:'3/4 = ?/12. Penyebut 4 jadi 12 → dikali <b>3</b>. Maka pembilang 3 × 3 = <b>9</b>. Jadi 3/4 = <b>9/12</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:2,b1:3,a2:'?',b2:9},a:'6',e:'2/3 = ?/9. Penyebut 3 jadi 9 → dikali <b>3</b>. Maka pembilang 2 × 3 = <b>6</b>. Jadi 2/3 = <b>6/9</b>.'}},
+{id:55,sec:'C',topic:'Pecahan Senilai (Cerita)',type:'tf',s1:{q:'"Andi makan <b>1/2</b> kue, Budi makan <b>2/4</b> kue, Cici makan <b>3/6</b> kue." Apakah mereka makan jumlah yang sama?',v:null,a:'ya',e:'1/2 = 2/4 = 3/6. Ketiganya senilai. Jadi mereka makan jumlah yang sama. Jawabannya <b>Ya</b>.'},s2:{q:'"Sari makan <b>1/4</b> pizza, Budi makan <b>2/8</b> pizza, Cici makan <b>3/10</b> pizza." Apakah mereka makan jumlah yang sama?',v:null,a:'tidak',e:'1/4 = 2/8, tapi 3/10 tidak senilai dengan keduanya. Jadi tidak semua makan jumlah yang sama. Jawabannya <b>Tidak</b>.'}},
+{id:56,sec:'C',topic:'Isi Pembilang',type:'direct',s1:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:5,a2:'?',b2:15},a:'3',e:'1/5 = ?/15. Penyebut 5 jadi 15 → dikali <b>3</b>. Maka pembilang 1 × 3 = <b>3</b>. Jadi 1/5 = <b>3/15</b>.'},s2:{q:'Isi pembilang yang tepat agar pecahan senilai:',v:{t:'equiv',a1:1,b1:6,a2:'?',b2:12},a:'2',e:'1/6 = ?/12. Penyebut 6 jadi 12 → dikali <b>2</b>. Maka pembilang 1 × 2 = <b>2</b>. Jadi 1/6 = <b>2/12</b>.'}},
+{id:57,sec:'C',topic:'Isi Penyebut',type:'direct',s1:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:3,b1:5,a2:9,b2:'?'},a:'15',e:'3/5 = 9/?. Pembilang 3 jadi 9 → dikali <b>3</b>. Maka penyebut 5 × 3 = <b>15</b>. Jadi 3/5 = <b>9/15</b>.'},s2:{q:'Isi penyebut yang tepat agar pecahan senilai:',v:{t:'equiv',a1:4,b1:6,a2:8,b2:'?'},a:'12',e:'4/6 = 8/?. Pembilang 4 jadi 8 → dikali <b>2</b>. Maka penyebut 6 × 2 = <b>12</b>. Jadi 4/6 = <b>8/12</b>.'}},
+{id:58,sec:'C',topic:'Apakah Senilai?',type:'tf',s1:{q:'Apakah pecahan <b>2/6</b> dan <b>1/3</b> senilai?',v:null,a:'ya',e:'2/6 jika dibagi 2/2 menjadi 1/3. Jadi nilainya sama, <b>Ya</b> senilai.'},s2:{q:'Apakah pecahan <b>3/9</b> dan <b>1/3</b> senilai?',v:null,a:'ya',e:'3/9 jika dibagi 3/3 menjadi 1/3. Jadi nilainya sama, <b>Ya</b> senilai.'}},
+{id:59,sec:'C',topic:'Bentuk Paling Sederhana',type:'fraction',s1:{q:'Tulis bentuk paling sederhana dari pecahan <b>2/4</b>:',v:null,a:'1/2',e:'2/4 jika dibagi 2/2 menjadi <b>1/2</b>. Itulah bentuk paling sederhananya.'},s2:{q:'Tulis bentuk paling sederhana dari pecahan <b>4/6</b>:',v:null,a:'2/3',e:'4/6 jika dibagi 2/2 menjadi <b>2/3</b>. Itulah bentuk paling sederhananya.'}},
+{id:60,sec:'C',topic:'Pecahan Senilai (Cerita)',type:'tf',s1:{q:'"Aldi makan <b>2/4</b> bagian kue, Budi makan <b>1/2</b> bagian kue." Apakah mereka makan jumlah yang sama?',v:null,a:'ya',e:'2/4 senilai dengan 1/2. Jadi mereka makan jumlah yang sama. Jawabannya <b>Ya</b>.'},s2:{q:'"Ana minum <b>3/9</b> gelas susu, Budi minum <b>1/3</b> gelas susu." Apakah mereka minum jumlah yang sama?',v:null,a:'ya',e:'3/9 senilai dengan 1/3. Jadi mereka minum jumlah yang sama. Jawabannya <b>Ya</b>.'}}
+];
+
+function initMaterialVisuals(){
+document.getElementById('heroPie1').innerHTML=pieSVG(1,2,'#FF6B4A');
+document.getElementById('heroPie2').innerHTML=pieSVG(2,4,'#FFC542');
+document.getElementById('heroPie3').innerHTML=pieSVG(3,6,'#1A9B8E');
+document.getElementById('mat1Pie').innerHTML=pieSVG(3,4,'#FF6B4A');
+document.getElementById('mat2Pie').innerHTML=pieSVG(4,6,'#FF6B4A');
+document.getElementById('mat3Line').innerHTML=`<div style="display:flex;justify-content:center;padding:1rem 0;">${numberLineSVG(4,2,'#FF6B4A')}</div>`;
+document.getElementById('mat4PieA').innerHTML=pieSVG(2,5,'#FF6B4A');
+document.getElementById('mat4PieB').innerHTML=pieSVG(4,5,'#FF6B4A');
+document.getElementById('mat6Pie1').innerHTML=pieSVG(1,2,'#FF6B4A');
+document.getElementById('mat6Pie2').innerHTML=pieSVG(2,4,'#FFC542');
+document.getElementById('mat6Pie3').innerHTML=pieSVG(4,8,'#1A9B8E');
+}
+
+function goToSlide(idx){
+document.querySelectorAll('.slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+state.currentSlide=idx;
+updateNav();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextSlide(){if(state.currentSlide<state.totalSlides-1)goToSlide(state.currentSlide+1);}
+function prevSlide(){if(state.currentSlide>0)goToSlide(state.currentSlide-1);}
+function updateNav(){
+const titles=['Cover','Materi 1','Materi 2','Materi 3','Materi 4','Materi 5','Materi 6','Latihan Soal','Hasil','Refleksi'];
+document.getElementById('slideLabel').textContent=titles[state.currentSlide]||'';
+document.getElementById('slideNum').textContent=(state.currentSlide+1)+'/'+state.totalSlides;
+document.getElementById('prevBtn').style.visibility=state.currentSlide===0?'hidden':'visible';
+document.getElementById('nextBtn').style.display=state.currentSlide===state.totalSlides-1?'none':'inline-flex';
+}
+
+function checkNames(){
+const n1=document.getElementById('name1').value.trim();
+const n2=document.getElementById('name2').value.trim();
+const btn=document.getElementById('startBtn');
+const hint=document.getElementById('startHint');
+if(n1&&n2){btn.disabled=false;hint.textContent='Tombol sudah bisa ditekan, yuk mulai!';hint.style.color='var(--success)';}
+else{btn.disabled=true;hint.textContent='Isi kedua nama dulu untuk memulai';hint.style.color='var(--muted)';}
+}
+function startApp(){
+state.student1Name=document.getElementById('name1').value.trim();
+state.student2Name=document.getElementById('name2').value.trim();
+document.getElementById('resName1').textContent=state.student1Name;
+document.getElementById('resName2').textContent=state.student2Name;
+document.getElementById('reviewName1').textContent=state.student1Name;
+document.getElementById('reviewName2').textContent=state.student2Name;
+document.getElementById('reflName1').textContent=state.student1Name;
+document.getElementById('reflName2').textContent=state.student2Name;
+document.getElementById('resAva1').textContent=state.student1Name.charAt(0).toUpperCase();
+document.getElementById('resAva2').textContent=state.student2Name.charAt(0).toUpperCase();
+document.getElementById('reflAva1').textContent=state.student1Name.charAt(0).toUpperCase();
+document.getElementById('reflAva2').textContent=state.student2Name.charAt(0).toUpperCase();
+buildQNav();
+goToSlide(1);
+}
+
+function buildQNav(){
+const grid=document.getElementById('qNavGrid');
+grid.innerHTML='';
+QUESTIONS.forEach((q,i)=>{
+const btn=document.createElement('button');
+btn.className=`q-nav-btn section-${q.sec.toLowerCase()}`;
+btn.textContent=i+1;
+btn.onclick=()=>loadQuestion(i);
+btn.id='qnav-'+i;
+grid.appendChild(btn);
+});
+}
+function switchSection(sec){
+state.currentSec=sec;
+document.getElementById('tabA').className='sec-tab'+(sec==='A'?' active-a':'');
+document.getElementById('tabB').className='sec-tab'+(sec==='B'?' active-b':'');
+document.getElementById('tabC').className='sec-tab'+(sec==='C'?' active-c':'');
+const startIdx=sec==='A'?0:sec==='B'?20:40;
+loadQuestion(startIdx);
+}
+function updateQNavStatus(){
+QUESTIONS.forEach((q,i)=>{
+const btn=document.getElementById('qnav-'+i);
+if(!btn)return;
+btn.classList.remove('active','correct-1','wrong-1','correct-2','wrong-2');
+if(i===state.currentQ){
+btn.classList.add('active');
+if(state.currentSec==='B')btn.classList.add('s2-act');
+}
+if(state.answers[q.id]&&state.answers[q.id][1]&&state.answers[q.id][1].checked){
+btn.classList.add(state.answers[q.id][1].correct?'correct-1':'wrong-1');
+}
+if(state.answers[q.id]&&state.answers[q.id][2]&&state.answers[q.id][2].checked){
+btn.classList.add(state.answers[q.id][2].correct?'correct-2':'wrong-2');
+}
+});
+}
+function loadQuestion(idx){
+state.currentQ=idx;
+const q=QUESTIONS[idx];
+state.currentSec=q.sec;
+document.getElementById('tabA').className='sec-tab'+(q.sec==='A'?' active-a':'');
+document.getElementById('tabB').className='sec-tab'+(q.sec==='B'?' active-b':'');
+document.getElementById('tabC').className='sec-tab'+(q.sec==='C'?' active-c':'');
+const secTitle=q.sec==='A'?'Bagian A • Pembilang, Penyebut & Membentuk Pecahan':q.sec==='B'?'Bagian B • Garis Bilangan, Membandingkan & Mengurutkan':'Bagian C • Pecahan Senilai';
+const s1Name=state.student1Name,s2Name=state.student2Name;
+const s1Initial=s1Name.charAt(0).toUpperCase(),s2Initial=s2Name.charAt(0).toUpperCase();
+const renderBlock=(sid)=>{
+const sd=q['s'+sid];
+const qText=sd.q.startsWith('"')?`<div style="background:linear-gradient(135deg,${sid===1?'#FFF8E8,#FFEFD5':'#EAF7F5,#D5EDE9'});border-radius:12px;padding:0.75rem 1rem;margin-bottom:0.75rem;"><p style="font-size:0.95rem;font-style:italic;">${sd.q}</p></div>`:`<p style="font-size:0.95rem;margin-bottom:0.75rem;">${sd.q}</p>`;
+return `<div class="student-col s${sid}">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;"><div class="student-avatar avatar-${sid}">${sid===1?s1Initial:s2Initial}</div><div><div class="display-font" style="font-weight:bold;font-size:1rem;">${sid===1?s1Name:s2Name}</div><div style="font-size:0.75rem;color:var(--muted);">Soal ${q.id} untukmu</div></div></div>
+ ${qText}
+ ${renderVisual(sd.v,sid,q.id)}
+ ${renderInput(q,sid)}
+</div>`;
+};
+document.getElementById('questionArea').innerHTML=`
+<div style="text-align:center;margin-bottom:1rem;">
+<div class="topic-badge">SOAL ${q.id} • ${q.topic.toUpperCase()}</div>
+<div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem;font-weight:700;">${secTitle}</div>
+</div>
+<div class="grid-students">
+ ${renderBlock(1)}
+ ${renderBlock(2)}
+</div>`;
+[1,2].forEach(sid=>{
+const ans=state.answers[q.id]&&state.answers[q.id][sid];
+if(ans){
+restoreAnswer(q,sid,ans.value);
+}
+});
+updateQNavStatus();
+}
+
+function restoreAnswer(q,sid,value){
+if(!value)return;
+if(q.type==='direct'||q.type==='fraction'){
+const el=document.getElementById(`q${q.id}s${sid}`);
+if(el)el.value=value;
+}else if(q.type==='compare'){
+setCompare(q.id,sid,value);
+}else if(q.type==='tf'){
+setTF(q.id,sid,value);
+}else if(q.type==='order'){
+[0,1,2,3].forEach(i=>{const el=document.getElementById(`q${q.id}s${sid}${'abcd'[i]}`);if(el)el.value=value[i]||'';});
+}
+}
+
+function getAnswerValue(qid,sid){
+const q=QUESTIONS.find(x=>x.id===qid);
+if(q.type==='compare'||q.type==='tf'){
+return document.getElementById(`q${qid}s${sid}`).value;
+}else if(q.type==='order'){
+let r='';
+[0,1,2,3].forEach(i=>{const el=document.getElementById(`q${qid}s${sid}${'abcd'[i]}`);r+=(el?el.value:'').toUpperCase();});
+return r;
+}else{
+return document.getElementById(`q${qid}s${sid}`).value.trim();
+}
+}
+function normalizeAnswer(val){
+return String(val).replace(/\s/g,'').replace(/,/g,'').toLowerCase();
+}
+function checkAnswer(qid,sid){
+const q=QUESTIONS.find(x=>x.id===qid);
+const userAns=getAnswerValue(qid,sid);
+const correctAns=q['s'+sid].a;
+if(!userAns){alert('Isi jawaban dulu ya!');return;}
+const isCorrect=normalizeAnswer(userAns)===normalizeAnswer(correctAns);
+const fb=document.getElementById(`fb${qid}s${sid}`);
+fb.classList.remove('correct','wrong');
+fb.classList.add(isCorrect?'correct':'wrong','show');
+fb.innerHTML=isCorrect?`<b>Hebat!</b> Jawabanmu benar. ✅`:`<b>Belum tepat.</b> Coba lihat pembahasannya ya. ❌`;
+if(!state.answers[qid])state.answers[qid]={};
+state.answers[qid][sid]={value:userAns,checked:true,correct:isCorrect,topic:q.topic,sec:q.sec};
+fb.style.animation='none';void fb.offsetWidth;fb.style.animation='pop 0.3s ease';
+if(isCorrect)burstConfetti(2);
+updateQNavStatus();
+}
+function toggleExplanation(qid,sid){
+const q=QUESTIONS.find(x=>x.id===qid);
+const ex=document.getElementById(`ex${qid}s${sid}`);
+if(ex.classList.contains('show')){ex.classList.remove('show');return;}
+ex.innerHTML=`<b>Pembahasan:</b><br>${q['s'+sid].e}`;
+ex.classList.add('show');
+}
+
+function setCompare(qid,sid,sym){
+document.getElementById(`q${qid}s${sid}`).value=sym;
+const disp=document.getElementById(`cmp-disp-${qid}-${sid}`);
+if(disp)disp.textContent=sym;
+document.querySelectorAll(`[data-cmp="${qid}-${sid}"]`).forEach(b=>{
+b.classList.toggle('selected',b.textContent===sym);
+});
+}
+function setTF(qid,sid,val){
+document.getElementById(`q${qid}s${sid}`).value=val;
+document.querySelectorAll(`[data-tf="${qid}-${sid}"]`).forEach(b=>{
+b.classList.toggle('selected',b.textContent.toLowerCase()===val);
+});
+}
+
+function finishExam(){
+let s1C=0,s1W=0,s2C=0,s2W=0,s1Sec={A:0,B:0,C:0},s2Sec={A:0,B:0,C:0};
+let s1Topics={},s2Topics={};
+QUESTIONS.forEach(q=>{
+const a1=state.answers[q.id]&&state.answers[q.id][1];
+const a2=state.answers[q.id]&&state.answers[q.id][2];
+if(a1&&a1.checked&&a1.correct){s1C++;s1Sec[q.sec]++;}else{s1W++;}
+if(a2&&a2.checked&&a2.correct){s2C++;s2Sec[q.sec]++;}else{s2W++;}
+const t1=a1&&!a1.correct?1:0;
+const t2=a2&&!a2.correct?1:0;
+s1Topics[q.topic]=(s1Topics[q.topic]||0)+t1;
+s2Topics[q.topic]=(s2Topics[q.topic]||0)+t2;
+});
+const s1Score=Math.round(s1C/60*100),s2Score=Math.round(s2C/60*100);
+animateNumber('score1',0,s1Score,1000);
+animateNumber('score2',0,s2Score,1000);
+document.getElementById('correct1').textContent=s1C;
+document.getElementById('wrong1').textContent=s1W;
+document.getElementById('correct2').textContent=s2C;
+document.getElementById('wrong2').textContent=s2W;
+document.getElementById('secA1').textContent=s1Sec.A;
+document.getElementById('secB1').textContent=s1Sec.B;
+document.getElementById('secC1').textContent=s1Sec.C;
+document.getElementById('secA2').textContent=s2Sec.A;
+document.getElementById('secB2').textContent=s2Sec.B;
+document.getElementById('secC2').textContent=s2Sec.C;
+setTimeout(()=>{
+document.getElementById('bar1').style.width=s1Score+'%';
+document.getElementById('bar2').style.width=s2Score+'%';
+},200);
+document.getElementById('evalMsg1').textContent=getEval(s1Score);
+document.getElementById('evalMsg2').textContent=getEval(s2Score);
+buildReviewList('reviewList1',s1Topics);
+buildReviewList('reviewList2',s2Topics);
+goToSlide(8);
+setTimeout(()=>burstConfetti(40),400);
+}
+function getEval(s){
+if(s>=90)return'Luar biasa! Kamu sudah sangat paham pecahan!';
+if(s>=75)return'Bagus sekali! Tinggal sedikit lagi untuk sempurna.';
+if(s>=60)return'Cukup baik! Yuk ulas lagi bagian yang masih salah.';
+if(s>=40)return'Tetap semangat! Dengan latihan lagi pasti bisa.';
+return'Jangan menyerah! Yuk ulas materi dari awal bareng teman.';
+}
+function buildReviewList(elId,topics){
+const el=document.getElementById(elId);
+el.innerHTML='';
+const allTopics=['Pembilang','Penyebut','Pecahan dari Gambar','Pecahan dari Cerita','Garis Bilangan','Membandingkan','Membandingkan (Cerita)','Mengurutkan','Mengurutkan (Cerita)','Mengurutkan (Terbesar)','Pecahan Senilai','Pecahan Senilai (Cerita)','Pecahan Senilai dengan Gambar','Isi Pembilang','Isi Penyebut','Bentuk Paling Sederhana','Apakah Senilai?','Pembilang dari Cerita','Penyebut dari Cerita'];
+let hasWrong=false;
+allTopics.forEach(t=>{
+const wrong=topics[t]||0;
+if(wrong>0){
+hasWrong=true;
+const div=document.createElement('div');
+div.className='review-item review-need';
+div.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="#E63946" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div>${t}</div><div style="font-size:0.75rem;font-weight:400;color:var(--muted);">${wrong} soal salah • Perlu diulas</div></div>`;
+el.appendChild(div);
+}
+});
+if(!hasWrong){
+const div=document.createElement('div');
+div.className='review-item review-good';
+div.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#2BA84A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div>Semua sudah benar!</div><div style="font-size:0.75rem;font-weight:400;color:var(--muted);">Paham semua materi</div></div>`;
+el.appendChild(div);
+}
+}
+function animateNumber(elId,from,to,duration){
+const el=document.getElementById(elId);
+const start=performance.now();
+function step(now){
+const t=Math.min((now-start)/duration,1);
+el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-t,3)));
+if(t<1)requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+}
+
+function burstConfetti(count){
+const colors=['#FF6B4A','#FFC542','#1A9B8E','#4FC0B5','#E04A2A'];
+for(let i=0;i<count;i++){
+const p=document.createElement('div');
+p.className='confetti-piece';
+p.style.left=Math.random()*100+'vw';
+p.style.background=colors[Math.floor(Math.random()*colors.length)];
+p.style.animationDelay=(Math.random()*0.5)+'s';
+p.style.borderRadius=Math.random()>0.5?'50%':'2px';
+p.style.width=(8+Math.random()*8)+'px';
+p.style.height=p.style.width;
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),4000);
+}
+}
+
+function initBgShapes(){
+const c=document.getElementById('bgShapes');
+const shapes=[
+{x:5,y:15,size:60,color:'#FF6B4A',type:'circle',delay:'0s'},
+{x:92,y:25,size:50,color:'#1A9B8E',type:'square',delay:'2s'},
+{x:15,y:70,size:70,color:'#FFC542',type:'triangle',delay:'1s'},
+{x:85,y:75,size:80,color:'#FF6B4A',type:'circle',delay:'3s'},
+{x:50,y:8,size:40,color:'#1A9B8E',type:'square',delay:'1.5s'}
+];
+shapes.forEach(s=>{
+const d=document.createElement('div');
+d.className='bg-shape';
+d.style.left=s.x+'%';d.style.top=s.y+'%';d.style.animationDelay=s.delay;
+let svg='';
+if(s.type==='circle')svg=`<svg width="${s.size}" height="${s.size}" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="${s.color}" opacity="0.15"/><circle cx="50" cy="50" r="35" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.25"/></svg>`;
+else if(s.type==='square')svg=`<svg width="${s.size}" height="${s.size}" viewBox="0 0 100 100"><rect x="15" y="15" width="70" height="70" rx="14" fill="${s.color}" opacity="0.15"/><rect x="25" y="25" width="50" height="50" rx="10" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.25"/></svg>`;
+else svg=`<svg width="${s.size}" height="${s.size}" viewBox="0 0 100 100"><path d="M50 10 L90 85 L10 85 Z" fill="${s.color}" opacity="0.15"/><path d="M50 25 L80 80 L20 80 Z" fill="none" stroke="${s.color}" stroke-width="2" opacity="0.25"/></svg>`;
+d.innerHTML=svg;c.appendChild(d);
+});
+}
+
+function restart(){
+if(!confirm('Yakin ingin memulai dari awal? Semua jawaban akan direset.'))return;
+state.answers={};
+document.querySelectorAll('input[type="text"]').forEach(i=>{if(i.id.startsWith('q'))i.value='';});
+document.querySelectorAll('input[type="hidden"]').forEach(i=>i.value='');
+document.querySelectorAll('.reflection-area').forEach(t=>t.value='');
+goToSlide(0);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+initBgShapes();
+initMaterialVisuals();
+updateNav();
+document.getElementById('name1').addEventListener('input',checkNames);
+document.getElementById('name2').addEventListener('input',checkNames);
+document.getElementById('name1').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('name2').focus();});
+document.getElementById('name2').addEventListener('keydown',e=>{if(e.key==='Enter'&&!document.getElementById('startBtn').disabled)startApp();});
+document.getElementById('startBtn').addEventListener('click',startApp);
+});
+</script>
+</body>
+</html>
