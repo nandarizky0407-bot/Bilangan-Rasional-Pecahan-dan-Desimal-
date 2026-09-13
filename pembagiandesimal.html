@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Si Koma — Membagi Desimal · Kelas 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --paper:#FAF1DE; --ink:#2E2318; --card:#FFFBF2;
+  --orange:#F4633A; --orange-l:#FDE0D6;
+  --green:#1E7A5A; --green-l:#DFF0E7;
+  --yellow:#F6B73C; --yellow-l:#FCEDCB;
+  --pink:#E85D75; --pink-l:#FBE2E8;
+  --shadow:6px 6px 0 var(--ink);
+  --shadow-sm:4px 4px 0 var(--ink);
+  --r:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Quicksand',sans-serif;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(#EADBBB 1.5px, transparent 1.6px);
+  background-size:26px 26px;overflow:hidden}
+::selection{background:var(--yellow)}
+h1,h2,h3,.disp{font-family:'Fredoka',sans-serif}
+button{font-family:inherit;cursor:pointer}
+input,textarea{font-family:inherit}
+i[data-lucide]{width:1.15em;height:1.15em;vertical-align:-.22em}
+
+#progressWrap{position:fixed;top:0;left:0;right:0;height:6px;background:#E8D9B5;z-index:60}
+#progressBar{height:100%;width:0;background:var(--orange);transition:width .4s cubic-bezier(.2,.8,.2,1);border-radius:0 4px 4px 0}
+.topbar{position:fixed;top:6px;left:0;right:0;height:52px;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:50;pointer-events:none}
+.topbar > *{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:600;font-size:1.05rem}
+.brand svg{width:30px;height:34px}
+#chapterLabel{font-size:.85rem;font-weight:700;background:var(--card);border:2.5px solid var(--ink);border-radius:999px;padding:5px 14px;box-shadow:3px 3px 0 var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44vw}
+.topbar .spacer{flex:1}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:2.5px solid var(--ink);background:var(--card);display:inline-flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--ink);transition:transform .12s, box-shadow .12s;color:var(--ink)}
+.iconbtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.iconbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+#deck{position:fixed;top:60px;bottom:72px;left:0;right:0}
+.slide{position:absolute;inset:0;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .45s,transform .45s,visibility .45s}
+.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+.wrap{min-height:100%;width:min(1160px,93vw);margin:0 auto;display:flex;flex-direction:column;justify-content:center;padding:1.6rem 0 2.4rem}
+
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.slide.active .a{animation:rise .6s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
+
+.navbar{position:fixed;bottom:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:50}
+#slideCounter{font-family:'Fredoka';font-weight:600;background:var(--ink);color:var(--paper);border-radius:999px;padding:7px 18px;font-size:.95rem}
+.navbtns{display:flex;gap:12px}
+.navbtn{height:48px;min-width:48px;padding:0 18px;border-radius:16px;border:3px solid var(--ink);background:var(--yellow);box-shadow:var(--shadow-sm);font-family:'Fredoka';font-weight:600;font-size:1rem;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,box-shadow .12s}
+.navbtn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.navbtn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.navbtn:disabled{opacity:.35;cursor:not-allowed}
+.navbtn.next{background:var(--orange);color:#fff}
+.navbtn.next:hover:not(:disabled){background:#ff7450}
+
+#drawer{position:fixed;top:0;right:-360px;width:340px;max-width:88vw;height:100%;background:var(--card);border-left:4px solid var(--ink);z-index:80;transition:right .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+#drawer.open{right:0}
+#drawer header{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:3px dashed var(--ink)}
+#drawer h3{font-size:1.15rem}
+#drawerList{flex:1;overflow-y:auto;padding:12px}
+.dl-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;border-radius:12px;padding:10px 12px;font-weight:600;font-size:.95rem;color:var(--ink)}
+.dl-item:hover{background:var(--yellow-l)}
+.dl-item.now{background:var(--orange);color:#fff}
+.dl-item .num{font-family:'Fredoka';width:30px;height:30px;border:2.5px solid currentColor;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;flex:none}
+#backdrop{position:fixed;inset:0;background:rgba(46,35,24,.35);opacity:0;visibility:hidden;transition:.3s;z-index:70}
+#backdrop.show{opacity:1;visibility:visible}
+
+#toasts{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
+.toast{background:var(--ink);color:var(--paper);font-weight:700;padding:11px 22px;border-radius:14px;box-shadow:var(--shadow-sm);display:flex;gap:10px;align-items:center;animation:rise .4s both;font-size:.95rem;max-width:86vw}
+.toast.ok{background:var(--green)}
+.toast.err{background:var(--pink)}
+
+.kicker{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:6px 14px;border-radius:999px;width:max-content}
+.kicker.alt{background:var(--green)}
+.kicker.pink{background:var(--pink)}
+.kicker.yel{background:var(--yellow);color:var(--ink)}
+h2.title{font-size:clamp(1.7rem,3.4vw,2.6rem);font-weight:600;line-height:1.15;margin:.7rem 0 .4rem}
+p.sub{font-size:1.02rem;font-weight:500;max-width:62ch;color:#5c4d3d}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:1.4rem}
+.btn{display:inline-flex;align-items:center;gap:9px;border:3px solid var(--ink);border-radius:14px;padding:11px 20px;font-family:'Fredoka';font-weight:600;font-size:1rem;background:var(--card);box-shadow:var(--shadow-sm);transition:transform .12s,box-shadow .12s;color:var(--ink)}
+.btn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.primary{background:var(--orange);color:#fff}
+.btn.green{background:var(--green);color:#fff}
+.btn.yellow{background:var(--yellow)}
+.btn.pink{background:var(--pink);color:#fff}
+.chip{display:inline-flex;align-items:center;gap:7px;border:2.5px solid var(--ink);border-radius:999px;padding:5px 13px;font-weight:700;font-size:.85rem;background:var(--card)}
+.numinput{border:3px solid var(--ink);border-radius:14px;padding:11px 14px;font-family:'Fredoka';font-size:1.25rem;font-weight:600;width:150px;background:#fff;text-align:center}
+.numinput:focus{outline:4px solid var(--yellow);outline-offset:2px}
+.unitlbl{font-family:'Fredoka';font-weight:600;font-size:1.15rem;margin-left:8px}
+.fb{margin-top:12px;border-radius:14px;padding:11px 15px;font-weight:700;display:none;border:3px solid var(--ink)}
+.fb.show{display:flex;gap:9px;align-items:flex-start;animation:rise .35s both}
+.fb.good{background:var(--green-l);border-color:var(--green);color:var(--green)}
+.fb.bad{background:var(--pink-l);border-color:var(--pink);color:#b3314b}
+.kiki{width:110px;height:130px;flex:none}
+.floaty{animation:bob 3.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.blink{animation:blink 4.2s infinite;transform-origin:center}
+@keyframes popIn{0%{transform:scale(.4)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+#s-cover .wrap{justify-content:center;gap:2rem}
+.cover-grid{display:grid;grid-template-columns:1.25fr .85fr;gap:2.5rem;align-items:center}
+.cover-title{font-size:clamp(2.6rem,6.4vw,4.7rem);font-weight:700;line-height:1.02;margin:.6rem 0 1rem}
+.cover-title .koma-akses{color:var(--orange)}
+.cover-sub{font-size:1.08rem;font-weight:600;max-width:48ch;color:#5c4d3d}
+.cover-chips{display:flex;flex-wrap:wrap;gap:10px;margin:1.1rem 0 1.4rem}
+.cover-actions{display:flex;flex-wrap:wrap;gap:14px}
+.mascot-stage{position:relative;display:flex;justify-content:center}
+.mascot-stage .kiki{width:min(240px,34vw);height:auto}
+.fdec{position:absolute;font-family:'Fredoka';font-weight:700;background:var(--card);border:3px solid var(--ink);border-radius:14px;padding:6px 13px;box-shadow:var(--shadow-sm);font-size:1.05rem;animation:bob 4s ease-in-out infinite}
+.fdec:nth-child(2){top:2%;left:-2%;background:var(--yellow-l);animation-delay:.4s}
+.fdec:nth-child(3){top:16%;right:-4%;background:var(--green-l);color:var(--green);animation-delay:1.1s;animation-duration:4.6s}
+.fdec:nth-child(4){bottom:12%;left:-6%;background:var(--pink-l);color:var(--pink);animation-delay:1.7s;animation-duration:5s}
+.marquee{margin-top:1.4rem;background:var(--yellow);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);overflow:hidden;padding:9px 0;transform:rotate(-1deg)}
+.marquee-in{display:inline-block;white-space:nowrap;font-family:'Fredoka';font-weight:600;font-size:1rem;animation:mq 22s linear infinite}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.fliprow{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:1.6rem}
+.flip{flex:1;min-width:230px;max-width:320px;height:280px;perspective:1100px;cursor:pointer;position:relative;z-index:3}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .65s cubic-bezier(.3,.9,.3,1);transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:1.2rem;text-align:center}
+.face.front{background:var(--card)}
+.face.front .fic{width:64px;height:64px;border-radius:50%;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center}
+.face.front .fic i{width:30px;height:30px}
+.face.front h3{font-size:1.2rem}
+.face.front span{font-size:.82rem;font-weight:700;color:#8a7a63}
+.face.back{transform:rotateY(180deg);color:#fff}
+.face.back p{font-weight:700;font-size:1.02rem;line-height:1.45}
+.face.back .revealme{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.flip:nth-child(1) .face.back{background:var(--orange)}
+.flip:nth-child(2) .face.back{background:var(--green)}
+.flip:nth-child(3) .face.back{background:var(--pink)}
+
+.pizza-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:2.2rem;align-items:center;margin-top:1.4rem}
+.pizzas{display:flex;gap:16px;flex-wrap:wrap}
+.pz{width:120px;height:120px}
+.kids{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.kid{border:3px solid var(--ink);border-radius:16px;background:var(--card);padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-sm);opacity:0;transform:translateY(10px);transition:.45s}
+.kid.on{opacity:1;transform:none}
+.kid b{font-family:'Fredoka'}
+.pstep{display:none;border-left:6px solid var(--orange);padding:4px 0 4px 16px;margin-top:14px}
+.pstep.on{display:block;animation:rise .5s both}
+.pstep h3{font-size:1.25rem;margin-bottom:4px}
+.big-reveal{margin-top:18px;background:var(--green);color:#fff;border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 20px;font-family:'Fredoka';font-size:1.35rem;font-weight:700;display:none;align-items:center;gap:12px}
+.big-reveal.on{display:flex;animation:rise .5s both}
+.stepdots{display:flex;gap:8px;margin-top:18px;align-items:center;flex-wrap:wrap}
+.sdot{width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);background:var(--card);font-family:'Fredoka';font-weight:700}
+.sdot.on{background:var(--yellow)}
+.sdot.done{background:var(--green);color:#fff}
+
+.goal-list{margin-top:1.4rem;display:flex;flex-direction:column;gap:12px;max-width:820px}
+.goal{display:flex;align-items:center;gap:16px;border:3px solid var(--ink);border-radius:16px;background:var(--card);padding:13px 18px;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s;user-select:none}
+.goal:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.goal .gnum{font-family:'Fredoka';font-weight:700;font-size:1.3rem;width:42px;height:42px;border:3px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;background:var(--yellow-l)}
+.goal p{font-weight:600;flex:1;font-size:1rem}
+.goal .gcheck{width:32px;height:32px;border:3px solid var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff;flex:none}
+.goal.done{background:var(--green-l)}
+.goal.done .gcheck{background:var(--green);color:#fff}
+.goal.done .gnum{background:var(--green);color:#fff}
+.route{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:2rem}
+.route .chip{box-shadow:3px 3px 0 var(--ink)}
+.route .chip:nth-child(odd){background:var(--yellow-l)}
+.route i.arr{color:var(--orange)}
+
+.warm-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.3rem;align-items:start}
+.model-card{display:flex;flex-direction:column;align-items:center;gap:14px}
+.grid10{display:grid;grid-template-columns:repeat(10,1fr);width:min(300px,64vw);border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#fff}
+.grid10 b{aspect-ratio:1;border:.5px solid #EADFC8;transition:background .25s}
+.grid10 b.colA{background:var(--orange-l)}
+.grid10 b.rowB{background:var(--green-l)}
+.grid10 b.both{background:var(--yellow)}
+.stepper{display:flex;align-items:center;gap:12px;font-family:'Fredoka';font-weight:700;font-size:1.15rem}
+.stepper button{width:36px;height:36px;border-radius:10px;border:3px solid var(--ink);background:var(--card);font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.stepper button:active{transform:translate(2px,2px);box-shadow:none}
+.eq-big{font-family:'Fredoka';font-weight:700;font-size:clamp(1.4rem,2.6vw,2rem);background:var(--yellow);border:3px solid var(--ink);border-radius:14px;padding:8px 20px;box-shadow:var(--shadow-sm)}
+.trick-steps{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.tstep{display:flex;align-items:center;gap:12px;border:3px solid var(--ink);border-radius:14px;padding:10px 14px;font-weight:700;box-shadow:var(--shadow-sm);background:var(--card)}
+.tstep .tnum{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Fredoka';flex:none;font-size:.9rem}
+.tstep.hot{background:var(--orange-l)}
+.tri-arrow{color:var(--orange)}
+
+.mini-wrap{max-width:720px;margin:1.4rem auto 0}
+.mini-top{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-bottom:14px}
+.mini-q{font-family:'Fredoka';font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;text-align:center;background:var(--card);border:3px solid var(--ink);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+.mini-row{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+.mini-final{text-align:center;padding:26px;display:none}
+.mini-final.show{display:block;animation:rise .5s both}
+.stars-big{display:flex;justify-content:center;gap:10px;margin:14px 0 20px}
+.stars-big i{width:44px;height:44px;color:#D8CBAD}
+.stars-big i.lit{color:var(--yellow);fill:var(--yellow)}
+
+.ld-grid{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;margin-top:1.4rem}
+.ld{display:grid;grid-template-columns:2.6rem 2.2rem 1.2rem 2.2rem;grid-auto-rows:minmax(2.5rem,auto);font-family:'Fredoka';font-size:clamp(1.6rem,3vw,2.15rem);font-weight:600;text-align:center;align-items:center;justify-items:center;background:var(--card);border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;width:max-content}
+.ld .dv{grid-column:1;border-right:4px solid var(--ink);align-self:stretch;display:flex;align-items:center;justify-content:center;padding-right:.4rem}
+.ld .cell{opacity:0;transform:translateY(7px);transition:opacity .3s,transform .3s;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ld .cell.s0{opacity:1;transform:none}
+.ld .cell.on{opacity:1;transform:none}
+.ld .cell.new{color:var(--orange);animation:popIn .45s}
+.ld .bT{border-top:4px solid var(--ink)}
+.ld .uB{border-bottom:4px solid var(--ink)}
+.ld .cdot{color:var(--orange)}
+.ld-done{margin-top:14px;background:var(--green);color:#fff;border:3px solid var(--ink);border-radius:14px;padding:10px 18px;font-family:'Fredoka';font-weight:700;font-size:1.2rem;box-shadow:var(--shadow-sm);opacity:0;transform:scale(.8);transition:.4s}
+.ld-done.show{opacity:1;transform:none}
+.ld-step-text{min-height:76px;font-weight:600;font-size:1.08rem;line-height:1.55;background:var(--yellow-l);border:3px dashed var(--ink);border-radius:16px;padding:14px 18px}
+.try-box{margin-top:1.3rem;display:flex;gap:14px;align-items:center;flex-wrap:wrap;border:3px solid var(--ink);border-radius:var(--r);background:var(--pink-l);padding:14px 18px;box-shadow:var(--shadow-sm)}
+.try-box b{font-family:'Fredoka';font-size:1.25rem}
+.kiki-tip{display:flex;gap:14px;align-items:center;border:3px solid var(--ink);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);padding:14px 18px;margin-top:1.3rem}
+.kiki-tip .kiki{width:64px;height:76px}
+.kiki-tip p{font-weight:600;font-size:.98rem}
+.kiki-tip b{color:var(--orange)}
+
+.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.3rem;align-items:start}
+.lab-eq{display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-family:'Fredoka';font-weight:700}
+.bignum{font-size:clamp(2rem,4.4vw,3.2rem);background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:6px 22px;box-shadow:var(--shadow-sm)}
+.bignum .koma{color:var(--orange)}
+.bignum.bump{animation:popIn .4s}
+.lab-op{font-size:2rem;color:var(--green)}
+.lab-result{margin-top:20px;font-family:'Fredoka';font-weight:700;font-size:1.25rem;background:var(--green);color:#fff;border:3px solid var(--ink);border-radius:var(--r);padding:14px 20px;box-shadow:var(--shadow-sm)}
+.lab-note{margin-top:14px;font-weight:600;color:#5c4d3d;font-size:.98rem}
+.preset-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+
+.frac-steps{display:flex;flex-direction:column;gap:12px;margin-top:1.3rem;max-width:840px}
+.fstep{display:none;gap:14px;align-items:center;border:3px solid var(--ink);border-radius:var(--r);background:var(--card);padding:14px 18px;box-shadow:var(--shadow-sm)}
+.fstep.on{display:flex;animation:rise .45s both}
+.fstep .fnum{width:44px;height:44px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Fredoka';font-weight:700;font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex:none;border:3px solid var(--ink)}
+.fstep p{font-weight:600;font-size:1.02rem}
+.fstep b.frac{display:inline-block;border:2.5px solid var(--ink);border-radius:10px;padding:2px 10px;background:var(--yellow-l);font-family:'Fredoka'}
+.frac-eq{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:1.2rem}
+.frac-eq .fchip{font-family:'Fredoka';font-weight:700;font-size:1.15rem;border:3px solid var(--ink);border-radius:12px;padding:7px 15px;background:var(--card);opacity:0;transform:translateY(8px);transition:.4s}
+.frac-eq .fchip.on{opacity:1;transform:none}
+.frac-eq .fchip:last-child.on{background:var(--green);color:#fff}
+.bar6{display:flex;gap:7px;margin-top:1.2rem;max-width:560px}
+.bar6 .grp{display:flex;flex:2;gap:4px;padding:4px;border-radius:10px;transition:background .4s}
+.bar6 .grp+.grp,.bar6 .rest{margin-left:8px}
+.bar6 .rest{display:flex;flex:4;gap:4px;padding:4px}
+.bar6 .seg{flex:1;height:38px;border:3px solid var(--ink);border-radius:8px;background:#fff}
+.bar6 .grp .seg{background:var(--yellow)}
+.bar6.grouped .g1,.bar6.grouped .g1 .seg{background:var(--orange)}
+.bar6.grouped .g2,.bar6.grouped .g2 .seg{background:var(--green)}
+.bar6.grouped .g3,.bar6.grouped .g3 .seg{background:var(--pink)}
+.bar-lbl{font-weight:700;margin-top:10px;color:#5c4d3d}
+
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;margin-top:1.4rem}
+.vs-card{border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.vs-card header{padding:12px 18px;border-bottom:3px solid var(--ink);display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:700;font-size:1.15rem;color:#fff}
+.vs-card.m1 header{background:var(--orange)}
+.vs-card.m2 header{background:var(--green)}
+.vs-card .body{padding:16px 18px;background:var(--card)}
+.vs-card .body p{font-weight:600;font-size:.97rem;margin-bottom:8px}
+.vs-card .ex{margin-top:10px;background:var(--yellow-l);border:2.5px dashed var(--ink);border-radius:12px;padding:9px 13px;font-family:'Fredoka';font-weight:600}
+.rule-banner{margin-top:1.6rem;background:var(--ink);color:var(--paper);border-radius:var(--r);padding:18px 24px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow)}
+.rule-banner i{color:var(--yellow);width:30px;height:30px;flex:none}
+.rule-banner p{font-family:'Fredoka';font-weight:600;font-size:1.12rem}
+.iflist{margin-top:1.2rem;display:flex;flex-direction:column;gap:10px}
+.ifrow{display:flex;gap:12px;align-items:center;font-weight:700;background:var(--card);border:3px solid var(--ink);border-radius:14px;padding:10px 16px;box-shadow:var(--shadow-sm);width:max-content;max-width:100%;flex-wrap:wrap}
+.ifrow .cond{background:var(--pink-l);border:2.5px solid var(--ink);border-radius:999px;padding:4px 13px}
+.ifrow .then{background:var(--green-l);border:2.5px solid var(--ink);border-radius:999px;padding:4px 13px}
+
+.quiz-shell{display:grid;grid-template-columns:270px 1fr;gap:1.6rem;margin-top:1.2rem;align-items:start}
+.q-side{display:flex;flex-direction:column;gap:14px;position:sticky;top:0}
+#qGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+#qGrid button{aspect-ratio:1;border:2.5px solid var(--ink);border-radius:10px;background:var(--card);font-family:'Fredoka';font-weight:700;font-size:.85rem;box-shadow:2.5px 2.5px 0 var(--ink)}
+#qGrid button:hover{transform:translate(-1px,-1px)}
+#qGrid button.now{background:var(--yellow)}
+#qGrid button.ok{background:var(--green);color:#fff}
+#qGrid button.tried{background:var(--pink);color:#fff}
+#qGrid button.seen{background:#B9AD97;color:#fff}
+.stat-card{border:3px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 14px;box-shadow:var(--shadow-sm);font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:10px}
+.stat-card i{color:var(--orange)}
+.q-main{position:relative}
+.q-card{border:3px solid var(--ink);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);padding:22px 24px}
+.q-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.lvlbadge{display:inline-flex;align-items:center;gap:4px;border:2.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.8rem;background:var(--yellow-l)}
+.lvlbadge.l2{background:var(--orange-l)}
+.lvlbadge.l3{background:var(--pink-l)}
+.opbadge{border:2.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.8rem;background:var(--ink);color:var(--paper)}
+.q-text{font-size:1.12rem;font-weight:600;line-height:1.6}
+.q-text b{color:var(--orange)}
+.q-ansrow{display:flex;align-items:center;gap:6px;margin-top:18px;flex-wrap:wrap}
+.q-btns{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.whybox{margin-top:16px;border:3px solid var(--green);background:var(--green-l);border-radius:14px;padding:14px 16px;display:none;animation:rise .4s both}
+.whybox.show{display:flex;gap:12px}
+.whybox i{color:var(--green);flex:none;margin-top:2px}
+.whybox p{font-weight:600;font-size:.97rem;line-height:1.55}
+.q-finish{display:none;border:3px solid var(--ink);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);padding:34px;text-align:center}
+.q-finish.show{display:block;animation:rise .5s both}
+.q-finish h3{font-size:1.7rem;margin-bottom:6px}
+
+.lang-card{border:3px solid var(--ink);border-radius:14px;background:var(--card);padding:11px 13px;box-shadow:var(--shadow-sm)}
+.lang-card .lc-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.8rem;margin-bottom:9px;color:#5c4d3d}
+.lang-seg{display:flex;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;padding:4px;gap:4px}
+.lang-seg button{flex:1;border:none;background:transparent;border-radius:999px;padding:7px 8px;font-family:'Fredoka';font-weight:700;font-size:.85rem;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.lang-seg button.on{background:var(--orange);color:#fff;box-shadow:2px 2px 0 var(--ink)}
+.langmini{display:inline-flex;align-items:center;gap:6px;border:2.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-family:'Fredoka';font-weight:700;font-size:.8rem;background:var(--yellow);box-shadow:2.5px 2.5px 0 var(--ink);margin-left:auto;color:var(--ink);transition:transform .12s,box-shadow .12s}
+.langmini:hover{transform:translate(-1px,-1px);box-shadow:3.5px 3.5px 0 var(--ink)}
+
+.game-shell{max-width:900px;margin:1.2rem auto 0}
+.game-panel{display:none}
+.game-panel.show{display:block;animation:rise .45s both}
+.rules{display:flex;flex-direction:column;gap:10px;margin:16px 0 20px}
+.rule{display:flex;gap:12px;align-items:center;font-weight:600}
+.rule .ric{width:38px;height:38px;border:3px solid var(--ink);border-radius:12px;background:var(--yellow-l);display:flex;align-items:center;justify-content:center;flex:none}
+.game-hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.hud-chip{border:3px solid var(--ink);border-radius:999px;background:var(--card);padding:6px 15px;font-family:'Fredoka';font-weight:700;box-shadow:3px 3px 0 var(--ink);display:inline-flex;gap:8px;align-items:center}
+.hud-chip i{color:var(--orange)}
+.timebar-wrap{height:16px;border:3px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;margin-bottom:8px}
+#timebar{height:100%;width:100%;background:var(--green);border-radius:999px}
+#timebar.warn{background:var(--yellow)}
+#timebar.danger{background:var(--pink)}
+#gameQ{font-family:'Fredoka';font-weight:700;font-size:clamp(1.7rem,3.6vw,2.5rem);text-align:center;background:var(--card);border:3px solid var(--ink);border-radius:var(--r);padding:14px;box-shadow:var(--shadow-sm)}
+#balloonField{position:relative;height:min(400px,46vh);min-height:280px;border:3px dashed var(--ink);border-radius:var(--r);margin-top:14px;background:#fff;overflow:hidden;background-image:radial-gradient(#F1E6CC 1.5px,transparent 1.6px);background-size:22px 22px}
+.balloon{position:absolute;bottom:14%;width:92px;aspect-ratio:.84;background:var(--c);border:3px solid var(--ink);border-radius:50% 50% 47% 47%/56% 56% 44% 44%;display:flex;align-items:center;justify-content:center;animation:floaty var(--dur,4.6s) ease-in-out var(--del,0s) infinite alternate}
+@keyframes floaty{0%{transform:translate(0,0) rotate(-2deg)}50%{transform:translate(7px,-16px) rotate(2deg)}100%{transform:translate(-6px,8px) rotate(-1deg)}}
+.balloon .knot{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;background:var(--c);border:3px solid var(--ink);border-radius:4px}
+.balloon .string{position:absolute;top:100%;left:50%;height:34px;border-left:2.5px dashed var(--ink)}
+.balloon .val{background:var(--card);border:3px solid var(--ink);border-radius:999px;padding:6px 13px;font-family:'Fredoka';font-weight:700;font-size:1.15rem;z-index:1}
+.balloon.pop{animation:balloonPop .35s forwards}
+@keyframes balloonPop{40%{transform:scale(1.35);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.balloon.wrong{animation:shake .4s forwards}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.balloon.dead{opacity:.25;pointer-events:none;filter:grayscale(1)}
+.balloon.reveal{outline:5px dashed var(--green);outline-offset:5px;pointer-events:none}
+.part{position:absolute;width:12px;height:12px;border:2.5px solid var(--ink);pointer-events:none;z-index:5}
+.sfloat{position:absolute;font-family:'Fredoka';font-weight:700;font-size:1.4rem;color:var(--green);pointer-events:none;z-index:6;text-shadow:1px 1px 0 #fff}
+#gameMsg{text-align:center;font-weight:800;font-size:1.1rem;min-height:30px;margin-top:10px}
+#gameMsg.good{color:var(--green)}
+#gameMsg.badd{color:var(--pink)}
+.game-over{text-align:center;padding:30px}
+.game-over h3{font-size:1.8rem}
+
+.key-rows{margin-top:1.4rem;display:flex;flex-direction:column;gap:14px;max-width:860px}
+.key-row{display:flex;gap:18px;align-items:center;border:3px solid var(--ink);border-radius:var(--r);background:var(--card);padding:16px 20px;box-shadow:var(--shadow)}
+.key-row .kn{font-family:'Fredoka';font-weight:700;font-size:2rem;width:64px;height:64px;border:3px solid var(--ink);border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
+.key-row:nth-child(1) .kn{background:var(--orange-l);color:var(--orange)}
+.key-row:nth-child(2) .kn{background:var(--green-l);color:var(--green)}
+.key-row:nth-child(3) .kn{background:var(--yellow)}
+.key-row h3{font-size:1.15rem;margin-bottom:3px}
+.key-row p{font-weight:600;font-size:.95rem;color:#5c4d3d}
+.key-row .exchip{margin-left:auto;font-family:'Fredoka';font-weight:700;border:2.5px dashed var(--ink);border-radius:12px;padding:7px 13px;background:var(--yellow-l);white-space:nowrap}
+.selfcheck{margin-top:1.5rem;border:3px dashed var(--ink);border-radius:var(--r);padding:16px 20px;background:var(--card);max-width:860px}
+.selfcheck h3{margin-bottom:10px;font-size:1.1rem}
+.selfcheck .goal{box-shadow:none;padding:9px 14px}
+.selfcheck .goal:hover{box-shadow:none;transform:none}
+
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;margin-top:1.3rem;align-items:start}
+.moods{display:flex;gap:12px;flex-wrap:wrap}
+.mood{flex:1;min-width:100px;border:3px solid var(--ink);border-radius:16px;background:var(--card);padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:800;font-size:.85rem;box-shadow:var(--shadow-sm)}
+.mood i{width:30px;height:30px}
+.mood.on{background:var(--yellow);transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.conf-row{margin-top:18px}
+input[type=range]{width:100%;accent-color:var(--orange);height:30px}
+.conf-lbl{font-family:'Fredoka';font-weight:700;font-size:1.1rem;margin-top:4px}
+textarea{width:100%;border:3px solid var(--ink);border-radius:14px;padding:12px 14px;font-size:.98rem;font-weight:600;resize:vertical;min-height:86px;background:#fff}
+textarea:focus{outline:4px solid var(--yellow);outline-offset:2px}
+.fld{margin-bottom:16px}
+.fld label{font-weight:800;display:block;margin-bottom:8px}
+.ref-save{margin-top:6px}
+
+#s-thanks .wrap{align-items:center;text-align:center;position:relative;overflow:hidden}
+.ty-title{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:700;line-height:1.05}
+.ty-title span{color:var(--orange)}
+.ty-sub{font-weight:600;font-size:1.1rem;color:#5c4d3d;margin-top:12px;max-width:52ch}
+.confetti-zone{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cfp{position:absolute;top:-24px;border:2px solid var(--ink);animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg)}}
+
+@media (max-width:900px){
+  .cover-grid,.warm-grid,.lab-grid,.pizza-grid,.vs-grid,.quiz-shell,.ref-grid{grid-template-columns:1fr}
+  .q-side{position:static}
+  .flip{max-width:none}
+  .key-row{flex-wrap:wrap}
+  .key-row .exchip{margin-left:0}
+  #chapterLabel{display:none}
+  .ld{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="kiki-sym" viewBox="0 0 150 175">
+    <g>
+      <path d="M62 90 C 36 106 28 130 42 152" fill="none" stroke="#2E2318" stroke-width="34" stroke-linecap="round"/>
+      <path d="M62 90 C 36 106 28 130 42 152" fill="none" stroke="var(--orange)" stroke-width="22" stroke-linecap="round"/>
+      <circle cx="78" cy="56" r="46" fill="var(--orange)" stroke="#2E2318" stroke-width="5"/>
+      <g class="blink">
+        <circle cx="63" cy="50" r="9.5" fill="#fff" stroke="#2E2318" stroke-width="3"/>
+        <circle cx="95" cy="50" r="9.5" fill="#fff" stroke="#2E2318" stroke-width="3"/>
+        <circle cx="65" cy="52" r="4.2" fill="#2E2318"/>
+        <circle cx="97" cy="52" r="4.2" fill="#2E2318"/>
+      </g>
+      <circle cx="50" cy="70" r="6.5" fill="#F6A9B8" opacity=".85"/>
+      <circle cx="108" cy="70" r="6.5" fill="#F6A9B8" opacity=".85"/>
+      <path d="M66 70 Q 79 81 93 68" fill="none" stroke="#2E2318" stroke-width="4.5" stroke-linecap="round"/>
+    </g>
+  </symbol>
+</svg>
+
+<div id="progressWrap"><div id="progressBar"></div></div>
+
+<header class="topbar">
+  <div class="brand"><svg viewBox="0 0 150 175"><use href="#kiki-sym"/></svg> Si Koma</div>
+  <span id="chapterLabel">Sampul</span>
+  <div class="spacer"></div>
+  <button class="iconbtn" id="btnMenu" title="Daftar slide"><i data-lucide="menu"></i></button>
+  <button class="iconbtn" id="btnFull" title="Layar penuh"><i data-lucide="maximize"></i></button>
+</header>
+
+<main id="deck">
+
+<!-- SLIDE 1 : SAMPUL -->
+<section class="slide" data-title="Sampul" id="s-cover">
+  <div class="wrap">
+    <div class="cover-grid">
+      <div>
+        <span class="kicker alt a"><i data-lucide="sparkles"></i> Kelas 5 · Cambridge Primary Mathematics · Stage 5</span>
+        <h1 class="cover-title a" style="--d:.08s">Petualangan<br><span class="koma-akses">Si Koma</span>:<br>Membagi Desimal</h1>
+        <p class="cover-sub a" style="--d:.16s">Kita akan mengulang perkalian desimal, menguasai dua cara membagi desimal, menaklukkan 30 soal cerita berbahasa Inggris, dan menutup hari dengan game balon!</p>
+        <div class="cover-chips a" style="--d:.24s">
+          <span class="chip"><i data-lucide="book-open"></i> 2 Metode</span>
+          <span class="chip"><i data-lucide="languages"></i> 30 Soal EN + Terjemahan</span>
+          <span class="chip"><i data-lucide="gamepad-2"></i> 1 Game Seru</span>
+        </div>
+        <div class="cover-actions a" style="--d:.32s">
+          <button class="btn primary" data-go="1"><i data-lucide="play"></i> Mulai Belajar</button>
+          <button class="btn" data-go="10"><i data-lucide="pencil"></i> Langsung ke Soal</button>
+        </div>
+      </div>
+      <div class="mascot-stage a" style="--d:.2s">
+        <span class="fdec">÷ 4</span>
+        <span class="fdec">0,3</span>
+        <span class="fdec">× 10</span>
+        <svg class="kiki floaty" viewBox="0 0 150 175"><use href="#kiki-sym"/></svg>
+      </div>
+    </div>
+    <div class="marquee a" style="--d:.4s"><span class="marquee-in" id="mqText"></span></div>
+  </div>
+</section>
+
+<!-- SLIDE 2 : PEMANTIK KARTU (FIX: sekarang bisa diklik) -->
+<section class="slide" data-title="Pemantik · Cerita Sehari-hari">
+  <div class="wrap">
+    <span class="kicker pink a"><i data-lucide="lightbulb"></i> Pertanyaan Pemantik</span>
+    <h2 class="title a" style="--d:.06s">Kapan ya kita membagi yang <em>tidak bulat</em>?</h2>
+    <p class="sub a" style="--d:.12s">Klik setiap kartu untuk membuka ceritanya (klik lagi untuk menutup). Pernahkah kamu mengalami hal seperti ini?</p>
+    <div class="fliprow">
+      <div class="flip a" style="--d:.18s"><div class="flip-in">
+        <div class="face front"><div class="fic" style="background:var(--orange-l);color:var(--orange)"><i data-lucide="cake"></i></div>
+          <h3>Ulang Tahun Dita</h3><span>KLIK UNTUK MEMBUKA</span></div>
+        <div class="face back"><span class="revealme">Pertanyaan · klik untuk menutup</span>
+          <p>Satu kue ulang tahun beratnya 2,5 kg dan akan dipotong sama rata untuk 5 teman. Berapa kg kah bagian setiap teman?</p></div>
+      </div></div>
+      <div class="flip a" style="--d:.26s"><div class="flip-in">
+        <div class="face front"><div class="fic" style="background:var(--green-l);color:var(--green)"><i data-lucide="shopping-basket"></i></div>
+          <h3>Belanja di Pasar</h3><span>KLIK UNTUK MEMBUKA</span></div>
+        <div class="face back"><span class="revealme">Pertanyaan · klik untuk menutup</span>
+          <p>Harga satu donat $2,40. Ibu membeli 3 donat. Berapa dolar yang harus dibayar Ibu?</p></div>
+      </div></div>
+      <div class="flip a" style="--d:.34s"><div class="flip-in">
+        <div class="face front"><div class="fic" style="background:var(--pink-l);color:var(--pink)"><i data-lucide="droplets"></i></div>
+          <h3>Isi Botol Minum</h3><span>KLIK UNTUK MEMBUKA</span></div>
+        <div class="face back"><span class="revealme">Pertanyaan · klik untuk menutup</span>
+          <p>Jerigen berisi 12 liter air. Airnya dituang sama rata ke 8 botol. Berapa liter di setiap botol?</p></div>
+      </div></div>
+    </div>
+    <div class="kiki-tip a" style="--d:.42s">
+      <svg class="kiki floaty" viewBox="0 0 150 175"><use href="#kiki-sym"/></svg>
+      <p><b>Coba pikirkan:</b> di ketiga cerita itu, angkanya tidak bulat — ada <b>koma</b>-nya! Hari ini kita akan belajar berbagi dengan si koma agar hasilnya selalu adil.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 : PEMANTIK PIZZA -->
+<section class="slide" data-title="Pemantik · Berbagi Pizza">
+  <div class="wrap">
+    <span class="kicker pink a"><i data-lucide="pizza"></i> Tantangan Berpikir</span>
+    <h2 class="title a" style="--d:.06s">3 pizza untuk 4 anak — tiap anak dapat berapa?</h2>
+    <div class="pizza-grid">
+      <div>
+        <div class="pizzas a" style="--d:.12s" id="pizzaRow"></div>
+        <div class="kids" id="kidsRow"></div>
+      </div>
+      <div>
+        <div class="pstep" data-ps="0"><h3>Masalahnya…</h3><p>4 anak, 3 pizza. Kalau dibagi satu-satu, 3 ÷ 4 hasilnya <b>tidak bulat</b>. Lalu bagaimana?</p></div>
+        <div class="pstep" data-ps="1"><h3>Langkah 1 · Potong dulu!</h3><p>Setiap pizza dipotong menjadi <b>4 bagian sama besar</b> (perempatan). Sekarang ada 3 × 4 = <b>12 potong</b>.</p></div>
+        <div class="pstep" data-ps="2"><h3>Langkah 2 · Bagikan!</h3><p>12 potong ÷ 4 anak = 3 potong tiap anak. Tiga potong perempatan = <b>3/4 pizza</b>.</p></div>
+        <div class="pstep" data-ps="3"><h3>Langkah 3 · Hubungannya keren!</h3><p>Pecahan 3/4 ternyata sama dengan desimal. Inilah jembatan yang akan kita pakai hari ini!</p></div>
+        <div class="big-reveal" id="pizzaReveal"><i data-lucide="sparkles"></i> 3 ÷ 4 = 3/4 = 0,75 pizza tiap anak</div>
+        <div class="stepdots a" style="--d:.2s">
+          <button class="btn" id="pizzaPrev"><i data-lucide="chevron-left"></i></button>
+          <button class="btn primary" id="pizzaNext">Bagikan! <i data-lucide="arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 : TUJUAN -->
+<section class="slide" data-title="Tujuan Pembelajaran">
+  <div class="wrap">
+    <span class="kicker a"><i data-lucide="target"></i> Tujuan Pembelajaran</span>
+    <h2 class="title a" style="--d:.06s">Hari ini, aku akan mampu…</h2>
+    <p class="sub a" style="--d:.1s">Klik setiap tujuan untuk menandai "Aku siap!"</p>
+    <div class="goal-list">
+      <div class="goal a" style="--d:.14s"><span class="gnum">1</span><p>Mengalikan bilangan desimal dengan bilangan bulat dan desimal satu angka.</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+      <div class="goal a" style="--d:.2s"><span class="gnum">2</span><p>Membagi desimal secara <b>langsung</b> ketika pembaginya bilangan bulat.</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+      <div class="goal a" style="--d:.26s"><span class="gnum">3</span><p>Membagi desimal menggunakan <b>metode pecahan</b> dan trik menggeser koma.</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+      <div class="goal a" style="--d:.32s"><span class="gnum">4</span><p>Menyelesaikan soal cerita berbahasa Inggris dengan berpikir kritis: memilih operasi yang tepat.</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+      <div class="goal a" style="--d:.38s"><span class="gnum">5</span><p>Menghubungkan pembagian desimal dengan kehidupan sehari-hari.</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+    </div>
+    <div class="route a" style="--d:.46s">
+      <span class="chip"><i data-lucide="lightbulb"></i> Pemantik</span><i class="arr" data-lucide="chevron-right"></i>
+      <span class="chip"><i data-lucide="flame"></i> Pemanasan</span><i class="arr" data-lucide="chevron-right"></i>
+      <span class="chip"><i data-lucide="book-open"></i> 2 Metode</span><i class="arr" data-lucide="chevron-right"></i>
+      <span class="chip"><i data-lucide="pencil"></i> 30 Soal</span><i class="arr" data-lucide="chevron-right"></i>
+      <span class="chip"><i data-lucide="gamepad-2"></i> Game</span><i class="arr" data-lucide="chevron-right"></i>
+      <span class="chip"><i data-lucide="heart"></i> Refleksi</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 : PEMANASAN -->
+<section class="slide" data-title="Pemanasan · Perkalian Desimal">
+  <div class="wrap">
+    <span class="kicker yel a"><i data-lucide="flame"></i> Pemanasan</span>
+    <h2 class="title a" style="--d:.06s">Ingat dulu: cara mengalikan desimal</h2>
+    <div class="warm-grid">
+      <div class="card model-card a" style="--d:.12s">
+        <b style="font-family:Fredoka;font-size:1.1rem">Model Petak 100 · mainkan slider-nya!</b>
+        <div class="grid10" id="grid10"></div>
+        <div class="stepper"><span>baris</span><button id="rowMinus">−</button><span id="rowVal" style="min-width:2.4rem;text-align:center">0,4</span><button id="rowPlus">+</button></div>
+        <div class="stepper"><span>kolom</span><button id="colMinus">−</button><span id="colVal" style="min-width:2.4rem;text-align:center">0,3</span><button id="colPlus">+</button></div>
+        <div class="eq-big" id="areaEq">0,3 × 0,4 = 0,12</div>
+        <p style="font-weight:600;font-size:.9rem;color:#5c4d3d;text-align:center">Irisan kuning = jawabannya! Persepuluhan × persepuluhan = <b>perseratusan</b>.</p>
+      </div>
+      <div>
+        <div class="card a" style="--d:.2s">
+          <b style="font-family:Fredoka;font-size:1.1rem"><i data-lucide="zap"></i> Trik cepat: koma dititip dulu!</b>
+          <div class="trick-steps">
+            <div class="tstep"><span class="tnum">1</span> Buang koma sebentar: <b>2,4</b> → 24, lalu hitung 24 × 3 = <b>72</b></div>
+            <div class="tstep hot"><span class="tnum">2</span> Hitung jumlah angka di belakang koma: 2,4 punya <b>satu</b></div>
+            <div class="tstep"><span class="tnum">3</span> Kembalikan koma: 72 → <b>7,2</b> &nbsp;<span class="tri-arrow"><i data-lucide="corner-down-right"></i></span> 2,4 × 3 = 7,2</div>
+          </div>
+        </div>
+        <div class="kiki-tip a" style="--d:.28s">
+          <svg class="kiki floaty" viewBox="0 0 150 175"><use href="#kiki-sym"/></svg>
+          <p><b>Rahasia si Koma:</b> kalau faktor pertama punya 1 angka di belakang koma dan faktor kedua punya 1 juga, jawabannya punya <b>2 angka</b> di belakang koma. Contoh: 0,3 × 0,4 → 0,<b>12</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 : LATIHAN PEMANASAN -->
+<section class="slide" data-title="Latihan Pemanasan">
+  <div class="wrap">
+    <span class="kicker yel a"><i data-lucide="dumbbell"></i> Latihan Kilat</span>
+    <h2 class="title a" style="--d:.06s">5 soal perkalian — secepat kilat!</h2>
+    <div class="mini-wrap">
+      <div class="card" id="miniBox">
+        <div class="mini-top"><span id="miniCount" style="font-family:Fredoka">Soal 1 / 5</span><span class="chip"><i data-lucide="star"></i> <span id="miniScore">0</span> poin</span></div>
+        <div class="mini-q" id="miniQ">2,4 × 3</div>
+        <div class="mini-row">
+          <input class="numinput" id="miniIn" inputmode="decimal" placeholder="?" autocomplete="off">
+          <button class="btn primary" id="miniCheck"><i data-lucide="check"></i> Periksa</button>
+          <button class="btn green" id="miniNext" style="display:none">Lanjut <i data-lucide="arrow-right"></i></button>
+        </div>
+        <div class="fb" id="miniFb"></div>
+        <p style="text-align:center;margin-top:14px;font-size:.85rem;font-weight:700;color:#8a7a63">Boleh pakai koma (,) atau titik (.)</p>
+      </div>
+      <div class="card mini-final" id="miniFinal">
+        <h3 style="font-size:1.5rem">Pemanasan selesai!</h3>
+        <div class="stars-big" id="miniStars"></div>
+        <p id="miniFinalTxt" style="font-weight:700;margin-bottom:18px"></p>
+        <button class="btn yellow" id="miniRetry"><i data-lucide="rotate-ccw"></i> Ulangi</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 : METODE 1 -->
+<section class="slide" data-title="Metode 1 · Pembagian Langsung">
+  <div class="wrap">
+    <span class="kicker a"><i data-lucide="divide"></i> Metode 1</span>
+    <h2 class="title a" style="--d:.06s">Pembagian langsung — koma ikut turun!</h2>
+    <p class="sub a" style="--d:.1s">Dipakai saat <b>pembaginya bilangan bulat</b> (3, 5, 12, …). Tekan tombol langkah untuk mengikuti si Koma.</p>
+    <div class="ld-grid">
+      <div class="a" style="--d:.16s">
+        <div class="ld" id="ld1" data-step="0">
+          <span class="cell" style="grid-row:1;grid-column:2" data-s="1">1</span>
+          <span class="cell cdot" style="grid-row:1;grid-column:3" data-s="2">,</span>
+          <span class="cell" style="grid-row:1;grid-column:4" data-s="4">6</span>
+          <span class="dv cell s0" style="grid-row:2;grid-column:1">3</span>
+          <span class="cell s0 bT" style="grid-row:2;grid-column:2">4</span>
+          <span class="cell s0 bT cdot" style="grid-row:2;grid-column:3">,</span>
+          <span class="cell s0 bT" style="grid-row:2;grid-column:4">8</span>
+          <span class="cell uB" style="grid-row:3;grid-column:2" data-s="1">3</span>
+          <span class="cell" style="grid-row:4;grid-column:2" data-s="3">1</span>
+          <span class="cell" style="grid-row:4;grid-column:4" data-s="3">8</span>
+          <span class="cell uB" style="grid-row:5;grid-column:2" data-s="4">1</span>
+          <span class="cell uB" style="grid-row:5;grid-column:4" data-s="4">8</span>
+          <span class="cell" style="grid-row:6;grid-column:4" data-s="4">0</span>
+        </div>
+        <div class="ld-done" id="ldDone">4,8 ÷ 3 = 1,6 · Selesai!</div>
+      </div>
+      <div class="a" style="--d:.24s">
+        <div class="ld-step-text" id="ldText">Tekan "Langkah 1" untuk mulai menghitung 4,8 ÷ 3.</div>
+        <div class="stepdots" id="ldDots">
+          <button class="btn yellow" id="ldPrev"><i data-lucide="chevron-left"></i></button>
+          <button class="sdot" data-ld="1">1</button>
+          <button class="sdot" data-ld="2">2</button>
+          <button class="sdot" data-ld="3">3</button>
+          <button class="sdot" data-ld="4">4</button>
+          <button class="btn primary" id="ldNext">Langkah 1 <i data-lucide="chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="try-box a" style="--d:.32s">
+      <b>Kamu coba:</b>&nbsp;6,5 ÷ 5 = ?
+      <button class="btn pink" id="tryReveal"><i data-lucide="eye"></i> Tunjukkan jawaban</button>
+      <span id="tryAns" style="font-family:Fredoka;font-weight:700;font-size:1.3rem;display:none">1,3 &nbsp;<small style="font-weight:600">(65 ÷ 5 = 13, lalu koma diturunkan)</small></span>
+    </div>
+    <div class="kiki-tip a" style="--d:.4s">
+      <svg class="kiki floaty" viewBox="0 0 150 175"><use href="#kiki-sym"/></svg>
+      <p><b>Aturan emas:</b> tulis koma di hasil <b>tepat di atas</b> koma angka yang dibagi. Setelah koma ditulis, bagi sisa angkanya seperti biasa!</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 : LAB ×10 -->
+<section class="slide" data-title="Laboratorium ×10">
+  <div class="wrap">
+    <span class="kicker alt a"><i data-lucide="flask-conical"></i> Laboratorium Koma</span>
+    <h2 class="title a" style="--d:.06s">Apa yang terjadi jika koma digeser?</h2>
+    <p class="sub a" style="--d:.1s">Tekan tombol untuk menggeser koma pada <b>kedua</b> bilangan. Amati hasilnya!</p>
+    <div class="lab-grid">
+      <div class="card a" style="--d:.16s">
+        <div class="preset-row" id="presetRow"></div>
+        <div class="lab-eq">
+          <span class="bignum" id="labA"></span>
+          <span class="lab-op">÷</span>
+          <span class="bignum" id="labB"></span>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:22px;flex-wrap:wrap">
+          <button class="btn primary" id="labShift"><i data-lucide="move-horizontal"></i> Geser koma (×10 keduanya)</button>
+          <button class="btn" id="labReset"><i data-lucide="rotate-ccw"></i> Atur ulang</button>
+        </div>
+        <div class="lab-result" id="labResult"></div>
+        <p class="lab-note" id="labNote"></p>
+      </div>
+      <div>
+        <div class="card a" style="--d:.24s">
+          <b style="font-family:Fredoka;font-size:1.1rem"><i data-lucide="telescope"></i> Apa yang barusan terjadi?</b>
+          <p style="font-weight:600;margin-top:10px;line-height:1.6">Menggeser koma pada <b>kedua</b> bilangan sebanyak sama <b>tidak mengubah hasilnya</b> — sama seperti 6 ÷ 3 dan 60 ÷ 30 yang sama-sama 2.</p>
+          <p style="font-weight:600;margin-top:10px;line-height:1.6">Triknya: kalau pembaginya masih desimal, <b>geser terus sampai dia bulat</b>, lalu bagi seperti biasa!</p>
+        </div>
+        <div class="kiki-tip a" style="--d:.32s">
+          <svg class="kiki floaty" viewBox="0 0 150 175"><use href="#kiki-sym"/></svg>
+          <p><b>Bonus fakta:</b> membagi dengan 0,1 sama artinya dengan mengalikan 10. Coba cek: 3,5 ÷ 0,1 = 35. Ajaib, kan?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9 : METODE 2 -->
+<section class="slide" data-title="Metode 2 · Metode Pecahan">
+  <div class="wrap">
+    <span class="kicker alt a"><i data-lucide="slice"></i> Metode 2</span>
+    <h2 class="title a" style="--d:.06s">Metode pecahan — ubah, bandingkan, selesai!</h2>
+    <p class="sub a" style="--d:.1s">Contoh: <b>0,6 ÷ 0,2</b>. Ikuti langkah-langkahnya, lalu lihat batang di bawah berubah.</p>
+    <div class="frac-eq a" style="--d:.14s" id="fracChips">
+      <span class="fchip" data-fs="1">0,6 ÷ 0,2</span>
+      <span class="fchip" data-fs="2">6/10 ÷ 2/10</span>
+      <span class="fchip" data-fs="3">6 ÷ 2</span>
+      <span class="fchip" data-fs="4">= 3</span>
+    </div>
+    <div class="frac-steps">
+      <div class="fstep" data-fst="1"><span class="fnum">1</span><p>Tulis tiap bilangan sebagai <b>pecahan</b>: 0,6 = <b class="frac">6/10</b> (enam persepuluhan) dan 0,2 = <b class="frac">2/10</b> (dua persepuluhan).</p></div>
+      <div class="fstep" data-fst="2"><span class="fnum">2</span><p>Pertanyaannya berubah menjadi: <b>ada berapa 2/10 di dalam 6/10?</b></p></div>
+      <div class="fstep" data-fst="3"><span class="fnum">3</span><p>Penyebutnya sama-sama 10, jadi cukup bagi pembilangnya: <b>6 ÷ 2 = 3</b>.</p></div>
+      <div class="fstep" data-fst="4"><span class="fnum">4</span><p><b>0,6 ÷ 0,2 = 3.</b> Cek dengan trik ×10: 6 ÷ 2 = 3. Hasilnya cocok!</p></div>
+    </div>
+    <div class="stepdots a" style="--d:.2s">
+      <button class="btn" id="fracPrev"><i data-lucide="chevron-left"></i></button>
+      <button class="btn primary" id="fracNext">Mulai langkah <i data-lucide="chevron-right"></i></button>
+    </div>
+    <div class="bar6 a" style="--d:.26s" id="fracBar">
+      <div class="grp g1"><i class="seg"></i><i class="seg"></i></div>
+      <div class="grp g2"><i class="seg"></i><i class="seg"></i></div>
+      <div class="grp g3"><i class="seg"></i><i class="seg"></i></div>
+      <div class="rest"><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i></div>
+    </div>
+    <p class="bar-lbl a" style="--d:.3s" id="fracBarLbl">Batang ini = 0,6 (6 persepuluhan kuning). Nanti akan terbagi jadi kelompok berisi 0,2.</p>
+  </div>
+</section>
+
+<!-- SLIDE 10 : BANDING -->
+<section class="slide" data-title="Kapan Pakai yang Mana?">
+  <div class="wrap">
+    <span class="kicker a"><i data-lucide="scale"></i> Bandingkan</span>
+    <h2 class="title a" style="--d:.06s">Dua senjata, dua situasi</h2>
+    <div class="vs-grid">
+      <div class="vs-card m1 a" style="--d:.12s">
+        <header><i data-lucide="divide"></i> Pembagian Langsung</header>
+        <div class="body">
+          <p><b>Kapan?</b> Pembaginya sudah bulat: 3, 4, 5, 8, 12…</p>
+          <p>Bagi seperti biasa, lalu tulis koma di hasil <b>tepat di atas</b> koma yang dibagi.</p>
+          <div class="ex">Contoh: 4,8 ÷ 3 = 1,6 &nbsp;·&nbsp; 7,2 ÷ 8 = 0,9</div>
+        </div>
+      </div>
+      <div class="vs-card m2 a" style="--d:.2s">
+        <header><i data-lucide="slice"></i> Metode Pecahan / ×10</header>
+        <div class="body">
+          <p><b>Kapan?</b> Pembaginya juga desimal: 0,2, 0,4, 0,25…</p>
+          <p>Ubah ke pecahan yang penyebutnya sama, ATAU geser koma keduanya sampai pembaginya bulat.</p>
+          <div class="ex">Contoh: 5,6 ÷ 0,8 → 56 ÷ 8 = 7 &nbsp;·&nbsp; 0,6 ÷ 0,2 → 6/10 ÷ 2/10 = 3</div>
+        </div>
+      </div>
+    </div>
+    <div class="iflist">
+      <div class="ifrow a" style="--d:.28s"><span class="cond">Pembagi bulat</span><i data-lucide="arrow-right"></i><span class="then">bagi langsung, koma ikut turun</span></div>
+      <div class="ifrow a" style="--d:.34s"><span class="cond">Pembagi desimal</span><i data-lucide="arrow-right"></i><span class="then">geser koma / pakai pecahan dulu</span></div>
+    </div>
+    <div class="rule-banner a" style="--d:.4s">
+      <i data-lucide="crown"></i>
+      <p>Aturan si Koma: "Kalau pembagimu masih desimal, buat dia BULAT dulu — geser komanya, tapi geser juga koma temannya sama banyak!"</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11 : 30 SOAL -->
+<section class="slide" data-title="30 Story Problems · EN/ID">
+  <div class="wrap">
+    <span class="kicker pink a"><i data-lucide="brain"></i> Latihan Inti</span>
+    <h2 class="title a" style="--d:.06s">30 Soal Cerita: Detektif Desimal! <span style="font-size:.5em;color:#8a7a63;font-family:Quicksand;font-weight:700">soal berbahasa Inggris · bisa diterjemahkan ke Indonesia</span></h2>
+    <p class="sub a" style="--d:.1s">Soal ditulis dalam <b>bahasa Inggris</b> (gaya Cambridge Primary). Klik tombol <b>EN/ID</b> di dalam kartu soal, atau gunakan saklar bahasa di panel kiri — soal, petunjuk, dan pembahasan ikut berubah. <span style="font-weight:800">Benar di percobaan pertama = 2 poin, kedua = 1 poin.</span></p>
+    <div class="quiz-shell">
+      <aside class="q-side">
+        <div class="lang-card">
+          <div class="lc-head"><i data-lucide="languages"></i> Bahasa Soal · Question Language</div>
+          <div class="lang-seg">
+            <button id="langEn" class="on">English</button>
+            <button id="langId">Indonesia</button>
+          </div>
+        </div>
+        <div class="stat-card"><i data-lucide="trophy"></i><span id="qScore">0 points</span></div>
+        <div class="stat-card"><i data-lucide="check-check"></i><span id="qDone">Done 0/30</span></div>
+        <div id="qGrid"></div>
+        <p style="font-size:.8rem;font-weight:700;color:#8a7a63" id="qJumpLbl">Click a number to jump to a question</p>
+      </aside>
+      <div class="q-main">
+        <div class="q-card" id="qCard">
+          <div class="q-meta" id="qMeta"></div>
+          <p class="q-text" id="qText"></p>
+          <div class="q-ansrow">
+            <input class="numinput" id="qIn" inputmode="decimal" placeholder="?" autocomplete="off">
+            <span class="unitlbl" id="qUnit"></span>
+          </div>
+          <div class="q-btns">
+            <button class="btn primary" id="qCheck"><i data-lucide="check"></i> Check</button>
+            <button class="btn yellow" id="qHint"><i data-lucide="lightbulb"></i> Hint</button>
+            <button class="btn pink" id="qReveal" style="display:none"><i data-lucide="eye"></i> Show solution</button>
+          </div>
+          <p style="font-size:.8rem;font-weight:700;color:#8a7a63;margin-top:10px">Titik (.) dan koma (,) sama-sama diterima · Both dot and comma are accepted</p>
+          <div class="fb" id="qFb"></div>
+          <div class="whybox" id="qWhy"><i data-lucide="lightbulb"></i><p id="qWhyTxt"></p></div>
+        </div>
+        <div class="q-finish" id="qFinish">
+          <h3>All questions answered!</h3>
+          <div class="stars-big" id="qStars"></div>
+          <p id="qFinishTxt" style="font-weight:700;margin-bottom:20px"></p>
+          <button class="btn primary" data-go="11"><i data-lucide="gamepad-2"></i> Lanjut ke Game!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12 : GAME (FIX: tombol Mulai sekarang berfungsi) -->
+<section class="slide" data-title="Game · Serbu Balon Desimal!">
+  <div class="wrap">
+    <span class="kicker yel a"><i data-lucide="gamepad-2"></i> Pendinginan Seru</span>
+    <h2 class="title a" style="--d:.06s">Serbu Balon Desimal!</h2>
+    <div class="game-shell">
+      <div class="card game-panel show" id="gStart">
+        <h3 style="font-size:1.35rem;margin-bottom:6px">Siap meledakkan balon?</h3>
+        <div class="rules">
+          <div class="rule"><span class="ric"><i data-lucide="target"></i></span><span>10 soal pembagian & perkalian desimal muncul satu per satu di atas.</span></div>
+          <div class="rule"><span class="ric"><i data-lucide="mouse-pointer-click"></i></span><span><b>Pecahkan balon</b> yang berisi jawaban benar sebelum waktunya habis (20 detik!).</span></div>
+          <div class="rule"><span class="ric"><i data-lucide="flame"></i></span><span>Jawaban beruntun = bonus <b>streak</b>. Salah meledak = waktu berkurang 3 detik.</span></div>
+          <div class="rule"><span class="ric"><i data-lucide="trophy"></i></span><span>Kumpulkan skor setinggi mungkin dan raih 3 bintang!</span></div>
+        </div>
+        <button class="btn primary" id="gPlay" style="font-size:1.1rem"><i data-lucide="play"></i> Mulai Game!</button>
+      </div>
+      <div class="game-panel" id="gRun">
+        <div class="game-hud">
+          <span class="hud-chip"><i data-lucide="list-ordered"></i><span id="gNum">1/10</span></span>
+          <span class="hud-chip"><i data-lucide="trophy"></i><span id="gScore">0</span></span>
+          <span class="hud-chip"><i data-lucide="flame"></i><span id="gStreak">0</span></span>
+          <span class="spacer" style="flex:1"></span>
+          <button class="iconbtn" id="gSound" title="Suara"><i data-lucide="volume-2"></i></button>
+        </div>
+        <div class="timebar-wrap"><div id="timebar"></div></div>
+        <div id="gameQ"></div>
+        <div id="balloonField"></div>
+        <div id="gameMsg"></div>
+      </div>
+      <div class="card game-panel game-over" id="gOver">
+        <h3>Permainan selesai!</h3>
+        <div class="stars-big" id="gStars"></div>
+        <p style="font-weight:700;font-size:1.05rem;margin-bottom:6px">Skor kamu: <span id="gFinalScore" style="font-family:Fredoka;font-size:1.5rem;color:var(--orange)">0</span></p>
+        <p style="font-weight:600;margin-bottom:20px" id="gFinalTxt"></p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn yellow" id="gAgain"><i data-lucide="rotate-ccw"></i> Main Lagi</button>
+          <button class="btn primary" data-go="12"><i data-lucide="flag"></i> Lanjut ke Kesimpulan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 13 : KESIMPULAN -->
+<section class="slide" data-title="Kesimpulan">
+  <div class="wrap">
+    <span class="kicker a"><i data-lucide="flag"></i> Kesimpulan</span>
+    <h2 class="title a" style="--d:.06s">Tiga kunci emas hari ini</h2>
+    <div class="key-rows">
+      <div class="key-row a" style="--d:.12s"><span class="kn">01</span><div><h3>Perkalian desimal</h3><p>Kalikan tanpa koma dulu, lalu kembalikan koma sebanyak total angka di belakang koma kedua faktor.</p></div><span class="exchip">2,4 × 3 = 7,2</span></div>
+      <div class="key-row a" style="--d:.2s"><span class="kn">02</span><div><h3>Pembagi bulat → bagi langsung</h3><p>Bagi seperti biasa. Koma di hasil ditulis tepat di atas koma angka yang dibagi.</p></div><span class="exchip">4,8 ÷ 3 = 1,6</span></div>
+      <div class="key-row a" style="--d:.28s"><span class="kn">03</span><div><h3>Pembagi desimal → pecahan / geser koma</h3><p>Ubah ke pecahan berpenyebut sama, atau geser koma KEDUA bilangan sampai pembaginya bulat.</p></div><span class="exchip">5,6 ÷ 0,8 = 7</span></div>
+    </div>
+    <div class="selfcheck a" style="--d:.36s">
+      <h3><i data-lucide="circle-check-big"></i> Cek diri: bisakah aku menjelaskan…</h3>
+      <div class="goal-list" style="margin-top:0">
+        <div class="goal"><span class="gnum"><i data-lucide="x"></i></span><p>…mengapa koma di hasil ditulis tepat di atas koma yang dibagi?</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+        <div class="goal"><span class="gnum"><i data-lucide="x"></i></span><p>…mengapa menggeser koma kedua bilangan tidak mengubah hasil?</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+        <div class="goal"><span class="gnum"><i data-lucide="x"></i></span><p>…mengapa 0,6 ÷ 0,2 sama dengan 6 ÷ 2?</p><span class="gcheck"><i data-lucide="check"></i></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 14 : REFLEKSI -->
+<section class="slide" data-title="Refleksi">
+  <div class="wrap">
+    <span class="kicker pink a"><i data-lucide="heart"></i> Refleksi</span>
+    <h2 class="title a" style="--d:.06s">Bagaimana perasaanmu hari ini?</h2>
+    <div class="ref-grid">
+      <div class="card a" style="--d:.12s">
+        <div class="fld"><label>1 · Perasaanku tentang materi ini</label>
+          <div class="moods" id="moodRow">
+            <button class="mood" data-mood="Seru!"><i data-lucide="laugh"></i>Seru!</button>
+            <button class="mood" data-mood="Paham"><i data-lucide="smile"></i>Paham</button>
+            <button class="mood" data-mood="Bingung"><i data-lucide="meh"></i>Bingung</button>
+            <button class="mood" data-mood="Butuh bantuan"><i data-lucide="frown"></i>Butuh bantuan</button>
+          </div>
+        </div>
+        <div class="fld conf-row"><label>2 · Seberapa percaya diri kamu?</label>
+          <input type="range" min="1" max="5" value="3" id="confSlider">
+          <div class="conf-lbl" id="confLbl">Cukup percaya diri</div>
+        </div>
+      </div>
+      <div class="card a" style="--d:.2s">
+        <div class="fld"><label>3 · Hari ini aku belajar bahwa…</label><textarea id="refLearn" placeholder="Tulis hal paling berkesan yang kamu pelajari…"></textarea></div>
+        <div class="fld"><label>4 · Yang masih membuatku penasaran…</label><textarea id="refHard" placeholder="Tulis bagian yang ingin kamu pelajari lagi…"></textarea></div>
+        <button class="btn green ref-save" id="refSave"><i data-lucide="save"></i> Simpan Refleksiku</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 15 : THANKS -->
+<section class="slide" data-title="Terima Kasih" id="s-thanks">
+  <div class="wrap">
+    <div class="confetti-zone" id="confettiZone"></div>
+    <svg class="kiki floaty a" viewBox="0 0 150 175" style="width:150px;height:175px"><use href="#kiki-sym"/></svg>
+    <h1 class="ty-title a" style="--d:.1s">Thank you for <span>today!</span></h1>
+    <p class="ty-sub a" style="--d:.18s">Kamu sudah menguasai seni berbagi dengan si Koma. Ingat: kalau pembaginya desimal — buat dia bulat dulu! Sampai jumpa di petualangan angka berikutnya.</p>
+    <div class="cover-chips a" style="--d:.26s;justify-content:center">
+      <span class="chip"><i data-lucide="trophy"></i> Kamu luar biasa</span>
+      <span class="chip"><i data-lucide="sparkles"></i> Hingga jumpa</span>
+    </div>
+    <div class="a" style="--d:.34s;margin-top:8px">
+      <button class="btn yellow" id="btnRestart"><i data-lucide="rotate-ccw"></i> Ulangi dari Awal</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="navbar">
+  <span id="slideCounter">1 / 15</span>
+  <div class="navbtns">
+    <button class="navbtn" id="btnPrev"><i data-lucide="chevron-left"></i></button>
+    <button class="navbtn next" id="btnNext">Berikutnya <i data-lucide="chevron-right"></i></button>
+  </div>
+</footer>
+
+<div id="backdrop"></div>
+<nav id="drawer">
+  <header><h3>Daftar Slide</h3><button class="iconbtn" id="btnCloseDrawer"><i data-lucide="x"></i></button></header>
+  <div id="drawerList"></div>
+</nav>
+<div id="toasts"></div>
+
+<script>
+/* =========================================================
+   UTILITAS — aman dipakai di lingkungan apa pun
+========================================================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function icons(){ try{ if(window.lucide) lucide.createIcons(); }catch(e){} }
+function toast(msg,type=''){ const t=document.createElement('div'); t.className='toast '+type; t.innerHTML=msg; $('#toasts').appendChild(t); setTimeout(()=>{t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400)},3200); }
+function parseNum(v){ if(typeof v!=='string') v=String(v); v=v.trim().replace(',','.'); const n=parseFloat(v); return isFinite(n)?n:NaN; }
+function fmtID(n){ let s=(+n.toFixed(2)).toString(); return s.replace('.',','); }
+function starRow(el,n,total=3){ el.innerHTML=''; for(let i=0;i<total;i++){ el.innerHTML+=`<i data-lucide="star" class="${i<n?'lit':''}"></i>`; } icons(); }
+function lsGet(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:v; }catch(e){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function burstConfetti(zone,n=70){
+  const cols=['#F4633A','#1E7A5A','#F6B73C','#E85D75'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('span'); p.className='cfp';
+    const s=7+Math.random()*9;
+    p.style.left=Math.random()*100+'%';
+    p.style.width=s+'px'; p.style.height=s*(.5+Math.random())+'px';
+    p.style.background=cols[i%4];
+    p.style.borderRadius=Math.random()<.4?'50%':'2px';
+    p.style.animationDuration=(2.4+Math.random()*2.6)+'s';
+    p.style.animationDelay=(Math.random()*1.2)+'s';
+    zone.appendChild(p);
+  }
+  setTimeout(()=>{ if(zone.contains(p0())) zone.innerHTML=''; function p0(){return zone.firstChild;} },6500);
+}
+function confetti(){ const z=$('#confettiZone'); if(z) burstConfetti(z,80); }
+
+/* =========================================================
+   STATE GAME DIDEKLARASI PALING AWAL (var = tanpa TDZ,
+   sehingga engine slide bisa memeriksanya dengan aman)
+========================================================= */
+var game={running:false,qn:0,score:0,streak:0,correct:0,sound:true,timer:null,tleft:20,locked:false,cur:null,best:+(lsGet('rekor-balon','0')||0)};
+var qLang='en'; // bahasa soal cerita
+
+/* =========================================================
+   MESIN SLIDE (inti — diinisialisasi lebih dulu, mandiri)
+========================================================= */
+const slides=$$('.slide'); let cur=0;
+function chapterLabel(){ $('#chapterLabel').textContent=slides[cur].dataset.title||''; }
+function go(n){
+  if(n<0||n>=slides.length) return;
+  if(slides[cur].id==='s-thanks'){ const z=$('#confettiZone'); if(z) z.innerHTML=''; }
+  if((slides[cur].dataset.title||'').indexOf('Game')===0 && game.running) endGame(true);
+  slides[cur].classList.remove('active');
+  cur=n; slides[cur].classList.add('active');
+  slides[cur].scrollTop=0;
+  $('#progressBar').style.width=((cur+1)/slides.length*100)+'%';
+  $('#slideCounter').textContent=(cur+1)+' / '+slides.length;
+  $('#btnPrev').disabled=cur===0; $('#btnNext').disabled=cur===slides.length-1;
+  chapterLabel(); buildDrawer(); icons();
+  if(slides[cur].id==='s-thanks') confetti();
+}
+ $('#btnPrev').onclick=()=>go(cur-1);
+ $('#btnNext').onclick=()=>go(cur+1);
+function buildDrawer(){ const L=$('#drawerList'); L.innerHTML=''; slides.forEach((s,i)=>{ const b=document.createElement('button'); b.className='dl-item'+(i===cur?' now':''); b.innerHTML=`<span class="num">${i+1}</span>${s.dataset.title}`; b.onclick=()=>{closeDrawer(); go(i);}; L.appendChild(b); }); }
+function openDrawer(){ $('#drawer').classList.add('open'); $('#backdrop').classList.add('show'); }
+function closeDrawer(){ $('#drawer').classList.remove('open'); $('#backdrop').classList.remove('show'); }
+
+/* =========================================================
+   DELEGASI EVENT GLOBAL — sengaja dipasang di document,
+   sehingga TIDAK mungkin gagal terpasang walau modul lain error.
+   Mencakup: navigasi data-go, kartu flip pemantik (FIX #1),
+   dan tombol game Mulai/Lagi/Suara (FIX #2).
+========================================================= */
+document.addEventListener('click',e=>{
+  // 1) tombol lompat slide
+  const goBtn=e.target.closest('[data-go]');
+  if(goBtn){ go(+goBtn.dataset.go); return; }
+  // 2) kartu pemantik yang bisa dibalik
+  const flip=e.target.closest('.flip');
+  if(flip){ flip.classList.toggle('on'); return; }
+  // 3) game: mulai / main lagi
+  if(e.target.closest('#gPlay')||e.target.closest('#gAgain')){ startGame(); return; }
+  // 4) game: saklar suara
+  if(e.target.closest('#gSound')){ toggleSound(); return; }
+  // 5) tombol cepat terjemahan di kartu soal
+  if(e.target.closest('#qLangQuick')){ setLang(qLang==='en'?'id':'en'); return; }
+  // 6) checklist tujuan & cek-diri
+  const g=e.target.closest('.goal');
+  if(g){
+    if(g.closest('.selfcheck')){ g.classList.toggle('done'); g.querySelector('.gnum').innerHTML=g.classList.contains('done')?'<i data-lucide="check"></i>':'<i data-lucide="x"></i>'; icons(); return; }
+    if(g.parentElement.classList.contains('goal-list') && /^\d$/.test(g.querySelector('.gnum').textContent.trim())){ g.classList.toggle('done'); return; }
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown') go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp') go(cur-1);
+  if(e.key==='Home') go(0); if(e.key==='End') go(slides.length-1);
+});
+let tx0=null;
+ $('#deck').addEventListener('touchstart',e=>{tx0=e.touches[0].clientX},{passive:true});
+ $('#deck').addEventListener('touchend',e=>{ if(tx0===null)return; const dx=e.changedTouches[0].clientX-tx0; if(Math.abs(dx)>70){ dx<0?go(cur+1):go(cur-1); } tx0=null; },{passive:true});
+window.addEventListener('load',icons); // jaga-jaga jika CDN ikon datang terlambat
+
+/* INISIALISASI DECK — dijalankan SEKARANG agar tampilan pasti muncul */
+icons(); go(0);
+
+/* =========================================================
+   MODUL 1 : MARQUEE SAMPUL
+========================================================= */
+try{
+  const mq=`4,8 ÷ 3 = 1,6 &nbsp;·&nbsp; 0,6 ÷ 0,2 = 3 &nbsp;·&nbsp; bagi dengan ceria &nbsp;·&nbsp; 5,6 ÷ 0,8 = 7 &nbsp;·&nbsp; geser komanya! &nbsp;·&nbsp; 12,5 ÷ 5 = 2,5 &nbsp;·&nbsp; `;
+  $('#mqText').innerHTML=mq+mq;
+}catch(e){ console.error('marquee',e); }
+
+/* =========================================================
+   MODUL 2 : CHROME (menu, layar penuh, restart)
+========================================================= */
+try{
+  $('#btnMenu').onclick=openDrawer; $('#btnCloseDrawer').onclick=closeDrawer; $('#backdrop').onclick=closeDrawer;
+  $('#btnFull').onclick=()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
+  $('#btnRestart').onclick=()=>go(0);
+}catch(e){ console.error('chrome',e); }
+
+/* =========================================================
+   MODUL 3 : PIZZA 3 ÷ 4
+========================================================= */
+try{
+  const WEDGE='M20 4 A16 16 0 0 1 36 20 L20 20 Z';
+  const row=$('#pizzaRow');
+  for(let p=0;p<3;p++){
+    row.innerHTML+=`<svg class="pz" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="17" fill="#F6B73C" stroke="#2E2318" stroke-width="2.5"/>
+      <circle cx="20" cy="20" r="12.5" fill="#F4633A" stroke="#2E2318" stroke-width="1.6"/>
+      <g class="cuts" opacity="0"><line x1="20" y1="3" x2="20" y2="37" stroke="#2E2318" stroke-width="2"/><line x1="3" y1="20" x2="37" y2="20" stroke="#2E2318" stroke-width="2"/></g>
+    </svg>`;
+  }
+  const kids=$('#kidsRow');
+  for(let k=0;k<4;k++){
+    kids.innerHTML+=`<div class="kid">Anak ${k+1}
+      <svg width="20" height="20" viewBox="0 0 40 40"><path d="${WEDGE}" fill="#F4633A" stroke="#2E2318" stroke-width="2.5"/></svg>
+      <svg width="20" height="20" viewBox="0 0 40 40"><path d="${WEDGE}" fill="#F4633A" stroke="#2E2318" stroke-width="2.5"/></svg>
+      <svg width="20" height="20" viewBox="0 0 40 40"><path d="${WEDGE}" fill="#F4633A" stroke="#2E2318" stroke-width="2.5"/></svg>
+      = 3/4</div>`;
+  }
+  let pzStep=0;
+  function pizzaShow(){
+    $$('#pizzaRow .cuts').forEach(c=>c.setAttribute('opacity',pzStep>=1?'1':'0'));
+    $$('.kid').forEach((k,i)=>k.classList.toggle('on',pzStep>=2));
+    $('#pizzaReveal').classList.toggle('on',pzStep>=3);
+    $$('.pstep').forEach(p=>p.classList.toggle('on',+p.dataset.ps===pzStep));
+    $('#pizzaPrev').disabled=pzStep===0;
+    $('#pizzaNext').innerHTML=pzStep>=3?'Ulangi <i data-lucide="rotate-ccw"></i>':(pzStep===0?'Potong pizza! <i data-lucide="scissors"></i>':'Lanjut <i data-lucide="chevron-right"></i>');
+    icons();
+  }
+  $('#pizzaNext').onclick=()=>{ pzStep=pzStep>=3?0:pzStep+1; pizzaShow(); };
+  $('#pizzaPrev').onclick=()=>{ pzStep=Math.max(0,pzStep-1); pizzaShow(); };
+  pizzaShow();
+}catch(e){ console.error('pizza',e); }
+
+/* =========================================================
+   MODUL 4 : MODEL AREA 100 PETAK
+========================================================= */
+try{
+  const g=$('#grid10'); for(let i=0;i<100;i++) g.appendChild(document.createElement('b'));
+  const cells=[...g.children];
+  let r=4,c=3;
+  function render(){
+    cells.forEach((b,i)=>{ const row=Math.floor(i/10)+1, col=i%10+1;
+      b.className = col<=c&&row<=r ? 'both' : (col<=c?'colA':(row<=r?'rowB':'')); });
+    $('#rowVal').textContent='0,'+r; $('#colVal').textContent='0,'+c;
+    $('#areaEq').textContent=`0,${c} × 0,${r} = 0,${String(c*r).padStart(2,'0')}`;
+  }
+  $('#rowMinus').onclick=()=>{r=Math.max(1,r-1);render()}; $('#rowPlus').onclick=()=>{r=Math.min(9,r+1);render()};
+  $('#colMinus').onclick=()=>{c=Math.max(1,c-1);render()}; $('#colPlus').onclick=()=>{c=Math.min(9,c+1);render()};
+  render();
+}catch(e){ console.error('area',e); }
+
+/* =========================================================
+   MODUL 5 : KUIS KILAT PEMANASAN
+========================================================= */
+try{
+  const WARM=[
+    {q:'2,4 × 3',a:7.2,why:'24 × 3 = 72 → satu angka di belakang koma → 7,2'},
+    {q:'0,7 × 0,2',a:0.14,why:'7 × 2 = 14 → dua angka di belakang koma → 0,14'},
+    {q:'1,5 × 4',a:6,why:'15 × 4 = 60 → satu angka di belakang koma → 6,0 = 6'},
+    {q:'0,5 × 0,8',a:0.4,why:'5 × 8 = 40 → dua angka di belakang koma → 0,40 = 0,4'},
+    {q:'3,6 × 0,1',a:0.36,why:'Mengali dengan 0,1 = geser koma satu tempat ke kiri: 3,6 → 0,36'}
+  ];
+  let mi=0,mscore=0;
+  function miniShow(){
+    $('#miniCount').textContent=`Soal ${mi+1} / ${WARM.length}`;
+    $('#miniQ').textContent=WARM[mi].q;
+    $('#miniIn').value=''; $('#miniIn').disabled=false;
+    $('#miniCheck').style.display=''; $('#miniNext').style.display='none';
+    $('#miniFb').className='fb';
+  }
+  $('#miniCheck').onclick=()=>{
+    const v=parseNum($('#miniIn').value);
+    if(isNaN(v)){ toast('Tulis jawabanmu dulu ya!','err'); return; }
+    const fb=$('#miniFb');
+    if(Math.abs(v-WARM[mi].a)<0.005){
+      mscore++; $('#miniScore').textContent=mscore;
+      fb.className='fb show good'; fb.innerHTML=`<i data-lucide="party-popper"></i> Benar! ${WARM[mi].why}`;
+      $('#miniIn').disabled=true; $('#miniCheck').style.display='none';
+      if(mi<WARM.length-1){ $('#miniNext').style.display=''; } else { setTimeout(miniEnd,900); }
+    } else {
+      fb.className='fb show bad'; fb.innerHTML=`<i data-lucide="circle-alert"></i> Belum tepat. Hitung tanpa koma dulu, lalu kembalikan komanya!`;
+    }
+    icons();
+  };
+  $('#miniIn').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#miniCheck').click(); });
+  $('#miniNext').onclick=()=>{ mi++; miniShow(); };
+  function miniEnd(){
+    $('#miniBox').style.display='none'; $('#miniFinal').classList.add('show');
+    const st=mscore>=5?3:(mscore>=3?2:1);
+    starRow($('#miniStars'),st);
+    $('#miniFinalTxt').textContent=`Skor kamu ${mscore*20} dari 100. ${st===3?'Sempurna! Kamu siap masuk materi utama.':'Tidak apa-apa — intinya: koma dititip dulu, lalu dipanggil kembali!'}`;
+  }
+  $('#miniRetry').onclick=()=>{ mi=0;mscore=0;$('#miniScore').textContent=0;$('#miniBox').style.display='';$('#miniFinal').classList.remove('show'); miniShow(); };
+  miniShow();
+}catch(e){ console.error('mini',e); }
+
+/* =========================================================
+   MODUL 6 : PEMBAGIAN BERSUSUN
+========================================================= */
+try{
+  const LD_STEPS=[
+    'Lihat angka depannya: 4 ÷ 3 = 1. Tulis 1 di hasil. Kalikan balik: 3 × 1 = 3, tulis di bawah angka 4.',
+    'Koma ikut turun! Tulis tanda koma di hasil, tepat di atas koma milik 4,8.',
+    'Sisa pembagian tadi adalah 1 (dari 4 − 3). Turunkan angka 8 menyampingnya → sekarang kita punya 18.',
+    '18 ÷ 3 = 6. Tulis 6 di hasil. Cek balik: 3 × 6 = 18, sisa 0. Selesai — 4,8 ÷ 3 = 1,6!'
+  ];
+  let ldStep=0;
+  function ldShow(){
+    $$('#ld1 .cell').forEach(c=>{ const s=+(c.dataset.s||0);
+      c.classList.toggle('on',s<=ldStep);
+      c.classList.toggle('new',s===ldStep&&ldStep>0);
+    });
+    $('#ldText').textContent=LD_STEPS[ldStep-1]||'Tekan "Langkah 1" untuk mulai menghitung 4,8 ÷ 3.';
+    $('#ldDone').classList.toggle('show',ldStep>=4);
+    $$('#ldDots .sdot').forEach(d=>{ const n=+d.dataset.ld; d.classList.toggle('on',n===ldStep); d.classList.toggle('done',n<ldStep); });
+    $('#ldPrev').disabled=ldStep===0;
+    $('#ldNext').innerHTML=ldStep>=4?'Ulangi <i data-lucide="rotate-ccw"></i>':`Langkah ${ldStep+1} <i data-lucide="chevron-right"></i>`;
+    icons();
+  }
+  $('#ldNext').onclick=()=>{ ldStep=ldStep>=4?0:ldStep+1; ldShow(); };
+  $('#ldPrev').onclick=()=>{ ldStep=Math.max(0,ldStep-1); ldShow(); };
+  $$('#ldDots .sdot').forEach(d=>d.onclick=()=>{ ldStep=+d.dataset.ld; ldShow(); });
+  $('#tryReveal').onclick=()=>{ const a=$('#tryAns'); a.style.display=a.style.display==='none'?'':'none'; };
+  ldShow();
+}catch(e){ console.error('ld',e); }
+
+/* =========================================================
+   MODUL 7 : LABORATORIUM ×10
+========================================================= */
+try{
+  function mul10(str){
+    if(str.includes('.')){
+      const d=str.length-str.indexOf('.')-1, a=str.replace('.','');
+      if(d-1<=0) return a;
+      return a.slice(0,a.length-(d-1))+'.'+a.slice(a.length-(d-1));
+    }
+    return str+'0';
+  }
+  const PRESETS=[['0,6','0,3'],['2,4','0,6'],['4,5','0,9'],['3,6','0,04']];
+  let labP=0, labA='', labB='';
+  function labRender(bump){
+    const comma=s=>s.split('').map(ch=>ch===','?`<span class="koma">,</span>`:ch).join('');
+    const A=$('#labA'),B=$('#labB');
+    A.innerHTML=comma(labA); B.innerHTML=comma(labB);
+    if(bump){ A.classList.remove('bump');B.classList.remove('bump'); void A.offsetWidth; A.classList.add('bump');B.classList.add('bump'); }
+    const res=parseFloat(PRESETS[labP][0].replace(',','.'))/parseFloat(PRESETS[labP][1].replace(',','.'));
+    const done=!labB.includes('.');
+    $('#labResult').textContent=done?`Pembagi sudah bulat → ${labA} ÷ ${labB} = ${fmtID(res)} — mudah dihitung!`:`Hasilnya selalu tetap: ${fmtID(res)}`;
+    $('#labNote').textContent=done?'Perhatikan: menggeser koma TIDAK mengubah hasilnya, hanya membuat hitungan lebih mudah.':`Awalnya: ${PRESETS[labP][0]} ÷ ${PRESETS[labP][1]} — sekarang: ${labA} ÷ ${labB}. Sama-sama = ${fmtID(res)}.`;
+    $('#labShift').disabled=done;
+  }
+  function labSet(p){
+    labP=p; labA=PRESETS[p][0]; labB=PRESETS[p][1];
+    const row=$('#presetRow'); row.innerHTML='';
+    PRESETS.forEach((pr,i)=>{ const b=document.createElement('button'); b.className='btn'+(i===p?' yellow':''); b.textContent=pr[0]+' ÷ '+pr[1]; b.onclick=()=>labSet(i); row.appendChild(b); });
+    labRender(false);
+  }
+  $('#labShift').onclick=()=>{ labA=mul10(labA); labB=mul10(labB); labRender(true); };
+  $('#labReset').onclick=()=>labSet(labP);
+  labSet(0);
+}catch(e){ console.error('lab',e); }
+
+/* =========================================================
+   MODUL 8 : METODE PECAHAN
+========================================================= */
+try{
+  let frStep=0;
+  function fracShow(){
+    $$('.fstep').forEach(f=>f.classList.toggle('on',+f.dataset.fst===frStep));
+    $$('#fracChips .fchip').forEach(c=>c.classList.toggle('on',+c.dataset.fs<=frStep));
+    $('#fracBar').classList.toggle('grouped',frStep>=3);
+    $('#fracBarLbl').textContent=frStep>=3?'6 persepuluhan terbagi jadi 3 kelompok — tiap kelompok berisi 0,2. Maka hasilnya 3!':'Batang ini = 0,6 (6 persepuluhan kuning). Nanti akan terbagi jadi kelompok berisi 0,2.';
+    $('#fracPrev').disabled=frStep===0;
+    $('#fracNext').innerHTML=frStep>=4?'Ulangi <i data-lucide="rotate-ccw"></i>':(frStep===0?'Mulai langkah <i data-lucide="chevron-right"></i>':`Langkah ${frStep+1} <i data-lucide="chevron-right"></i>`);
+    icons();
+  }
+  $('#fracNext').onclick=()=>{ frStep=frStep>=4?0:frStep+1; fracShow(); };
+  $('#fracPrev').onclick=()=>{ frStep=Math.max(0,frStep-1); fracShow(); };
+  fracShow();
+}catch(e){ console.error('frac',e); }
+
+/* =========================================================
+   MODUL 9 : 30 SOAL CERITA EN/ID
+========================================================= */
+const STORY=[
+{lv:1,icon:'shopping-basket',op:'Division',opId:'Pembagian',unit:'kg',unitId:'kg',ans:0.5,
+ t:'Mom buys <b>2.5 kg</b> of sugar and splits it equally into <b>5 jars</b>. How many kilograms of sugar are in each jar?',
+ tid:'Ibu membeli <b>2,5 kg</b> gula. Gula itu dibagikan rata ke dalam <b>5 toples</b>. Berapa kg gula dalam setiap toples?',
+ h:'Work out 25 ÷ 5 first, then think about where the decimal point goes.',
+ hid:'Berapa 25 ÷ 5? Lalu pikirkan di mana posisi koma.',
+ w:'2.5 ÷ 5 = 0.5. Quick way: 25 ÷ 5 = 5, then move the decimal point one place because 2.5 has one decimal digit.',
+ wid:'2,5 ÷ 5 = 0,5. Cara cepat: 25 ÷ 5 = 5, lalu koma bergeser satu tempat karena 2,5 hanya punya satu angka di belakang koma.'},
+{lv:1,icon:'book-open',op:'Multiplication',opId:'Perkalian',unit:'$',unitId:'$',ans:14,
+ t:'One notebook costs <b>$3.50</b>. Rani buys <b>4 notebooks</b> for the new semester. What is the total cost of all the notebooks?',
+ tid:'Satu buku tulis harganya <b>$3,50</b>. Rani membeli <b>4 buku</b> untuk bekal semester baru. Berapa total harga seluruh buku?',
+ h:'Multiply 35 × 4 first, then place the decimal point (two decimal places).',
+ hid:'Hitung 35 × 4 dulu, lalu tempatkan koma (dua angka di belakang koma).',
+ w:'35 × 4 = 140. Because there are two decimal places (3.50), the answer becomes 14.00. So $14.',
+ wid:'35 × 4 = 140. Karena ada dua angka di belakang koma (3,50), hasilnya menjadi 14,00. Jadi $14.'},
+{lv:1,icon:'scissors',op:'Division',opId:'Pembagian',unit:'m',unitId:'m',ans:0.8,
+ t:'A ribbon <b>6.4 m</b> long is cut into <b>8 equal parts</b>. How long is each part?',
+ tid:'Seutas pita sepanjang <b>6,4 m</b> dipotong menjadi <b>8 bagian</b> yang sama panjang. Berapa panjang setiap bagian?',
+ h:'64 ÷ 8 = 8. Where does the decimal point go?',
+ hid:'64 ÷ 8 = 8. Di mana posisi komanya?',
+ w:'6.4 ÷ 8 = 0.8 m. Since 64 ÷ 8 = 8 and 6.4 has one decimal digit, the answer is 0.8.',
+ wid:'6,4 ÷ 8 = 0,8 m. Karena 64 ÷ 8 = 8 dan 6,4 punya satu angka di belakang koma, hasilnya 0,8.'},
+{lv:1,icon:'cup-soda',op:'Division',opId:'Pembagian',unit:'L',unitId:'L',ans:0.3,
+ t:'There are <b>1.8 liters</b> of orange juice to be shared equally into <b>6 glasses</b>. How many liters of juice go into each glass?',
+ tid:'Ada <b>1,8 liter</b> jus jeruk yang dibagikan rata ke dalam <b>6 gelas</b>. Berapa liter jus di setiap gelas?',
+ h:'18 ÷ 6 = 3 — now just place the decimal point.',
+ hid:'18 ÷ 6 = 3, tinggal atur komanya.',
+ w:'1.8 ÷ 6 = 0.3 L. Imagine 18 tenths shared by 6 → 3 tenths = 0.3.',
+ wid:'1,8 ÷ 6 = 0,3 L. Bayangkan 18 persepuluhan dibagi 6 → 3 persepuluhan = 0,3.'},
+{lv:1,icon:'cookie',op:'Multiplication',opId:'Perkalian',unit:'$',unitId:'$',ans:12,
+ t:'One bread roll costs <b>$2.40</b>. Your brother buys <b>5 rolls</b> for breakfast. How much does he pay?',
+ tid:'Satu roti bakar dijual <b>$2,40</b>. Kakak membeli <b>5 roti</b> untuk sarapan. Berapa yang harus dibayar?',
+ h:'24 × 5 = 120. Where does the decimal point go?',
+ hid:'24 × 5 = 120. Koma ada di mana?',
+ w:'24 × 5 = 120, and with two decimal places the answer is 12.00. So he pays $12.',
+ wid:'24 × 5 = 120, dengan dua angka di belakang koma hasilnya 12,00. Jadi kakak membayar $12.'},
+{lv:1,icon:'candy',op:'Division',opId:'Pembagian',unit:'kg',unitId:'kg',ans:0.1,
+ t:'A jar holds <b>0.9 kg</b> of chocolate candies, shared equally among <b>9 children</b>. How many kilograms does each child get?',
+ tid:'Kantong berisi <b>0,9 kg</b> permen cokelat dibagikan sama rata kepada <b>9 anak</b>. Berapa kg bagian setiap anak?',
+ h:'9 ÷ 9 = 1 — now watch the decimal point.',
+ hid:'9 ÷ 9 = 1, lalu perhatikan komanya.',
+ w:'0.9 ÷ 9 = 0.1 kg. Nine tenths shared by 9 → one tenth = 0.1.',
+ wid:'0,9 ÷ 9 = 0,1 kg. Sembilan persepuluhan dibagi 9 → satu persepuluhan = 0,1.'},
+{lv:1,icon:'ruler',op:'Division',opId:'Pembagian',unit:'m',unitId:'m',ans:0.9,
+ t:'<b>Four ribbons</b> of the same length are made from <b>3.6 m</b> of ribbon. How long is one ribbon?',
+ tid:'<b>Empat pita</b> yang sama panjang dibuat dari <b>3,6 m</b> pita. Berapa panjang satu pita?',
+ h:'36 ÷ 4 = 9. Now place the decimal point.',
+ hid:'36 ÷ 4 = 9. Atur komanya.',
+ w:'3.6 ÷ 4 = 0.9 m because 36 ÷ 4 = 9, then the decimal point moves one place.',
+ wid:'3,6 ÷ 4 = 0,9 m karena 36 ÷ 4 = 9, lalu koma bergeser satu tempat.'},
+{lv:1,icon:'hand-coins',op:'Multiplication',opId:'Perkalian',unit:'$',unitId:'$',ans:0.9,
+ t:'One pack of chewing gum costs <b>$0.15</b>. Budi buys <b>6 packs</b>. How much does he pay?',
+ tid:'Harga satu permen karet <b>$0,15</b>. Budi membeli <b>6 permen</b>. Berapa yang ia bayar?',
+ h:'15 × 6 = 90 → now turn it into a decimal.',
+ hid:'15 × 6 = 90 → ubah menjadi desimal.',
+ w:'15 × 6 = 90, and with two decimal places the answer is 0.90. So $0.90.',
+ wid:'15 × 6 = 90, dengan dua tempat desimal hasilnya 0,90. Jadi $0,90.'},
+{lv:1,icon:'droplets',op:'Division',opId:'Pembagian',unit:'L',unitId:'L',ans:0.9,
+ t:'<b>7.2 liters</b> of water are poured equally into <b>8 bottles</b>. How many liters does each bottle hold?',
+ tid:'Air sebanyak <b>7,2 liter</b> dimasukkan sama rata ke dalam <b>8 botol</b>. Berapa liter isi setiap botol?',
+ h:'72 ÷ 8 = 9, then place the decimal point.',
+ hid:'72 ÷ 8 = 9, lalu atur koma.',
+ w:'7.2 ÷ 8 = 0.9 L because 72 ÷ 8 = 9 and the decimal point moves one place.',
+ wid:'7,2 ÷ 8 = 0,9 L karena 72 ÷ 8 = 9 dan koma bergeser satu tempat.'},
+{lv:1,icon:'cake',op:'Multiplication',opId:'Perkalian',unit:'kg',unitId:'kg',ans:2,
+ t:'One cake needs <b>0.25 kg</b> of flour. How many kilograms of flour are needed for <b>8 cakes</b>?',
+ tid:'Untuk membuat satu kue diperlukan <b>0,25 kg</b> tepung. Berapa kg tepung untuk <b>8 kue</b>?',
+ h:'25 × 8 = 200. The number 0.25 has two decimal digits.',
+ hid:'25 × 8 = 200. 0,25 punya dua angka di belakang koma.',
+ w:'25 × 8 = 200, with two decimal places → 2.00. So 2 kg of flour.',
+ wid:'25 × 8 = 200, dengan dua angka di belakang koma → 2,00. Jadi 2 kg tepung.'},
+{lv:2,icon:'wallet',op:'2 Steps',opId:'2 Langkah',unit:'$',unitId:'$',ans:2.3,
+ t:'Rika hands over <b>$10</b> to buy <b>4 pencils</b> of the same price and receives <b>$0.80</b> in change. What is the price of one pencil?',
+ tid:'Rika menyerahkan <b>$10</b> untuk membeli <b>4 pensil</b> yang sama harga dan menerima kembalian <b>$0,80</b>. Berapa harga satu pensil?',
+ h:'Find the total cost of the 4 pencils first, then divide by 4.',
+ hid:'Cari dulu total harga 4 pensil, baru dibagi 4.',
+ w:'Money spent: 10 − 0.80 = 9.20. Price of one pencil: 9.20 ÷ 4 = 2.30. So $2.30.',
+ wid:'Uang yang dibelanjakan: 10 − 0,80 = 9,20. Harga satu pensil: 9,20 ÷ 4 = 2,30. Jadi $2,30.'},
+{lv:2,icon:'ruler',op:'Division',opId:'Pembagian',unit:'pieces',unitId:'bagian',ans:7,
+ t:'A piece of cloth <b>5.6 m</b> long is cut into equal pieces, each <b>0.8 m</b> long. How many pieces are made?',
+ tid:'Kain sepanjang <b>5,6 m</b> dipotong menjadi beberapa bagian, masing-masing <b>0,8 m</b>. Berapa banyak bagian kain?',
+ h:'How many 0.8s fit into 5.6? Try 0.8 × 7.',
+ hid:'Berapa banyak 0,8 ada di dalam 5,6? Coba hitung 0,8 × 7.',
+ w:'5.6 ÷ 0.8 = 7. Shift both decimal points one place: 56 ÷ 8 = 7 pieces.',
+ wid:'5,6 ÷ 0,8 = 7. Geser koma keduanya satu tempat: 56 ÷ 8 = 7 bagian.'},
+{lv:2,icon:'droplets',op:'Multiplication',opId:'Perkalian',unit:'L',unitId:'L',ans:10,
+ t:'One bottle holds <b>1.25 liters</b> of mineral water. How many liters of water are there in <b>8 full bottles</b>?',
+ tid:'Satu botol berisi <b>1,25 liter</b> air mineral. Berapa liter air dalam <b>8 botol</b> yang penuh?',
+ h:'125 × 8 = 1000, then place the decimal point carefully.',
+ hid:'125 × 8 = 1000, lalu tempatkan koma dengan benar.',
+ w:'125 × 8 = 1000, with two decimal places → 10.00. So 10 liters.',
+ wid:'125 × 8 = 1000, dengan dua angka di belakang koma → 10,00. Jadi 10 liter.'},
+{lv:2,icon:'shopping-basket',op:'Division',opId:'Pembagian',unit:'kg',unitId:'kg',ans:0.75,
+ t:'A supply of <b>4.5 kg</b> of rice runs out in <b>6 days</b>, with the same amount cooked every day. How many kilograms of rice are cooked each day?',
+ tid:'Persediaan beras <b>4,5 kg</b> habis dalam <b>6 hari</b> dengan takaran sama setiap hari. Berapa kg beras dimasak tiap hari?',
+ h:'45 ÷ 6 = 7.5. Then move the decimal point one place.',
+ hid:'45 ÷ 6 = 7,5. Lalu geser koma satu tempat.',
+ w:'4.5 ÷ 6 = 0.75. Trick: 45 ÷ 6 = 7.5, then move the decimal point one place → 0.75 kg.',
+ wid:'4,5 ÷ 6 = 0,75. Trik: 45 ÷ 6 = 7,5, lalu koma bergeser satu tempat → 0,75 kg.'},
+{lv:2,icon:'cookie',op:'2 Steps',opId:'2 Langkah',unit:'$',unitId:'$',ans:4.5,
+ t:'<b>Five chocolate bars</b> cost <b>$7.50</b> in total. How much do <b>3 bars</b> cost?',
+ tid:'<b>Lima batang</b> cokelat sama harganya <b>$7,50</b>. Berapa harga <b>3 batang</b> cokelat?',
+ h:'Find the price of one bar first, then multiply by 3.',
+ hid:'Cari harga satu batang dulu, baru kalikan 3.',
+ w:'One bar: 7.50 ÷ 5 = 1.50. Three bars: 1.50 × 3 = 4.50. So $4.50.',
+ wid:'Harga satu batang: 7,50 ÷ 5 = 1,50. Harga 3 batang: 1,50 × 3 = 4,50. Jadi $4,50.'},
+{lv:2,icon:'car',op:'2 Steps',opId:'2 Langkah',unit:'km',unitId:'km',ans:5,
+ t:'The distance from Raka\'s house to his grandmother\'s house is <b>32.4 km</b>. After traveling <b>17.4 km</b>, he stops to rest. He plans to cover the rest of the trip equally in <b>3 hours</b>. How many kilometers per hour is that?',
+ tid:'Jarak rumah Raka ke rumah nenek <b>32,4 km</b>. Setelah menempuh <b>17,4 km</b> ia beristirahat. Sisa perjalanan direncanakan sama rata dalam <b>3 jam</b>. Berapa km tiap jam?',
+ h:'Work out the remaining distance first.',
+ hid:'Hitung dulu sisa jaraknya.',
+ w:'Distance left: 32.4 − 17.4 = 15 km. Each hour: 15 ÷ 3 = 5 km.',
+ wid:'Sisa jarak: 32,4 − 17,4 = 15 km. Setiap jam: 15 ÷ 3 = 5 km.'},
+{lv:2,icon:'package',op:'Division',opId:'Pembagian',unit:'containers',unitId:'wadah',ans:6,
+ t:'A bag holds <b>2.4 kg</b> of peanuts to be moved into small containers. Each container holds <b>0.4 kg</b>. How many containers are needed?',
+ tid:'Kantong berisi <b>2,4 kg</b> kacang dipindah ke wadah kecil. Setiap wadah memuat <b>0,4 kg</b>. Berapa wadah dibutuhkan?',
+ h:'How many 0.4s fit into 2.4? Shift the decimal points first.',
+ hid:'24 ÷ 4 membantu — geser dulu komanya.',
+ w:'2.4 ÷ 0.4 = 6. Shift both decimal points one place: 24 ÷ 4 = 6 containers.',
+ wid:'2,4 ÷ 0,4 = 6. Geser koma keduanya satu tempat: 24 ÷ 4 = 6 wadah.'},
+{lv:2,icon:'ticket',op:'Multiplication',opId:'Perkalian',unit:'$',unitId:'$',ans:12.5,
+ t:'A children\'s ride ticket costs <b>$6.25</b>. An adult ticket costs <b>twice</b> the price of a child\'s ticket. What is the price of one adult ticket?',
+ tid:'Tiket wahana anak harganya <b>$6,25</b>. Tiket dewasa <b>dua kali</b> harga tiket anak. Berapa harga satu tiket dewasa?',
+ h:'"Twice" means multiply by 2.',
+ hid:'"Dua kali" berarti dikalikan 2.',
+ w:'6.25 × 2 = 12.50. So an adult ticket costs $12.50.',
+ wid:'6,25 × 2 = 12,50. Jadi tiket dewasa $12,50.'},
+{lv:2,icon:'citrus',op:'Strategy',opId:'Taktik',unit:'$',unitId:'$',ans:3,
+ t:'<b>1.5 kg</b> of strawberries costs <b>$9.00</b>. How much does <b>0.5 kg</b> of strawberries cost?',
+ tid:'Harga <b>1,5 kg</b> stroberi adalah <b>$9,00</b>. Berapa harga <b>0,5 kg</b> stroberi?',
+ h:'0.5 kg is one third of 1.5 kg.',
+ hid:'0,5 kg adalah sepertiga dari 1,5 kg.',
+ w:'0.5 is one third of 1.5, so the price is 9.00 ÷ 3 = $3.00. (Another way: 1 kg costs 6.00, then 6 × 0.5 = 3.)',
+ wid:'0,5 adalah sepertiga dari 1,5, jadi harganya 9,00 ÷ 3 = $3,00. (Alternatif: harga per kg = 6,00, lalu 6 × 0,5 = 3.)'},
+{lv:2,icon:'footprints',op:'2 Steps',opId:'2 Langkah',unit:'km',unitId:'km',ans:9,
+ t:'Deni runs around a track that is <b>0.75 km</b> long each lap. He runs <b>6 laps</b> a day for <b>2 days</b>. How many kilometers does he run in total?',
+ tid:'Deni berlari mengelilingi lintasan sepanjang <b>0,75 km</b> tiap putaran. Ia berlari <b>6 putaran</b> setiap hari selama <b>2 hari</b>. Total km Deni berlari?',
+ h:'Find the distance for one day first.',
+ hid:'Hitung dulu jarak satu hari.',
+ w:'One day: 0.75 × 6 = 4.5 km. Two days: 4.5 × 2 = 9 km.',
+ wid:'Satu hari: 0,75 × 6 = 4,5 km. Dua hari: 4,5 × 2 = 9 km.'},
+{lv:3,icon:'beef',op:'2 Steps',opId:'2 Langkah',unit:'$',unitId:'$',ans:5,
+ t:'Mom brings <b>$20</b>. She buys <b>2.5 kg</b> of meat that costs <b>$6</b> per kilogram. How much money is left?',
+ tid:'Ibu membawa uang <b>$20</b>. Ia membeli <b>2,5 kg</b> daging dengan harga <b>$6</b> tiap kilogram. Berapa sisa uang Ibu?',
+ h:'Find the total cost of the meat first.',
+ hid:'Hitung dulu harga seluruh daging.',
+ w:'The meat costs: 2.5 × 6 = 15. Money left: 20 − 15 = $5.',
+ wid:'Harga daging: 2,5 × 6 = 15. Sisa uang: 20 − 15 = $5.'},
+{lv:3,icon:'droplets',op:'Division',opId:'Pembagian',unit:'times',unitId:'kali',ans:25,
+ t:'A jerry can holds <b>12.5 liters</b> of water. Each hand wash uses <b>0.5 liters</b>. How many times can the water be used until it runs out?',
+ tid:'Jerigen berisi <b>12,5 liter</b> air. Setiap kali mencuci tangan dipakai <b>0,5 liter</b>. Berapa kali air dapat dipakai sampai habis?',
+ h:'How many 0.5s are there in 12.5? Shift both decimal points.',
+ hid:'Berapa banyak 0,5 ada di dalam 12,5? Geser koma keduanya.',
+ w:'12.5 ÷ 0.5 = 25. Shift both decimal points one place: 125 ÷ 5 = 25 times.',
+ wid:'12,5 ÷ 0,5 = 25. Geser koma satu tempat: 125 ÷ 5 = 25 kali.'},
+{lv:3,icon:'shopping-basket',op:'2 Steps',opId:'2 Langkah',unit:'kg',unitId:'kg',ans:0.75,
+ t:'Dina weighs three bags of flour: <b>0.5 kg</b>, <b>1.25 kg</b>, and <b>2 kg</b>. All the flour is shared equally into <b>5 containers</b>. How many kilograms go into each container?',
+ tid:'Dina menimbang tiga kantong tepung: <b>0,5 kg</b>, <b>1,25 kg</b>, dan <b>2 kg</b>. Semua dibagi rata ke <b>5 wadah</b>. Berapa kg tiap wadah?',
+ h:'Add up all the weights first.',
+ hid:'Jumlahkan dulu semua beratnya.',
+ w:'Total: 0.5 + 1.25 + 2 = 3.75 kg. Each container: 3.75 ÷ 5 = 0.75 kg.',
+ wid:'Total: 0,5 + 1,25 + 2 = 3,75 kg. Setiap wadah: 3,75 ÷ 5 = 0,75 kg.'},
+{lv:3,icon:'citrus',op:'Multiplication',opId:'Perkalian',unit:'$',unitId:'$',ans:4.8,
+ t:'Oranges cost <b>$3.20</b> per kilogram. Mom buys <b>1.5 kg</b>. How much does she pay?',
+ tid:'Harga jeruk <b>$3,20</b> per kilogram. Ibu membeli <b>1,5 kg</b>. Berapa yang harus dibayar?',
+ h:'Multiply by 1 first, then by 0.5 (half), then add.',
+ hid:'Kalikan 1 dulu, lalu setengahnya (0,5), lalu jumlahkan.',
+ w:'3.20 × 1 = 3.20 and 3.20 × 0.5 = 1.60. Total: 3.20 + 1.60 = 4.80. So $4.80.',
+ wid:'3,20 × 1 = 3,20 dan 3,20 × 0,5 = 1,60. Jumlahnya 3,20 + 1,60 = 4,80. Jadi $4,80.'},
+{lv:3,icon:'book-open',op:'Division',opId:'Pembagian',unit:'pages',unitId:'halaman',ans:0.5,
+ t:'Fajar reads <b>12.5 pages</b> in <b>25 minutes</b> at a steady speed. How many pages does he read every minute?',
+ tid:'Fajar membaca <b>12,5 halaman</b> dalam <b>25 menit</b> dengan kecepatan tetap. Berapa halaman yang ia baca setiap menit?',
+ h:'Try 12.5 ÷ 25. Remember: 125 ÷ 25 = 5.',
+ hid:'Coba 12,5 ÷ 25. Ingat 125 ÷ 25 = 5.',
+ w:'12.5 ÷ 25 = 0.5. Imagine 125 ÷ 25 = 5, then the decimal point moves one place.',
+ wid:'12,5 ÷ 25 = 0,5. Bayangkan 125 ÷ 25 = 5, lalu koma bergeser satu tempat.'},
+{lv:3,icon:'scissors',op:'2 Steps',opId:'2 Langkah',unit:'m',unitId:'m',ans:1.4,
+ t:'A rope <b>6.3 m</b> long is cut into <b>9 equal parts</b>. Two parts are then <b>joined</b> into one piece. How long is that joined piece?',
+ tid:'Tali sepanjang <b>6,3 m</b> dipotong menjadi <b>9 bagian</b> sama panjang. Dua bagian lalu <b>disambung</b> menjadi satu. Panjang tali sambungan itu?',
+ h:'Find the length of one part first.',
+ hid:'Cari panjang satu bagian dulu.',
+ w:'One part: 6.3 ÷ 9 = 0.7 m. Two parts joined: 0.7 × 2 = 1.4 m.',
+ wid:'Satu bagian: 6,3 ÷ 9 = 0,7 m. Sambungan dua bagian: 0,7 × 2 = 1,4 m.'},
+{lv:3,icon:'cake',op:'2 Steps',opId:'2 Langkah',unit:'kg',unitId:'kg',ans:0.1,
+ t:'A chocolate block weighs <b>0.9 kg</b>. After <b>0.4 kg</b> is used to bake a cake, the rest is shared equally into <b>5 pans</b>. How many kilograms go into each pan?',
+ tid:'Sebatang cokelat seberat <b>0,9 kg</b>. Setelah <b>0,4 kg</b> dipakai membuat kue, sisanya dibagi rata ke <b>5 loyang</b>. Berapa kg tiap loyang?',
+ h:'Find the leftover chocolate first.',
+ hid:'Hitung dulu sisa cokelatnya.',
+ w:'Left: 0.9 − 0.4 = 0.5 kg. Each pan: 0.5 ÷ 5 = 0.1 kg.',
+ wid:'Sisa: 0,9 − 0,4 = 0,5 kg. Setiap loyang: 0,5 ÷ 5 = 0,1 kg.'},
+{lv:3,icon:'gas-pump',op:'Division',opId:'Pembagian',unit:'km',unitId:'km',ans:11,
+ t:'A motorcycle travels <b>27.5 km</b> on <b>2.5 liters</b> of fuel. How many kilometers can it travel on <b>1 liter</b>?',
+ tid:'Sepeda motor menempuh <b>27,5 km</b> dengan <b>2,5 liter</b> bensin. Berapa km yang bisa ditempuh dengan <b>1 liter</b>?',
+ h:'Shift both decimal points one place: 275 ÷ 25.',
+ hid:'Geser koma keduanya satu tempat: 275 ÷ 25.',
+ w:'27.5 ÷ 2.5 = 11. Shift both decimal points: 275 ÷ 25 = 11 km per liter.',
+ wid:'27,5 ÷ 2,5 = 11. Geser koma: 275 ÷ 25 = 11 km per liter.'},
+{lv:3,icon:'wallet',op:'2 Steps',opId:'2 Langkah',unit:'$',unitId:'$',ans:18,
+ t:'The younger sister has <b>$4.50</b>. Her older brother has <b>three times</b> as much money. How much money do they have altogether?',
+ tid:'Uang adik <b>$4,50</b>. Uang kakak <b>tiga kali</b> uang adik. Berapa jumlah uang mereka berdua?',
+ h:'Find the brother\'s money first, then add.',
+ hid:'Cari uang kakak dulu, lalu jumlahkan.',
+ w:'The brother has: 4.50 × 3 = 13.50. Altogether: 13.50 + 4.50 = $18.',
+ wid:'Uang kakak: 4,50 × 3 = 13,50. Jumlah: 13,50 + 4,50 = $18.'},
+{lv:3,icon:'ice-cream',op:'Division',opId:'Pembagian',unit:'cups',unitId:'cup',ans:22,
+ t:'A tub of ice cream holds <b>5.5 liters</b> and is packed into small cups that hold <b>0.25 liters</b> each. How many cups can be filled completely?',
+ tid:'Bak es krim berisi <b>5,5 liter</b> dikemas ke cup kecil berisi <b>0,25 liter</b>. Berapa banyak cup terisi penuh?',
+ h:'Shift both decimal points two places: 550 ÷ 25.',
+ hid:'Geser koma dua tempat: 550 ÷ 25.',
+ w:'5.5 ÷ 0.25 = 22. Shift both decimal points two places: 550 ÷ 25 = 22 cups.',
+ wid:'5,5 ÷ 0,25 = 22. Geser koma dua tempat: 550 ÷ 25 = 22 cup.'}
+];
+
+const LV={en:{1:'Easy',2:'Medium',3:'Hard'},id:{1:'Mudah',2:'Sedang',3:'Sulit'}};
+const LQ={
+ en:{pts:'points',done:'Done',q:'Question',jump:'Click a number to jump to a question',
+   check:'Check',next:'Next Question',finish:'See Results',hint:'Hint',reveal:'Show solution',
+   needAnswer:'Write your answer first!',
+   correct:(a,u)=>`Correct! The answer is ${a} ${u}.`,
+   wrong1:'Not yet — read the problem again slowly and check your steps!',
+   wrong2:'Still not right. No worries — use the Hint or show the solution!',
+   revealed:a=>`The answer is ${a}. No worries — study the solution below!`,
+   allDone:'All questions answered!',
+   total:p=>`Total: ${p} points out of 60.`,
+   great:'Amazing — you are a true decimal detective!',
+   good:'Great work! Every question makes you sharper.'},
+ id:{pts:'poin',done:'Selesai',q:'Soal',jump:'Klik nomor untuk melompat soal',
+   check:'Periksa',next:'Soal Berikutnya',finish:'Lihat Hasil',hint:'Petunjuk',reveal:'Lihat pembahasan',
+   needAnswer:'Tulis jawabanmu dulu ya!',
+   correct:(a,u)=>`Benar sekali! Jawaban: ${a} ${u}.`,
+   wrong1:'Belum tepat — baca lagi soalnya perlahan dan periksa langkahmu!',
+   wrong2:'Masih belum tepat. Tenang, gunakan Petunjuk atau lihat pembahasannya!',
+   revealed:a=>`Jawabannya ${a}. Tidak apa-apa, pelajari caranya ya!`,
+   allDone:'Semua soal terjawab!',
+   total:p=>`Total ${p} poin dari 60.`,
+   great:'Luar biasa — kamu detektif desimal sejati!',
+   good:'Kerja bagus! Setiap soal membuatmu makin tajam.'}
+};
+const L=()=>LQ[qLang];
+const fmtL=n=>{ const s=(+n.toFixed(2)).toString(); return qLang==='en'?s:s.replace('.',','); };
+const unitOf=q=>qLang==='en'?q.unit:q.unitId;
+const textOf=(q,f)=>qLang==='en'?q[f]:q[f+'id'];
+
+var qs=STORY.map(()=>({att:0,done:false,seen:false}));
+var qi=0;
+
+function qStats(){ const done=qs.filter(q=>q.done).length; const pts=qs.reduce((s,q,i)=>s+(q.done?(q.seen?0:(q.att===0?2:1)):0),0);
+  $('#qScore').textContent=pts+' '+L().pts; $('#qDone').textContent=`${L().done} ${done}/30`;
+  return {done,pts}; }
+function qGridPaint(){
+  $$('#qGrid button').forEach((b,i)=>{
+    b.className=''; if(i===qi)b.classList.add('now');
+    if(qs[i].done) b.classList.add(qs[i].seen?'seen':'ok');
+    else if(qs[i].att>0) b.classList.add('tried');
+  });
+}
+function qShow(){
+  const q=STORY[qi];
+  const stars=Array(q.lv).fill('<i data-lucide="star"></i>').join('');
+  $('#qMeta').innerHTML=`<span class="lvlbadge l${q.lv}">${stars} ${LV[qLang][q.lv]}</span><span class="opbadge">${qLang==='en'?q.op:q.opId}</span><span class="chip" style="padding:2px 11px"><i data-lucide="${q.icon}"></i></span><span style="font-weight:800;color:#8a7a63">${L().q} ${qi+1}</span><button class="langmini" id="qLangQuick" title="Translate / Terjemahkan"><i data-lucide="languages"></i> ${qLang==='en'?'ID':'EN'}</button>`;
+  $('#qText').innerHTML=textOf(q,'t');
+  $('#qUnit').textContent=unitOf(q);
+  $('#qIn').value=''; $('#qIn').disabled=false;
+  $('#qFb').className='fb'; $('#qWhy').classList.remove('show');
+  $('#qReveal').style.display='none';
+  const last=qi===STORY.length-1;
+  $('#qCheck').innerHTML=(qs[qi].done)?(last?L().finish+' <i data-lucide="flag"></i>':L().next+' <i data-lucide="arrow-right"></i>'):'<i data-lucide="check"></i> '+L().check;
+  $('#qHint').innerHTML='<i data-lucide="lightbulb"></i> '+L().hint;
+  $('#qReveal').innerHTML='<i data-lucide="eye"></i> '+L().reveal;
+  if(qs[qi].done){ $('#qWhyTxt').innerHTML=textOf(q,'w'); $('#qWhy').classList.add('show'); $('#qIn').disabled=true; }
+  qStats(); qGridPaint(); icons();
+}
+function qFinish(){
+  $('#qCard').style.display='none'; $('#qFinish').classList.add('show');
+  const {pts}=qStats();
+  const st=pts>=48?3:(pts>=30?2:1);
+  starRow($('#qStars'),st);
+  $('#qFinish h3').textContent=L().allDone;
+  $('#qFinishTxt').textContent=`${L().total(pts)} ${st===3?L().great:L().good}`;
+  burstConfetti($('#qFinish'),40);
+}
+function setLang(l){
+  qLang=l;
+  $('#langEn').classList.toggle('on',l==='en');
+  $('#langId').classList.toggle('on',l==='id');
+  $('#qJumpLbl').textContent=L().jump;
+  qShow();
+}
+
+try{
+  const gEl=$('#qGrid'); gEl.innerHTML='';
+  STORY.forEach((_,i)=>{ const b=document.createElement('button'); b.textContent=i+1; b.onclick=()=>{qi=i;qShow();}; gEl.appendChild(b); });
+  $('#qCheck').onclick=()=>{
+    const q=STORY[qi], st=qs[qi];
+    if(st.done){
+      if(qi<STORY.length-1){ qi++; qShow(); $('#qCard').scrollIntoView({behavior:'smooth'}); }
+      else qFinish();
+      return;
+    }
+    const v=parseNum($('#qIn').value);
+    if(isNaN(v)){ toast(L().needAnswer,'err'); return; }
+    const fb=$('#qFb');
+    if(Math.abs(v-q.ans)<0.005){
+      st.done=true;
+      fb.className='fb show good'; fb.innerHTML=`<i data-lucide="party-popper"></i> ${L().correct(fmtL(q.ans),unitOf(q))}`;
+      $('#qWhyTxt').innerHTML=textOf(q,'w'); $('#qWhy').classList.add('show');
+      $('#qIn').disabled=true;
+      $('#qCheck').innerHTML=(qi===STORY.length-1)?L().finish+' <i data-lucide="flag"></i>':L().next+' <i data-lucide="arrow-right"></i>';
+      if(qStats().done===STORY.length) setTimeout(qFinish,1400);
+    } else {
+      st.att++;
+      if(st.att===1){ fb.className='fb show bad'; fb.innerHTML='<i data-lucide="circle-alert"></i> '+L().wrong1; }
+      else { fb.className='fb show bad'; fb.innerHTML='<i data-lucide="lightbulb"></i> '+L().wrong2; $('#qReveal').style.display=''; }
+    }
+    qGridPaint(); icons();
+  };
+  $('#qIn').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#qCheck').click(); });
+  $('#qHint').onclick=()=>{ toast('<i data-lucide="lightbulb"></i> '+textOf(STORY[qi],'h')); };
+  $('#qReveal').onclick=()=>{
+    const q=STORY[qi],st=qs[qi];
+    st.done=true; st.seen=true;
+    $('#qFb').className='fb show bad'; $('#qFb').innerHTML='<i data-lucide="eye"></i> '+L().revealed(fmtL(q.ans)+' '+unitOf(q));
+    $('#qWhyTxt').innerHTML=textOf(q,'w'); $('#qWhy').classList.add('show');
+    $('#qIn').disabled=true; $('#qReveal').style.display='none';
+    $('#qCheck').innerHTML=(qi===STORY.length-1)?L().finish+' <i data-lucide="flag"></i>':L().next+' <i data-lucide="arrow-right"></i>';
+    if(qStats().done===STORY.length) setTimeout(qFinish,1600);
+    qGridPaint(); icons();
+  };
+  $('#langEn').onclick=()=>setLang('en');
+  $('#langId').onclick=()=>setLang('id');
+  setLang('en');
+}catch(e){ console.error('quiz',e); }
+
+/* =========================================================
+   MODUL 10 : GAME SERBU BALON DESIMAL (diperbaiki)
+========================================================= */
+const PALETTE=['#F4633A','#1E7A5A','#F6B73C','#E85D75'];
+var AC=null;
+function ac(){ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); return AC; }
+function beep(f1,f2,dur,type='sine',vol=.18){
+  if(!game.sound) return;
+  try{ const c=ac(),o=c.createOscillator(),g=c.createGain();
+    if(c.state==='suspended') c.resume();
+    o.type=type; o.frequency.setValueAtTime(f1,c.currentTime);
+    if(f2) o.frequency.exponentialRampToValueAtTime(f2,c.currentTime+dur);
+    g.gain.setValueAtTime(vol,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);
+    o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+dur);
+  }catch(e){}
+}
+const sGood=()=>{beep(620,920,.12);setTimeout(()=>beep(880,1200,.14),90)};
+const sBad=()=>beep(220,120,.25,'square',.1);
+const sPop=()=>beep(700,90,.13,'triangle',.25);
+function toggleSound(){ game.sound=!game.sound; $('#gSound').innerHTML=`<i data-lucide="${game.sound?'volume-2':'volume-x'}"></i>`; icons(); toast(game.sound?'Suara aktif':'Suara mati'); }
+
+function genBQ(){
+  const tp=Math.floor(Math.random()*4); let txt,ans;
+  if(tp===0){ const d=2+Math.floor(Math.random()*8); const r=(1+Math.floor(Math.random()*17))/10; ans=r; txt=`${fmtID(r*d)} ÷ ${d}`; }
+  else if(tp===1){ const a=(1+Math.floor(Math.random()*98))/10; const dv=Math.random()<.5?10:100; ans=a/dv; txt=`${fmtID(a)} ÷ ${dv}`; }
+  else if(tp===2){ const k=2+Math.floor(Math.random()*8); const p=(1+Math.floor(Math.random()*9))/10; ans=k; txt=`${fmtID(k*p)} ÷ ${fmtID(p)}`; }
+  else { const a=(1+Math.floor(Math.random()*98))/10; const m=2+Math.floor(Math.random()*8); ans=+(a*m).toFixed(2); txt=`${fmtID(a)} × ${m}`; }
+  const pool=[ans*10,ans/10,+(String(+ans.toFixed(2)).replace('.','')),ans+(0.1+Math.random()),ans-Math.random()*0.5];
+  const opts=[]; const seen=new Set([+ans.toFixed(2)]);
+  for(const p of pool){ const v=+Math.abs(p).toFixed(2); if(!seen.has(v)&&v>0.01){ opts.push(v); seen.add(v); } if(opts.length===3) break; }
+  let guard=0;
+  while(opts.length<3 && guard++<200){ const v=+(Math.abs(ans+Math.random()*3)).toFixed(2); if(!seen.has(v)){opts.push(v);seen.add(v);} }
+  opts.splice(Math.floor(Math.random()*4),0,+ans.toFixed(2));
+  return {txt,ans:+ans.toFixed(2),opts};
+}
+function gShowPanel(id){ $$('.game-panel').forEach(p=>p.classList.remove('show')); const t=$(id); if(t) t.classList.add('show'); }
+function gNext(){
+  if(!game.running) return;
+  game.qn++; game.locked=false;
+  if(game.qn>10){ endGame(false); return; }
+  $('#gNum').textContent=game.qn+'/10';
+  $('#gStreak').textContent=game.streak;
+  $('#gameMsg').textContent=''; $('#gameMsg').className='';
+  const q=genBQ(); game.cur=q;
+  $('#gameQ').textContent=q.txt+' = ?';
+  const field=$('#balloonField'); field.innerHTML='';
+  const pos=[8,31,54,76];
+  q.opts.forEach((v,i)=>{
+    const b=document.createElement('button');
+    b.className='balloon'; b.style.setProperty('--c',PALETTE[i]);
+    b.style.left=(pos[i]+Math.random()*4)+'%';
+    b.style.bottom=(12+Math.random()*22)+'%';
+    b.style.setProperty('--dur',(3.6+Math.random()*2)+'s');
+    b.style.setProperty('--del',(-Math.random()*3)+'s');
+    b.innerHTML=`<span class="val">${fmtID(v)}</span><span class="knot"></span><span class="string"></span>`;
+    b.dataset.v=v;
+    b.addEventListener('click',()=>gPick(b,v));
+    field.appendChild(b);
+  });
+  game.tleft=20; clearInterval(game.timer);
+  game.timer=setInterval(()=>{
+    if(!game.running){ clearInterval(game.timer); return; }
+    game.tleft-=0.1;
+    const pct=Math.max(0,game.tleft/20*100);
+    const bar=$('#timebar');
+    bar.style.width=pct+'%';
+    bar.className=game.tleft<6?'danger':(game.tleft<12?'warn':'');
+    if(game.tleft<=0){ clearInterval(game.timer); gTimeout(); }
+  },100);
+}
+function gPick(bal,v){
+  if(!game.running||game.locked) return; game.locked=true; clearInterval(game.timer);
+  const q=game.cur;
+  if(Math.abs(v-q.ans)<0.005){
+    game.streak++; game.correct++;
+    const pts=100+Math.ceil(game.tleft)*5+(game.streak-1)*20;
+    game.score+=pts;
+    sPop(); setTimeout(sGood,150);
+    bal.classList.add('pop'); popParts(bal); floatScore(bal,'+'+pts);
+    const msg=$('#gameMsg'); msg.className='good'; msg.textContent=`Melesat! ${q.txt} = ${fmtID(q.ans)}${game.streak>1?' · Streak ×'+game.streak+'!':''}`;
+  } else {
+    game.streak=0; game.tleft=Math.max(0.1,game.tleft-3);
+    sBad();
+    bal.classList.add('wrong','dead');
+    const msg=$('#gameMsg'); msg.className='badd'; msg.textContent='Bukan yang itu! (−3 detik)';
+  }
+  $('#gScore').textContent=game.score; $('#gStreak').textContent=game.streak;
+  setTimeout(()=>{ if(game.running) gNext(); },1500);
+}
+function gTimeout(){
+  if(!game.running||game.locked) return; game.locked=true;
+  game.streak=0; $('#gStreak').textContent=0;
+  $$('#balloonField .balloon').forEach(b=>{ if(Math.abs(+b.dataset.v-game.cur.ans)<0.005) b.classList.add('reveal'); });
+  sBad();
+  const msg=$('#gameMsg'); msg.className='badd'; msg.textContent=`Waktu habis! ${game.cur.txt} = ${fmtID(game.cur.ans)}`;
+  setTimeout(()=>{ if(game.running) gNext(); },1700);
+}
+function popParts(bal){
+  const field=$('#balloonField'), r=bal.getBoundingClientRect(), fr=field.getBoundingClientRect();
+  const cx=r.left-fr.left+r.width/2, cy=r.top-fr.top+r.height/2;
+  for(let i=0;i<12;i++){
+    const p=document.createElement('span'); p.className='part';
+    p.style.left=cx+'px'; p.style.top=cy+'px';
+    p.style.background=PALETTE[i%4];
+    p.style.borderRadius=Math.random()<.5?'50%':'3px';
+    field.appendChild(p);
+    const ang=Math.random()*Math.PI*2, d=50+Math.random()*70;
+    p.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${Math.cos(ang)*d}px,${Math.sin(ang)*d+30}px) scale(0)`,opacity:0}],{duration:550+Math.random()*250,easing:'cubic-bezier(.2,.8,.3,1)'}).onfinish=()=>p.remove();
+  }
+}
+function floatScore(bal,txt){
+  const field=$('#balloonField'), r=bal.getBoundingClientRect(), fr=field.getBoundingClientRect();
+  const s=document.createElement('span'); s.className='sfloat'; s.textContent=txt;
+  s.style.left=(r.left-fr.left+r.width/2-20)+'px'; s.style.top=(r.top-fr.top)+'px';
+  field.appendChild(s);
+  s.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-70px)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>s.remove();
+}
+function startGame(){
+  try{
+    game.running=true; game.qn=0; game.score=0; game.streak=0; game.correct=0; game.locked=false;
+    $('#gScore').textContent=0; $('#gStreak').textContent=0;
+    clearInterval(game.timer);
+    gShowPanel('#gRun');
+    try{ const c=ac(); if(c.state==='suspended') c.resume(); }catch(e){}
+    gNext();
+  }catch(e){ console.error('startGame',e); toast('Terjadi kesalahan saat memulai game.','err'); }
+}
+function endGame(aborted){
+  game.running=false; clearInterval(game.timer);
+  if(aborted){ gShowPanel('#gStart'); return; } // kembali ke layar awal saat keluar di tengah permainan
+  gShowPanel('#gOver');
+  const st=game.correct>=9?3:(game.correct>=7?2:(game.correct>=4?1:0));
+  starRow($('#gStars'),st);
+  $('#gFinalScore').textContent=game.score;
+  if(game.score>game.best){ game.best=game.score; lsSet('rekor-balon',game.best); toast('<i data-lucide="trophy"></i> Rekor baru: '+game.score+' poin!','ok'); }
+  $('#gFinalTxt').textContent=`Benar ${game.correct} dari 10 balon · Rekor tertinggi: ${game.best} poin`;
+}
+
+/* =========================================================
+   MODUL 11 : REFLEKSI
+========================================================= */
+try{
+  const CONFL=['Masih goyah, butuh latihan lagi','Mulai paham','Cukup percaya diri','Percaya diri!','Siap tantangan berikutnya!'];
+  $('#confSlider').oninput=e=>$('#confLbl').textContent=CONFL[e.target.value-1];
+  let mood='';
+  $('#moodRow').addEventListener('click',e=>{
+    const b=e.target.closest('.mood'); if(!b) return;
+    $$('#moodRow .mood').forEach(m=>m.classList.remove('on'));
+    b.classList.add('on'); mood=b.dataset.mood;
+  });
+  $('#refSave').onclick=()=>{
+    if(!mood){ toast('Pilih dulu perasaanmu ya!','err'); return; }
+    const data={mood,conf:+$('#confSlider').value,learn:$('#refLearn').value,hard:$('#refHard').value,date:new Date().toLocaleString('id-ID')};
+    lsSet('refleksi-desimal-k5',JSON.stringify(data));
+    toast('<i data-lucide="save"></i> Refleksi tersimpan. Kerja bagus hari ini!','ok');
+  };
+}catch(e){ console.error('refleksi',e); }
+</script>
+</body>
+</html>
