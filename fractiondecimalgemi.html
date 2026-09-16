@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Ulangan — Pecahan & Desimal | Cambridge Stage 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0369a1; --blue2:#0284c7; --sky:#e0f2fe;
+  --ink:#0f172a; --muted:#5b6b7e;
+  --green:#16a34a; --red:#dc2626; --amber:#f59e0b;
+  --line:#e2e8f0; --radius:16px;
+  --shadow:0 10px 30px -12px rgba(2,60,110,.20);
+}
+*{box-sizing:border-box; margin:0; padding:0}
+[hidden]{display:none !important}
+body{
+  font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
+  background:linear-gradient(#f4f9ff,#e9f3fc);
+  background-image:radial-gradient(#d8e8f8 1px,transparent 1px);
+  background-size:24px 24px; min-height:100vh;
+}
+h1,h2,h3,.disp{font-family:'Baloo 2','Nunito',sans-serif}
+button{font-family:inherit}
+
+/* ===== Komponen pecahan (tampilan bersusun seperti di lembar soal) ===== */
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;line-height:1.05;
+  text-align:center;margin:0 2px;font-weight:700;font-size:.95em}
+.frac .fn{border-bottom:1.6px solid currentColor;padding:0 4px 1px}
+.frac .fd{padding:1px 4px 0}
+.frac.mix{margin-left:3px}
+
+/* ===== Layar awal ===== */
+.startWrap{max-width:780px;margin:28px auto;padding:0 16px}
+.sheetHead{background:#fff;border:3px solid var(--blue2);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+.shTitle{font-family:'Baloo 2';font-weight:800;color:var(--blue);font-size:1.5rem;letter-spacing:.3px}
+.shSub{font-weight:800;margin-top:4px}
+.shCov{color:var(--muted);font-size:.9rem;margin-top:2px}
+.idRow{display:flex;gap:12px;margin:16px 0;flex-wrap:wrap}
+.idRow label{flex:1;min-width:220px;font-weight:700;font-size:.9rem;color:var(--muted)}
+.idRow input{width:100%;margin-top:5px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;font-family:inherit;font-size:1rem;font-weight:600}
+.idRow input:focus{outline:none;border-color:var(--blue2)}
+.card{background:#fff;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:16px}
+.card h2{font-size:1.15rem;color:var(--blue);margin-bottom:12px}
+.modeCard{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--line);border-radius:14px;
+  padding:14px 16px;cursor:pointer;background:#fff;margin-bottom:10px;transition:.15s}
+.modeCard:hover{border-color:#94a3b8}
+.modeCard.active{border-color:var(--blue2);background:#f0f9ff;box-shadow:0 0 0 3px rgba(2,132,199,.12)}
+.modeCard .radio{width:20px;height:20px;border-radius:50%;border:2px solid #94a3b8;flex-shrink:0;margin-top:3px}
+.modeCard.active .radio{border-color:var(--blue2);background:radial-gradient(circle,var(--blue2) 45%,transparent 50%)}
+.modeCard b{display:block}
+.modeCard small{color:var(--muted);line-height:1.45;display:block;margin-top:2px}
+#durRow{display:flex;align-items:center;gap:10px;margin:10px 2px 0;font-weight:700;font-size:.92rem}
+#durSel{padding:8px 10px;border:2px solid var(--line);border-radius:10px;font-family:inherit;font-weight:700}
+.tutorNote{margin-top:12px;background:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;padding:10px 14px;font-size:.88rem;color:#92400e}
+.instructions{background:#f0f9ff;border-left:5px solid var(--blue2);border-radius:10px;padding:12px 16px;font-size:.92rem;line-height:1.55;margin-bottom:16px}
+.instructions b{color:var(--blue)}
+.partTable{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px}
+.partTable td{padding:7px 10px;border-bottom:1px solid #eef2f7}
+.partTable tr:last-child td{border-bottom:none}
+.btn{border:none;border-radius:12px;padding:12px 22px;font-weight:800;font-size:1rem;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--blue2);color:#fff;box-shadow:0 6px 16px -6px rgba(2,132,199,.6)}
+.btn.primary:hover:not(:disabled){background:#036aa5;transform:translateY(-1px)}
+.btn.ghost{background:#fff;color:#334155;border:2px solid var(--line)}
+.btn.ghost:hover:not(:disabled){border-color:#94a3b8}
+.btn.dangerB{background:var(--red);color:#fff}
+.btn.dangerB:hover{background:#b91c1c}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnStart{width:100%;font-size:1.15rem;padding:15px;margin-top:4px}
+
+/* ===== Bar atas kuis ===== */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);padding:9px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:'Baloo 2';font-weight:800;color:var(--blue);font-size:1.02rem}
+.brand small{display:block;font-family:'Nunito';font-weight:700;color:var(--muted);font-size:.72rem}
+.stuChip{background:var(--sky);color:var(--blue);font-weight:800;font-size:.82rem;padding:6px 12px;border-radius:999px}
+.spacer{flex:1}
+.langSeg{display:flex;border:2px solid var(--line);border-radius:10px;overflow:hidden}
+.langSeg button{border:none;background:#fff;padding:7px 13px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--muted)}
+.langSeg button.on{background:var(--blue2);color:#fff}
+#btnFinish{padding:9px 16px;font-size:.88rem}
+
+/* ===== Layout kuis ===== */
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px;max-width:1180px;margin:18px auto;padding:0 16px;align-items:start}
+.palette{position:sticky;top:76px;background:#fff;border-radius:var(--radius);border:1px solid var(--line);
+  box-shadow:var(--shadow);padding:14px;max-height:calc(100vh - 96px);overflow:auto}
+.palTop{display:flex;justify-content:space-between;font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:6px}
+.palBarBg{height:8px;background:#eef2f7;border-radius:99px;overflow:hidden;margin-bottom:12px}
+.palBar{height:100%;width:0;background:linear-gradient(90deg,var(--blue2),#22c55e);transition:width .3s}
+.pgtitle{display:flex;justify-content:space-between;align-items:baseline;margin:10px 2px 6px}
+.pgtitle span:first-child{font-family:'Baloo 2';font-weight:800;color:var(--blue);font-size:.8rem}
+.pgtitle span:first-child.chal{color:#9333ea}
+.pgname{font-size:.68rem;color:var(--muted);font-weight:700;text-align:right;max-width:150px}
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pbtn{width:100%;aspect-ratio:1;border-radius:10px;border:2px solid var(--line);background:#fff;
+  font-weight:800;color:#334155;cursor:pointer;font-size:.9rem;transition:.12s}
+.pbtn:hover{border-color:#94a3b8;transform:translateY(-1px)}
+.pbtn.sel{background:#fef3c7;border-color:var(--amber);color:#92400e}
+.pbtn.ok{background:#dcfce7;border-color:#22c55e;color:#166534}
+.pbtn.bad{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+.pbtn.to{background:#fff7ed;border-color:#fb923c;color:#9a3412}
+.pbtn.cur{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,23,42,.12)}
+
+/* ===== Panel timer ===== */
+.timerBar{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 16px;margin-bottom:16px;flex-wrap:wrap}
+.ringWrap{position:relative;width:86px;height:86px;flex-shrink:0}
+.ringWrap svg{transform:rotate(-90deg)}
+.ringBg{fill:none;stroke:#e8edf3;stroke-width:9}
+.ringFg{fill:none;stroke:var(--blue2);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .25s linear,stroke .3s}
+.timerText{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2';font-weight:800;font-size:1.25rem}
+.ringWrap.warn .ringFg{stroke:var(--amber)}
+.ringWrap.warn .timerText{color:#b45309}
+.ringWrap.danger .ringFg{stroke:#ef4444}
+.ringWrap.danger .timerText{color:#ef4444;animation:pulse 1s infinite}
+.ringWrap.okc .ringFg{stroke:var(--green)}
+.ringWrap.okc .timerText{color:var(--green)}
+.ringWrap.badc .ringFg{stroke:#ef4444}
+.ringWrap.badc .timerText{color:#ef4444}
+@keyframes pulse{50%{opacity:.45}}
+.timerInfo{flex:1;min-width:200px}
+#timerModeLabel{font-family:'Baloo 2';font-weight:800;color:var(--blue)}
+#timerStatus{font-size:.85rem;color:var(--muted);font-weight:700;margin:2px 0 8px}
+.timerMeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn15{background:var(--amber);color:#fff;border:none;border-radius:999px;padding:9px 18px;
+  font-weight:800;font-size:.88rem;cursor:pointer;box-shadow:0 4px 12px -4px rgba(245,158,11,.7);transition:.15s}
+.btn15:hover:not(:disabled){background:#d97706;transform:translateY(-1px)}
+.btn15:disabled{opacity:.4;cursor:not-allowed}
+.totalChip{background:#f1f5f9;border-radius:999px;padding:8px 14px;font-weight:800;font-size:.85rem;color:#334155}
+#timeoutNote{width:100%;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;font-weight:800;
+  font-size:.85rem;border-radius:10px;padding:8px 12px}
+
+/* ===== Kartu soal ===== */
+.qcard{background:#fff;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);padding:22px 24px}
+.qcard.anim{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qMeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.partChip{background:var(--blue2);color:#fff;font-weight:800;font-size:.75rem;padding:5px 12px;border-radius:999px;letter-spacing:.4px}
+.partChip.chal{background:#9333ea}
+.partChipId{background:var(--sky);color:var(--blue);font-weight:800;font-size:.75rem;padding:5px 12px;border-radius:999px}
+.partChipId.chal{background:#f3e8ff;color:#7e22ce}
+.typeChip{margin-left:auto;background:#f1f5f9;color:#475569;font-weight:800;font-size:.72rem;padding:5px 12px;border-radius:999px}
+#qNum{font-family:'Baloo 2';font-weight:800;color:var(--blue);font-size:1.05rem;margin-bottom:6px}
+#qText{font-size:1.12rem;font-weight:700;line-height:1.7;margin-bottom:18px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px;margin-bottom:9px;
+  border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:1.02rem;font-weight:700;color:var(--ink);transition:.13s}
+.opt:hover:not(:disabled){border-color:var(--blue2);transform:translateX(4px)}
+.opt .letter{width:34px;height:34px;border-radius:50%;background:var(--sky);color:var(--blue);
+  font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.95rem}
+.opt.picked{border-color:var(--blue2);background:#f0f9ff;box-shadow:0 0 0 3px rgba(2,132,199,.14)}
+.opt.picked .letter{background:var(--blue2);color:#fff}
+.opt.correct{border-color:var(--green);background:#f0fdf4}
+.opt.correct .letter{background:var(--green);color:#fff}
+.opt.wrongpick{border-color:var(--red);background:#fef2f2}
+.opt.wrongpick .letter{background:var(--red);color:#fff}
+.opt.dim{opacity:.55}
+.opt:disabled{cursor:default}
+.tfGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tfGrid .opt{margin-bottom:0;justify-content:center}
+.lt{background:#dcfce7 !important;color:#166534 !important}
+.lf{background:#fee2e2 !important;color:#991b1b !important}
+.qActions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.qActions .primary{flex:1;min-width:180px}
+.feedbackBox:empty{display:none}
+.banner{border-radius:14px;padding:14px 16px;display:flex;gap:12px;margin-top:18px;font-size:.95rem}
+.banner.good{background:#dcfce7;border:1px solid #86efac;color:#14532d}
+.banner.bad{background:#fee2e2;border:1px solid #fca5a5;color:#7f1d1d}
+.banner.una{background:#f1f5f9;border:1px solid #cbd5e1;color:#334155}
+.bIcon{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.7);display:flex;
+  align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;flex-shrink:0}
+.bTitle{font-family:'Baloo 2';font-weight:800;font-size:1.05rem}
+.bLine{margin-top:3px}
+.bTime{opacity:.8;font-size:.85rem;font-weight:700}
+.expl{background:#fffbeb;border:1px solid #fde68a;border-left:6px solid var(--amber);
+  border-radius:12px;padding:14px 16px;margin-top:12px}
+.explHead{font-family:'Baloo 2';font-weight:800;color:#92400e;font-size:1.02rem;margin-bottom:6px}
+.explBody{line-height:1.75;font-size:.98rem;color:#453a20}
+
+/* ===== Layar hasil ===== */
+.resultWrap{max-width:1000px;margin:24px auto;padding:0 16px}
+.resHead{background:linear-gradient(135deg,var(--blue2),#075e96);color:#fff;border-radius:20px;
+  padding:26px 28px;box-shadow:var(--shadow);display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.scoreBig{font-family:'Baloo 2';font-weight:800;font-size:3rem;line-height:1}
+.scoreSide{flex:1;min-width:230px}
+.scoreSide .rname{font-size:1.1rem;font-weight:800}
+.scoreSide .rmeta{font-size:.85rem;opacity:.9;margin-top:4px}
+#rMsg{margin-top:8px;font-weight:700;font-size:.95rem;background:rgba(255,255,255,.16);border-radius:10px;padding:8px 12px;display:inline-block}
+.statGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.stat .lbl{font-size:.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.stat .num{font-family:'Baloo 2';font-weight:800;font-size:1.9rem;margin-top:2px}
+.num.g{color:var(--green)} .num.r{color:var(--red)} .num.n{color:#64748b} .num.b{color:var(--blue2)}
+.partCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.partCard.chal{border:2px solid #d8b4fe}
+.pcHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.pcTitle{font-family:'Baloo 2';font-weight:800;color:var(--ink)}
+.pcSub{font-size:.78rem;color:var(--muted);font-weight:700}
+.pcAcc{font-family:'Baloo 2';font-weight:800;font-size:1.4rem;flex-shrink:0}
+.pcAcc.good{color:var(--green)} .pcAcc.mid{color:var(--amber)} .pcAcc.low{color:var(--red)}
+.pcBar{height:9px;background:#eef2f7;border-radius:99px;overflow:hidden;margin:10px 0}
+.pcBar div{height:100%;background:linear-gradient(90deg,var(--blue2),#22c55e);border-radius:99px}
+.pcStats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px}
+.c-ok{background:#dcfce7;color:#166534} .c-bad{background:#fee2e2;color:#991b1b}
+.c-una{background:#f1f5f9;color:#475569} .c-time{background:#e0f2fe;color:#075985}
+.pcRow{font-size:.9rem;margin:5px 0;line-height:1.6}
+.qchip{display:inline-block;min-width:24px;text-align:center;padding:2px 9px;margin:2px;border-radius:8px;font-weight:800;font-size:.85rem}
+.qchip.fix{background:#fee2e2;color:#991b1b}
+.qchip.slow{background:#fef3c7;color:#92400e}
+.none{color:#94a3b8;font-weight:700;font-size:.85rem}
+.pcAdvice{margin-top:10px;background:#f0f9ff;border-left:4px solid var(--blue2);border-radius:8px;
+  padding:10px 12px;font-size:.9rem;line-height:1.6;color:#0c4a6e}
+.ovCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
+.ovTitle{font-family:'Baloo 2';font-weight:800;color:var(--blue);font-size:1.1rem;margin-bottom:8px}
+.ovList{margin:0 0 10px 20px;line-height:1.7;font-size:.93rem}
+.ovList li{margin-bottom:8px}
+.ovBest{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:12px 14px;font-weight:700}
+.tableWrap{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff}
+th,td{padding:8px 10px;border-bottom:1px solid #eef2f7;text-align:left;white-space:nowrap}
+th{background:#f1f5f9;position:sticky;top:0;font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;color:#475569}
+td.noteCell{white-space:normal;min-width:200px}
+.tag{font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.t-ok{background:#dcfce7;color:#166534} .t-bad{background:#fee2e2;color:#991b1b} .t-una{background:#f1f5f9;color:#475569}
+.resBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+
+/* ===== Modal ===== */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:24px;max-width:430px;width:100%;box-shadow:0 24px 60px -20px rgba(0,0,0,.4)}
+.modal h3{font-family:'Baloo 2';color:var(--blue);margin-bottom:8px}
+.modal p{line-height:1.6;font-size:.93rem;color:#334155}
+.mBtns{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .palette{position:static;order:2;max-height:none}
+  .qcard{order:1}
+  .pgrid{grid-template-columns:repeat(10,1fr)}
+  .tfGrid{grid-template-columns:1fr}
+  .typeChip{margin-left:0}
+}
+@media print{
+  .topbar,.palette,.qActions,.resBtns,.btn15{display:none !important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LAYAR AWAL (PENGATURAN TUTOR) ============ -->
+<section id="startScreen">
+  <div class="startWrap">
+    <div class="sheetHead">
+      <div class="shTitle">CAMBRIDGE PRIMARY MATHEMATICS — STAGE 5</div>
+      <div class="shSub">Mastery Practice: Fractions, Decimals &amp; Word Problems</div>
+      <div class="shCov">Equivalent &amp; Comparing Fractions · Fraction Arithmetic · Word Problems · Decimals (+, −, ×, ÷) — 60 soal, 6 bagian (termasuk Challenge Desimal × Desimal)</div>
+    </div>
+
+    <div class="idRow">
+      <label>Nama Siswa<input id="inpName" placeholder="Nama lengkap siswa"></label>
+      <label>Kelas<input id="inpClass" placeholder="Year 5 / Grade 5"></label>
+    </div>
+
+    <div class="card">
+      <h2>Pengaturan Tutor — Mode Waktu</h2>
+      <div class="modeCard active" data-mode="cd">
+        <span class="radio"></span>
+        <div>
+          <b>Timer Hitung Mundur</b>
+          <small>Setiap soal diberi batas waktu (default 2 menit). Waktu berhenti otomatis saat siswa menekan tombol "Cek Jawaban". Tersedia tombol <b>+15 detik</b>. Jika waktu habis, siswa masih bisa menambah waktu atau pindah soal.</small>
+        </div>
+      </div>
+      <div class="modeCard" data-mode="sw">
+        <span class="radio"></span>
+        <div>
+          <b>Stopwatch (Hitungan Maju)</b>
+          <small>Waktu dihitung maju untuk setiap soal, tanpa batas waktu. Cocok untuk mengukur kecepatan pengerjaan tanpa tekanan.</small>
+        </div>
+      </div>
+      <div id="durRow">
+        <span>Durasi per soal (hitung mundur):</span>
+        <select id="durSel">
+          <option value="60">1 menit (60 detik)</option>
+          <option value="120" selected>2 menit (default)</option>
+          <option value="180">3 menit</option>
+        </select>
+      </div>
+      <div class="tutorNote">Catatan tutor: hanya <b>satu</b> mode waktu yang berjalan, sesuai pilihan di atas. Timer/stopwatch mulai berjalan setiap kali siswa menekan nomor soal, dan berhenti saat tombol "Cek Jawaban" ditekan.</div>
+    </div>
+
+    <div class="card">
+      <h2>Petunjuk Pengerjaan (Instructions)</h2>
+      <div class="instructions">
+        <b>EN:</b> Read each question carefully. For Multiple Choice questions, choose the correct answer (A, B, C, or D). For True/False questions, determine whether the statement is True (T) or False (F).<br><br>
+        <b>ID:</b> Baca setiap soal dengan teliti. Klik <b>nomor soal</b> untuk memulai waktu, pilih jawaban, lalu tekan <b>"Cek Jawaban"</b> untuk melihat hasil dan pembahasan dalam Bahasa Indonesia. Gunakan tombol <b>EN / ID</b> di kanan atas untuk menerjemahkan soal ke Bahasa Indonesia. Tekan <b>"Finish Exam"</b> kapan saja untuk melihat hasil &amp; analisis.
+      </div>
+      <table class="partTable">
+        <tr><td><b>Part 1</b></td><td>Fractions Concepts &amp; Comparing (Soal 1–10)</td></tr>
+        <tr><td><b>Part 2</b></td><td>Operations on Fractions (Soal 11–20)</td></tr>
+        <tr><td><b>Part 3</b></td><td>Fraction Word Problems (Soal 21–30)</td></tr>
+        <tr><td><b>Part 4</b></td><td>Decimal Addition &amp; Subtraction (Soal 31–40)</td></tr>
+        <tr><td><b>Part 5</b></td><td>Decimal Multiplication &amp; Division (Soal 41–50)</td></tr>
+        <tr><td><b>Part 6</b></td><td>Decimal × Decimal &amp; Decimal ÷ Decimal — Challenge, lebih sulit (Soal 51–60)</td></tr>
+      </table>
+    </div>
+
+    <button class="btn primary btnStart" id="btnStart">Mulai Latihan — Start Exam</button>
+  </div>
+</section>
+
+<!-- ============ LAYAR KUIS ============ -->
+<section id="quizScreen" hidden>
+  <div class="topbar">
+    <div class="brand">Cambridge Stage 5<small>Pecahan &amp; Desimal · 60 Soal</small></div>
+    <span class="stuChip" id="stuChip">Siswa</span>
+    <div class="spacer"></div>
+    <div class="langSeg">
+      <button id="langEn" class="on">EN</button>
+      <button id="langId">ID</button>
+    </div>
+    <button class="btn dangerB" id="btnFinish">Finish Exam</button>
+  </div>
+
+  <div class="layout">
+    <!-- Panel nomor soal -->
+    <aside class="palette">
+      <div class="palTop"><span>Navigasi Soal</span><span id="palProg">0 / 60 terjawab</span></div>
+      <div class="palBarBg"><div class="palBar" id="palBar"></div></div>
+      <div id="palette"></div>
+    </aside>
+
+    <!-- Kolom utama -->
+    <div class="main">
+      <div class="timerBar">
+        <div class="ringWrap" id="ringWrap">
+          <svg viewBox="0 0 120 120" width="86" height="86">
+            <circle class="ringBg" cx="60" cy="60" r="50"></circle>
+            <circle class="ringFg" id="ringFg" cx="60" cy="60" r="50"></circle>
+          </svg>
+          <div class="timerText" id="timerText">0:00</div>
+        </div>
+        <div class="timerInfo">
+          <div id="timerModeLabel">Timer</div>
+          <div id="timerStatus">Klik nomor soal untuk memulai</div>
+          <div class="timerMeta">
+            <button class="btn15" id="btnAdd15">+15 detik</button>
+            <span class="totalChip" id="totalTime">Total waktu: 0:00</span>
+          </div>
+        </div>
+        <div id="timeoutNote" hidden>Waktu untuk soal ini habis! Tekan "+15 detik" untuk melanjutkan, atau pindah ke soal lain.</div>
+      </div>
+
+      <div class="qcard" id="qcard">
+        <div class="qMeta">
+          <span class="partChip" id="qPartEn">PART 1</span>
+          <span class="partChipId" id="qPartId"></span>
+          <span class="typeChip" id="qType"></span>
+        </div>
+        <div id="qNum">Soal 1</div>
+        <div id="qText"></div>
+        <div id="optWrap"></div>
+        <div class="qActions">
+          <button class="btn ghost" id="btnPrev">&#8592; Sebelumnya</button>
+          <button class="btn primary" id="btnCheck">Cek Jawaban</button>
+          <button class="btn ghost" id="btnNext">Berikutnya &#8594;</button>
+        </div>
+        <div class="feedbackBox" id="feedbackBox"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYAR HASIL ============ -->
+<section id="resultScreen" hidden>
+  <div class="resultWrap">
+    <div class="resHead">
+      <div>
+        <div style="font-family:'Baloo 2';font-weight:800;font-size:1rem;opacity:.9">SKOR AKHIR</div>
+        <div class="scoreBig" id="rScore">0/60</div>
+        <div style="font-weight:800;font-size:1.1rem" id="rPercent">0%</div>
+      </div>
+      <div class="scoreSide">
+        <div class="rname" id="rName"></div>
+        <div class="rmeta"><span id="rClass"></span> · <span id="rDate"></span></div>
+        <div id="rMsg"></div>
+      </div>
+    </div>
+
+    <div class="statGrid">
+      <div class="stat"><div class="lbl">Benar</div><div class="num g" id="statOk">0</div></div>
+      <div class="stat"><div class="lbl">Salah</div><div class="num r" id="statBad">0</div></div>
+      <div class="stat"><div class="lbl">Tidak Dijawab</div><div class="num n" id="statUna">0</div></div>
+      <div class="stat"><div class="lbl">Total Waktu</div><div class="num b" id="statTotal">0:00</div></div>
+      <div class="stat"><div class="lbl">Rata-rata / Soal</div><div class="num b" id="statAvg">0:00</div></div>
+    </div>
+
+    <div class="ovCard">
+      <div class="ovTitle">Ringkasan &amp; Fokus Belajar (Analisis Keseluruhan)</div>
+      <div id="overallAdvice"></div>
+    </div>
+
+    <div class="ovCard">
+      <div class="ovTitle">Analisis per Bagian Soal (Perlu Diperbaiki &amp; Dimaksimalkan)</div>
+      <div id="partAnalysis"></div>
+    </div>
+
+    <div class="ovCard">
+      <div class="ovTitle">Rincian Waktu &amp; Status per Soal</div>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>No</th><th>Part</th><th>Jawaban Siswa</th><th>Kunci</th><th>Status</th><th>Waktu</th><th>Catatan</th></tr></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="resBtns">
+      <button class="btn primary" id="btnReview">Tinjau Kembali Soal &amp; Pembahasan</button>
+      <button class="btn ghost" id="btnPrint">Cetak Hasil</button>
+      <button class="btn dangerB" id="btnRestart">Ulangi Latihan (Reset)</button>
+    </div>
+  </div>
+</section>
+
+<!-- Modal konfirmasi selesai -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <h3>Selesaikan Ujian? (Finish Exam)</h3>
+    <p>Sudah dijawab: <b id="mDone">0</b> soal · Belum dijawab: <b id="mLeft">60</b> soal.<br>
+    Setelah diselesaikan, hasil dan analisis akan ditampilkan dan waktu akan dihentikan.</p>
+    <div class="mBtns">
+      <button class="btn ghost" id="mCancel">Batal</button>
+      <button class="btn dangerB" id="mConfirm">Ya, Finish Exam</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const TOTAL=60; // jumlah seluruh soal
+
+/* ===== Helper tampilan pecahan ===== */
+function F(n,d){return `<span class="frac"><span class="fn">${n}</span><span class="fd">${d}</span></span>`;}
+function MX(w,n,d){return `${w}<span class="frac mix"><span class="fn">${n}</span><span class="fd">${d}</span></span>`;}
+function fmt(t){t=Math.max(0,Math.round(t));const m=Math.floor(t/60);const s=t%60;return m+':'+String(s).padStart(2,'0');}
+const LETTERS=['A','B','C','D'];
+const SLOW_LIMIT=60; // detik — ambang "lambat" untuk analisis
+
+/* ===== Data bagian ===== */
+const PARTS=[
+ {name:'Fractions Concepts & Comparing', idn:'Konsep & Perbandingan Pecahan', range:[1,10]},
+ {name:'Operations on Fractions', idn:'Operasi Hitung Pecahan', range:[11,20]},
+ {name:'Fraction Word Problems', idn:'Soal Cerita Pecahan', range:[21,30]},
+ {name:'Decimal Addition & Subtraction', idn:'Penjumlahan & Pengurangan Desimal', range:[31,40]},
+ {name:'Decimal Multiplication & Division', idn:'Perkalian & Pembagian Desimal', range:[41,50]},
+ {name:'Decimal × Decimal & Decimal ÷ Decimal', idn:'Perkalian & Pembagian Desimal dengan Desimal (Lebih Sulit)', range:[51,60], chal:true}
+];
+
+/* ===== Data 60 soal (en = bahasa Inggris, idn = terjemahan, ex = pembahasan Indonesia) ===== */
+const QUESTIONS=[
+// ---------- PART 1 ----------
+{p:0,t:'mc',en:`Which of the following fractions is equivalent to ${F(3,4)}?`,
+ idn:`Manakah pecahan berikut yang senilai dengan ${F(3,4)}?`,
+ opts:[F(6,12),F(9,12),F(12,20),F(15,24)],ans:1,
+ ex:`Pecahan senilai diperoleh dengan mengalikan pembilang dan penyebut dengan bilangan yang sama: ${F(3,4)} × ${F(3,3)} = ${F(9,12)}.`},
+{p:0,t:'mc',en:`Convert the improper fraction ${F(17,5)} into a mixed number.`,
+ idn:`Ubahlah pecahan biasa ${F(17,5)} menjadi pecahan campuran.`,
+ opts:[MX(3,1,5),MX(2,4,5),MX(3,2,5),MX(3,3,5)],ans:2,
+ ex:`Bagi pembilang dengan penyebut: 17 ÷ 5 = 3 sisa 2. Maka bentuk pecahan campurannya adalah ${MX(3,2,5)}.`},
+{p:0,t:'mc',en:`Which comparison symbol correctly completes: ${F(5,8)} [ &nbsp; ] ${F(7,12)} ?`,
+ idn:`Simbol perbandingan apa yang tepat untuk melengkapi: ${F(5,8)} [ &nbsp; ] ${F(7,12)} ?`,
+ opts:['&lt;','&gt;','=','≤'],ans:1,
+ ex:`Samakan penyebut menggunakan KPK dari 8 dan 12, yaitu 24. ${F(5,8)} = ${F(15,24)}, dan ${F(7,12)} = ${F(14,24)}. Karena 15 &gt; 14, maka ${F(5,8)} &gt; ${F(7,12)}.`},
+{p:0,t:'mc',en:`What is the simplest form of ${F(18,24)}?`,
+ idn:`Berapakah bentuk paling sederhana dari ${F(18,24)}?`,
+ opts:[F(9,12),F(6,8),F(3,4),F(2,3)],ans:2,
+ ex:`Bagi pembilang dan penyebut dengan FPB-nya, yaitu 6: 18 ÷ 6 = 3 dan 24 ÷ 6 = 4. Bentuk paling sederhananya adalah ${F(3,4)}.`},
+{p:0,t:'mc',en:`Arrange the following fractions in ascending order (smallest to greatest): ${F(1,2)}, ${F(2,3)}, ${F(3,8)}, ${F(5,6)}.`,
+ idn:`Urutkan pecahan berikut dari yang terkecil ke yang terbesar: ${F(1,2)}, ${F(2,3)}, ${F(3,8)}, ${F(5,6)}.`,
+ opts:[`${F(3,8)}, ${F(1,2)}, ${F(2,3)}, ${F(5,6)}`,`${F(1,2)}, ${F(3,8)}, ${F(2,3)}, ${F(5,6)}`,`${F(3,8)}, ${F(2,3)}, ${F(1,2)}, ${F(5,6)}`,`${F(5,6)}, ${F(2,3)}, ${F(1,2)}, ${F(3,8)}`],ans:0,
+ ex:`Samakan penyebut ke KPK yaitu 24: ${F(1,2)} = ${F(12,24)}; ${F(2,3)} = ${F(16,24)}; ${F(3,8)} = ${F(9,24)}; ${F(5,6)} = ${F(20,24)}. Urutan dari terkecil ke terbesar: ${F(9,24)} (${F(3,8)}) &lt; ${F(12,24)} (${F(1,2)}) &lt; ${F(16,24)} (${F(2,3)}) &lt; ${F(20,24)} (${F(5,6)}).`},
+{p:0,t:'tf',en:`The fraction ${F(4,7)} is greater than ${F(1,2)}.`,
+ idn:`Pecahan ${F(4,7)} lebih besar daripada ${F(1,2)}.`,ans:0,
+ ex:`Ubah ke penyebut 14: ${F(4,7)} = ${F(8,14)}, sedangkan ${F(1,2)} = ${F(7,14)}. Karena 8 &gt; 7, maka ${F(4,7)} &gt; ${F(1,2)}. Pernyataan ini <b>BENAR</b>.`},
+{p:0,t:'tf',en:`The mixed number ${MX(4,3,8)} is equal to ${F(35,8)}.`,
+ idn:`Pecahan campuran ${MX(4,3,8)} sama dengan ${F(35,8)}.`,ans:0,
+ ex:`Ubah pecahan campuran ke pecahan biasa: (4 × 8) + 3 = 32 + 3 = 35. Jadi ${MX(4,3,8)} = ${F(35,8)}. Pernyataan ini <b>BENAR</b>.`},
+{p:0,t:'tf',en:`When two fractions have the same numerator, the fraction with the smaller denominator is larger.`,
+ idn:`Jika dua pecahan memiliki pembilang yang sama, pecahan dengan penyebut yang lebih kecil nilainya lebih besar.`,ans:0,
+ ex:`Jika pembilang sama, pembagian ke bagian yang lebih sedikit (penyebut lebih kecil) menghasilkan nilai potongan yang lebih besar (contoh: ${F(1,2)} &gt; ${F(1,4)}). Pernyataan ini <b>BENAR</b>.`},
+{p:0,t:'mc',en:`Which of the following fractions is closest to 1?`,
+ idn:`Manakah pecahan berikut yang paling dekat dengan 1?`,
+ opts:[F(5,6),F(7,8),F(9,10),F(11,12)],ans:3,
+ ex:`Selisih tiap pecahan terhadap 1: 1 − ${F(5,6)} = ${F(1,6)}; 1 − ${F(7,8)} = ${F(1,8)}; 1 − ${F(9,10)} = ${F(1,10)}; 1 − ${F(11,12)} = ${F(1,12)}. Karena ${F(1,12)} adalah selisih terkecil, maka ${F(11,12)} paling dekat dengan 1.`},
+{p:0,t:'tf',en:`${F(6,9)} and ${F(10,15)} are equivalent fractions.`,
+ idn:`${F(6,9)} dan ${F(10,15)} adalah pecahan senilai.`,ans:0,
+ ex:`Sederhanakan kedua pecahan: ${F(6,9)} = ${F(2,3)} (dibagi 3), dan ${F(10,15)} = ${F(2,3)} (dibagi 5). Keduanya sama-sama bernilai ${F(2,3)}. Pernyataan ini <b>BENAR</b>.`},
+// ---------- PART 2 ----------
+{p:1,t:'mc',en:`Calculate: ${F(2,5)} + ${F(3,10)}. Give your answer in simplest form.`,
+ idn:`Hitunglah: ${F(2,5)} + ${F(3,10)}. Berikan jawaban dalam bentuk paling sederhana.`,
+ opts:[F(5,15),F(7,10),F(1,2),F(4,5)],ans:1,
+ ex:`Samakan penyebut ke 10: ${F(2,5)} = ${F(4,10)}. Maka ${F(4,10)} + ${F(3,10)} = ${F(7,10)}.`},
+{p:1,t:'mc',en:`Find the difference: ${F(7,9)} − ${F(1,3)}.`,
+ idn:`Hitunglah selisihnya: ${F(7,9)} − ${F(1,3)}.`,
+ opts:[F(6,6),F(2,3),F(4,9),F(5,9)],ans:2,
+ ex:`Samakan penyebut ke 9: ${F(1,3)} = ${F(3,9)}. Maka ${F(7,9)} − ${F(3,9)} = ${F(4,9)}.`},
+{p:1,t:'mc',en:`Calculate: ${MX(2,1,4)} + ${MX(1,2,3)}.`,
+ idn:`Hitunglah: ${MX(2,1,4)} + ${MX(1,2,3)}.`,
+ opts:[MX(3,11,12),MX(3,3,7),MX(4,1,12),MX(3,5,12)],ans:0,
+ ex:`Jumlahkan bilangan bulat: 2 + 1 = 3. Samakan penyebut pecahan ke 12: ${F(1,4)} = ${F(3,12)} dan ${F(2,3)} = ${F(8,12)}. Jumlahkan: ${F(3,12)} + ${F(8,12)} = ${F(11,12)}. Total = ${MX(3,11,12)}.`},
+{p:1,t:'mc',en:`Subtract: 4 − ${MX(1,3,7)}.`,
+ idn:`Hitunglah: 4 − ${MX(1,3,7)}.`,
+ opts:[MX(3,4,7),MX(2,4,7),MX(2,3,7),MX(3,3,7)],ans:1,
+ ex:`Ubah 4 menjadi ${MX(3,7,7)}. Kurangkan: ${MX(3,7,7)} − ${MX(1,3,7)} = (3 − 1) + (${F(7,7)} − ${F(3,7)}) = ${MX(2,4,7)}.`},
+{p:1,t:'mc',en:`What is ${F(3,5)} of 45?`,
+ idn:`Berapakah ${F(3,5)} dari 45?`,
+ opts:['15','21','27','30'],ans:2,
+ ex:`Hitung: ${F(3,5)} × 45 = (45 ÷ 5) × 3 = 9 × 3 = 27.`},
+{p:1,t:'mc',en:`Multiply a fraction by a whole number: 6 × ${F(2,9)}. Write as a mixed number in simplest form.`,
+ idn:`Kalikan pecahan dengan bilangan bulat: 6 × ${F(2,9)}. Tulis jawabannya sebagai pecahan campuran dalam bentuk paling sederhana.`,
+ opts:[MX(1,1,3),MX(1,2,3),MX(2,1,3),F(12,9)],ans:0,
+ ex:`Hitung: 6 × ${F(2,9)} = ${F(12,9)}. Sederhanakan dengan membagi 3: ${F(4,3)} = ${MX(1,1,3)}.`},
+{p:1,t:'mc',en:`Divide a unit fraction by a whole number: ${F(1,4)} ÷ 3.`,
+ idn:`Bagilah pecahan satuan dengan bilangan bulat: ${F(1,4)} ÷ 3.`,
+ opts:[F(3,4),F(1,12),F(4,3),F(1,7)],ans:1,
+ ex:`Membagi suatu pecahan dengan 3 sama artinya mengalikannya dengan ${F(1,3)}: ${F(1,4)} ÷ 3 = ${F(1,4)} × ${F(1,3)} = ${F(1,12)}.`},
+{p:1,t:'tf',en:`${F(3,8)} + ${F(1,4)} = ${F(4,12)}.`,
+ idn:`${F(3,8)} + ${F(1,4)} = ${F(4,12)}.`,ans:1,
+ ex:`Dalam penjumlahan pecahan, penyebut tidak boleh langsung dijumlahkan. Samakan penyebut: ${F(3,8)} + ${F(2,8)} = ${F(5,8)}, bukan ${F(4,12)}. Pernyataan ini <b>SALAH</b>.`},
+{p:1,t:'tf',en:`${MX(3,1,5)} − ${MX(1,4,5)} = ${MX(1,2,5)}.`,
+ idn:`${MX(3,1,5)} − ${MX(1,4,5)} = ${MX(1,2,5)}.`,ans:0,
+ ex:`Ubah ke pecahan biasa: ${MX(3,1,5)} = ${F(16,5)} dan ${MX(1,4,5)} = ${F(9,5)}. Hasil pengurangan: ${F(16,5)} − ${F(9,5)} = ${F(7,5)} = ${MX(1,2,5)}. Pernyataan ini <b>BENAR</b>.`},
+{p:1,t:'tf',en:`Multiplying a fraction by a whole number greater than 1 always results in a product larger than the original fraction.`,
+ idn:`Mengalikan pecahan dengan bilangan bulat yang lebih dari 1 selalu menghasilkan produk yang lebih besar daripada pecahan awal.`,ans:0,
+ ex:`Jika pecahan positif dikalikan dengan bilangan bulat ≥ 2, hasilnya selalu lebih besar dari nilai awal pecahan tersebut. Pernyataan ini <b>BENAR</b>.`},
+// ---------- PART 3 ----------
+{p:2,t:'mc',en:`Emma had ${F(7,8)} m of ribbon. She used ${F(3,4)} m to wrap a gift. How much ribbon does she have left?`,
+ idn:`Emma memiliki pita sepanjang ${F(7,8)} m. Ia menggunakan ${F(3,4)} m untuk membungkus kado. Berapa sisa pita Emma?`,
+ opts:[`${F(1,8)} m`,`${F(4,8)} m`,`${F(1,4)} m`,`${F(3,8)} m`],ans:0,
+ ex:`Sisa pita = ${F(7,8)} − ${F(3,4)} = ${F(7,8)} − ${F(6,8)} = ${F(1,8)} m.`},
+{p:2,t:'mc',en:`Oliver baked a cake. He gave ${F(1,3)} of the cake to his neighbor and ${F(2,5)} of the cake to his cousin. What fraction of the cake remains?`,
+ idn:`Oliver membuat sebuah kue. Ia memberikan ${F(1,3)} bagian kue kepada tetangganya dan ${F(2,5)} bagian kepada sepupunya. Berapa bagian kue yang tersisa?`,
+ opts:[F(11,15),F(4,15),F(3,8),F(1,15)],ans:1,
+ ex:`Bagian yang diberikan = ${F(1,3)} + ${F(2,5)} = ${F(5,15)} + ${F(6,15)} = ${F(11,15)}. Sisa kue = 1 − ${F(11,15)} = ${F(15,15)} − ${F(11,15)} = ${F(4,15)}.`},
+{p:2,t:'mc',en:`In a class of 36 students, ${F(5,9)} of the students are girls. How many boys are in the class?`,
+ idn:`Dalam sebuah kelas terdapat 36 murid, dan ${F(5,9)} di antaranya adalah perempuan. Berapa banyak murid laki-laki di kelas tersebut?`,
+ opts:['20','18','16','14'],ans:2,
+ ex:`Jumlah murid perempuan = ${F(5,9)} × 36 = 20 orang. Jumlah murid laki-laki = 36 − 20 = 16 orang (atau pecahan laki-laki = 1 − ${F(5,9)} = ${F(4,9)}; ${F(4,9)} × 36 = 16).`},
+{p:2,t:'mc',en:`Liam drank ${MX(1,1,2)} litres of water in the morning and ${MX(1,3,4)} litres in the afternoon. What was the total amount of water Liam drank?`,
+ idn:`Liam minum ${MX(1,1,2)} liter air di pagi hari dan ${MX(1,3,4)} liter di sore hari. Berapa total air yang diminum Liam?`,
+ opts:[`${MX(3,1,4)} L`,`${MX(2,4,6)} L`,`${MX(3,1,2)} L`,`${MX(2,3,4)} L`],ans:0,
+ ex:`Total air = ${MX(1,1,2)} + ${MX(1,3,4)} = ${MX(1,2,4)} + ${MX(1,3,4)} = ${MX(2,5,4)} = ${MX(3,1,4)} liter.`},
+{p:2,t:'mc',en:`A recipe for one tray of cookies requires ${F(2,3)} cup of sugar. How many cups of sugar are needed to bake 6 trays?`,
+ idn:`Resep untuk satu loyang kue membutuhkan ${F(2,3)} cup gula. Berapa cup gula yang dibutuhkan untuk memanggang 6 loyang?`,
+ opts:['3 cups',`${MX(3,1,2)} cups`,'4 cups',`${MX(4,1,3)} cups`],ans:2,
+ ex:`Gula yang dibutuhkan = 6 × ${F(2,3)} = ${F(12,3)} = 4 cangkir (cup).`},
+{p:2,t:'mc',en:`A 5-metre plank of wood is cut into equal pieces each of length ${F(1,4)} metre. How many pieces are obtained?`,
+ idn:`Sebuah papan kayu sepanjang 5 meter dipotong menjadi potongan-potongan sama panjang, masing-masing ${F(1,4)} meter. Berapa banyak potongan yang diperoleh?`,
+ opts:['10','15','20','25'],ans:2,
+ ex:`Banyak potongan = 5 ÷ ${F(1,4)} = 5 × 4 = 20 potongan.`},
+{p:2,t:'tf',en:`Sophia has 24 stickers. If she gives ${F(3,8)} of them to her friend, she has given away 9 stickers.`,
+ idn:`Sophia memiliki 24 stiker. Jika ia memberikan ${F(3,8)} bagiannya kepada temannya, berarti ia telah memberikan 9 stiker.`,ans:0,
+ ex:`Banyak stiker yang diberikan = ${F(3,8)} × 24 = (24 ÷ 8) × 3 = 3 × 3 = 9 stiker. Pernyataan ini <b>BENAR</b>.`},
+{p:2,t:'tf',en:`If Noah walks ${F(3,5)} km to school and Maya walks ${F(7,10)} km, then Noah walks a longer distance than Maya.`,
+ idn:`Jika Noah berjalan ${F(3,5)} km ke sekolah dan Maya berjalan ${F(7,10)} km, maka Noah berjalan lebih jauh daripada Maya.`,ans:1,
+ ex:`Jarak Noah = ${F(3,5)} = ${F(6,10)} km. Jarak Maya = ${F(7,10)} km. Karena ${F(6,10)} &lt; ${F(7,10)}, Noah berjalan lebih dekat daripada Maya. Pernyataan ini <b>SALAH</b>.`},
+{p:2,t:'mc',en:`A jug contains ${MX(2,1,2)} litres of juice. After pouring out ${F(4,5)} litre, how much juice remains in the jug?`,
+ idn:`Sebuah teko berisi ${MX(2,1,2)} liter jus. Setelah ${F(4,5)} liter dituangkan, berapa sisa jus di dalam teko?`,
+ opts:[`${MX(1,7,10)} L`,`${MX(1,3,10)} L`,`${MX(1,1,5)} L`,`${MX(2,1,10)} L`],ans:0,
+ ex:`Sisa jus = ${MX(2,1,2)} − ${F(4,5)} = ${MX(2,5,10)} − ${F(8,10)} = ${MX(1,15,10)} − ${F(8,10)} = ${MX(1,7,10)} liter.`},
+{p:2,t:'tf',en:`A pizza is shared equally among 4 children. If each child gets ${F(1,4)} of the pizza, 3 children together receive ${F(3,4)} of the pizza.`,
+ idn:`Sebuah pizza dibagi sama rata kepada 4 anak. Jika setiap anak mendapat ${F(1,4)} bagian, maka 3 anak bersama-sama menerima ${F(3,4)} bagian pizza.`,ans:0,
+ ex:`3 anak menerima: 3 × ${F(1,4)} = ${F(3,4)} bagian pizza. Pernyataan ini <b>BENAR</b>.`},
+// ---------- PART 4 ----------
+{p:3,t:'mc',en:`Find the sum: 4.56 + 3.78.`,
+ idn:`Hitunglah: 4.56 + 3.78.`,
+ opts:['7.34','8.24','8.34','8.44'],ans:2,
+ ex:`Luruskan tanda komanya: 4.56 + 3.78 = 8.34.`},
+{p:3,t:'mc',en:`Calculate: 12.05 + 7.8.`,
+ idn:`Hitunglah: 12.05 + 7.8.`,
+ opts:['19.13','19.85','20.25','19.88'],ans:1,
+ ex:`Tulis 7.8 sebagai 7.80: 12.05 + 7.80 = 19.85.`},
+{p:3,t:'mc',en:`Find the difference: 9.4 − 3.67.`,
+ idn:`Hitunglah selisihnya: 9.4 − 3.67.`,
+ opts:['5.73','5.83','6.27','5.67'],ans:0,
+ ex:`Tulis 9.4 sebagai 9.40: 9.40 − 3.67 = 5.73.`},
+{p:3,t:'mc',en:`Subtract: 15 − 4.82.`,
+ idn:`Hitunglah: 15 − 4.82.`,
+ opts:['10.28','11.18','10.18','9.18'],ans:2,
+ ex:`Tulis 15 sebagai 15.00: 15.00 − 4.82 = 10.18.`},
+{p:3,t:'mc',en:`What number must be added to 6.35 to get 10?`,
+ idn:`Bilangan berapa yang harus ditambahkan ke 6.35 agar hasilnya 10?`,
+ opts:['3.65','3.75','4.65','4.35'],ans:0,
+ ex:`Kurangkan: 10.00 − 6.35 = 3.65.`},
+{p:3,t:'mc',en:`A running track is 400 m long. Lucas ran 158.45 m and walked 87.6 m. How much distance does he have left to complete the track?`,
+ idn:`Sebuah lintasan lari panjangnya 400 m. Lucas berlari 158.45 m dan berjalan 87.6 m. Berapa sisa jarak yang harus ia tempuh untuk menyelesaikan lintasan?`,
+ opts:['153.95 m','154.05 m','246.05 m','144.95 m'],ans:0,
+ ex:`Jarak yang sudah ditempuh = 158.45 + 87.60 = 246.05 m. Sisa jarak = 400.00 − 246.05 = 153.95 m.`},
+{p:3,t:'tf',en:`0.7 + 0.05 = 0.12.`,
+ idn:`0.7 + 0.05 = 0.12.`,ans:1,
+ ex:`0.7 = 0.70. Maka 0.70 + 0.05 = 0.75, bukan 0.12. Nilai tempat persepuluhan dan perseratusan harus dijumlahkan dengan benar. Pernyataan ini <b>SALAH</b>.`},
+{p:3,t:'tf',en:`8.3 − 2.45 = 5.85.`,
+ idn:`8.3 − 2.45 = 5.85.`,ans:0,
+ ex:`8.30 − 2.45 = 5.85. Pernyataan ini <b>BENAR</b>.`},
+{p:3,t:'tf',en:`The sum of 2.75 and 1.25 is equal to 4.`,
+ idn:`Hasil penjumlahan 2.75 dan 1.25 sama dengan 4.`,ans:0,
+ ex:`2.75 + 1.25 = 4.00 = 4. Pernyataan ini <b>BENAR</b>.`},
+{p:3,t:'mc',en:`At a supermarket, Sarah bought apples for $3.45 and oranges for $4.80. She paid with a $10 bill. How much change did she receive?`,
+ idn:`Di pasar swalayan, Sarah membeli apel seharga $3.45 dan jeruk seharga $4.80. Ia membayar dengan uang $10. Berapa uang kembalian yang diterimanya?`,
+ opts:['$1.75','$2.25','$1.85','$2.75'],ans:0,
+ ex:`Total belanjaan = $3.45 + $4.80 = $8.25. Uang kembalian = $10.00 − $8.25 = $1.75.`},
+// ---------- PART 5 ----------
+{p:4,t:'mc',en:`Calculate: 3.4 × 6.`,
+ idn:`Hitunglah: 3.4 × 6.`,
+ opts:['18.4','20.4','20.2','21.4'],ans:1,
+ ex:`Kalikan seperti bilangan bulat: 34 × 6 = 204. Karena terdapat 1 angka di belakang koma, hasilnya adalah 20.4.`},
+{p:4,t:'mc',en:`What is 0.75 × 100?`,
+ idn:`Berapakah 0.75 × 100?`,
+ opts:['7.5','75','750','0.075'],ans:1,
+ ex:`Mengalikan dengan 100 berarti menggeser tanda koma ke kanan sebanyak 2 tempat: 0.75 × 100 = 75.`},
+{p:4,t:'mc',en:`Calculate: 8.4 ÷ 4.`,
+ idn:`Hitunglah: 8.4 ÷ 4.`,
+ opts:['2.1','2.2','2.01','4.2'],ans:0,
+ ex:`Bagi bilangan desimal dengan bilangan bulat: 8 ÷ 4 = 2 dan 0.4 ÷ 4 = 0.1, sehingga 8.4 ÷ 4 = 2.1.`},
+{p:4,t:'mc',en:`Divide: 36.9 ÷ 10.`,
+ idn:`Hitunglah: 36.9 ÷ 10.`,
+ opts:['369','3.69','0.369','36.09'],ans:1,
+ ex:`Membagi dengan 10 berarti menggeser tanda koma ke kiri sebanyak 1 tempat: 36.9 ÷ 10 = 3.69.`},
+{p:4,t:'mc',en:`A ribbon of length 14.5 metres is cut into 5 equal pieces. How long is each piece?`,
+ idn:`Sebuah pita sepanjang 14.5 meter dipotong menjadi 5 bagian yang sama panjang. Berapa panjang setiap bagian?`,
+ opts:['2.7 m','2.8 m','2.9 m','3.1 m'],ans:2,
+ ex:`Panjang tiap potongan = 14.5 ÷ 5 = 2.9 m.`},
+{p:4,t:'mc',en:`One notebook costs $2.45. What is the cost of 4 notebooks?`,
+ idn:`Harga satu buku tulis adalah $2.45. Berapa harga 4 buku tulis?`,
+ opts:['$9.60','$9.80','$8.90','$10.20'],ans:1,
+ ex:`Harga total = 4 × $2.45 = $9.80.`},
+{p:4,t:'tf',en:`5.2 × 10 = 52.`,
+ idn:`5.2 × 10 = 52.`,ans:0,
+ ex:`Geser koma 1 angka ke kanan: 5.2 × 10 = 52. Pernyataan ini <b>BENAR</b>.`},
+{p:4,t:'tf',en:`45 ÷ 100 = 4.5.`,
+ idn:`45 ÷ 100 = 4.5.`,ans:1,
+ ex:`Membagi dengan 100 menggeser koma 2 angka ke kiri: 45 ÷ 100 = 0.45, bukan 4.5. Pernyataan ini <b>SALAH</b>.`},
+{p:4,t:'tf',en:`1.8 ÷ 3 = 0.6.`,
+ idn:`1.8 ÷ 3 = 0.6.`,ans:0,
+ ex:`18 ÷ 3 = 6, maka 1.8 ÷ 3 = 0.6. Pernyataan ini <b>BENAR</b>.`},
+{p:4,t:'mc',en:`A bottle holds 1.25 litres of juice. How many litres of juice are in 8 identical bottles?`,
+ idn:`Sebuah botol berisi 1.25 liter jus. Berapa liter jumlah jus dalam 8 botol yang identik?`,
+ opts:['8.5 L','9.0 L','10.0 L','10.25 L'],ans:2,
+ ex:`Total isi jus = 8 × 1.25 = 10.00 liter = 10 liter.`},
+// ---------- PART 6 (Challenge): Desimal × Desimal & Desimal ÷ Desimal ----------
+{p:5,t:'mc',en:`Calculate: 0.4 × 0.6.`,
+ idn:`Hitunglah: 0.4 × 0.6.`,
+ opts:['0.24','2.4','0.024','0.204'],ans:0,
+ ex:`Kalikan seperti bilangan bulat: 4 × 6 = 24. Jumlah angka di belakang koma = 1 + 1 = 2, sehingga hasilnya 0.24.`},
+{p:5,t:'mc',en:`Calculate: 2.5 × 0.3.`,
+ idn:`Hitunglah: 2.5 × 0.3.`,
+ opts:['7.5','0.75','0.075','0.705'],ans:1,
+ ex:`Kalikan seperti bilangan bulat: 25 × 3 = 75. Jumlah angka di belakang koma = 1 + 1 = 2, sehingga hasilnya 0.75.`},
+{p:5,t:'mc',en:`Calculate: 1.2 × 1.5.`,
+ idn:`Hitunglah: 1.2 × 1.5.`,
+ opts:['1.8','18','0.18','1.08'],ans:0,
+ ex:`Hitung 12 × 15 = 180. Jumlah angka di belakang koma = 1 + 1 = 2, sehingga 180 menjadi 1.80 = 1.8.`},
+{p:5,t:'tf',en:`0.25 × 0.4 = 0.1.`,
+ idn:`0.25 × 0.4 = 0.1.`,ans:0,
+ ex:`Hitung 25 × 4 = 100. Jumlah angka di belakang koma = 2 + 1 = 3, sehingga hasilnya 0.100 = 0.1. Jangan terkecoh — nol di akhir boleh dihilangkan. Pernyataan ini <b>BENAR</b>.`},
+{p:5,t:'mc',en:`Calculate: 3.6 × 0.25.`,
+ idn:`Hitunglah: 3.6 × 0.25.`,
+ opts:['9.0','0.9','0.09','0.72'],ans:1,
+ ex:`Hitung 36 × 25 = 900. Jumlah angka di belakang koma = 1 + 2 = 3, sehingga hasilnya 0.900 = 0.9.`},
+{p:5,t:'mc',en:`Calculate: 4.8 ÷ 0.6.`,
+ idn:`Hitunglah: 4.8 ÷ 0.6.`,
+ opts:['0.8','8','0.08','80'],ans:1,
+ ex:`Geser tanda koma 1 tempat ke kanan pada kedua bilangan agar pembaginya bilangan bulat: 4.8 ÷ 0.6 = 48 ÷ 6 = 8.`},
+{p:5,t:'mc',en:`Calculate: 6.3 ÷ 0.09.`,
+ idn:`Hitunglah: 6.3 ÷ 0.09.`,
+ opts:['70','7','0.7','700'],ans:0,
+ ex:`Geser tanda koma 2 tempat ke kanan pada kedua bilangan: 6.3 ÷ 0.09 = 630 ÷ 9 = 70. Hati-hati: hasilnya lebih besar dari 6.3 karena pembaginya kurang dari 1.`},
+{p:5,t:'mc',en:`A 3.6-metre plank of wood is cut into equal pieces, each 0.4 metre long. How many pieces are obtained?`,
+ idn:`Sebuah papan kayu sepanjang 3.6 meter dipotong menjadi potongan-potongan sama panjang, masing-masing 0.4 meter. Berapa banyak potongan yang diperoleh?`,
+ opts:['8','9','0.9','90'],ans:1,
+ ex:`Banyak potongan = 3.6 ÷ 0.4 = 36 ÷ 4 = 9 potongan. (Periksa: 9 × 0.4 = 3.6 m, sesuai panjang papan.)`},
+{p:5,t:'tf',en:`When a decimal number is divided by a decimal less than 1, the answer is greater than the number being divided.`,
+ idn:`Ketika suatu bilangan desimal dibagi dengan bilangan desimal yang kurang dari 1, hasilnya lebih besar daripada bilangan yang dibagi.`,ans:0,
+ ex:`Contoh: 4.8 ÷ 0.6 = 8. Karena 8 &gt; 4.8, membagi dengan desimal kurang dari 1 menghasilkan bilangan yang lebih besar. Pernyataan ini <b>BENAR</b>.`},
+{p:5,t:'mc',en:`A jug contains 4.5 litres of juice. The juice is poured equally into cups that each hold 0.15 litre. How many cups are filled?`,
+ idn:`Sebuah teko berisi 4.5 liter jus. Jus dituangkan sama rata ke dalam cangkir yang masing-masing berkapasitas 0.15 liter. Berapa banyak cangkir yang terisi?`,
+ opts:['30','3','300','20'],ans:0,
+ ex:`Banyak cangkir = 4.5 ÷ 0.15. Geser koma 2 tempat: 450 ÷ 15 = 30 cangkir. (Periksa: 30 × 0.15 = 4.5 L, sesuai isi teko.)`}
+];
+
+/* ===== State aplikasi ===== */
+const st={
+ name:'',cls:'',mode:'cd',dur:120,
+ cur:0,translate:false,review:false,finished:false,
+ times:new Array(TOTAL).fill(0),   // waktu terpakai per soal (detik)
+ extra:new Array(TOTAL).fill(0),   // tambahan waktu (+15) per soal
+ sel:new Array(TOTAL).fill(null),  // pilihan siswa per soal
+ checked:new Array(TOTAL).fill(false),
+ ok:new Array(TOTAL).fill(false),
+ timedOut:new Array(TOTAL).fill(false)
+};
+let running=false,lastTick=0,startMode='cd';
+const paletteBtns=new Array(TOTAL);
+const CIRC=2*Math.PI*50;
+
+/* ===== Timer ===== */
+function addTime(i,dt){
+ st.times[i]+=dt;
+ if(st.mode==='cd'){const cap=st.dur+st.extra[i]; if(st.times[i]>cap)st.times[i]=cap;}
+}
+function checkTimeout(i){
+ if(st.mode==='cd'&&!st.checked[i]&&!st.review){
+   const cap=st.dur+st.extra[i];
+   if(st.times[i]>=cap-1e-6){st.times[i]=cap;st.timedOut[i]=true;running=false;return true;}
+ }
+ return false;
+}
+function commitTime(){
+ if(running){
+   const now=Date.now();const dt=(now-lastTick)/1000;lastTick=now;
+   addTime(st.cur,dt);running=false;checkTimeout(st.cur);
+ }
+}
+setInterval(function tick(){
+ if(!running)return;
+ const now=Date.now();const dt=(now-lastTick)/1000;lastTick=now;
+ addTime(st.cur,dt);
+ if(checkTimeout(st.cur))refreshPalette();
+ updateTimerUI();updateTotal();
+},200);
+
+function updateTotal(){
+ let t=0;for(let i=0;i<TOTAL;i++)t+=st.times[i];
+ $('#totalTime').textContent='Total waktu: '+fmt(t);
+ return t;
+}
+function updateTimerUI(){
+ const i=st.cur,ring=$('#ringFg'),wrap=$('#ringWrap'),text=$('#timerText'),status=$('#timerStatus'),add15=$('#btnAdd15');
+ ring.style.strokeDasharray=CIRC;
+ add15.style.display=(st.mode==='cd'&&!st.review)?'':'none';
+ add15.disabled=st.checked[i]||st.review||st.finished;
+ $('#timeoutNote').hidden=!(st.timedOut[i]&&!st.checked[i]&&!st.review);
+ if(st.review){
+   wrap.className='ringWrap done';ring.style.strokeDashoffset=0;
+   text.textContent=fmt(st.times[i]);
+   status.textContent='Mode Tinjau — timer tidak berjalan';return;
+ }
+ if(st.checked[i]){
+   wrap.className='ringWrap '+(st.ok[i]?'okc':'badc');
+   ring.style.strokeDashoffset=0;
+   text.textContent=fmt(st.times[i]);
+   status.textContent='Jawaban terkunci · waktu '+fmt(st.times[i]);
+ }else if(st.mode==='cd'){
+   const cap=st.dur+st.extra[i];
+   const rem=Math.max(0,cap-st.times[i]);
+   ring.style.strokeDashoffset=CIRC*(1-Math.min(1,rem/cap));
+   wrap.className='ringWrap'+(rem<=15?' danger':rem<=40?' warn':'');
+   text.textContent=fmt(rem);
+   status.textContent=st.timedOut[i]?'Waktu habis! Tambah waktu atau pindah soal.':(running?'Sedang berjalan untuk soal ini…':'Jeda — klik nomor soal untuk memulai');
+ }else{
+   ring.style.strokeDashoffset=CIRC*(1-Math.min(1,st.times[i]/120));
+   wrap.className='ringWrap';
+   text.textContent=fmt(st.times[i]);
+   status.textContent=running?'Sedang berjalan untuk soal ini…':'Jeda — klik nomor soal untuk memulai';
+ }
+}
+
+/* ===== Navigasi soal ===== */
+function goto(i){
+ if(i<0||i>=TOTAL)return;
+ if(st.finished&&!st.review)return;
+ commitTime();
+ st.cur=i;
+ renderQuestion(true);
+ refreshPalette();
+ if(!st.checked[i]&&!st.review){running=true;lastTick=Date.now();}
+ updateTimerUI();updateTotal();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===== Palet nomor soal ===== */
+function buildPalette(){
+ const wrap=$('#palette');wrap.innerHTML='';
+ PARTS.forEach(function(p,pi){
+   const g=document.createElement('div');
+   g.innerHTML=`<div class="pgtitle"><span class="${p.chal?'chal':''}">Part ${pi+1}</span><span class="pgname">${p.name}</span></div>`;
+   const grid=document.createElement('div');grid.className='pgrid';
+   for(let n=p.range[0];n<=p.range[1];n++){
+     const b=document.createElement('button');b.className='pbtn';b.textContent=n;
+     b.addEventListener('click',function(){goto(n-1);});
+     grid.appendChild(b);paletteBtns[n-1]=b;
+   }
+   g.appendChild(grid);wrap.appendChild(g);
+ });
+}
+function refreshPalette(){
+ for(let i=0;i<TOTAL;i++){
+   let c='pbtn';
+   if(st.checked[i])c+=st.ok[i]?' ok':' bad';
+   else if(st.timedOut[i])c+=' to';
+   else if(st.sel[i]!=null)c+=' sel';
+   if(i===st.cur)c+=' cur';
+   paletteBtns[i].className=c;
+ }
+ const done=st.checked.filter(Boolean).length;
+ $('#palProg').textContent=done+' / '+TOTAL+' terjawab';
+ $('#palBar').style.width=(done/TOTAL*100)+'%';
+}
+
+/* ===== Render soal ===== */
+function optButton(i,idx,q){
+ const isTF=q.t==='tf';
+ const label=isTF?(st.translate?(idx===0?'Benar':'Salah'):(idx===0?'True':'False')):q.opts[idx];
+ const lead=isTF?`<span class="letter ${idx===0?'lt':'lf'}">${idx===0?'✓':'✗'}</span>`:`<span class="letter">${LETTERS[idx]}</span>`;
+ let cls='opt';
+ const picked=st.sel[i]===idx;
+ if(st.checked[i]||st.review){
+   if(idx===q.ans)cls+=' correct';
+   else if(picked)cls+=' wrongpick';
+   else cls+=' dim';
+ }else if(picked)cls+=' picked';
+ const dis=(st.checked[i]||st.review||st.finished)?'disabled':'';
+ return `<button class="${cls}" ${dis} data-idx="${idx}">${lead}<span class="optText">${label}</span></button>`;
+}
+function labelOf(q,idx){
+ if(q.t==='tf')return idx===0?'True':'False';
+ return `${LETTERS[idx]}. ${q.opts[idx]}`;
+}
+function labelShort(q,idx){return q.t==='tf'?(idx===0?'True':'False'):LETTERS[idx];}
+function feedbackHTML(i){
+ const q=QUESTIONS[i];let s='';
+ if(st.checked[i]){
+   const okc=st.ok[i];
+   const my=st.sel[i]!=null?labelOf(q,st.sel[i]):'—';
+   s+=`<div class="banner ${okc?'good':'bad'}"><span class="bIcon">${okc?'✓':'✗'}</span><div>
+     <div class="bTitle">${okc?'Benar! Jawabanmu tepat.':'Belum tepat, semangat!'}</div>
+     <div class="bLine">Jawabanmu: <b>${my}</b></div>
+     ${okc?'':`<div class="bLine">Jawaban benar: <b>${labelOf(q,q.ans)}</b></div>`}
+     <div class="bLine bTime">Waktu pengerjaan soal ini: ${fmt(st.times[i])}</div>
+   </div></div>`;
+ }else if(st.review){
+   s+=`<div class="banner una"><span class="bIcon">–</span><div>
+     <div class="bTitle">Soal ini tidak dijawab saat ujian.</div>
+     <div class="bLine">Jawaban benar: <b>${labelOf(q,q.ans)}</b> · Waktu tercatat: ${fmt(st.times[i])}</div>
+   </div></div>`;
+ }else return '';
+ s+=`<div class="expl"><div class="explHead">Pembahasan</div><div class="explBody">${q.ex}</div></div>`;
+ return s;
+}
+function renderQuestion(anim){
+ const i=st.cur,q=QUESTIONS[i],part=PARTS[q.p];
+ if(anim){const c=$('#qcard');c.classList.remove('anim');void c.offsetWidth;c.classList.add('anim');}
+ $('#qNum').textContent='Soal '+(i+1)+' dari '+TOTAL;
+ $('#qPartEn').textContent='PART '+(q.p+1)+' · '+part.name.toUpperCase();
+ $('#qPartEn').classList.toggle('chal',!!part.chal);
+ $('#qPartId').textContent=part.idn;
+ $('#qPartId').classList.toggle('chal',!!part.chal);
+ $('#qType').textContent=q.t==='tf'?'True / False · Benar-Salah':'Multiple Choice · Pilihan Ganda';
+ $('#qText').innerHTML=st.translate?q.idn:q.en;
+ let html='';
+ if(q.t==='tf')html='<div class="tfGrid">'+optButton(i,0,q)+optButton(i,1,q)+'</div>';
+ else html=q.opts.map(function(_,idx){return optButton(i,idx,q);}).join('');
+ $('#optWrap').innerHTML=html;
+ $$('#optWrap .opt').forEach(function(b){b.addEventListener('click',function(){pickOption(+b.dataset.idx);});});
+ const chk=$('#btnCheck');
+ chk.style.display=st.review?'none':'';
+ chk.disabled=st.sel[i]==null||st.checked[i];
+ chk.textContent=st.checked[i]?'Sudah dicek ✓':'Cek Jawaban';
+ $('#btnPrev').disabled=(i===0);
+ $('#btnNext').disabled=(i===TOTAL-1);
+ $('#feedbackBox').innerHTML=feedbackHTML(i);
+}
+function pickOption(idx){
+ const i=st.cur;
+ if(st.checked[i]||st.review||st.finished)return;
+ st.sel[i]=idx;
+ renderQuestion(false);
+}
+function checkAnswer(){
+ const i=st.cur,q=QUESTIONS[i];
+ if(st.sel[i]==null||st.checked[i]||st.review||st.finished)return;
+ commitTime();
+ st.checked[i]=true;
+ st.ok[i]=(st.sel[i]===q.ans);
+ st.timedOut[i]=false;
+ refreshPalette();renderQuestion(false);updateTimerUI();updateTotal();
+ const fb=$('#feedbackBox');
+ if(fb)fb.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ===== Analisis hasil ===== */
+function partStats(pi){
+ const range=PARTS[pi].range,a=range[0],b=range[1];
+ let ok=0,bad=0,una=0,tSum=0,tN=0;const slow=[],fix=[];
+ for(let i=a-1;i<b;i++){
+   if(st.checked[i]){
+     tSum+=st.times[i];tN++;
+     if(st.ok[i]){ok++;if(st.times[i]>SLOW_LIMIT)slow.push(i+1);}
+     else{bad++;fix.push(i+1);}
+   }else{una++;fix.push(i+1);}
+ }
+ return {a:a,b:b,ok:ok,bad:bad,una:una,slow:slow,fix:fix,avg:tN?tSum/tN:0,acc:ok/(b-a+1)*100};
+}
+function partAdvice(s){
+ if(s.acc>=80&&s.avg<=SLOW_LIMIT&&s.una===0)return 'Sangat baik! Pemahaman materi ini sudah kuat dan waktu pengerjaan efisien. Pertahankan dengan latihan rutin.';
+ if(s.acc>=80)return 'Pemahaman materi sudah baik, tetapi beberapa soal dikerjakan lebih dari '+SLOW_LIMIT+' detik. Latih kembali soal sejenis dengan target di bawah '+SLOW_LIMIT+' detik per soal agar lebih cepat.';
+ if(s.acc>=50)return 'Cukup baik, tetapi masih ada jawaban yang keliru. Pelajari kembali pembahasan pada soal yang ditandai, pahami konsepnya, lalu kerjakan ulang soal serupa.';
+ return 'Bagian ini perlu penguatan. Bahas ulang konsep dasarnya bersama tutor, pelajari pembahasan setiap soal secara perlahan, lalu ulangi latihan topik ini sebelum ulangan.';
+}
+function chips(arr,cls){
+ if(!arr.length)return '<span class="none">Tidak ada</span>';
+ return arr.map(function(n){return `<span class="qchip ${cls}">${n}</span>`;}).join('');
+}
+function partCard(pi,s){
+ const p=PARTS[pi],acc=Math.round(s.acc);
+ return `<div class="partCard ${p.chal?'chal':''}">
+   <div class="pcHead">
+     <div><div class="pcTitle">Bagian ${pi+1} — ${p.idn}</div>
+     <div class="pcSub">${p.name} (Soal ${s.a}–${s.b})</div></div>
+     <div class="pcAcc ${acc>=80?'good':acc>=50?'mid':'low'}">${acc}%</div>
+   </div>
+   <div class="pcBar"><div style="width:${acc}%"></div></div>
+   <div class="pcStats">
+     <span class="chip c-ok">Benar ${s.ok}</span>
+     <span class="chip c-bad">Salah ${s.bad}</span>
+     <span class="chip c-una">Tidak dijawab ${s.una}</span>
+     <span class="chip c-time">Rata-rata waktu (soal dijawab) ${fmt(s.avg)}</span>
+   </div>
+   <div class="pcRow"><b>Perlu diperbaiki (salah / tidak dijawab):</b> ${chips(s.fix,'fix')}</div>
+   <div class="pcRow"><b>Perlu dimaksimalkan (benar tapi &gt; ${SLOW_LIMIT} detik):</b> ${chips(s.slow,'slow')}</div>
+   <div class="pcAdvice">${partAdvice(s)}</div>
+ </div>`;
+}
+function overallAdvice(stats){
+ const scored=stats.map(function(s,pi){return {pi:pi,s:s,need:s.bad*2+s.una*2+s.slow.length};});
+ const sorted=scored.slice().sort(function(x,y){return y.need-x.need;});
+ const prio=sorted.filter(function(x){return x.need>0;}).slice(0,2);
+ const best=scored.slice().sort(function(x,y){return y.s.acc-x.s.acc;})[0];
+ let html='';
+ if(!prio.length){
+   html+=`<div class="ovGood">Luar biasa! Semua bagian dikerjakan dengan akurasi tinggi dan waktu yang efisien. Pertahankan dan lanjutkan ke materi berikutnya.</div>`;
+ }else{
+   html+='<div style="font-weight:800;margin-bottom:6px">Prioritas belajar (berdasarkan kebenaran &amp; waktu pengerjaan):</div><ol class="ovList">';
+   prio.forEach(function(x){
+     const s=x.s,r=[];
+     if(s.bad)r.push(s.bad+' soal salah');
+     if(s.una)r.push(s.una+' soal tidak dijawab');
+     if(s.slow.length)r.push(s.slow.length+' soal benar tetapi lambat (&gt; '+SLOW_LIMIT+' detik)');
+     html+=`<li><b>Bagian ${x.pi+1} — ${PARTS[x.pi].idn}:</b> ${r.join(', ')}. ${partAdvice(s)}</li>`;
+   });
+   html+='</ol>';
+ }
+ html+=`<div class="ovBest">Bagian paling dikuasai: Bagian ${best.pi+1} — ${PARTS[best.pi].idn} (akurasi ${Math.round(best.s.acc)}%).</div>`;
+ return html;
+}
+
+/* ===== Selesaikan ujian & tampilkan hasil ===== */
+function buildResults(){
+ const okc=st.ok.filter(Boolean).length;
+ const badc=st.checked.filter(function(c,i){return c&&!st.ok[i];}).length;
+ const unac=TOTAL-okc-badc;
+ const total=updateTotal();
+ $('#rName').textContent=st.name||'(tanpa nama)';
+ $('#rClass').textContent=st.cls||'Year 5';
+ $('#rDate').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ $('#rScore').textContent=okc+'/'+TOTAL;
+ const pct=Math.round(okc/TOTAL*100);
+ $('#rPercent').textContent=pct+'%';
+ $('#rMsg').textContent=pct>=85?'Luar biasa! Kamu menguasai materi ini dengan sangat baik.':pct>=70?'Bagus! Sedikit lagi menuju sempurna.':pct>=50?'Cukup baik. Pelajari pembahasan soal yang salah, ya.':'Jangan menyerah! Pelajari kembali pembahasannya, lalu coba lagi.';
+ $('#statOk').textContent=okc;$('#statBad').textContent=badc;$('#statUna').textContent=unac;
+ $('#statTotal').textContent=fmt(total);$('#statAvg').textContent=fmt(total/TOTAL);
+ let rows='';
+ for(let i=0;i<TOTAL;i++){
+   const q=QUESTIONS[i];let tag,cls,note,mine;
+   mine=st.sel[i]!=null?labelShort(q,st.sel[i]):'—';
+   if(st.checked[i]&&st.ok[i]){tag='Benar';cls='t-ok';note=st.times[i]>SLOW_LIMIT?('Benar, tetapi perlu dipercepat (> '+SLOW_LIMIT+' dtk)'):'Bagus — benar & efisien';}
+   else if(st.checked[i]){tag='Salah';cls='t-bad';note='Pelajari kembali pembahasan soal ini';}
+   else{tag='Tidak dijawab';cls='t-una';note=st.timedOut[i]?'Waktu habis sebelum menjawab':'Tidak dikerjakan';}
+   rows+=`<tr><td>${i+1}</td><td>${q.p+1}</td><td>${mine}</td><td>${labelShort(q,q.ans)}</td><td><span class="tag ${cls}">${tag}</span></td><td>${fmt(st.times[i])}</td><td class="noteCell">${note}</td></tr>`;
+ }
+ $('#detailBody').innerHTML=rows;
+ const stats=PARTS.map(function(_,pi){return partStats(pi);});
+ $('#partAnalysis').innerHTML=stats.map(function(s,pi){return partCard(pi,s);}).join('');
+ $('#overallAdvice').innerHTML=overallAdvice(stats);
+}
+function doFinish(){
+ commitTime();running=false;
+ st.finished=true;st.review=true;
+ buildResults();
+ $('#quizScreen').hidden=true;
+ $('#resultScreen').hidden=false;
+ $('#btnFinish').style.display='none';
+ window.scrollTo(0,0);
+}
+
+/* ===== Event bindings ===== */
+ $$('.modeCard').forEach(function(c){
+ c.addEventListener('click',function(){
+   startMode=c.dataset.mode;
+   $$('.modeCard').forEach(function(x){x.classList.toggle('active',x===c);});
+   $('#durRow').style.display=(startMode==='cd')?'flex':'none';
+ });
+});
+ $('#btnStart').addEventListener('click',function(){
+ st.name=$('#inpName').value.trim();
+ st.cls=$('#inpClass').value.trim();
+ st.mode=startMode;
+ st.dur=parseInt($('#durSel').value,10)||120;
+ $('#stuChip').textContent=(st.name||'Siswa')+(st.cls?(' · '+st.cls):'');
+ $('#timerModeLabel').textContent=st.mode==='cd'
+   ?('Timer Hitung Mundur · '+fmt(st.dur)+' / soal')
+   :'Stopwatch · hitungan maju';
+ $('#startScreen').hidden=true;
+ $('#quizScreen').hidden=false;
+ buildPalette();
+ goto(0);
+});
+ $('#langEn').addEventListener('click',function(){setLang(false);});
+ $('#langId').addEventListener('click',function(){setLang(true);});
+function setLang(id){
+ st.translate=id;
+ $('#langEn').classList.toggle('on',!id);
+ $('#langId').classList.toggle('on',id);
+ renderQuestion(false);
+}
+ $('#btnPrev').addEventListener('click',function(){goto(st.cur-1);});
+ $('#btnNext').addEventListener('click',function(){goto(st.cur+1);});
+ $('#btnCheck').addEventListener('click',checkAnswer);
+ $('#btnAdd15').addEventListener('click',function(){
+ const i=st.cur;
+ if(st.mode!=='cd'||st.checked[i]||st.review||st.finished)return;
+ st.extra[i]+=15;
+ st.timedOut[i]=false;
+ if(!running){running=true;lastTick=Date.now();}
+ updateTimerUI();
+});
+ $('#btnFinish').addEventListener('click',function(){
+ commitTime();
+ const done=st.checked.filter(Boolean).length;
+ $('#mDone').textContent=done;$('#mLeft').textContent=TOTAL-done;
+ $('#modal').classList.add('show');
+});
+ $('#mCancel').addEventListener('click',function(){$('#modal').classList.remove('show');});
+ $('#mConfirm').addEventListener('click',function(){$('#modal').classList.remove('show');doFinish();});
+ $('#btnReview').addEventListener('click',function(){
+ $('#resultScreen').hidden=true;
+ $('#quizScreen').hidden=false;
+ goto(0);
+});
+ $('#btnPrint').addEventListener('click',function(){window.print();});
+ $('#btnRestart').addEventListener('click',function(){location.reload();});
+</script>
+</body>
+</html>
