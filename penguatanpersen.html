@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jago Diskon lewat Persen — Matematika Kelas 4 SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#F5F0E4; --paper2:#FFFDF4; --ink:#26231C; --ink2:#6B6557;
+  --line:#D9D0BC; --grid:rgba(38,35,28,.05);
+  --acc:#E4572E; --acc-soft:#FBE3D9;
+  --green:#2E6B4F; --green-soft:#DDEBE0;
+  --red:#C33B2E; --amber:#E9A820; --purple:#7A5CA8;
+  --hard:6px 6px 0 rgba(38,35,28,.14);
+}
+html,body{height:100%}
+body{
+  font-family:'Space Grotesk',sans-serif;color:var(--ink);overflow:hidden;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:34px 34px;
+}
+::selection{background:var(--acc);color:#fff}
+h1,h2,h3,h4{font-family:'Fraunces',serif}
+button{font-family:inherit;cursor:pointer}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(38,35,28,.25);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============ progress & hud ============ */
+#pwrap{position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:rgba(38,35,28,.08)}
+#pbar{display:block;height:100%;width:0;background:var(--acc);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.hud{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(14px,3vw,34px);background:rgba(245,240,228,.93);backdrop-filter:blur(6px);border-top:2px solid var(--ink)}
+.hud-title{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.hud-nav{display:flex;gap:10px;align-items:center}
+.navb{width:42px;height:42px;border-radius:12px;border:2.5px solid var(--ink);background:var(--paper2);display:grid;place-items:center;transition:.15s;color:var(--ink)}
+.navb:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.navb:disabled{opacity:.3;pointer-events:none}
+.hud-num{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;min-width:88px;text-align:right}
+
+/* ============ deck & slide ============ */
+#deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;padding:clamp(44px,6vh,64px) clamp(20px,4.5vw,60px) 92px;display:none}
+.slide.active{display:flex;flex-direction:column;overflow-y:auto}
+.wrap{width:100%;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;flex:1;min-height:0}
+.corner-no{position:absolute;top:10px;right:24px;font-family:'Fraunces',serif;font-weight:800;font-size:5.4rem;color:rgba(38,35,28,.06);line-height:1;pointer-events:none;user-select:none}
+.rv{opacity:0}
+.slide.active .rv{animation:rv .6s cubic-bezier(.2,.7,.25,1) forwards;animation-delay:calc(var(--d,0)*80ms)}
+@keyframes rv{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2)}
+.eyebrow::before{content:'';width:26px;height:2.5px;background:var(--acc);flex:none}
+h2.title{font-size:clamp(1.8rem,3.6vw,2.9rem);font-weight:800;line-height:1.08;margin:10px 0 6px;letter-spacing:-.01em}
+h2.title.sm{font-size:clamp(1.4rem,2.4vw,1.9rem)}
+h2.title em{font-style:italic;color:var(--acc);font-weight:600}
+.sub{color:var(--ink2);font-size:1.02rem;line-height:1.6;max-width:680px}
+
+/* ============ tombol & util ============ */
+.btn{display:inline-flex;align-items:center;gap:8px;border:2.5px solid var(--ink);border-radius:12px;padding:.72em 1.5em;font-weight:700;font-size:.95rem;transition:transform .15s,box-shadow .15s,background .15s,color .15s;color:var(--ink);background:var(--paper2)}
+.btn.primary{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 var(--acc)}
+.btn.primary:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--acc)}
+.btn.primary:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--acc)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.btn.sm{padding:.45em 1em;font-size:.84rem;border-width:2px}
+.btn.big{font-size:1.15rem;padding:.9em 2.4em}
+.btn:disabled{opacity:.4;pointer-events:none}
+kbd{border:1.5px solid var(--ink2);border-bottom-width:3px;border-radius:6px;padding:1px 7px;font-size:.72rem;font-weight:700;background:var(--paper2);font-family:inherit}
+.fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1.08;vertical-align:middle;font-weight:700}
+.fr b{padding:0 5px}
+.fr i{font-style:normal;border-top:2.2px solid currentColor;padding:1px 5px 0}
+.fb{display:inline-flex;align-items:center;gap:5px;font-size:.85rem;font-weight:700}
+.fb.ok{color:var(--green)}.fb.no{color:var(--red)}
+@keyframes shake{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .4s}
+.meter{height:12px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;background:var(--paper2)}
+.meter i{display:block;height:100%;background:var(--green);width:0;transition:width .4s}
+.ans{border:none;border-bottom:2.5px solid var(--ink);background:rgba(255,255,255,.6);font-family:inherit;font-weight:700;font-size:1.05rem;color:var(--acc);width:130px;padding:5px 10px;text-align:center;border-radius:8px 8px 0 0;transition:.15s}
+.ans:focus{outline:none;border-color:var(--acc);background:#fff}
+.ans:disabled{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+.unit{font-weight:700;color:var(--ink2);font-size:.92rem}
+.unit.big{font-size:1.05rem}
+.mem{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--ink);border-radius:10px;padding:5px 12px;font-weight:700;background:var(--paper2);font-size:.88rem}
+.chip{border:2px solid var(--ink);background:none;border-radius:99px;padding:4px 13px;font-size:.8rem;font-weight:700;transition:.12s;color:var(--ink)}
+.chip:hover{background:var(--ink);color:var(--paper)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border:2px solid var(--ink);border-radius:99px;background:var(--paper);margin:8px 0 4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--ink);cursor:grab}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--acc);border:3px solid var(--ink);cursor:grab}
+.warn-note{margin-top:14px;display:flex;gap:10px;align-items:flex-start;color:var(--ink2);font-size:.9rem;max-width:600px;line-height:1.55}
+.warn-note svg{flex:none;color:var(--amber);margin-top:2px}
+.plate{margin-top:18px;border:2.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:16px;padding:12px 20px;font-size:.98rem;font-weight:600;display:inline-flex;gap:10px;align-items:center;box-shadow:6px 6px 0 var(--acc);flex-wrap:wrap}
+.plate b{color:var(--amber)}
+.next-cta{margin-top:18px;display:flex;justify-content:flex-end}
+
+/* ============ overlay, menu, toast ============ */
+.overlay{position:fixed;inset:0;z-index:80;background:rgba(38,35,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.menu-box{background:var(--paper2);border:3px solid var(--ink);border-radius:20px;box-shadow:10px 10px 0 rgba(38,35,28,.28);width:min(580px,94vw);max-height:82vh;overflow:auto;padding:26px 24px 18px}
+.menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.menu-head h3{font-size:1.45rem}
+.mi{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:10px 12px;border:none;background:none;border-radius:10px;font-size:.93rem;font-weight:600;color:var(--ink);transition:.12s}
+.mi:hover{background:var(--acc-soft)}
+.mi.now{background:var(--ink);color:var(--paper)}
+.mi .n{font-family:'Fraunces',serif;font-weight:700;color:var(--acc);min-width:30px}
+.mi.now .n{color:var(--amber)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:.8em 1.5em;border-radius:12px;font-weight:600;z-index:90;opacity:0;pointer-events:none;transition:.3s;border:2px solid var(--paper2);box-shadow:var(--hard)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============ cover ============ */
+.cover-wrap{flex-direction:row;align-items:center;gap:clamp(20px,5vw,70px)}
+.cover-left{flex:1.15}
+.cover-left h1{font-size:clamp(2.4rem,5.4vw,4.2rem);font-weight:900;line-height:1.04;letter-spacing:-.015em;margin:14px 0}
+.cover-left h1 em{color:var(--acc);font-style:italic;font-weight:700}
+.pct-mark{display:inline-block;color:var(--acc);transform:rotate(8deg)}
+.lede{color:var(--ink2);font-size:1.06rem;line-height:1.65;max-width:520px;margin-bottom:22px}
+.chiprow{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.cover-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.cover-meta{font-size:.8rem;color:var(--ink2);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cover-right{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+.dial{position:relative;width:min(320px,34vw)}
+.dial svg{width:100%;display:block;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(38,35,28,.1);stroke-width:11}
+.ring-fg{fill:none;stroke:var(--acc);stroke-width:11;stroke-linecap:round;stroke-dasharray:578.05;stroke-dashoffset:578.05}
+.dial-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial-num b{font-family:'Fraunces',serif;font-size:clamp(2.5rem,4.4vw,3.7rem);font-weight:800}
+.dial-num span{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+.dial-cap{font-family:'Caveat',cursive;font-size:1.35rem;color:var(--ink2);transform:rotate(-2deg);text-align:center}
+
+/* ============ why & pemantik ============ */
+.imp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.imp{position:relative;border:2.5px solid var(--ink);border-radius:18px;background:var(--paper2);padding:18px 18px 16px;box-shadow:var(--hard);transition:.15s}
+.imp:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 rgba(38,35,28,.18)}
+.imp .pct{position:absolute;top:8px;right:14px;font-family:'Fraunces',serif;font-weight:800;font-size:1.6rem;color:rgba(228,87,46,.28)}
+.imp .ic{width:42px;height:42px;border-radius:12px;background:var(--acc-soft);display:grid;place-items:center;color:var(--acc);margin-bottom:10px}
+.imp h4{font-size:1.03rem;margin-bottom:5px}
+.imp p{font-size:.86rem;color:var(--ink2);line-height:1.5}
+.provoke{background:var(--ink);color:var(--paper);border-radius:22px;padding:clamp(20px,2.8vw,32px);margin-top:22px;max-width:860px;box-shadow:8px 8px 0 rgba(38,35,28,.18)}
+.provoke h3{font-size:1.4rem;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.bulb{width:40px;height:40px;border-radius:12px;background:var(--amber);display:grid;place-items:center;color:var(--ink);flex:none}
+.pk{padding:12px 0;border-bottom:1.5px dashed rgba(245,240,228,.25)}
+.pk:last-of-type{border-bottom:none}
+.pk-top{display:flex;gap:12px;align-items:flex-start}
+.pk-num{font-family:'Fraunces',serif;font-weight:800;color:var(--amber);font-size:1.25rem;line-height:1.25}
+.pk p{font-size:.95rem;line-height:1.5}
+.pk-hint{max-height:0;overflow:hidden;transition:max-height .35s ease;font-family:'Caveat',cursive;font-size:1.25rem;color:var(--amber);padding-left:34px}
+.pk.open .pk-hint{max-height:90px}
+.pk-btn{margin:4px 0 0 34px;background:none;border:none;color:rgba(245,240,228,.55);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border-bottom:1.5px dashed currentColor;padding:2px 0}
+.pk-btn:hover{color:var(--amber)}
+
+/* ============ tujuan ============ */
+.goals{display:flex;flex-direction:column;margin-top:24px;flex:1;justify-content:center;max-width:900px}
+.goal{display:flex;align-items:center;gap:clamp(14px,2.4vw,26px);padding:clamp(12px,2vh,19px) 10px;border-top:2px solid var(--ink);cursor:pointer;transition:.15s;user-select:none}
+.goal:last-of-type{border-bottom:2px solid var(--ink)}
+.goal:hover{background:var(--paper2)}
+.goal .gn{font-family:'Fraunces',serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:800;color:var(--acc);min-width:62px}
+.goal p{font-size:clamp(.94rem,1.5vw,1.12rem);font-weight:600;flex:1;line-height:1.45}
+.gbox{width:30px;height:30px;border:2.5px solid var(--ink);border-radius:9px;display:grid;place-items:center;background:var(--paper2);flex:none;transition:.15s}
+.gbox svg{opacity:0;transform:scale(.4);transition:.2s;color:#fff}
+.goal.done .gbox{background:var(--green);border-color:var(--green)}
+.goal.done .gbox svg{opacity:1;transform:scale(1)}
+.goal.done p{color:var(--ink2)}
+.goal-count{margin-top:16px;font-weight:700;font-size:.95rem;color:var(--ink2)}
+.goal-count b{color:var(--acc);font-size:1.1rem}
+
+/* ============ widget interaktif umum ============ */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,36px);margin-top:22px;flex:1;align-items:start}
+.flist{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.flist .mem{justify-content:flex-start;font-size:.94rem;padding:9px 14px}
+.flist .mem b{color:var(--acc)}
+.steps3{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.step3{flex:1;min-width:150px;border:2.5px solid var(--ink);border-radius:16px;background:var(--paper2);padding:14px 16px;box-shadow:var(--hard)}
+.step3 .sn{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#fff;font-family:'Fraunces',serif;font-weight:800;display:grid;place-items:center;margin-bottom:8px;font-size:1rem}
+.step3 h4{font-size:.98rem;margin-bottom:4px}
+.step3 p{font-size:.84rem;color:var(--ink2);line-height:1.5}
+.worked{border:2.5px dashed var(--ink);border-radius:18px;padding:14px 20px;background:rgba(255,253,244,.75);margin-top:16px}
+.worked h4{font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.worked p{line-height:1.85;font-size:.96rem}
+.worked b{color:var(--acc)}
+.icard{position:relative;background:var(--paper2);border:2.5px solid var(--ink);border-radius:20px;box-shadow:var(--hard);padding:22px 22px 18px}
+.life-tag{position:absolute;top:-15px;left:22px;background:var(--amber);border:2.5px solid var(--ink);border-radius:99px;padding:3px 14px;font-size:.7rem;font-weight:700;letter-spacing:.15em}
+.icard label{display:flex;justify-content:space-between;font-weight:700;font-size:.88rem;margin-top:8px}
+.icard label b{color:var(--acc)}
+
+/* label diskon (materi 1) */
+.tagbox{border:2.5px solid var(--ink);border-radius:16px;background:var(--ink);color:var(--paper);padding:14px 18px;text-align:center;margin:8px 0 4px}
+.tagbox small{display:block;font-size:.6rem;letter-spacing:.24em;font-weight:700;color:rgba(245,240,228,.6)}
+.tagbox .tp{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;line-height:1.2}
+.tagbox .td{display:inline-block;background:var(--acc);border:2px solid var(--paper2);border-radius:99px;color:#fff;font-weight:800;padding:2px 14px;margin-top:6px;font-size:1.05rem;transform:rotate(-2deg)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.dplate{border:2.5px solid var(--ink);border-radius:14px;padding:10px 8px;text-align:center}
+.dplate small{display:block;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ink2)}
+.dplate b{font-family:'Fraunces',serif;font-size:1.35rem;line-height:1.3}
+.dplate.pot{background:rgba(233,168,32,.15)}
+.dplate.pot b{color:#8a6206}
+.dplate.bay{background:var(--green-soft)}
+.dplate.bay b{color:var(--green)}
+.stackbar{display:flex;height:30px;border:2.5px solid var(--ink);border-radius:99px;overflow:hidden;margin-top:16px;background:var(--paper2)}
+.stackbar i{display:block;height:100%;transition:width .25s}
+.stackbar .paid{background:var(--green)}
+.stackbar .cut{background:var(--acc)}
+.stackbar span{display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden}
+.sb-leg{display:flex;gap:16px;margin-top:8px;font-size:.74rem;font-weight:700;color:var(--ink2)}
+.sb-leg i{width:11px;height:11px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-1px}
+
+/* mesin potongan (materi 2) */
+.m-item{border:2.5px solid var(--ink);border-radius:16px;background:var(--ink);color:var(--paper);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 12px;flex-wrap:wrap}
+.m-item b{font-family:'Fraunces',serif;font-size:1.3rem}
+.m-item .mp{font-weight:700;color:var(--amber);font-size:1.05rem}
+.m-item .md{background:var(--acc);border:2px solid var(--paper2);border-radius:99px;padding:2px 12px;font-weight:800}
+.mform{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.msteps{display:none;margin-top:12px;border-left:4px solid var(--green);background:var(--green-soft);padding:12px 15px;border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.7}
+.msteps.show{display:block}
+.msteps.bad{border-color:var(--red);background:rgba(195,59,46,.1)}
+.mstreak{font-size:.8rem;font-weight:700;color:var(--ink2)}
+.mstreak b{color:var(--acc);font-size:1rem}
+
+/* struk (materi 3) */
+.struk{border:2.5px dashed var(--ink);border-radius:14px;background:#fff;padding:16px 18px;margin-top:10px}
+.struk .shead{text-align:center;font-family:'Fraunces',serif;font-weight:800;letter-spacing:.08em;border-bottom:2px dashed var(--line);padding-bottom:8px;margin-bottom:10px}
+.srow{display:flex;justify-content:space-between;gap:10px;font-size:.95rem;font-weight:600;padding:4px 0}
+.srow.disc{color:var(--red)}
+.srow.total{border-top:2.5px dashed var(--ink);margin-top:8px;padding-top:10px;font-family:'Fraunces',serif;font-weight:800;font-size:1.25rem;color:var(--green)}
+
+/* detektif (materi 4) */
+.casebadge{display:inline-block;background:var(--purple);color:#fff;border:2.5px solid var(--ink);border-radius:99px;padding:3px 14px;font-size:.72rem;font-weight:700;letter-spacing:.12em;margin-bottom:8px}
+.caseq{font-size:.98rem;line-height:1.65;font-weight:600}
+.caseq b{color:var(--acc)}
+.dlive{margin-top:12px;border:2.5px solid var(--ink);border-radius:14px;background:var(--paper);padding:11px 14px;font-weight:700;font-size:.98rem;text-align:center}
+.dlive b{color:var(--acc)}
+.dlive.lock{background:var(--green-soft);border-color:var(--green)}
+.dlive.lock b{color:var(--green)}
+.dhint{display:none;margin-top:10px;font-family:'Caveat',cursive;font-size:1.25rem;color:#8a6206;background:rgba(233,168,32,.16);border-radius:10px;padding:8px 14px}
+.dhint.show{display:block}
+.dactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* ============ latihan & ujian ============ */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.8rem;font-weight:700;color:var(--ink2)}
+.legend .lg{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:11px;height:11px;border-radius:3.5px;border:1.5px solid var(--ink);display:inline-block}
+.ex-layout,.exam-layout{display:grid;grid-template-columns:290px 1fr;gap:clamp(14px,2.2vw,26px);flex:1;min-height:0;margin-top:14px}
+.ex-side,.exm-side{display:flex;flex-direction:column;gap:11px;border:2.5px solid var(--ink);border-radius:20px;background:var(--paper2);padding:18px;box-shadow:var(--hard);min-height:0;overflow:auto}
+.ex-side h4,.exm-side h4{font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2)}
+.ex-score{display:flex;align-items:baseline;gap:8px}
+.ex-score b{font-family:'Fraunces',serif;font-size:2.3rem;color:var(--green);line-height:1}
+.ex-score span{color:var(--ink2);font-weight:600;font-size:.9rem}
+.ex-note{font-size:.82rem;color:var(--ink2);line-height:1.5}
+.ex-tips{border-top:2px dashed var(--line);padding-top:10px;font-size:.85rem;line-height:1.55;display:flex;flex-direction:column;gap:9px}
+.tip{display:flex;gap:8px}
+.tip svg{flex:none;margin-top:2px;color:var(--acc)}
+.ex-side .btn,.exm-side .btn{margin-top:auto}
+.side-note{font-size:.78rem;color:var(--ink2);line-height:1.5;border-top:2px dashed var(--line);padding-top:10px;display:flex;gap:8px}
+.side-note svg{flex:none;color:var(--acc);margin-top:1px}
+.ex-list{overflow-y:auto;padding:4px 14px 20px 4px}
+.exi{display:flex;gap:14px;padding:14px 8px;border-bottom:1.8px dashed var(--line);align-items:flex-start;transition:background .15s}
+.exi:hover{background:rgba(255,253,244,.95)}
+.exi.done{background:rgba(46,107,79,.07)}
+.exi .no{font-family:'Fraunces',serif;font-weight:800;font-size:1.2rem;color:rgba(38,35,28,.3);min-width:34px;padding-top:2px}
+.exbody{flex:1;min-width:0}
+.exq{font-weight:600;line-height:1.55;font-size:1rem}
+.exform{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.btn.mini{padding:.42em 1em;font-size:.8rem;border-radius:9px}
+.reveal{background:none;border:none;border-bottom:1.5px dashed var(--red);color:var(--red);font-weight:700;font-size:.8rem;padding:0 0 1px}
+.ans-show{font-size:.88rem;font-weight:700;color:#8a6206;background:rgba(233,168,32,.18);padding:3px 10px;border-radius:8px}
+.xpemb{display:none;margin-top:9px;border-left:4px solid var(--amber);background:rgba(233,168,32,.13);padding:10px 14px;border-radius:0 12px 12px 0;font-size:.9rem;line-height:1.65}
+.xpemb.show{display:block}
+.xpemb h5{font-family:'Space Grotesk',sans-serif;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:#8a6206;margin-bottom:4px}
+.xpemb b{color:#8a6206}
+.exi.bad .exq{animation:shake .4s}
+
+/* mesin ujian */
+.cnts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.cnt{border:2px solid var(--ink);border-radius:10px;padding:7px 4px 5px;text-align:center;background:var(--paper2)}
+.cnt b{display:block;font-family:'Fraunces',serif;font-size:1.2rem;line-height:1.1}
+.cnt span{font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+.cnt.ok b{color:var(--green)}.cnt.no b{color:var(--red)}.cnt.lt b{color:#B07E0E}
+#navGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.nv{aspect-ratio:1;border:2px solid var(--ink);border-radius:9px;background:var(--paper2);font-weight:700;font-size:.82rem;transition:.12s;color:var(--ink);display:grid;place-items:center}
+.nv:hover{transform:translateY(-2px)}
+.nv.cur{background:var(--ink);color:var(--paper)}
+.nv.ok{background:var(--green);border-color:var(--green);color:#fff}
+.nv.no{background:var(--red);border-color:var(--red);color:#fff}
+.q-card{border:2.5px solid var(--ink);border-radius:20px;background:var(--paper2);box-shadow:var(--hard);padding:clamp(16px,2.4vw,26px);display:flex;flex-direction:column;min-height:0;overflow-y:auto}
+.q-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:2px dashed var(--line)}
+.q-pos{font-family:'Fraunces',serif;font-weight:800;font-size:1.2rem}
+.q-tag{display:inline-block;color:#fff;border:2px solid var(--ink);border-radius:99px;padding:3px 12px;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-left:10px;vertical-align:middle}
+.q-sec{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.q-text{font-weight:600;font-size:1.05rem;line-height:1.6;padding:16px 0 14px}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2.5px solid var(--ink);background:var(--paper);border-radius:14px;padding:10px 14px;font-weight:600;font-size:.96rem;color:var(--ink);transition:.13s}
+.opt .ol{width:30px;height:30px;border-radius:9px;border:2px solid var(--ink);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:800;flex:none;background:var(--paper2)}
+.opt:hover:not(:disabled){transform:translateX(5px);border-color:var(--acc)}
+.opt.sel{border-color:var(--acc);background:var(--acc-soft);box-shadow:3px 3px 0 rgba(228,87,46,.35)}
+.opt.sel .ol{background:var(--acc);color:#fff;border-color:var(--acc)}
+.opt:disabled{cursor:default}
+.opt.correct{background:var(--green-soft);border-color:var(--green)}
+.opt.correct .ol{background:var(--green);border-color:var(--green);color:#fff}
+.opt.wrong{background:rgba(195,59,46,.12);border-color:var(--red)}
+.opt.wrong .ol{background:var(--red);border-color:var(--red);color:#fff}
+.opt.dim{opacity:.45}
+.isian-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0 10px}
+.qfb{display:none;align-items:center;gap:9px;margin-top:14px;border-radius:12px;padding:10px 15px;font-weight:700;font-size:.94rem}
+.qfb.good{display:flex;background:var(--green-soft);color:var(--green)}
+.qfb.bad{display:flex;background:rgba(195,59,46,.1);color:var(--red)}
+.pemb{display:none;margin-top:12px;border-left:4px solid var(--amber);background:rgba(233,168,32,.13);padding:13px 16px;border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.65}
+.pemb.show{display:block}
+.pemb h5{font-family:'Space Grotesk',sans-serif;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#8a6206;margin-bottom:5px}
+.pemb b{color:#8a6206}
+.q-foot{display:flex;gap:10px;align-items:center;margin-top:auto;padding-top:16px;flex-wrap:wrap}
+.q-foot .sp{flex:1}
+
+/* hasil ujian */
+.res-box{background:var(--paper2);border:3px solid var(--ink);border-radius:22px;box-shadow:10px 10px 0 rgba(38,35,28,.28);width:min(720px,94vw);max-height:86vh;overflow:auto;padding:26px 26px 20px}
+.res-score{text-align:center;margin-bottom:16px}
+.rs-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ink2)}
+.res-score .big{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(3rem,7vw,4.4rem);color:var(--acc);line-height:1}
+.res-score .of{font-family:'Fraunces',serif;font-weight:700;font-size:1.3rem;color:var(--ink2)}
+.rs-pred{font-family:'Fraunces',serif;font-style:italic;font-size:1.25rem;margin-top:4px}
+.res-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.rtile{border:2.5px solid var(--ink);border-radius:14px;padding:11px 8px;text-align:center;background:var(--paper)}
+.rtile b{display:block;font-family:'Fraunces',serif;font-size:1.5rem;line-height:1.15}
+.rtile span{font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--ink2)}
+.rtile.tg b{color:var(--green)}.rtile.tr b{color:var(--red)}.rtile.ta b{color:#B07E0E}
+.res-line{text-align:center;font-size:.86rem;color:var(--ink2);font-weight:600;margin-bottom:12px}
+.catrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:.85rem;font-weight:700}
+.catrow .cdot{width:12px;height:12px;border-radius:4px;border:1.5px solid var(--ink);flex:none}
+.catrow .clab{min-width:170px}
+.catrow .meter{flex:1}
+.catrow b{min-width:44px;text-align:right}
+.res-sub{font-family:'Space Grotesk',sans-serif;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);font-weight:700;margin:10px 0 4px}
+.res-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:8px 0 18px}
+.res-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* ============ kesimpulan / refleksi / penutup ============ */
+.conc{margin-top:20px;flex:1;display:flex;flex-direction:column;justify-content:center;max-width:940px}
+.conc-item{display:flex;gap:clamp(16px,3vw,34px);align-items:baseline;padding:clamp(9px,1.7vh,16px) 6px;border-top:2px solid var(--ink);transition:.15s}
+.conc-item:last-of-type{border-bottom:2px solid var(--ink)}
+.conc-item:hover{background:var(--paper2);padding-left:18px}
+.conc-item .cn{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(1.3rem,2.4vw,2rem);color:var(--acc);min-width:60px}
+.conc-item p{font-size:clamp(.93rem,1.5vw,1.08rem);line-height:1.5}
+.conc-item p b{color:var(--acc)}
+.conc-hand{font-family:'Caveat',cursive;font-size:1.55rem;color:var(--green);transform:rotate(-1.5deg);margin-top:14px;align-self:flex-end}
+.ref-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(20px,3.2vw,44px);margin-top:18px;flex:1;min-height:0}
+.ref-left{display:flex;flex-direction:column;justify-content:center;gap:16px}
+.ref-scale{border:2.5px solid var(--ink);background:var(--paper2);border-radius:20px;padding:24px;box-shadow:var(--hard)}
+.ref-scale .val{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(2.6rem,5vw,3.8rem);color:var(--acc);line-height:1}
+#refNote{display:none;border:2px dashed var(--acc);border-radius:14px;padding:11px 15px;font-size:.88rem;line-height:1.5;background:var(--acc-soft)}
+.ref-q{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.ref-q label{font-weight:700;font-size:.94rem}
+.ref-q textarea{border:2.5px solid var(--ink);border-radius:14px;background:var(--paper2);padding:12px 14px;font-family:inherit;font-size:.95rem;resize:vertical;min-height:62px;color:var(--ink)}
+.ref-q textarea:focus{outline:none;border-color:var(--acc);box-shadow:3px 3px 0 var(--acc-soft)}
+.end-wrap{align-items:center;justify-content:center;text-align:center;gap:10px}
+.end-100{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(4.6rem,13vw,9rem);line-height:.95;color:var(--acc);letter-spacing:-.03em}
+.end-100 small{color:var(--ink);font-size:.35em;vertical-align:super}
+#confettiHost{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.cfp{position:absolute;top:-5vh;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(114vh) rotate(680deg);opacity:.85}}
+.end-wrap>*{position:relative;z-index:2}
+.end-hand{font-family:'Caveat',cursive;font-size:1.5rem;color:var(--green);transform:rotate(-2deg)}
+
+/* ============ responsif ============ */
+@media(max-width:1020px){
+  .imp-grid{grid-template-columns:1fr 1fr}
+  .mat-grid,.ref-grid{grid-template-columns:1fr}
+  .ex-layout,.exam-layout{grid-template-columns:1fr}
+  .ex-side,.exm-side{order:2}
+  .q-card,.ex-list{order:1}
+  .ex-list,.q-card{overflow:visible;max-height:none}
+  .ex-side,.exm-side{max-height:none}
+  .cover-wrap{flex-direction:column;text-align:center;gap:18px}
+  .cover-actions,.chiprow,.cover-meta{justify-content:center}
+  .dial{width:min(250px,55vw)}
+}
+@media(max-width:640px){
+  .q-opts,.imp-grid,.res-tiles{grid-template-columns:1fr 1fr}
+  #navGrid{grid-template-columns:repeat(8,1fr)}
+  .res-grid{grid-template-columns:repeat(8,1fr)}
+  .hud-num{display:none}
+  .corner-no{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="pwrap"><i id="pbar"></i></div>
+
+<main id="deck">
+
+<!-- ============ 1. SAMPUL ============ -->
+<section class="slide" data-title="Sampul">
+  <div class="wrap cover-wrap">
+    <div class="cover-left">
+      <div class="eyebrow rv" style="--d:0">Matematika · Fase B · Kelas 4 SD · Kurikulum Merdeka</div>
+      <h1 class="rv" style="--d:1">Jago <em>Diskon</em> lewat Persen <span class="pct-mark">%</span></h1>
+      <p class="lede rv" style="--d:2">Hari ini kita bedah tuntas satu keahlian belanja paling berharga: membaca, menghitung, dan mencari diskon — sampai tidak ada satu rupiah pun yang keliru di kasir.</p>
+      <div class="chiprow rv" style="--d:3">
+        <span class="mem">3 Keterampilan Inti</span>
+        <span class="mem">20 Latihan + Pembahasan</span>
+        <span class="mem">Ujian 40 Soal (LKS)</span>
+      </div>
+      <div class="cover-actions rv" style="--d:4">
+        <button class="btn primary" onclick="goTo(1)">Mulai Belajar
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button class="btn ghost" onclick="openMenu()">Daftar Slide</button>
+      </div>
+      <div class="cover-meta rv" style="--d:5">Gunakan <kbd>←</kbd> <kbd>→</kbd> pada keyboard untuk berpindah slide</div>
+    </div>
+    <div class="cover-right rv" style="--d:2">
+      <div class="dial">
+        <svg viewBox="0 0 220 220">
+          <circle class="ring-bg" cx="110" cy="110" r="92"/>
+          <circle class="ring-fg" id="dialRing" cx="110" cy="110" r="92"/>
+        </svg>
+        <div class="dial-num"><b id="dialPct">0%</b><span>label diskon</span></div>
+      </div>
+      <div class="dial-cap">angka yang sama, makna yang berbeda —<br>hari ini kamu belajar membacanya!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. DISKON DI MANA-MANA ============ -->
+<section class="slide" data-title="Diskon di Mana-Mana">
+  <span class="corner-no">02</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Mengapa Materi Ini Penting?</div>
+    <h2 class="title rv" style="--d:1">Diskon ada di <em>mana-mana</em></h2>
+    <div class="imp-grid">
+      <div class="imp rv" style="--d:2"><span class="pct">−30%</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H3v9l9.3 9.3a2 2 0 0 0 2.8 0l6.2-6.2a2 2 0 0 0 0-2.8L12 2z"/><circle cx="7.5" cy="7.5" r="1.4"/></svg></span><h4>Kasir &amp; Etalase</h4><p>Label “diskon 30%” mengubah harga. Yang paham persen tahu persis berapa rupiah yang dihemat.</p></div>
+      <div class="imp rv" style="--d:3"><span class="pct">20%</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h11M11 3l4 4-4 4"/><path d="M20 17H9M13 21l-4-4 4-4"/></svg></span><h4>Bandingkan Toko</h4><p>Toko A: Rp50.000 diskon 20%. Toko B: langsung Rp42.000. Mana yang lebih murah? Persen yang menjawab.</p></div>
+      <div class="imp rv" style="--d:4"><span class="pct">70%</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span><h4>Flash Sale Online</h4><p>Belanja online penuh angka diskon besar. Tanpa menghitung, mudah tergoda beli hal yang tak perlu.</p></div>
+      <div class="imp rv" style="--d:5"><span class="pct">−5%</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h14v20l-2.3-1.6L14.4 22l-2.4-1.6L9.6 22l-2.3-1.6L5 22V2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></span><h4>Cek Struk Belanja</h4><p>Struk mencantumkan potongan. Kamu bisa memastikan diskon benar-benar diterima — hebat, kan?</p></div>
+      <div class="imp rv" style="--d:6"><span class="pct">×2</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 5-10 5L2 7l10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg></span><h4>Diskon Ganda</h4><p>Diskon 20% lalu 10% lagi ternyata BUKAN diskon 30%! Hanya yang paham persen yang tidak tertipu.</p></div>
+      <div class="imp rv" style="--d:7"><span class="pct">90%</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3 8-10V5l-8-3-8 3v7c0 7 8 10 8 10z"/><path d="M9 11.5l2 2 4-4"/></svg></span><h4>Konsumen Cerdas</h4><p>Spanduk “DISKON 90%” memang memikat — tetapi konsumen cerdas tetap menghitung kebutuhannya.</p></div>
+    </div>
+    <div class="provoke rv" style="--d:8">
+      <h3><span class="bulb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.6 1 2.5h6c0-.9.2-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></span>Pertanyaan Pemantik</h3>
+      <div class="pk">
+        <div class="pk-top"><span class="pk-num">1</span><p>Suatu barang kena <b>diskon 50%</b>, lalu minggu depan kena <b>diskon 50% lagi</b>. Apakah jadinya gratis?</p></div>
+        <button class="pk-btn">petunjuk</button>
+        <div class="pk-hint">Diskon kedua dihitung dari harga yang SUDAH dipotong, bukan harga mula-mula…</div>
+      </div>
+      <div class="pk">
+        <div class="pk-top"><span class="pk-num">2</span><p>Toko A: tas Rp100.000 dengan <b>diskon 30%</b>. Toko B: tas sama, langsung <b>Rp90.000</b>. Di mana lebih murah?</p></div>
+        <button class="pk-btn">petunjuk</button>
+        <div class="pk-hint">Hitung dulu 30% dari 100.000, lalu kurangkan dari harga awal…</div>
+      </div>
+      <div class="pk">
+        <div class="pk-top"><span class="pk-num">3</span><p>Baju berlabel <b>“Diskon 25%”</b> tetapi tidak tertulis harganya. Bisakah kita tahu berapa yang harus dibayar? Informasi apa yang masih kurang?</p></div>
+        <button class="pk-btn">petunjuk</button>
+        <div class="pk-hint">Persen diskon hanya bermakna jika ada harga mula-mula yang jadi acuannya…</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. TUJUAN ============ -->
+<section class="slide" data-title="Tujuan Pembelajaran">
+  <span class="corner-no">03</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Rencana Hari Ini</div>
+    <h2 class="title rv" style="--d:1">Tujuan <em>Pembelajaran</em></h2>
+    <p class="sub rv" style="--d:2">Klik setiap tujuan untuk menandainya. Di akhir sesi kita periksa bersama: sudah tercapai semua?</p>
+    <div class="goals rv" style="--d:3" id="goalList">
+      <div class="goal"><span class="gn">01</span><p>Menjelaskan makna <b>diskon</b> dan hubungannya dengan persen serta pecahan.</p><span class="gbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="goal"><span class="gn">02</span><p>Menghitung <b>besar potongan harga</b> (diskon) dari harga dan persentase diskon.</p><span class="gbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="goal"><span class="gn">03</span><p>Menghitung <b>harga yang harus dibayar</b> setelah diskon, dengan dua cara.</p><span class="gbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="goal"><span class="gn">04</span><p>Mencari <b>persentase diskon</b> dari harga mula-mula dan harga akhir — kebalikan dari dua keterampilan sebelumnya.</p><span class="gbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+    </div>
+    <div class="goal-count rv" style="--d:4">Ter tandai: <b id="goalCount">0</b> / 4 — klik yang sudah kamu raih!</div>
+  </div>
+</section>
+
+<!-- ============ 4. MATERI 1: ANATOMI DISKON ============ -->
+<section class="slide" data-title="Materi 1 · Anatomi Diskon">
+  <span class="corner-no">04</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Materi 1 · Konsep Dasar</div>
+    <h2 class="title rv" style="--d:1">Anatomi sebuah <em>diskon</em></h2>
+    <div class="mat-grid">
+      <div>
+        <p class="sub rv" style="--d:2">Diskon adalah <b>potongan harga</b> yang dinyatakan dalam persen. Diskon membelah harga mula-mula menjadi dua bagian: <b>uang yang kita bayar</b> dan <b>uang yang kita hemat (potongan)</b>.</p>
+        <div class="flist rv" style="--d:3">
+          <span class="mem">1&nbsp; Besar potongan = <b>diskon% ÷ 100 × harga</b></span>
+          <span class="mem">2&nbsp; Harga dibayar = <b>harga mula-mula − potongan</b></span>
+          <span class="mem">3&nbsp; Persentase diskon = <b>potongan ÷ harga mula × 100%</b></span>
+        </div>
+        <p class="warn-note rv" style="--d:4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 20h20L12 3zM12 10v4M12 17.5h.01"/></svg>
+          Ketiga rumus itu <b>satu keluarga</b>: jika kamu mengetahui dua besaran, yang ketiga selalu bisa dicari. Inilah alasan soal diskon punya banyak wajah!
+        </p>
+        <div class="g100-presets rv" style="--d:5" style="margin-top:14px">
+          <button class="chip" data-p="120000" data-d="25">Tas Rp120rb · 25%</button>
+          <button class="chip" data-p="20000" data-d="50">Buku Rp20rb · 50%</button>
+          <button class="chip" data-p="60000" data-d="10">Mainan Rp60rb · 10%</button>
+        </div>
+      </div>
+      <div class="icard rv" style="--d:3">
+        <span class="life-tag">LABEL DISKON HIDUP — GESER!</span>
+        <div class="tagbox">
+          <small>TOKO SERBA ADA</small>
+          <div class="tp" id="anTagPrice">Rp75.000</div>
+          <span class="td" id="anTagDisc">−25%</span>
+        </div>
+        <label>Harga mula-mula <b id="anPriceVal">Rp75.000</b></label>
+        <input type="range" id="anPrice" min="10000" max="200000" step="5000" value="75000" aria-label="Harga mula-mula">
+        <label>Besaran diskon <b id="anDiscVal">25%</b></label>
+        <input type="range" id="anDisc" min="0" max="70" step="5" value="25" aria-label="Persentase diskon">
+        <div class="duo">
+          <div class="dplate pot"><small>Potongan (hemat)</small><b id="anPot">Rp18.750</b></div>
+          <div class="dplate bay"><small>Harga dibayar</small><b id="anBayar">Rp56.250</b></div>
+        </div>
+        <div class="stackbar">
+          <i class="paid" id="anPaid" style="width:75%"><span id="anPaidLbl">BAYAR</span></i>
+          <i class="cut" id="anCut" style="width:25%"><span id="anCutLbl">DISKON</span></i>
+        </div>
+        <div class="sb-leg"><span><i style="background:var(--green)"></i>yang dibayar</span><span><i style="background:var(--acc)"></i>yang dipotong</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. MATERI 2: BESAR POTONGAN ============ -->
+<section class="slide" data-title="Materi 2 · Besar Potongan">
+  <span class="corner-no">05</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Materi 2 · Keterampilan A</div>
+    <h2 class="title rv" style="--d:1">Keterampilan A: menghitung <em>besar potongan</em></h2>
+    <div class="mat-grid">
+      <div>
+        <div class="steps3 rv" style="--d:2">
+          <div class="step3"><span class="sn">1</span><h4>Ubah ke pecahan</h4><p>25% = 25/100 = 1/4. Makin sederhana, makin mudah dihitung.</p></div>
+          <div class="step3"><span class="sn">2</span><h4>Kalikan harga</h4><p>Potongan = pecahan × harga mula-mula.</p></div>
+          <div class="step3"><span class="sn">3</span><h4>Beri satuan Rp</h4><p>Jawaban diskon selalu berupa uang: Rp…, bukan %.</p></div>
+        </div>
+        <div class="worked rv" style="--d:3">
+          <h4>Contoh Terselesaikan</h4>
+          <p>Topi seharga <b>Rp50.000,00</b> didiskon <b>40%</b>.<br>
+          40% = 40/100 = 2/5<br>
+          Potongan = 2/5 × Rp50.000,00 = <b>Rp20.000,00</b> ✓</p>
+        </div>
+        <p class="warn-note rv" style="--d:4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 20h20L12 3zM12 10v4M12 17.5h.01"/></svg>
+          Hati-hati: <b>besar potongan ≠ harga yang dibayar!</b> “Berapa diskonnya?” dan “berapa yang dibayar?” adalah dua pertanyaan berbeda.
+        </p>
+      </div>
+      <div class="icard rv" style="--d:3">
+        <span class="life-tag">MESIN POTONGAN — TEBAK DULU!</span>
+        <div class="m-item">
+          <div><b id="mName">—</b><br><span class="mp" id="mPrice">—</span></div>
+          <span class="md" id="mDisc">−0%</span>
+        </div>
+        <div class="mform">
+          <span class="unit big">Potongan = Rp</span>
+          <input class="ans" id="mAns" inputmode="numeric" autocomplete="off" placeholder="…">
+          <button class="btn primary sm" id="mCheck">Periksa</button>
+          <button class="btn ghost sm" id="mNew">Soal Baru</button>
+        </div>
+        <div class="msteps" id="mSteps"></div>
+        <p class="mstreak" style="margin-top:12px">Beruntun benar: <b id="mStreak">0</b> — pecahan hafalan membantu!</p>
+        <div class="g100-presets" style="margin-top:8px">
+          <span class="mem">10% = 1/10</span><span class="mem">20% = 1/5</span><span class="mem">25% = 1/4</span><span class="mem">50% = 1/2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. MATERI 3: HARGA DIBAYAR ============ -->
+<section class="slide" data-title="Materi 3 · Harga Dibayar">
+  <span class="corner-no">06</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Materi 3 · Keterampilan B</div>
+    <h2 class="title rv" style="--d:1">Keterampilan B: <em>harga yang harus dibayar</em></h2>
+    <div class="mat-grid">
+      <div>
+        <div class="steps3 rv" style="--d:2">
+          <div class="step3"><span class="sn">1</span><h4>Hitung potongan</h4><p>Pakai Keterampilan A: diskon% ÷ 100 × harga.</p></div>
+          <div class="step3"><span class="sn">2</span><h4>Kurangkan</h4><p>Bayar = harga mula-mula − potongan.</p></div>
+        </div>
+        <div class="flist rv" style="--d:3">
+          <span class="mem">Jalan pintas: <b>bayar = (100% − diskon%) × harga</b></span>
+          <span class="mem">Diskon 10% → bayar <b>90%</b> harganya</span>
+          <span class="mem">Diskon 25% → bayar <b>3/4</b> harganya</span>
+          <span class="mem">Diskon 50% → bayar <b>setengah</b> harganya</span>
+        </div>
+        <div class="worked rv" style="--d:4">
+          <h4>Contoh Terselesaikan — dua cara</h4>
+          <p>Celana Rp200.000,00 didiskon <b>15%</b>.<br>
+          <b>Cara 1:</b> potongan = 15% × 200.000 = 30.000 → bayar = 200.000 − 30.000 = <b>Rp170.000,00</b><br>
+          <b>Cara 2:</b> bayar = 85% × 200.000 = <b>Rp170.000,00</b> ✓</p>
+        </div>
+      </div>
+      <div class="icard rv" style="--d:3">
+        <span class="life-tag">STRUK BELANJA — ATUR SLIDERNYA</span>
+        <label>Nama barang tetap: Tas Sekolah</label>
+        <label>Harga mula-mula <b id="sPriceVal">Rp80.000</b></label>
+        <input type="range" id="sPrice" min="25000" max="200000" step="5000" value="80000" aria-label="Harga mula-mula">
+        <label>Diskon <b id="sDiscVal">25%</b></label>
+        <input type="range" id="sDisc" min="0" max="70" step="5" value="25" aria-label="Diskon">
+        <div class="struk">
+          <div class="shead">TOKO MAJU JAYA</div>
+          <div class="srow"><span>Harga tas</span><span id="sR1">Rp80.000</span></div>
+          <div class="srow disc"><span id="sR2l">Diskon 25%</span><span id="sR2">−Rp20.000</span></div>
+          <div class="srow total"><span>TOTAL DIBAYAR</span><span id="sR3">Rp60.000</span></div>
+        </div>
+        <div class="g100-presets" style="margin-top:12px">
+          <button class="chip spreset" data-p="20000" data-d="25">Buku 20rb · 25%</button>
+          <button class="chip spreset" data-p="150000" data-d="10">Kemeja 150rb · 10%</button>
+          <button class="chip spreset" data-p="200000" data-d="50">Sepatu 200rb · 50%</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. MATERI 4: PERSENTASE DISKON ============ -->
+<section class="slide" data-title="Materi 4 · Persentase Diskon">
+  <span class="corner-no">07</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Materi 4 · Keterampilan C · Kebalikan</div>
+    <h2 class="title rv" style="--d:1">Keterampilan C: mencari <em>persentase diskonnya</em></h2>
+    <div class="mat-grid">
+      <div>
+        <div class="steps3 rv" style="--d:2">
+          <div class="step3"><span class="sn">1</span><h4>Cari potongan</h4><p>Potongan = harga mula-mula − harga akhir.</p></div>
+          <div class="step3"><span class="sn">2</span><h4>Bagi dengan harga mula</h4><p>Ini perbandingan potongan terhadap keseluruhan.</p></div>
+          <div class="step3"><span class="sn">3</span><h4>Kalikan 100%</h4><p>Hasilnya: persentase diskon yang selama ini “rahasia”.</p></div>
+        </div>
+        <div class="worked rv" style="--d:3">
+          <h4>Contoh Terselesaikan</h4>
+          <p>Buku mula-mula <b>Rp20.000,00</b>, setelah diskon menjadi <b>Rp15.000,00</b>.<br>
+          Potongan = 20.000 − 15.000 = Rp5.000,00<br>
+          Diskon = 5.000 ÷ 20.000 × 100% = <b>25%</b> ✓</p>
+        </div>
+        <p class="warn-note rv" style="--d:4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Inilah <b>kebalikan</b> dari dua keterampilan sebelumnya — dan bentuk soal favorit di ujian! Pahami arah alurnya, bukan sekadar hafal rumus.
+        </p>
+        <div class="next-cta rv" style="--d:5"><button class="btn primary" onclick="goTo(7)">Uji Dirimu: 20 Latihan Diskon
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+      <div class="icard rv" style="--d:3">
+        <span class="casebadge" id="dCase">KASUS #1</span>
+        <p class="caseq" id="dQ"></p>
+        <label>Geser tebakan diskonmu <b id="dSliderVal">0%</b></label>
+        <input type="range" id="dSlider" min="0" max="70" step="5" value="0" aria-label="Tebakan persentase diskon">
+        <div class="dlive" id="dLive">Jika diskon 0% → harga akhir = <b>—</b></div>
+        <div class="dhint" id="dHint"></div>
+        <div class="dactions">
+          <button class="btn ghost sm" id="dHintBtn">Buka Petunjuk</button>
+          <button class="btn primary sm" id="dNew">Kasus Baru</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. LATIHAN 20 SOAL ============ -->
+<section class="slide" data-title="Latihan · 20 Soal Diskon">
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Latihan Mandiri · 20 Soal + Pembahasan</div>
+    <h2 class="title sm rv" style="--d:1">20 Latihan Diskon — <em>giliranmu!</em></h2>
+    <div class="ex-layout rv" style="--d:2">
+      <div class="ex-side">
+        <div class="ex-score"><b>0</b><span>/ 20 benar</span></div>
+        <div class="meter"><i id="exBar"></i></div>
+        <div class="ex-note">Isi jawaban lalu tekan <b>Cek</b> atau <b>Enter</b>. Pembahasan muncul saat kamu benar — atau setelah dua kali mencoba.</div>
+        <div class="ex-tips">
+          <div class="tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.6 1 2.5h6c0-.9.2-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><span>Potongan = diskon% ÷ 100 × harga.</span></div>
+          <div class="tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.6 1 2.5h6c0-.9.2-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><span>Bayar = harga − potongan, atau langsung (100% − diskon%) × harga.</span></div>
+          <div class="tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.6 1 2.5h6c0-.9.2-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><span>Diskon% = potongan ÷ harga mula-mula × 100%.</span></div>
+          <div class="tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.6 1 2.5h6c0-.9.2-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><span>Tulis angka saja: “20.000” atau “20000” sama-sama benar.</span></div>
+        </div>
+        <button class="btn ghost sm" id="exReset">Ulangi Latihan</button>
+      </div>
+      <div class="ex-list" id="exList"></div>
+    </div>
+    <div class="next-cta rv" style="--d:3"><button class="btn primary" onclick="goTo(8)">Lanjut ke Ujian 40 Soal
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. UJIAN 40 SOAL ============ -->
+<section class="slide" data-title="Ujian · 40 Soal LKS">
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Ujian Sesuai LKS · 20 Pilihan Ganda + 20 Isian</div>
+    <h2 class="title sm rv" style="--d:1">Ujian: <em>40 Soal Diskon &amp; Persen</em></h2>
+    <div class="legend rv" style="--d:2">
+      <span class="lg"><i style="background:#E4572E"></i>Konsep Persen &amp; Jumlah</span>
+      <span class="lg"><i style="background:#C98A12"></i>Besar Potongan</span>
+      <span class="lg"><i style="background:#2E6B4F"></i>Harga Dibayar</span>
+      <span class="lg"><i style="background:#7A5CA8"></i>Sisa &amp; Kekurangan</span>
+      <span class="lg" style="color:var(--ink2)">Jawab → <b style="color:var(--ink)">Cek Jawaban</b> → baca pembahasan → lanjut.</span>
+    </div>
+    <div class="exam-layout rv" style="--d:3">
+      <div class="exm-side">
+        <h4>Peta Soal</h4>
+        <div class="cnts">
+          <div class="cnt ok"><b id="cntOk">0</b><span>Benar</span></div>
+          <div class="cnt no"><b id="cntNo">0</b><span>Salah</span></div>
+          <div class="cnt lt"><b id="cntLeft">40</b><span>Belum</span></div>
+        </div>
+        <div id="navGrid"></div>
+        <button class="btn primary" id="btnFinish">Selesai Ujian &amp; Cek Skor</button>
+        <button class="btn ghost sm" id="btnRestart">Ulangi dari Soal 1</button>
+        <div class="side-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span>Skor dihitung dari jawaban yang sudah dicek. Tekan <b>Selesai Ujian</b> kapan saja untuk melihat skor, rekap per kategori, dan peninjauan pembahasan.</span>
+        </div>
+      </div>
+      <div class="q-card">
+        <div class="q-head">
+          <span><span class="q-pos" id="qPos">Soal 1 dari 40</span><span class="q-tag" id="qTag">—</span></span>
+          <span class="q-sec" id="qSec">Pilihan Ganda</span>
+        </div>
+        <div id="qMain"></div>
+        <div class="qfb" id="qFb"></div>
+        <div class="pemb" id="qPem"><h5>Pembahasan</h5><div id="qPemTxt"></div></div>
+        <div class="q-foot">
+          <button class="btn ghost sm" id="btnPrevQ">← Sebelumnya</button>
+          <span class="sp"></span>
+          <button class="btn primary" id="btnCheck">Cek Jawaban</button>
+          <button class="btn ghost" id="btnNextQ">Soal Berikutnya →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. KESIMPULAN ============ -->
+<section class="slide" data-title="Kesimpulan">
+  <span class="corner-no">10</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Rangkuman</div>
+    <h2 class="title rv" style="--d:1">Kesimpulan: <em>kuasai alurnya</em></h2>
+    <div class="conc">
+      <div class="conc-item rv" style="--d:2"><span class="cn">01</span><p>Diskon adalah <b>potongan harga dalam bentuk persen</b> — ia membelah harga menjadi “yang dibayar” dan “yang dihemat”.</p></div>
+      <div class="conc-item rv" style="--d:3"><span class="cn">02</span><p><b>Besar potongan</b> = diskon% ÷ 100 × harga mula-mula. Jawabannya selalu rupiah.</p></div>
+      <div class="conc-item rv" style="--d:4"><span class="cn">03</span><p><b>Harga dibayar</b> = harga − potongan, atau jalan pintas: <b>(100% − diskon%) × harga</b>. Diskon 50% artinya bayar setengah.</p></div>
+      <div class="conc-item rv" style="--d:5"><span class="cn">04</span><p><b>Persentase diskon</b> = potongan ÷ harga mula-mula × 100% — kebalikan dari dua keterampilan sebelumnya.</p></div>
+      <div class="conc-item rv" style="--d:6"><span class="cn">05</span><p>Bedakan tiga pertanyaan: <b>berapa potongannya?</b>, <b>berapa yang dibayar?</b>, dan <b>berapa persen diskonnya?</b> — baca soal sampai tuntas!</p></div>
+      <div class="conc-item rv" style="--d:7"><span class="cn">06</span><p>Diskon 100% = <b>gratis</b>; diskon ganda dihitung bertingkat; dan konsumen cerdas <b>selalu menghitung sebelum tergoda</b>.</p></div>
+      <div class="conc-hand rv" style="--d:8">tiga rumus, satu keluarga — semuanya lewat 100! ✓</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. REFLEKSI ============ -->
+<section class="slide" data-title="Refleksi">
+  <span class="corner-no">11</span>
+  <div class="wrap">
+    <div class="eyebrow rv" style="--d:0">Cermin Diri</div>
+    <h2 class="title rv" style="--d:1">Refleksi: ceritakan <em>harimu</em></h2>
+    <div class="ref-grid">
+      <div class="ref-left rv" style="--d:2">
+        <div class="ref-scale">
+          <div class="val" id="refVal">70%</div>
+          <p style="font-weight:700;margin-top:6px">Seberapa yakin kamu menghitung diskon sekarang?</p>
+          <input type="range" id="refSlider" min="0" max="100" value="70" step="5" aria-label="Tingkat keyakinan">
+          <p style="font-size:.8rem;color:var(--ink2);margin-top:8px">Skornya juga dalam persen — tunjukkan angkanya!</p>
+        </div>
+        <div id="refNote"></div>
+      </div>
+      <div class="rv" style="--d:3">
+        <div class="ref-q">
+          <label for="refA">Dari tiga keterampilan (potongan, harga bayar, persentase diskon), mana yang paling kamu kuasai? Kenapa?</label>
+          <textarea id="refA" placeholder="Contoh: potongan, karena hafal 25% = 1/4…"></textarea>
+        </div>
+        <div class="ref-q">
+          <label for="refB">Kesalahan apa yang paling sering kamu lakukan, dan bagaimana rencanamu mengatasinya?</label>
+          <textarea id="refB" placeholder="Tulis jujur, ya — di situlah kita mulai pertemuan berikutnya…"></textarea>
+        </div>
+        <button class="btn primary" id="refSend">Kirim Refleksi
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. PENUTUP ============ -->
+<section class="slide" id="slideEnd" data-title="Penutup">
+  <div id="confettiHost"></div>
+  <div class="wrap end-wrap">
+    <div class="end-100 rv" style="--d:0">−50<small>%</small></div>
+    <h2 class="title rv" style="--d:1">Terima kasih untuk <em>hari ini!</em></h2>
+    <p class="sub rv" style="--d:2" style="text-align:center">Kamu kini menguasai tiga keterampilan diskon: menghitung potongan, menentukan harga bayar, dan membongkar persentase diskon. Mulai hari ini, setiap label merah di etalase akan “berbicara” padamu — dan kamu paham bahasanya.</p>
+    <p class="end-hand rv" style="--d:3">“Konsumen cerdas tidak menghindari diskon — ia menghitungnya.”</p>
+    <div class="cover-actions rv" style="--d:4" style="justify-content:center">
+      <button class="btn primary" onclick="goTo(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 9.5V21h14V9.5"/></svg>
+        Ulangi dari Awal
+      </button>
+      <button class="btn ghost" onclick="goTo(8)">Kembali ke Ujian</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- HUD -->
+<footer class="hud">
+  <span class="hud-title" id="hudTitle">Sampul</span>
+  <div class="hud-nav">
+    <button class="navb" id="btnHome" aria-label="Ke awal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 9.5V21h14V9.5"/></svg></button>
+    <button class="navb" id="btnPrev" aria-label="Sebelumnya"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+    <button class="navb" id="btnNext" aria-label="Berikutnya"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <button class="navb" id="btnMenu" aria-label="Daftar slide"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8.5 6h12M8.5 12h12M8.5 18h12"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01" stroke-width="3.4"/></svg></button>
+  </div>
+  <span class="hud-num" id="hudNum">01 / 12</span>
+</footer>
+
+<!-- Overlay daftar slide -->
+<div class="overlay" id="menuOverlay">
+  <div class="menu-box">
+    <div class="menu-head">
+      <h3>Daftar Slide</h3>
+      <button class="navb" id="menuClose" aria-label="Tutup"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div id="menuList"></div>
+  </div>
+</div>
+
+<!-- Overlay hasil ujian -->
+<div class="overlay" id="resOverlay"><div class="res-box" id="resBody"></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= utilitas ================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const pickA = a => a[Math.floor(Math.random()*a.length)];
+const fmtID = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+function parseNum(s){
+  if(s===undefined||s===null) return NaN;
+  s = String(s).toLowerCase().replace(/%/g,'').replace(/\s/g,'').replace(/,/g,'.');
+  s = s.replace(/[^0-9.\-]/g,'');
+  let p; do{ p=s; s=s.replace(/(\d)\.(\d{3})(?!\d)/,'$1$2'); }while(s!==p);
+  if(s===''||s==='.'||s==='-') return NaN;
+  const n = parseFloat(s);
+  return isNaN(n) ? NaN : n;
+}
+function parseFrac(s){
+  s = (s||'').trim();
+  const m = s.match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  if(!m) return null;
+  const d = parseInt(m[2]);
+  if(d===0) return null;
+  return parseInt(m[1]) / d;
+}
+let toastT;
+function toast(msg){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+const IC_OK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+const IC_NO='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+/* ================= navigasi deck ================= */
+const slides=$$('.slide'), N=slides.length;
+const titles=slides.map(s=>s.dataset.title||'');
+let cur=0;
+function goTo(i){
+  if(i<0||i>=N) return;
+  slides[cur].classList.remove('active');
+  cur=i;
+  slides[cur].classList.add('active');
+  $('#pbar').style.width=((cur+1)/N*100)+'%';
+  $('#hudNum').textContent=String(cur+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
+  $('#hudTitle').textContent=titles[cur];
+  $('#btnPrev').disabled=(cur===0);
+  $('#btnNext').disabled=(cur===N-1);
+  const w=slides[cur].querySelector('.wrap'); if(w) w.scrollTop=0;
+  if(slides[cur].id==='slideEnd') launchConfetti();
+  if(titles[cur]==='Refleksi') refRefresh();
+}
+ $('#btnPrev').onclick=()=>goTo(cur-1);
+ $('#btnNext').onclick=()=>goTo(cur+1);
+ $('#btnHome').onclick=()=>goTo(0);
+function openMenu(){ $('#menuOverlay').classList.add('open'); }
+ $('#btnMenu').onclick=openMenu;
+ $('#menuClose').onclick=()=>$('#menuOverlay').classList.remove('open');
+ $('#menuOverlay').addEventListener('click',e=>{ if(e.target.id==='menuOverlay') $('#menuOverlay').classList.remove('open'); });
+ $('#menuList').innerHTML=titles.map((t,i)=>`<button class="mi" data-i="${i}"><span class="n">${String(i+1).padStart(2,'0')}</span>${t}</button>`).join('');
+ $$('#menuList .mi').forEach(b=>b.onclick=()=>{ goTo(+b.dataset.i); $('#menuOverlay').classList.remove('open'); });
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea,select')){ if(e.key==='Escape') e.target.blur(); return; }
+  if($('#menuOverlay').classList.contains('open')){ if(e.key==='Escape') $('#menuOverlay').classList.remove('open'); return; }
+  if($('#resOverlay').classList.contains('open')){ if(e.key==='Escape') $('#resOverlay').classList.remove('open'); return; }
+  if(titles[cur]==='Ujian · 40 Soal LKS'){
+    if(e.key==='ArrowRight'){ e.preventDefault(); EXM.cur===Q40.length-1 ? finishExam() : loadQ(EXM.cur+1); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); if(EXM.cur>0) loadQ(EXM.cur-1); }
+    else if(/^[1-4]$/.test(e.key)) pickOpt(+e.key-1);
+    else if(/^[abcd]$/.test(e.key.toLowerCase())) pickOpt('abcd'.indexOf(e.key.toLowerCase()));
+    return;
+  }
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); goTo(cur+1); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(cur-1); }
+  else if(e.key==='Home') goTo(0);
+  else if(e.key==='End') goTo(N-1);
+});
+
+/* ================= jam persen di sampul ================= */
+const TARGETS=[50,25,70,10,40,90,30,60];
+let dialCur=0, dialI=0;
+(function animDial(){
+  const to=TARGETS[dialI++%TARGETS.length], from=dialCur, t0=performance.now(), dur=1200;
+  (function step(t){
+    let k=Math.min(1,(t-t0)/dur); k=1-Math.pow(1-k,3);
+    dialCur=from+(to-from)*k;
+    $('#dialPct').textContent=Math.round(dialCur)+'%';
+    $('#dialRing').style.strokeDashoffset=578.05*(1-dialCur/100);
+    if(k<1) requestAnimationFrame(step); else setTimeout(animDial,750);
+  })(t0);
+})();
+
+/* ================= pemantik & tujuan ================= */
+ $$('.pk-btn').forEach(b=>b.onclick=()=>{
+  const pk=b.closest('.pk'); pk.classList.toggle('open');
+  b.textContent=pk.classList.contains('open')?'tutup petunjuk':'petunjuk';
+});
+ $$('#goalList .goal').forEach(g=>g.onclick=()=>{
+  g.classList.toggle('done');
+  $('#goalCount').textContent=$$('#goalList .goal.done').length;
+});
+
+/* ================= materi 1: label diskon hidup ================= */
+(function(){
+  function upd(){
+    const h=+$('#anPrice').value, d=+$('#anDisc').value;
+    const pot=Math.round(h*d/100), bayar=h-pot;
+    $('#anPriceVal').textContent=fmtID(h);
+    $('#anDiscVal').textContent=d+'%';
+    $('#anTagPrice').textContent=fmtID(h);
+    $('#anTagDisc').textContent='−'+d+'%';
+    $('#anPot').textContent=fmtID(pot);
+    $('#anBayar').textContent=fmtID(bayar);
+    $('#anPaid').style.width=(100-d)+'%';
+    $('#anCut').style.width=d+'%';
+    $('#anPaidLbl').textContent=(100-d)>=16?('BAYAR '+(100-d)+'%'):'';
+    $('#anCutLbl').textContent=d>=14?('DISKON '+d+'%'):'';
+  }
+  $('#anPrice').addEventListener('input',upd);
+  $('#anDisc').addEventListener('input',upd);
+  $$('.g100-presets .chip[data-p]').forEach(b=>b.onclick=()=>{ $('#anPrice').value=b.dataset.p; $('#anDisc').value=b.dataset.d; upd(); });
+  upd();
+})();
+
+/* ================= materi 2: mesin potongan ================= */
+(function(){
+  const MITEMS=[
+    {n:'Baju Anak',p:80000},{n:'Buku Tulis',p:20000},{n:'Tas Sekolah',p:120000},
+    {n:'Topi Keren',p:50000},{n:'Sepatu Olahraga',p:200000},{n:'Kotak Pensil',p:30000},
+    {n:'Mainan Robot',p:60000},{n:'Jam Dinding',p:45000},{n:'Payung',p:40000},
+    {n:'Sandal',p:25000},{n:'Botol Minum',p:35000}
+  ];
+  const MDISC=[5,10,15,20,25,30,40,50];
+  const MFRAC={5:'1/20',10:'1/10',15:'3/20',20:'1/5',25:'1/4',30:'3/10',40:'2/5',50:'1/2'};
+  let last=-1, streak=0;
+  function newQ(){
+    let idx; do{ idx=Math.floor(Math.random()*MITEMS.length); }while(idx===last);
+    last=idx;
+    const it=MITEMS[idx], d=pickA(MDISC);
+    $('#mName').textContent=it.n;
+    $('#mPrice').textContent=fmtID(it.p);
+    $('#mDisc').textContent='−'+d+'%';
+    $('#mAns').value=''; $('#mAns').disabled=false; $('#mCheck').disabled=false;
+    const st=$('#mSteps'); st.className='msteps'; st.innerHTML='';
+    $('#mAns').focus();
+  }
+  function check(){
+    const it=MITEMS[last], d=+$('#mDisc').textContent.replace(/[^0-9]/g,'');
+    const pot=Math.round(it.p*d/100);
+    const n=parseNum($('#mAns').value);
+    const st=$('#mSteps');
+    if(!isNaN(n)&&Math.abs(n-pot)<1e-6){
+      streak++; $('#mStreak').textContent=streak;
+      st.className='msteps show';
+      st.innerHTML=`${IC_OK} <b>Benar!</b><br>Langkah: ${d}% = ${d}/100 = <b>${MFRAC[d]}</b><br>Potongan = ${MFRAC[d]} × ${fmtID(it.p)} = <b>${fmtID(pot)}</b>`;
+      $('#mAns').disabled=true; $('#mCheck').disabled=true;
+    } else {
+      streak=0; $('#mStreak').textContent=0;
+      st.className='msteps show bad';
+      st.innerHTML=`${IC_NO} Belum tepat. Ingat: <b>${d}% ÷ 100 × ${fmtID(it.p)}</b>. Coba lagi!`;
+      $('#mAns').focus(); $('#mAns').select();
+    }
+  }
+  $('#mCheck').onclick=check;
+  $('#mNew').onclick=newQ;
+  $('#mAns').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+  newQ();
+})();
+
+/* ================= materi 3: struk belanja ================= */
+(function(){
+  function upd(){
+    const h=+$('#sPrice').value, d=+$('#sDisc').value;
+    const pot=Math.round(h*d/100), bayar=h-pot;
+    $('#sPriceVal').textContent=fmtID(h);
+    $('#sDiscVal').textContent=d+'%';
+    $('#sR1').textContent=fmtID(h);
+    $('#sR2l').textContent='Diskon '+d+'%';
+    $('#sR2').textContent='−'+fmtID(pot);
+    $('#sR3').textContent=fmtID(bayar);
+  }
+  $('#sPrice').addEventListener('input',upd);
+  $('#sDisc').addEventListener('input',upd);
+  $$('.spreset').forEach(b=>b.onclick=()=>{ $('#sPrice').value=b.dataset.p; $('#sDisc').value=b.dataset.d; upd(); });
+  upd();
+})();
+
+/* ================= materi 4: detektif diskon ================= */
+(function(){
+  const CASES=[
+    {m:40000,a:30000,d:25},{m:60000,a:48000,d:20},{m:80000,a:40000,d:50},
+    {m:50000,a:42500,d:15},{m:120000,a:90000,d:25},{m:90000,a:63000,d:30},
+    {m:150000,a:120000,d:20},{m:200000,a:180000,d:10}
+  ];
+  let cIdx=0, no=1;
+  function load(idx){
+    cIdx=idx;
+    const c=CASES[idx];
+    $('#dCase').textContent='KASUS #'+no;
+    $('#dQ').innerHTML=`Sebuah barang berharga mula-mula <b>${fmtID(c.m)}</b>. Setelah diskon rahasia, harganya menjadi <b>${fmtID(c.a)}</b>. Temukan persentase diskonnya dengan menggeser slider!`;
+    $('#dSlider').value=0; $('#dSlider').disabled=false;
+    $('#dSliderVal').textContent='0%';
+    $('#dLive').className='dlive';
+    $('#dLive').innerHTML='Jika diskon 0% → harga akhir = <b>'+fmtID(c.m)+'</b>';
+    $('#dHint').className='dhint'; $('#dHint').innerHTML='';
+  }
+  function live(){
+    const c=CASES[cIdx], d=+$('#dSlider').value;
+    const akhir=Math.round(c.m*(100-d)/100);
+    $('#dSliderVal').textContent=d+'%';
+    const lv=$('#dLive');
+    if(akhir===c.a){
+      const pot=c.m-c.a;
+      lv.className='dlive lock';
+      lv.innerHTML=`${IC_OK} Tepat! Diskon rahasianya <b>${d}%</b> — potongan ${fmtID(pot)} dan ${Math.round(pot/1000).toLocaleString('id-ID')||pot} ÷ ${fmtID(c.m)} × 100% = <b>${d}%</b>`;
+      $('#dSlider').disabled=true;
+      $('#dHint').innerHTML=`Ingat alurnya: potongan = ${fmtID(c.m)} − ${fmtID(c.a)} = <b>${fmtID(pot)}</b>, lalu potongan ÷ harga mula × 100%.`;
+      $('#dHint').className='dhint show';
+    } else {
+      lv.className='dlive';
+      lv.innerHTML=`Jika diskon ${d}% → harga akhir = <b>${fmtID(akhir)}</b> <span style="color:var(--ink2);font-weight:600">(target: ${fmtID(c.a)})</span>`;
+    }
+  }
+  $('#dSlider').addEventListener('input',live);
+  $('#dHintBtn').onclick=()=>{
+    const c=CASES[cIdx], pot=c.m-c.a;
+    $('#dHint').innerHTML=`Petunjuk: potongan = ${fmtID(c.m)} − ${fmtID(c.a)} = <b>${fmtID(pot)}</b>. Sekarang cari: berapa persen ${fmtID(pot)} dari ${fmtID(c.m)}?`;
+    $('#dHint').className='dhint show';
+  };
+  $('#dNew').onclick=()=>{
+    let idx; do{ idx=Math.floor(Math.random()*CASES.length); }while(idx===cIdx);
+    no++; load(idx);
+  };
+  load(0);
+})();
+
+/* ================= 20 LATIHAN DISKON ================= */
+const EX20=[
+{q:'Harga pensil Rp10.000,00 mendapat diskon 10%. Berapa rupiah besar potongan (diskon)-nya?', a:1000, u:'Rp',
+ why:'10% = 10/100 = 1/10. Potongan = 1/10 × Rp10.000 = <b>Rp1.000</b>.'},
+{q:'Buku tulis seharga Rp20.000,00 didiskon 25%. Berapa rupiah potongannya?', a:5000, u:'Rp',
+ why:'25% = 25/100 = 1/4. Potongan = 1/4 × Rp20.000 = <b>Rp5.000</b>.'},
+{q:'Tas sekolah seharga Rp150.000,00 mendapat diskon 20%. Berapa rupiah besar diskonnya?', a:30000, u:'Rp',
+ why:'Potongan = 20/100 × Rp150.000 = <b>Rp30.000</b>.'},
+{q:'Topi harganya Rp50.000,00 dengan diskon 40%. Berapa rupiah yang dipotong?', a:20000, u:'Rp',
+ why:'40% = 40/100 = 2/5. Potongan = 2/5 × Rp50.000 = <b>Rp20.000</b>.'},
+{q:'Baju seharga Rp80.000,00 didiskon 50%. Berapa rupiah potongan harganya?', a:40000, u:'Rp',
+ why:'50% = setengah harga. Potongan = 1/2 × Rp80.000 = <b>Rp40.000</b>.'},
+{q:'Sepeda seharga Rp500.000,00 didiskon 10%. Berapa rupiah diskonnya?', a:50000, u:'Rp',
+ why:'Potongan = 10/100 × Rp500.000 = <b>Rp50.000</b>.'},
+{q:'Bola voli seharga Rp60.000,00 mendapat diskon 5%. Berapa rupiah potongannya?', a:3000, u:'Rp',
+ why:'5% = 5/100 = 1/20. Potongan = 1/20 × Rp60.000 = <b>Rp3.000</b>.'},
+{q:'Cokelat seharga Rp25.000,00 didiskon 20%. Berapa rupiah yang dipotong?', a:5000, u:'Rp',
+ why:'20% = 20/100 = 1/5. Potongan = 1/5 × Rp25.000 = <b>Rp5.000</b>.'},
+{q:'Sepatu seharga Rp120.000,00 didiskon 25%. Berapa rupiah harga yang harus dibayar?', a:90000, u:'Rp',
+ why:'Potongan = 25% × 120.000 = 30.000. Dibayar = 120.000 − 30.000 = <b>Rp90.000</b> (atau langsung 75% × 120.000).'},
+{q:'Mainan seharga Rp40.000,00 didiskon 50%. Berapa rupiah harga yang harus dibayar?', a:20000, u:'Rp',
+ why:'Diskon 50% = setengah harga, jadi dibayar <b>Rp20.000</b>.'},
+{q:'Celana seharga Rp200.000,00 didiskon 15%. Berapa rupiah harga yang harus dibayar?', a:170000, u:'Rp',
+ why:'Potongan = 15% × 200.000 = 30.000. Dibayar = 200.000 − 30.000 = <b>Rp170.000</b>.'},
+{q:'Sampo seharga Rp30.000,00 didiskon 10%. Berapa rupiah yang harus dibayar di kasir?', a:27000, u:'Rp',
+ why:'Potongan = 3.000. Dibayar = 30.000 − 3.000 = <b>Rp27.000</b> (atau 90% × 30.000).'},
+{q:'Kasur seharga Rp800.000,00 mendapat diskon 25%. Berapa rupiah harga yang harus dibayar?', a:600000, u:'Rp',
+ why:'Potongan = 1/4 × 800.000 = 200.000. Dibayar = 800.000 − 200.000 = <b>Rp600.000</b>.'},
+{q:'Kotak pensil seharga Rp30.000,00 didiskon 30%. Berapa rupiah harga yang harus dibayar?', a:21000, u:'Rp',
+ why:'Potongan = 30% × 30.000 = 9.000. Dibayar = 30.000 − 9.000 = <b>Rp21.000</b>.'},
+{q:'Buku cerita harganya mula-mula Rp20.000,00. Setelah diskon, harganya menjadi Rp15.000,00. Berapa persen diskonnya?', a:25, u:'%',
+ why:'Potongan = 20.000 − 15.000 = 5.000. Diskon = 5.000 ÷ 20.000 × 100% = <b>25%</b>.'},
+{q:'Tas harganya Rp100.000,00 dan potongan yang diberikan Rp10.000,00. Berapa persen diskonnya?', a:10, u:'%',
+ why:'Diskon = 10.000 ÷ 100.000 × 100% = <b>10%</b>.'},
+{q:'Kaus harganya mula-mula Rp60.000,00. Setelah diskon harganya menjadi Rp48.000,00. Berapa persen diskonnya?', a:20, u:'%',
+ why:'Potongan = 60.000 − 48.000 = 12.000. Diskon = 12.000 ÷ 60.000 × 100% = <b>20%</b>.'},
+{q:'Jam tangan mula-mula Rp300.000,00, potongannya Rp150.000,00. Berapa persen diskonnya?', a:50, u:'%',
+ why:'Diskon = 150.000 ÷ 300.000 × 100% = <b>50%</b> (setengah harga).'},
+{q:'Lunch box mula-mula Rp40.000,00. Setelah diskon, harga yang dibayar Rp36.000,00. Berapa persen diskonnya?', a:10, u:'%',
+ why:'Potongan = 40.000 − 36.000 = 4.000. Diskon = 4.000 ÷ 40.000 × 100% = <b>10%</b>.'},
+{q:'Alat gambar mula-mula Rp150.000,00 dengan diskon Rp45.000,00. Berapa persen diskonnya?', a:30, u:'%',
+ why:'Diskon = 45.000 ÷ 150.000 × 100% = <b>30%</b>.'}
+];
+(function(){
+  const list=$('#exList'); let right=0;
+  function upd(){
+    $('#exBar').style.width=(right/EX20.length*100)+'%';
+    $('.ex-side .ex-score b').textContent=right;
+  }
+  EX20.forEach((q,i)=>{
+    const li=document.createElement('div'); li.className='exi';
+    li.innerHTML=`<span class="no">${i+1}</span>
+      <div class="exbody">
+        <p class="exq">${q.q}</p>
+        <form class="exform">
+          ${q.u==='Rp'?'<span class="unit big">Rp</span>':''}
+          <input class="ans" inputmode="decimal" autocomplete="off" placeholder="…">
+          <span class="unit">${q.u}</span>
+          <button class="btn mini primary" type="submit">Cek</button>
+          <span class="fb"></span>
+        </form>
+        <div class="xpemb"><h5>Pembahasan</h5><div>${q.why}</div></div>
+      </div>`;
+    const form=li.querySelector('form'), inp=li.querySelector('.ans'),
+          fb=li.querySelector('.fb'), btn=form.querySelector('button'),
+          pem=li.querySelector('.xpemb');
+    let tries=0;
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      if(inp.disabled) return;
+      const n=parseNum(inp.value);
+      if(!isNaN(n)&&Math.abs(n-q.a)<1e-6){
+        right++; upd();
+        li.classList.add('done');
+        inp.disabled=true; btn.style.display='none';
+        fb.className='fb ok'; fb.innerHTML=IC_OK+' Benar!';
+        pem.classList.add('show');
+      } else {
+        tries++;
+        li.classList.remove('bad'); void li.offsetWidth; li.classList.add('bad');
+        fb.className='fb no'; fb.innerHTML=IC_NO+' Belum tepat — coba lagi!';
+        if(tries>=2 && !li.querySelector('.reveal')){
+          const rv=document.createElement('button');
+          rv.type='button'; rv.className='reveal'; rv.textContent='lihat jawaban';
+          rv.onclick=()=>{
+            inp.disabled=true; btn.style.display='none'; rv.remove();
+            fb.innerHTML=`<span class="ans-show">Jawaban: ${q.u==='Rp'?fmtID(q.a):q.a+' '+q.u}</span>`;
+            pem.classList.add('show');
+          };
+          fb.appendChild(rv);
+        }
+        inp.focus(); inp.select();
+      }
+    });
+    list.appendChild(li);
+  });
+  upd();
+  $('#exReset').onclick=()=>toast('Muat ulang halaman (F5) untuk mengulang latihan dari awal.');
+})();
+
+/* ================= DATA UJIAN 40 SOAL (sesuai LKS) ================= */
+const CATS={
+  dasar:['Konsep Persen & Jumlah','#E4572E'],
+  potongan:['Besar Potongan','#C98A12'],
+  bayar:['Harga Dibayar','#2E6B4F'],
+  sisa:['Sisa & Kekurangan','#7A5CA8']
+};
+const FR=(a,b)=>`<span class="fr"><b>${a}</b><i>${b}</i></span>`;
+const Q40=[
+{t:'pg',c:'dasar',q:'Ibu memotong sebuah kue menjadi 100 potong yang sama besar. Jika Budi memakan 20 potong kue tersebut, berapa persen kue yang dimakan Budi?',o:['10%','20%','80%','100%'],k:1,why:'Persen artinya "per seratus". 20 potong dari 100 potong sama dengan 20/100, yaitu <b>20%</b>.'},
+{t:'pg',c:'sisa',q:'Baterai HP Ayah awalnya 100%. Setelah digunakan untuk menonton video, baterainya berkurang 30%. Berapa persen sisa baterai HP Ayah sekarang?',o:['30%','50%','70%','100%'],k:2,why:'Sisa baterai = 100% − 30% = <b>70%</b>.'},
+{t:'pg',c:'potongan',q:'Diskon 50% di toko baju berarti kita hanya perlu membayar ... dari harga aslinya.',o:['Seperempat','Setengah','Seluruhnya','Sepertiga'],k:1,why:'50% sama dengan 50/100 yang jika disederhanakan menjadi 1/2 (setengah).'},
+{t:'pg',c:'dasar',q:'Kakak menabung uang di celengan. Dari 100 lembar uang yang ada, 40 lembar adalah uang Rp2.000. Berapa persen jumlah uang Rp2.000 dari seluruh lembaran uang di celengan?',o:['40%','60%','10%','20%'],k:0,why:'40 lembar dari 100 lembar total = 40/100 = <b>40%</b>.'},
+{t:'pg',c:'sisa',q:'Saat mengunduh (download) sebuah permainan, layar menunjukkan angka 75%. Berapa persen lagi agar unduhan tersebut selesai hingga 100%?',o:['15%','20%','25%','35%'],k:2,why:'Selesai artinya 100%. Kekurangan unduhan = 100% − 75% = <b>25%</b>.'},
+{t:'pg',c:'potongan',q:'Harga sebuah pensil adalah Rp10.000. Toko memberikan diskon sebesar 10%. Berapa rupiah potongan harga (diskon) yang didapat?',o:['Rp500','Rp1.000','Rp2.000','Rp10.000'],k:1,why:'10% = 10/100. Potongan = (10/100) × 10.000 = <b>Rp1.000</b>.'},
+{t:'pg',c:'dasar',q:`Pecahan ${FR(1,2)} (satu perdua) jika diubah ke dalam bentuk persen sama dengan...`,o:['12%','25%','50%','100%'],k:2,why:'1/2 dari 100% adalah <b>50%</b>.'},
+{t:'pg',c:'sisa',q:'Dari 100 anak kelas 4 SD, 55 anak suka makan ayam goreng dan sisanya suka ikan bakar. Berapa persen anak yang suka ikan bakar?',o:['55%','45%','35%','100%'],k:1,why:'Total anak = 100 (atau 100%). Suka ikan bakar = 100 − 55 = 45 anak, yang berarti <b>45%</b>.'},
+{t:'pg',c:'dasar',q:'Pak Guru membagikan 100 buku cerita. Sebanyak 15% dari buku tersebut adalah buku dongeng hewan. Berapa banyak buku dongeng hewan tersebut?',o:['15 buku','85 buku','100 buku','150 buku'],k:0,why:'15% dari 100 buku = (15/100) × 100 = <b>15 buku</b>.'},
+{t:'pg',c:'sisa',q:'Hari ini kemungkinan turun hujan adalah 80%. Berapa persen kemungkinan hari ini tidak turun hujan?',o:['10%','20%','80%','100%'],k:1,why:'Total kemungkinan selalu 100%. Kemungkinan tidak hujan = 100% − 80% = <b>20%</b>.'},
+{t:'pg',c:'dasar',q:'25% sering juga disebut sebagai...',o:['Setengah','Seperempat','Tiga perempat','Satu penuh'],k:1,why:'25% = 25/100. Jika disederhanakan, dibagi 25 atas dan bawah, hasilnya adalah 1/4 (seperempat).'},
+{t:'pg',c:'dasar',q:'Paman memiliki 200 ekor ayam. Sebanyak 50% dari ayam tersebut bertelur hari ini. Berapa ekor ayam yang bertelur?',o:['50 ekor','100 ekor','150 ekor','200 ekor'],k:1,why:'50% berarti setengah. Setengah dari 200 ekor adalah <b>100 ekor</b>.'},
+{t:'pg',c:'dasar',q:'Adik memiliki 50 kelereng. Ia memberikan 20% dari kelerengnya kepada teman. Berapa banyak kelereng yang diberikan Adik?',o:['10 kelereng','20 kelereng','30 kelereng','50 kelereng'],k:0,why:'20% = 20/100. (20/100) × 50 = (20 × 50)/100 = 1000/100 = <b>10 kelereng</b>.'},
+{t:'pg',c:'dasar',q:'Roti bakar dibagi menjadi 10 potong. Siti memakan 3 potong. Berapa persen roti yang dimakan Siti?',o:['3%','13%','30%','70%'],k:2,why:'3 potong dari 10 potong = 3/10. Untuk menjadi persen (per seratus), kalikan dengan 10/10. Menjadi 30/100 = <b>30%</b>.'},
+{t:'pg',c:'sisa',q:'Sebuah botol minum terisi air sebanyak 60%. Agar botol tersebut penuh (100%), berapa persen air yang harus ditambahkan?',o:['30%','40%','60%','100%'],k:1,why:'Penuh = 100%. Kekurangan air = 100% − 60% = <b>40%</b>.'},
+{t:'pg',c:'sisa',q:'Dari 100 soal ujian Matematika, Anton berhasil menjawab 92 soal dengan benar. Berapa persen soal yang dijawab salah oleh Anton?',o:['92%','18%','8%','2%'],k:2,why:'Total soal 100. Benar 92. Salah = 100 − 92 = 8 soal. Karena dari 100 soal, nilainya langsung menjadi <b>8%</b>.'},
+{t:'pg',c:'potongan',q:'Toko mainan memberikan diskon 100% untuk pembeli ke-100. Diskon 100% berarti...',o:['Bayar setengah harga','Harga menjadi dua kali lipat','Gratis (tidak perlu bayar)','Bayar 100 rupiah'],k:2,why:'Diskon 100% artinya harga dipotong sepenuhnya — <b>gratis</b>!'},
+{t:'pg',c:'dasar',q:'Lampu lalu lintas menyala merah selama 100 detik. Mobil Rio berhenti selama 45 detik. Berapa persen waktu berhenti Rio dibandingkan total waktu lampu merah?',o:['100%','55%','45%','450%'],k:2,why:'45 detik dari 100 detik = 45/100 = <b>45%</b>.'},
+{t:'pg',c:'sisa',q:'Ibu membawa uang Rp50.000 ke pasar. Ibu menghabiskan 50% dari uangnya untuk membeli ikan. Berapa sisa uang Ibu sekarang?',o:['Rp10.000','Rp20.000','Rp25.000','Rp50.000'],k:2,why:'50% artinya setengah. Setengah dari Rp50.000 adalah Rp25.000. Sisa uang = 50.000 − 25.000 = <b>Rp25.000</b>.'},
+{t:'pg',c:'dasar',q:`75% jika diubah menjadi bentuk pecahan biasa yang paling sederhana adalah...`,o:[FR(1,2),FR(1,4),FR(3,4),FR(1,3)],k:2,why:'75% = 75/100. Dibagi 25 pada pembilang dan penyebut, hasilnya <b>3/4</b>.'},
+{t:'is',c:'sisa',q:'Baterai laptop Dini tersisa 15%. Dini mengisi daya laptop tersebut hingga bertambah 60%. Baterai laptop Dini sekarang adalah',pre:'',suf:'%',a:75,at:'75%',why:'Pembahasan: 15% + 60% = <b>75%</b>.'},
+{t:'is',c:'sisa',q:'Pak Petani menanam 100 bibit tomat. Setelah satu bulan, 8 bibit tomat mati. Persentase bibit tomat yang hidup adalah',pre:'',suf:'%',a:92,at:'92%',why:'Bibit mati 8, berarti yang hidup = 100 − 8 = 92 bibit. Dari 100 bibit total, 92 berarti <b>92%</b>.'},
+{t:'is',c:'potongan',q:'Harga sebuah buku tulis adalah Rp4.000. Saat hari kemerdekaan, ada diskon sebesar 25%. Pecahan yang senilai dengan 25% adalah',pre:'',suf:'(tulis a/b)',fracV:.25,at:'1/4',why:'25% = 25/100. Disederhanakan menjadi <b>1/4</b>.'},
+{t:'is',c:'sisa',q:'Di sebuah bus terdapat 100 penumpang. Sebanyak 62 penumpang adalah perempuan. Persentase penumpang laki-laki di dalam bus tersebut adalah',pre:'',suf:'%',a:38,at:'38%',why:'Penumpang laki-laki = 100 − 62 = 38 orang. 38 dari 100 adalah <b>38%</b>.'},
+{t:'is',c:'potongan',q:'10% dari Rp20.000 adalah',pre:'Rp',suf:'',a:2000,at:'Rp2.000',why:'10% = 10/100. Potongan = (10/100) × 20.000 = <b>2.000</b>.'},
+{t:'is',c:'dasar',q:'Kakak memakan 1/4 bagian dari loyang pizza. Dalam bentuk persen, Kakak memakan',pre:'',suf:'% pizza',a:25,at:'25%',why:'1/4 dari 100% adalah (100 ÷ 4) = <b>25%</b>.'},
+{t:'is',c:'sisa',q:'Selesai berolahraga, botol air minum Lani tersisa 20%. Persentase air minum yang telah diminum oleh Lani adalah',pre:'',suf:'%',a:80,at:'80%',why:'Total air 100%. Tersisa 20%. Yang diminum = 100% − 20% = <b>80%</b>.'},
+{t:'is',c:'dasar',q:'Bentuk persen dari pecahan 50/100 adalah',pre:'',suf:'%',a:50,at:'50%',why:'Pecahan per seratus (/100) langsung menjadi persen. 50/100 = <b>50%</b>.'},
+{t:'is',c:'bayar',q:'Sebuah toko sepatu memasang tulisan "Diskon 50%". Jika harga sepatu Rp100.000, maka pembeli hanya perlu membayar',pre:'Rp',suf:'',a:50000,at:'Rp50.000',why:'Diskon 50% berarti setengah harga. Setengah dari 100.000 adalah <b>50.000</b>.'},
+{t:'is',c:'sisa',q:'Proses menyalin file di komputer sudah mencapai 88%. Untuk mencapai selesai (100%), persentase yang masih harus ditunggu adalah',pre:'',suf:'%',a:12,at:'12%',why:'Kekurangan persentase = 100% − 88% = <b>12%</b>.'},
+{t:'is',c:'potongan',q:'Harga sebuah tas adalah Rp100.000. Toko memberikan diskon 20%. Besar potongan harga (diskon) yang didapat adalah',pre:'Rp',suf:'',a:20000,at:'Rp20.000',why:'20% = 20/100. Potongan = (20/100) × 100.000 = <b>Rp20.000</b>.'},
+{t:'is',c:'bayar',q:'Sepatu olahraga seharga Rp200.000 mendapat diskon 50%. Harga sepatu tersebut setelah diskon menjadi',pre:'Rp',suf:'',a:100000,at:'Rp100.000',why:'Diskon 50% artinya setengah harga. Setengah dari 200.000 = 100.000. Harga setelah diskon = 200.000 − 100.000 = <b>Rp100.000</b>.'},
+{t:'is',c:'potongan',q:'Ibu membeli baju seharga Rp80.000. Baju tersebut mendapat diskon 10%. Potongan harga baju tersebut adalah',pre:'Rp',suf:'',a:8000,at:'Rp8.000',why:'10% = 10/100. Potongan = (10/100) × 80.000 = <b>Rp8.000</b>.'},
+{t:'is',c:'bayar',q:'Harga sebuah buku cerita adalah Rp40.000. Toko memberikan diskon 25%. Uang yang harus dibayar untuk membeli buku tersebut adalah',pre:'Rp',suf:'',a:30000,at:'Rp30.000',why:'25% = 25/100 atau 1/4. Potongan = 1/4 × 40.000 = 10.000. Harga yang harus dibayar = 40.000 − 10.000 = <b>Rp30.000</b>.'},
+{t:'is',c:'potongan',q:'Sebuah topi harganya Rp50.000 dan mendapat diskon 20%. Besar potongan harga topi tersebut adalah',pre:'Rp',suf:'',a:10000,at:'Rp10.000',why:'20% = 20/100 = 1/5. Potongan = 1/5 × 50.000 = <b>Rp10.000</b>.'},
+{t:'is',c:'bayar',q:'Ayah membeli kemeja seharga Rp150.000. Toko sedang mengadakan promo diskon 10%. Harga kemeja setelah mendapat diskon adalah',pre:'Rp',suf:'',a:135000,at:'Rp135.000',why:'Potongan = 10% × 150.000 = 15.000. Harga yang harus dibayar = 150.000 − 15.000 = <b>Rp135.000</b>.'},
+{t:'is',c:'potongan',q:'Harga sebuah jam tangan adalah Rp300.000. Toko memberikan diskon "Setengah Harga" atau 50%. Besar potongan harga jam tangan tersebut adalah',pre:'Rp',suf:'',a:150000,at:'Rp150.000',why:'Diskon 50% artinya setengah harga. Setengah dari Rp300.000 adalah <b>Rp150.000</b>.'},
+{t:'is',c:'bayar',q:'Adik ingin membeli mainan seharga Rp60.000. Jika mainan tersebut didiskon 25%, maka Adik hanya perlu membayar sebesar',pre:'Rp',suf:'',a:45000,at:'Rp45.000',why:'25% = 1/4. Potongan = 1/4 × 60.000 = 15.000. Harga yang harus dibayar = 60.000 − 15.000 = <b>Rp45.000</b>.'},
+{t:'is',c:'potongan',q:'Sebuah kotak pensil harganya Rp30.000. Ada potongan harga 10%. Besar potongan harga yang diberikan adalah',pre:'Rp',suf:'',a:3000,at:'Rp3.000',why:'Potongan = (10/100) × 30.000 = <b>Rp3.000</b>.'},
+{t:'is',c:'bayar',q:'Jaket musim dingin harganya Rp400.000 didiskon 50%. Harga jaket yang harus dibayar sekarang adalah',pre:'Rp',suf:'',a:200000,at:'Rp200.000',why:'Diskon 50% berarti setengah harga. Potongan = 200.000. Harga yang harus dibayar = 400.000 − 200.000 = <b>Rp200.000</b>.'}
+];
+
+/* ================= MESIN UJIAN ================= */
+const EXM={cur:0, st:Q40.map(()=>({pick:null,val:'',checked:false,ok:false}))};
+
+function buildNav(){
+  const g=$('#navGrid'); g.innerHTML='';
+  Q40.forEach((_,i)=>{ const b=document.createElement('button'); b.className='nv'; b.textContent=i+1; b.onclick=()=>loadQ(i); g.appendChild(b); });
+}
+function updNav(){
+  $$('#navGrid .nv').forEach((b,i)=>{
+    const st=EXM.st[i];
+    b.classList.toggle('ok',st.checked&&st.ok);
+    b.classList.toggle('no',st.checked&&!st.ok);
+    b.classList.toggle('cur',i===EXM.cur);
+  });
+  const ok=EXM.st.filter(s=>s.checked&&s.ok).length;
+  const no=EXM.st.filter(s=>s.checked&&!s.ok).length;
+  $('#cntOk').textContent=ok; $('#cntNo').textContent=no; $('#cntLeft').textContent=Q40.length-ok-no;
+}
+function pickOpt(j){
+  const st=EXM.st[EXM.cur], q=Q40[EXM.cur];
+  if(st.checked||q.t!=='pg') return;
+  st.pick=j;
+  $$('#qMain .opt').forEach((b,x)=>b.classList.toggle('sel',x===j));
+}
+function lockPG(){
+  const q=Q40[EXM.cur], st=EXM.st[EXM.cur];
+  $$('#qMain .opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.k) b.classList.add('correct');
+    else if(j===st.pick&&!st.ok) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+}
+function loadQ(i){
+  EXM.cur=i;
+  const q=Q40[i], st=EXM.st[i];
+  $('#qPos').textContent=`Soal ${i+1} dari ${Q40.length}`;
+  const c=CATS[q.c], tag=$('#qTag');
+  tag.textContent=c[0]; tag.style.background=c[1];
+  $('#qSec').textContent=q.t==='pg'?'Bagian A · Pilihan Ganda':'Bagian B · Isian';
+  if(q.t==='pg'){
+    $('#qMain').innerHTML=`<p class="q-text">${q.q}</p>
+      <div class="q-opts">${q.o.map((o,j)=>`<button class="opt" data-j="${j}"><span class="ol">${'abcd'[j].toUpperCase()}</span><span>${o}</span></button>`).join('')}</div>`;
+    $$('#qMain .opt').forEach(b=>b.onclick=()=>pickOpt(+b.dataset.j));
+    if(st.checked) lockPG();
+    else if(st.pick!=null) $$('#qMain .opt').forEach((b,j)=>b.classList.toggle('sel',j===st.pick));
+  } else {
+    $('#qMain').innerHTML=`<p class="q-text">${q.q}</p>
+      <form class="isian-row" id="isForm">
+        ${q.pre?`<span class="unit big">${q.pre}</span>`:''}
+        <input class="ans" inputmode="decimal" autocomplete="off" placeholder="…" aria-label="Jawaban">
+        <span class="unit">${q.suf}</span>
+      </form>`;
+    const inp=$('#qMain input');
+    inp.value=st.val;
+    if(st.checked){ inp.disabled=true; }
+    inp.addEventListener('input',()=>{ EXM.st[EXM.cur].val=inp.value; });
+    $('#isForm').addEventListener('submit',e=>{ e.preventDefault(); checkQ(); });
+    if(!st.checked) setTimeout(()=>inp.focus(),50);
+  }
+  $('#btnCheck').style.display=st.checked?'none':'inline-flex';
+  const fb=$('#qFb'), pem=$('#qPem');
+  if(st.checked){
+    fb.className='qfb '+(st.ok?'good':'bad');
+    fb.innerHTML=st.ok?IC_OK+' Benar!':IC_NO+' Belum tepat. Jawaban benar: <span style="text-decoration:underline">'+q.at+'</span>.';
+    $('#qPemTxt').innerHTML=q.why; pem.classList.add('show');
+  } else { fb.className='qfb'; fb.innerHTML=''; pem.classList.remove('show'); }
+  $('#btnPrevQ').disabled=(i===0);
+  $('#btnNextQ').textContent=(i===Q40.length-1)?'Selesai & Cek Skor':'Soal Berikutnya →';
+  $('#btnNextQ').className='btn '+(st.checked?'primary':'ghost');
+  updNav();
+  $('#qPos').scrollIntoView({block:'nearest'});
+}
+function checkQ(){
+  const q=Q40[EXM.cur], st=EXM.st[EXM.cur];
+  if(st.checked) return;
+  if(q.t==='pg'){
+    if(st.pick==null){ toast('Pilih dulu salah satu jawaban (a–d).'); return; }
+    st.ok=(st.pick===q.k);
+  } else {
+    const raw=st.val.trim();
+    if(!raw){ toast('Tulis dulu jawabanmu.'); return; }
+    let ok=false;
+    if(q.fracV!==undefined){
+      const f=parseFrac(raw);
+      const n=parseNum(raw);
+      ok=(f!==null&&Math.abs(f-q.fracV)<1e-9)||(!isNaN(n)&&Math.abs(n-q.fracV)<1e-9);
+    } else {
+      const n=parseNum(raw);
+      ok=!isNaN(n)&&Math.abs(n-q.a)<1e-6;
+    }
+    st.ok=ok;
+  }
+  st.checked=true;
+  if(q.t==='pg') lockPG();
+  else $('#qMain input').disabled=true;
+  const fb=$('#qFb');
+  fb.className='qfb '+(st.ok?'good':'bad');
+  fb.innerHTML=st.ok?IC_OK+' Benar!':IC_NO+' Belum tepat. Jawaban benar: <span style="text-decoration:underline">'+q.at+'</span>.';
+  $('#qPemTxt').innerHTML=q.why;
+  $('#qPem').classList.add('show');
+  $('#qPem').scrollIntoView({behavior:'smooth',block:'nearest'});
+  $('#btnCheck').style.display='none';
+  $('#btnNextQ').className='btn primary';
+  updNav();
+}
+function finishExam(){
+  const st=EXM.st;
+  if(!st.some(s=>s.checked)){ toast('Kerjakan minimal satu soal dulu, ya!'); return; }
+  const benar=st.filter(s=>s.checked&&s.ok).length;
+  const salah=st.filter(s=>s.checked&&!s.ok).length;
+  const kosong=Q40.length-benar-salah;
+  const nilai=Math.round(benar/Q40.length*100);
+  const pred=nilai>=90?'Luar biasa! Kamu resmi jadi detektif diskon.'
+           :nilai>=75?'Hebat! Pemahamanmu sangat kokoh.'
+           :nilai>=50?'Bagus — baca lagi pembahasannya, terus berlatih!'
+           :'Jangan menyerah. Pelajari tiap pembahasan, lalu ulangi ujiannya!';
+  const catRows=Object.keys(CATS).map(k=>{
+    const tot=Q40.filter(q=>q.c===k).length;
+    const ok=Q40.filter((q,i)=>q.c===k&&st[i].checked&&st[i].ok).length;
+    return `<div class="catrow"><span class="cdot" style="background:${CATS[k][1]}"></span><span class="clab">${CATS[k][0]}</span><div class="meter"><i style="width:${ok/tot*100}%;background:${CATS[k][1]}"></i></div><b>${ok}/${tot}</b></div>`;
+  }).join('');
+  const weakest=Object.keys(CATS).map(k=>({
+    k,r:Q40.filter((q,i)=>q.c===k&&st[i].checked&&st[i].ok).length/Q40.filter(q=>q.c===k).length
+  })).sort((a,b)=>a.r-b.r)[0];
+  const advice=weakest.r>=.75?'Konsisten kuat di semua kategori — luar biasa!':`Kategori terlemahmu: <b>${CATS[weakest.k][0]}</b> — buka kembali pembahasannya di peninjauan di bawah.`;
+  $('#resBody').innerHTML=`
+    <div class="res-score">
+      <span class="rs-label">Skor Ujian Diskon &amp; Persen</span><br>
+      <span class="big">${nilai}</span><span class="of"> / 100</span>
+      <p class="rs-pred">${pred}</p>
+    </div>
+    <div class="res-tiles">
+      <div class="rtile tg"><b>${benar}</b><span>Benar</span></div>
+      <div class="rtile tr"><b>${salah}</b><span>Salah</span></div>
+      <div class="rtile ta"><b>${kosong}</b><span>Tidak Dijawab</span></div>
+    </div>
+    <div class="res-sub">Rekap per Kategori</div>
+    ${catRows}
+    <p class="res-line" style="margin-top:10px">${advice}</p>
+    <div class="res-sub">Peninjauan — klik nomor untuk membuka soal &amp; pembahasan</div>
+    <div class="res-grid">${Q40.map((_,i)=>{
+      const s=st[i];
+      return `<button class="nv ${s.checked?(s.ok?'ok':'no'):'cur'}" data-i="${i}" title="Soal ${i+1}${s.checked?(s.ok?' · benar':' · salah'):' · tidak dijawab'}">${i+1}</button>`;
+    }).join('')}</div>
+    <div class="res-actions">
+      <button class="btn ghost" id="resClose">Tutup</button>
+      <button class="btn ghost" id="resRetry">Ulangi Ujian</button>
+      <button class="btn primary" id="resNext">Lanjut ke Kesimpulan</button>
+    </div>`;
+  $('#resOverlay').classList.add('open');
+  $('#resClose').onclick=()=>$('#resOverlay').classList.remove('open');
+  $('#resRetry').onclick=()=>{ restartExam(); };
+  $('#resNext').onclick=()=>{ $('#resOverlay').classList.remove('open'); goTo(titles.indexOf('Kesimpulan')); };
+  $$('#resBody .nv').forEach(b=>b.onclick=()=>{
+    $('#resOverlay').classList.remove('open'); loadQ(+b.dataset.i);
+  });
+}
+function restartExam(){
+  EXM.st=Q40.map(()=>({pick:null,val:'',checked:false,ok:false}));
+  $('#resOverlay').classList.remove('open');
+  loadQ(0);
+  toast('Ujian diulang dari soal 1.');
+}
+ $('#btnCheck').onclick=checkQ;
+ $('#btnPrevQ').onclick=()=>{ if(EXM.cur>0) loadQ(EXM.cur-1); };
+ $('#btnNextQ').onclick=()=>{ EXM.cur===Q40.length-1 ? finishExam() : loadQ(EXM.cur+1); };
+ $('#btnFinish').onclick=finishExam;
+ $('#btnRestart').onclick=restartExam;
+buildNav();
+loadQ(0);
+
+/* ================= refleksi ================= */
+ $('#refSlider').addEventListener('input',e=>{ $('#refVal').textContent=e.target.value+'%'; });
+ $('#refSend').onclick=()=>{
+  const a=$('#refA').value.trim(), b=$('#refB').value.trim();
+  if(!a&&!b){ toast('Isi dulu satu cerita kecilmu, ya!'); return; }
+  $('#refA').value=''; $('#refB').value='';
+  toast('Refleksimu ('+$('#refVal').textContent+') terkirim. Terima kasih!');
+};
+function refRefresh(){
+  const checked=EXM.st.filter(s=>s.checked);
+  const note=$('#refNote');
+  if(!checked.length){ note.style.display='none'; return; }
+  const benar=checked.filter(s=>s.ok).length;
+  const nilai=Math.round(benar/checked.length*100);
+  note.innerHTML=`Hasil ujianmu: <b>${benar} benar</b> dari ${checked.length} soal yang dicek — setara <b>${nilai}%</b>. Gunakan angka persen ini saat merefleksikan harimu!`;
+  note.style.display='block';
+}
+
+/* ================= konfeti ================= */
+function launchConfetti(){
+  const host=$('#confettiHost'); host.innerHTML='';
+  const colors=['#E4572E','#E9A820','#2E6B4F','#26231C'];
+  for(let i=0;i<70;i++){
+    const s=document.createElement('span'); s.className='cfp';
+    const w=6+Math.random()*8, h=Math.random()<.5?w:w*2.2;
+    s.style.cssText=`left:${Math.random()*100}%;width:${w}px;height:${h}px;background:${pickA(colors)};border-radius:${Math.random()<.4?'50%':'2px'};animation-duration:${2.6+Math.random()*2.6}s;animation-delay:${Math.random()*1.2}s`;
+    host.appendChild(s);
+  }
+}
+
+/* ================= inisialisasi ================= */
+goTo(0);
+</script>
+</body>
+</html>
