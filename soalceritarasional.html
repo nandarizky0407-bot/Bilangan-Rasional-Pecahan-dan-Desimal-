@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operasi Hitung Campuran & Soal Cerita — Bilangan Rasional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600;1,9..144,900&family=Space+Grotesk:wght@400;500;700&family=Spline+Sans+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F1E5; --paper2:#FBF8F0; --ink:#20241C; --soft:#6B6F60;
+  --acc:#C2410C; --acc2:#2F6B4F; --bad:#B3372A; --gold:#B98A1F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',sans-serif;color:var(--ink);background:var(--paper);
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><path d="M28 .5H.5V28" fill="none" stroke="%23202418" stroke-opacity=".06"/></svg>');
+}
+::selection{background:var(--acc);color:#fff}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.lucide{width:1.05em;height:1.05em;stroke-width:2.4;vertical-align:-.14em}
+
+/* ---------- bilah atas ---------- */
+.topbar{position:fixed;inset:0 0 auto 0;height:60px;z-index:50;display:flex;align-items:center;gap:18px;
+  padding:0 22px;background:var(--paper);border-bottom:2px solid var(--ink)}
+.brand{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
+.slide-meta{flex:1;display:flex;align-items:baseline;justify-content:center;gap:12px;min-width:0}
+#metaNo{font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--acc);font-weight:600}
+#metaTitle{font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.duel{display:flex;align-items:center;gap:8px;font-size:13px}
+.dname{font-weight:700;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s1t{color:var(--acc)} .s2t{color:var(--acc2)}
+.dscore{font-family:'Spline Sans Mono',monospace;font-weight:600;min-width:34px;text-align:center;background:#fff;border:1.5px solid var(--ink);border-radius:8px;padding:2px 6px}
+.dsep{font-family:'Fraunces',serif;font-style:italic;color:var(--soft)}
+.progress{position:absolute;left:0;right:0;bottom:-2px;height:3px}
+#progFill{height:100%;width:0;background:var(--acc);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+
+/* ---------- navigasi ---------- */
+.navbtns{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;gap:10px}
+.navbtn{width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);color:var(--ink);
+  cursor:pointer;display:grid;place-items:center;box-shadow:3px 3px 0 var(--ink);transition:.15s}
+.navbtn .lucide{width:22px;height:22px}
+.navbtn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.navbtn:disabled{opacity:.3;cursor:not-allowed;box-shadow:none}
+
+/* ---------- slide dasar ---------- */
+.slide{display:none;min-height:100vh;padding:92px clamp(18px,4vw,56px) 100px}
+.slide.active{display:block;animation:in .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.inner{max-width:1180px;margin:0 auto;position:relative}
+.kicker{font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;font-weight:600}
+.kicker::before{content:"";width:34px;height:2px;background:var(--acc)}
+.kicker.center{justify-content:center}.kicker.center::after{content:"";width:34px;height:2px;background:var(--acc)}
+.h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(30px,4.4vw,48px);line-height:1.04;letter-spacing:-.01em}
+.h2 em{color:var(--acc)}
+.lede{font-size:17.5px;line-height:1.65;color:var(--soft);max-width:660px;margin-top:18px}
+.howto{max-width:900px;color:var(--soft);font-size:14.5px;line-height:1.6;margin:12px 0 20px}
+.howto b{color:var(--ink)}
+.center{text-align:center}
+.card{background:var(--paper2);border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 rgba(32,36,28,.13);padding:24px}
+.dim{color:var(--soft);font-size:12.5px}
+.feed-ok{color:var(--acc2);font-weight:700;display:inline-flex;align-items:center;gap:6px;font-size:13.5px}
+.feed-no{color:var(--bad);font-weight:700;font-size:13.5px}
+
+/* ---------- pecahan ---------- */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.72em;line-height:1.08;
+  font-family:'Spline Sans Mono',monospace;font-weight:600;margin:0 .12em}
+.fr b{border-bottom:2px solid currentColor;padding:0 .28em 1px}
+.fr i{font-style:normal;padding:1px .28em 0}
+.fr.sm{font-size:.85em;vertical-align:-.45em;margin:0 .06em}
+.mixn{white-space:nowrap;font-family:'Spline Sans Mono',monospace;font-weight:600}
+
+/* ---------- tombol ---------- */
+.btn{font-family:inherit;font-weight:700;font-size:14.5px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);
+  padding:10px 18px;border-radius:11px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:3px 3px 0 rgba(32,36,28,.28);transition:.15s}
+.btn:hover:not(:disabled){transform:translate(-1px,-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px;box-shadow:2px 2px 0 rgba(32,36,28,.25)}
+.btn.big{padding:14px 26px;font-size:17px}
+.btn.fin{background:var(--acc);border-color:var(--acc)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* ============ 1. SAMPUL ============ */
+.cover{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center;min-height:calc(100vh - 200px);position:relative}
+.display{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(40px,6vw,78px);line-height:.98;letter-spacing:-.015em;margin-top:6px}
+.display em{font-style:italic;color:var(--acc)}
+.names{display:flex;align-items:center;gap:16px;margin:32px 0 26px;flex-wrap:wrap}
+.namebox{border:2px solid var(--ink);border-radius:13px;padding:10px 16px;background:#fff;display:flex;flex-direction:column;gap:2px;min-width:216px;box-shadow:4px 4px 0 rgba(32,36,28,.14)}
+.namebox span{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.nb1 span{color:var(--acc)} .nb2 span{color:var(--acc2)}
+.namebox input{border:none;outline:none;background:transparent;font-family:'Spline Sans Mono',monospace;font-size:16.5px;color:var(--ink);width:100%}
+.vs{font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:24px;color:var(--soft)}
+.kbd-hint{margin-top:30px;font-family:'Spline Sans Mono',monospace;font-size:12.5px;color:var(--soft)}
+.kbd-hint kbd{border:1.5px solid var(--ink);border-bottom-width:3px;border-radius:6px;padding:1px 8px;background:#fff;color:var(--ink)}
+.cv-card{position:relative;padding:34px 36px;background:var(--paper2);border:2px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 rgba(32,36,28,.15)}
+.stamp{position:absolute;top:-14px;right:18px;transform:rotate(5deg);border:2px solid var(--acc);color:var(--acc);
+  padding:4px 12px;border-radius:999px;font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;background:var(--paper);font-weight:600}
+.cv-strip{text-align:center;font-family:'Spline Sans Mono',monospace;font-weight:600}
+.cv-strip .big{font-size:clamp(22px,2.6vw,30px);color:var(--acc)}
+.cv-strip .ans{margin-top:12px;font-size:16px;color:var(--acc2)}
+.cv-note{text-align:center;margin-top:18px;font-family:'Fraunces',serif;font-style:italic;font-size:17px;color:var(--soft)}
+.cv-mark{position:absolute;font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:clamp(170px,22vw,300px);
+  color:rgba(32,36,28,.05);right:-2%;bottom:-10%;line-height:1;pointer-events:none;user-select:none;z-index:-1}
+
+/* ============ 2. REVIEW PECAHAN ============ */
+.op-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.op-card{background:var(--paper2);border:2px solid var(--ink);border-radius:15px;box-shadow:5px 5px 0 rgba(32,36,28,.12);padding:18px 20px}
+.op-head{display:flex;align-items:center;gap:14px}
+.op-sym{font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:34px;color:var(--acc);width:44px;text-align:center;line-height:1}
+.op-head h3{font-family:'Fraunces',serif;font-weight:900;font-size:20px}
+.op-rule{margin-top:8px;color:var(--soft);font-size:14px;line-height:1.55}
+.op-ex{margin-top:12px;font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:17px;background:#fff;
+  border:1.5px dashed rgba(32,36,28,.4);border-radius:11px;padding:10px 14px}
+.op-tip{margin-top:18px;padding:12px 16px;border-left:4px solid var(--acc);background:rgba(194,65,12,.06);border-radius:0 10px 10px 0;font-size:15px;line-height:1.6}
+
+/* ============ 3. REVIEW DESIMAL & PERSEN ============ */
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+.dp-card{background:var(--paper2);border:2px solid var(--ink);border-radius:15px;box-shadow:5px 5px 0 rgba(32,36,28,.12);padding:20px}
+.dp-card h3{font-family:'Fraunces',serif;font-weight:900;font-size:21px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.dp-card h3 .lucide{color:var(--acc);width:22px;height:22px}
+.dp-row{padding:11px 0;border-top:1.5px dashed rgba(32,36,28,.3);font-size:14.5px;line-height:1.6}
+.dp-row b{display:block;font-size:14.5px}
+.dp-ex{font-family:'Spline Sans Mono',monospace;font-weight:600;color:var(--acc2);margin-top:3px}
+
+/* ============ 4. URUTAN OPERASI ============ */
+.rule-flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin-top:24px}
+.rstep{border:2px solid var(--ink);border-radius:12px;padding:12px 18px;background:#fff;display:flex;gap:14px;align-items:center;font-weight:700}
+.rstep .rn{font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:30px;color:var(--acc);line-height:1}
+.rstep small{display:block;font-weight:400;color:var(--soft);font-size:12.5px}
+.rule-flow > .lucide{align-self:center;color:var(--soft);width:20px;height:20px}
+.ex{border-top:1.5px solid rgba(32,36,28,.3);padding:20px 4px;margin-top:6px}
+.ex:first-of-type{border-top:none}
+.ex-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ex-label{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);font-weight:600}
+.ex-expr{font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:clamp(19px,2.4vw,24px);margin-top:6px}
+.sol{display:none;margin-top:14px;border-top:1.5px dashed rgba(32,36,28,.35);padding-top:12px;font-size:14.5px;line-height:1.8}
+.sol.open{display:block;animation:in .35s ease}
+.sol-ans{margin-top:8px;font-family:'Spline Sans Mono',monospace;font-weight:600;color:var(--acc2);font-size:15.5px}
+.ex2col{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+
+/* ============ 5. KATA KUNCI ============ */
+.kw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:24px}
+.kw-card{background:var(--paper2);border:2px solid var(--ink);border-radius:15px;box-shadow:5px 5px 0 rgba(32,36,28,.12);padding:16px 18px}
+.kw-op{font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:30px;color:var(--acc);line-height:1}
+.kw-card h3{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin:4px 0 10px}
+.kw-chips{display:flex;flex-wrap:wrap;gap:6px}
+.kw-chip{font-family:'Spline Sans Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid rgba(32,36,28,.4);border-radius:999px;padding:4px 10px;background:#fff}
+.kw-note{margin-top:16px;padding:12px 16px;border-left:4px solid var(--acc2);background:rgba(47,107,79,.07);border-radius:0 10px 10px 0;font-size:14.5px;line-height:1.6}
+.steps{list-style:none;counter-reset:st;margin-top:14px}
+.steps li{counter-increment:st;display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-top:1.5px dashed rgba(32,36,28,.25);font-size:14.5px;line-height:1.6}
+.steps li:first-child{border-top:none}
+.steps li::before{content:counter(st);flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);
+  display:grid;place-items:center;font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:15px}
+.steps b{color:var(--acc)}
+mark.kw{background:rgba(194,65,12,.16);border-bottom:2px solid var(--acc);padding:0 3px;border-radius:4px;font-weight:700;color:inherit}
+
+/* ============ 6. CONTOH ============ */
+.demo-card{background:var(--paper2);border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 rgba(32,36,28,.13);padding:22px 24px;margin-top:20px}
+.demo-q{font-size:16.5px;line-height:1.75}
+.sol ol{margin:8px 0 0 22px;line-height:1.85}
+
+/* ============ 7. UJIAN ============ */
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:0 0 16px;font-size:13px;color:var(--soft)}
+.sw{width:15px;height:15px;border-radius:5px;border:1.5px solid var(--ink);display:inline-block;vertical-align:-2px;margin-right:6px}
+.sw.ok{background:var(--acc2);border-color:var(--acc2)}
+.sw.miss{background:#F6E3C5;border-color:var(--gold)}
+.sw.cur{background:var(--ink)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px;align-items:start}
+.panel{border:2px solid var(--ink);border-radius:16px;background:var(--paper2);overflow:hidden;box-shadow:6px 6px 0 rgba(32,36,28,.13);display:flex;flex-direction:column}
+.panel-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:2px solid var(--ink);color:#fff}
+.panel-head.p1{background:var(--acc)} .panel-head.p2{background:var(--acc2)}
+.pavatar{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:900;font-size:18px;flex:none}
+.pname{font-family:'Fraunces',serif;font-weight:900;font-size:19px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pscore{font-family:'Spline Sans Mono',monospace;font-size:12.5px;background:rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;white-space:nowrap}
+.numgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:5px;padding:11px;background:rgba(255,255,255,.55);border-bottom:2px solid var(--ink)}
+.numbtn{font-family:'Spline Sans Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid rgba(32,36,28,.35);
+  border-radius:8px;background:#fff;color:var(--ink);cursor:pointer;aspect-ratio:1;min-width:0;padding:0;transition:.12s}
+.numbtn:hover{border-color:var(--ink);transform:translateY(-1px)}
+.numbtn.cur{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.numbtn.done{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.numbtn.miss{background:#F6E3C5;border-color:var(--gold);color:#7A5A10}
+.qbody{overflow-y:auto;max-height:56vh;padding:14px}
+.qbody::-webkit-scrollbar{width:10px}
+.qbody::-webkit-scrollbar-thumb{background:rgba(32,36,28,.3);border-radius:8px;border:2px solid var(--paper2)}
+.qempty{text-align:center;color:var(--soft);padding:46px 12px;display:flex;flex-direction:column;gap:12px;align-items:center;font-size:14.5px}
+.qempty .lucide{width:32px;height:32px;color:var(--acc)}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.qbadge{font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-radius:999px;padding:5px 12px}
+.qbadge small{opacity:.65;font-weight:400}
+.stchip{font-family:'Spline Sans Mono',monospace;font-size:11.5px;font-weight:600;border-radius:999px;padding:5px 12px;display:inline-flex;align-items:center;gap:6px}
+.stchip.ok{background:#E4F1E6;color:var(--acc2);border:1.5px solid var(--acc2)}
+.stchip.miss{background:#F6E3C5;color:#7A5A10;border:1.5px solid var(--gold)}
+.qtext{font-size:15.5px;line-height:1.7}
+.qtext .fr{font-size:.95em}
+.opts{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
+.opt{display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:9px 12px;border:1.5px solid rgba(32,36,28,.35);
+  border-radius:11px;background:#fff;cursor:pointer;font-family:inherit;font-size:14.5px;transition:.12s}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt .letter{flex:none;width:28px;height:28px;border:1.5px solid var(--ink);border-radius:8px;display:grid;place-items:center;
+  font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:13px}
+.opt.sel{border-color:var(--ink);box-shadow:2.5px 2.5px 0 rgba(32,36,28,.22)}
+.opt.ok{border-color:var(--acc2);background:#E4F1E6}
+.opt.ok .letter{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.opt.bad{border-color:var(--bad);background:#F7E2DB}
+.opt.bad .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default;opacity:.85}
+.otext .fr{font-size:.92em}
+.qactions{display:flex;gap:10px;flex-wrap:wrap}
+.qfeed{min-height:24px;margin-top:10px;font-size:13.5px;line-height:1.55}
+.qsol{display:none;margin-top:10px;border-top:1.5px dashed rgba(32,36,28,.35);padding-top:10px;font-size:14px;line-height:1.75}
+.qsol.open{display:block;animation:in .35s ease}
+.qsol b{color:var(--acc)}
+.exam-actions{display:flex;justify-content:center;margin-top:26px}
+
+/* ============ 8. HASIL ============ */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+.res-card{background:var(--paper2);border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 rgba(32,36,28,.13);overflow:hidden}
+.res-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:2px solid var(--ink);color:#fff}
+.res-head.rh1{background:var(--acc)} .res-head.rh2{background:var(--acc2)}
+.res-body{padding:18px 20px}
+.res-big{font-family:'Fraunces',serif;font-weight:900;font-size:52px;line-height:1;color:var(--ink)}
+.res-big small{font-family:'Spline Sans Mono',monospace;font-size:14px;color:var(--soft);font-weight:600}
+.res-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1.5px dashed rgba(32,36,28,.3);font-size:14.5px;margin-top:9px}
+.res-row b{font-family:'Spline Sans Mono',monospace}
+.rbar{height:14px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;background:#fff;margin-top:14px}
+.rbar i{display:block;height:100%;background:var(--acc2);width:0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.res-nums{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;min-height:24px}
+.rnum{font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:600;border-radius:7px;padding:3px 7px;border:1.5px solid}
+.rnum.ok{color:#fff;background:var(--acc2);border-color:var(--acc2)}
+.rnum.miss{color:#7A5A10;background:#F6E3C5;border-color:var(--gold)}
+.res-msg{margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;color:var(--soft)}
+.winner{display:flex;align-items:center;gap:10px;margin:26px auto 0;font-size:17px;justify-content:center}
+.winner .lucide{color:var(--gold);width:24px;height:24px}
+.res-actions{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+
+/* ============ 10. REFLEKSI ============ */
+.rrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px dashed rgba(32,36,28,.3);flex-wrap:wrap}
+.rtopic{font-weight:700;font-size:14.5px}
+.rchips{display:flex;gap:7px;flex-wrap:wrap}
+.rchip{border:1.5px solid var(--ink);border-radius:999px;padding:6px 13px;cursor:pointer;background:transparent;font-family:inherit;font-size:13px;font-weight:600;transition:.13s}
+.rchip[data-v="hi"].on{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.rchip[data-v="mid"].on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rchip[data-v="lo"].on{background:var(--acc);border-color:var(--acc);color:#fff}
+textarea.rnote{width:100%;border:1.5px solid var(--ink);border-radius:11px;background:#fff;padding:11px 13px;font-family:inherit;font-size:14px;min-height:66px;margin-top:14px;resize:vertical;outline:none}
+textarea.rnote:focus{border-color:var(--acc)}
+
+/* ============ 9 & 11. KESIMPULAN & PENUTUP ============ */
+.sum{list-style:none;margin-top:28px;max-width:920px}
+.sum li{padding:19px 6px;border-bottom:1.5px solid rgba(32,36,28,.25);font-size:16px;line-height:1.65}
+.sum li:first-child{border-top:1.5px solid rgba(32,36,28,.25)}
+.sum b{font-family:'Fraunces',serif;font-size:18px;color:var(--acc);margin-right:6px}
+.thanks{padding-top:16px}
+.thanks .display{font-size:clamp(38px,5.5vw,72px)}
+.thanks .lede{margin:16px auto 26px}
+.recap{display:inline-block;text-align:left;margin:0 auto 24px}
+.rtbl{border-collapse:collapse;min-width:460px}
+.rtbl caption{font-family:'Fraunces',serif;font-weight:900;font-size:20px;text-align:left;margin-bottom:10px}
+.rtbl td,.rtbl th{padding:9px 20px;border-bottom:1.5px solid rgba(32,36,28,.25);font-size:15px;text-align:center}
+.rtbl th{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.rtbl td:first-child,.rtbl th:first-child{text-align:left}
+.rtbl .tot{font-weight:700;font-family:'Spline Sans Mono',monospace}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,90px);opacity:0;transition:.3s cubic-bezier(.2,.7,.2,1);
+  background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:12px;z-index:100;font-size:14px;max-width:88vw;box-shadow:4px 4px 0 rgba(32,36,28,.3)}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+@media (max-width:920px){
+  .cover,.op-grid,.dp-grid,.ex2col,.duo,.res-grid{grid-template-columns:1fr}
+  #metaTitle{display:none}
+  .qbody{max-height:60vh}
+}
+@media (max-width:720px){
+  .brand{display:none}.dname{max-width:64px}.topbar{gap:10px;padding:0 14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ======== BILAH ATAS ======== -->
+<header class="topbar">
+  <span class="brand">Operasi&nbsp;Bilangan&nbsp;Rasional</span>
+  <div class="slide-meta"><span id="metaNo">01 / 11</span><span id="metaTitle">Sampul</span></div>
+  <div class="duel">
+    <span class="dname s1t" data-ns1>Siswa 1</span><span class="dscore" id="duelS1">0</span>
+    <span class="dsep">vs</span>
+    <span class="dscore" id="duelS2">0</span><span class="dname s2t" data-ns2>Siswa 2</span>
+  </div>
+  <div class="progress"><div id="progFill"></div></div>
+</header>
+
+<!-- ======== 1. SAMPUL ======== -->
+<section class="slide active" data-title="Sampul">
+  <div class="inner">
+    <div class="cover">
+      <div>
+        <div class="kicker">Matematika · Penguatan · Bilangan Rasional</div>
+        <h1 class="display">Operasi Hitung Campuran <em>&amp; Soal Cerita.</em></h1>
+        <p class="lede">Ulangi operasi pecahan, desimal, dan persen, kuasai kata kunci soal cerita, lalu buktikan pada ujian 50 soal. Tulis namamu, dan mari mulai!</p>
+        <div class="names">
+          <label class="namebox nb1"><span>Siswa 1</span><input id="inName1" placeholder="Tulis nama…" maxlength="24"></label>
+          <span class="vs">vs</span>
+          <label class="namebox nb2"><span>Siswa 2</span><input id="inName2" placeholder="Tulis nama…" maxlength="24"></label>
+        </div>
+        <button class="btn big" id="btnStart">Mulai Belajar <i data-lucide="arrow-right"></i></button>
+        <p class="kbd-hint">Gunakan <kbd>←</kbd> <kbd>→</kbd> pada keyboard untuk berpindah slide.</p>
+      </div>
+      <div>
+        <div class="cv-card">
+          <span class="stamp">UJIAN 50 SOAL</span>
+          <div class="cv-strip">
+            <div class="big">1/2 + 25% × 0,4 = ?</div>
+            <div class="ans">0,5 + 0,25 × 0,4 = 0,6</div>
+          </div>
+          <div class="cv-note">Ubah ke desimal dulu, lalu hitung!</div>
+        </div>
+      </div>
+      <div class="cv-mark">×</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 2. REVIEW OPERASI PECAHAN ======== -->
+<section class="slide" data-title="Review · Operasi Pecahan">
+  <div class="inner">
+    <div class="kicker">Ingat Lagi · 1</div>
+    <h2 class="h2">Operasi hitung pada <em>pecahan</em></h2>
+    <div class="op-grid">
+      <div class="op-card">
+        <div class="op-head"><span class="op-sym">+</span><h3>Tambah</h3></div>
+        <p class="op-rule">Samakan penyebut dulu, baru jumlahkan pembilangnya.</p>
+        <div class="op-ex"><span class="fr"><b>1</b><i>2</i></span> + <span class="fr"><b>1</b><i>4</i></span> = <span class="fr"><b>2</b><i>4</i></span> + <span class="fr"><b>1</b><i>4</i></span> = <b>3/4</b></div>
+      </div>
+      <div class="op-card">
+        <div class="op-head"><span class="op-sym">−</span><h3>Kurang</h3></div>
+        <p class="op-rule">Samakan penyebut dulu, baru kurangkan pembilangnya.</p>
+        <div class="op-ex"><span class="fr"><b>3</b><i>4</i></span> − <span class="fr"><b>1</b><i>6</i></span> = <span class="fr"><b>9</b><i>12</i></span> − <span class="fr"><b>2</b><i>12</i></span> = <b>7/12</b></div>
+      </div>
+      <div class="op-card">
+        <div class="op-head"><span class="op-sym">×</span><h3>Kali</h3></div>
+        <p class="op-rule">Langsung kalikan: pembilang × pembilang, penyebut × penyebut.</p>
+        <div class="op-ex"><span class="fr"><b>2</b><i>3</i></span> × <span class="fr"><b>3</b><i>5</i></span> = <span class="fr"><b>6</b><i>15</i></span> = <b>2/5</b></div>
+      </div>
+      <div class="op-card">
+        <div class="op-head"><span class="op-sym">:</span><h3>Bagi</h3></div>
+        <p class="op-rule">Balik pecahan kedua, lalu ubah menjadi perkalian.</p>
+        <div class="op-ex"><span class="fr"><b>1</b><i>2</i></span> : <span class="fr"><b>1</b><i>4</i></span> = <span class="fr"><b>1</b><i>2</i></span> × <span class="fr"><b>4</b><i>1</i></span> = <b>2</b></div>
+      </div>
+    </div>
+    <div class="op-tip"><b>Pecahan campuran?</b> Ubah dulu ke pecahan biasa sebelum dihitung: 2<span class="fr sm"><b>1</b><i>2</i></span> = 5/2, sehingga 2<span class="fr sm"><b>1</b><i>2</i></span> × 4 = 5/2 × 4 = 10.</div>
+  </div>
+</section>
+
+<!-- ======== 3. REVIEW DESIMAL & PERSEN ======== -->
+<section class="slide" data-title="Review · Desimal & Persen">
+  <div class="inner">
+    <div class="kicker">Ingat Lagi · 2</div>
+    <h2 class="h2">Operasi pada <em>desimal</em> &amp; <em>persen</em></h2>
+    <div class="dp-grid">
+      <div class="dp-card">
+        <h3><i data-lucide="calculator"></i> Desimal</h3>
+        <div class="dp-row" style="border-top:none"><b>Tambah &amp; kurang — luruskan posisi koma.</b><span class="dp-ex">1,25 + 0,4 = 1,65 &nbsp;·&nbsp; 2,5 − 1,75 = 0,75</span></div>
+        <div class="dp-row"><b>Kali — kalikan biasa, lalu atur koma.</b><span class="dp-ex">0,3 × 0,5 = 0,15 &nbsp;·&nbsp; 1,2 × 0,4 = 0,48</span></div>
+        <div class="dp-row"><b>Bagi — geser koma sampai hilang.</b><span class="dp-ex">1,2 : 0,4 = 12 : 4 = 3</span></div>
+      </div>
+      <div class="dp-card">
+        <h3><i data-lucide="percent"></i> Persen</h3>
+        <div class="dp-row" style="border-top:none"><b>Persen artinya "per seratus" — ubah ke desimal dulu (bagi 100).</b><span class="dp-ex">25% × 80 = 0,25 × 80 = 20</span></div>
+        <div class="dp-row"><b>Hasil akhir bisa dikembalikan ke bentuk persen.</b><span class="dp-ex">0,75 = 75% &nbsp;·&nbsp; 3/4 = 0,75 = 75%</span></div>
+      </div>
+    </div>
+    <div class="op-tip"><b>Kunci soal campuran:</b> ubah <b>semua</b> pecahan dan persen ke desimal lebih dulu — pengerjaan menjadi jauh lebih ringkas dan jarang salah.</div>
+  </div>
+</section>
+
+<!-- ======== 4. URUTAN OPERASI ======== -->
+<section class="slide" data-title="Urutan Operasi">
+  <div class="inner">
+    <div class="kicker">Ingat Lagi · 3</div>
+    <h2 class="h2">Urutan operasi <em>hitung campuran</em></h2>
+    <div class="rule-flow">
+      <div class="rstep"><span class="rn">1</span><span>Tanda kurung<small>kerjakan yang di dalam kurung lebih dulu</small></span></div>
+      <i data-lucide="arrow-right"></i>
+      <div class="rstep"><span class="rn">2</span><span>Kali &amp; bagi<small>dari kiri ke kanan</small></span></div>
+      <i data-lucide="arrow-right"></i>
+      <div class="rstep"><span class="rn">3</span><span>Tambah &amp; kurang<small>dari kiri ke kanan</small></span></div>
+    </div>
+    <div class="ex2col">
+      <div class="ex">
+        <div class="ex-top">
+          <div><div class="ex-label">Contoh 1 · kali dulu, baru jumlah</div>
+            <div class="ex-expr"><span class="fr"><b>1</b><i>2</i></span> + 0,25 × 80%</div></div>
+          <button class="btn sm ghost exbtn" data-tg="solA"><i data-lucide="eye"></i> Tampilkan langkah</button>
+        </div>
+        <div class="sol" id="solA">
+          <ol><li>Ubah ke desimal: 1/2 = 0,5 dan 80% = 0,8.</li><li>Kerjakan perkalian dulu: 0,25 × 0,8 = 0,2.</li><li>Baru jumlahkan: 0,5 + 0,2 = 0,7.</li></ol>
+          <div class="sol-ans">Jadi, 1/2 + 0,25 × 80% = 0,7</div>
+        </div>
+      </div>
+      <div class="ex">
+        <div class="ex-top">
+          <div><div class="ex-label">Contoh 2 · kurung dulu, baru bagi</div>
+            <div class="ex-expr">(0,75 + 2<span class="fr sm"><b>1</b><i>2</i></span>) : 5</div></div>
+          <button class="btn sm ghost exbtn" data-tg="solB"><i data-lucide="eye"></i> Tampilkan langkah</button>
+        </div>
+        <div class="sol" id="solB">
+          <ol><li>Ubah ke desimal: 2 1/2 = 2,5.</li><li>Kerjakan tanda kurung dulu: 0,75 + 2,5 = 3,25.</li><li>Baru bagi: 3,25 : 5 = 0,65.</li></ol>
+          <div class="sol-ans">Jadi, (0,75 + 2 1/2) : 5 = 0,65</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 5. KATA KUNCI SOAL CERITA ======== -->
+<section class="slide" data-title="Kata Kunci Soal Cerita">
+  <div class="inner">
+    <div class="kicker">Materi · Soal Cerita</div>
+    <h2 class="h2">Kata kunci menentukan <em>operasinya</em></h2>
+    <div class="kw-grid">
+      <div class="kw-card"><div class="kw-op">+</div><h3>Tambah</h3>
+        <div class="kw-chips"><span class="kw-chip">jumlah</span><span class="kw-chip">total</span><span class="kw-chip">tambah</span><span class="kw-chip">bertambah</span><span class="kw-chip">naik</span><span class="kw-chip">membeli lagi</span></div></div>
+      <div class="kw-card"><div class="kw-op">−</div><h3>Kurang</h3>
+        <div class="kw-chips"><span class="kw-chip">sisa</span><span class="kw-chip">selisih</span><span class="kw-chip">kurang</span><span class="kw-chip">dipakai</span><span class="kw-chip">terjual</span><span class="kw-chip">dipotong</span></div></div>
+      <div class="kw-card"><div class="kw-op">×</div><h3>Kali</h3>
+        <div class="kw-chips"><span class="kw-chip">dari</span><span class="kw-chip">kali lipat</span><span class="kw-chip">% dari …</span><span class="kw-chip">sebanyak … bagian</span></div></div>
+      <div class="kw-card"><div class="kw-op">:</div><h3>Bagi</h3>
+        <div class="kw-chips"><span class="kw-chip">dibagi rata</span><span class="kw-chip">dibagikan ke … orang</span><span class="kw-chip">setiap kotak berisi …</span><span class="kw-chip">per</span></div></div>
+    </div>
+    <div class="kw-note"><b>Trik "sisa" paling cepat:</b> sisa = (100% − persen terpakai) × total. Contoh: terpakai 15% → sisa = 85% × total. Bila bagian diberikan dalam pecahan/desimal, jumlahkan dulu semua bagian terpakai, lalu 1 − bagian terpakai = sisa.</div>
+    <div class="card" style="margin-top:18px">
+      <div class="kicker" style="margin-bottom:4px"><i data-lucide="list-checks" style="width:15px;height:15px"></i> Langkah menyelesaikan soal cerita</div>
+      <ol class="steps">
+        <li><span><b>Pahami.</b> Baca dua kali — apa yang diketahui, dan apa yang ditanya?</span></li>
+        <li><span><b>Ubah semua ke desimal.</b> Pecahan dibagi, persen dibagi 100 (contoh: 2 1/2 = 2,5 dan 15% = 0,15).</span></li>
+        <li><span><b>Tandai kata kunci</b> untuk menentukan operasi: tambah, kurang, kali, atau bagi.</span></li>
+        <li><span><b>Hitung sesuai urutan operasi:</b> kurung → kali &amp; bagi → tambah &amp; kurang.</span></li>
+        <li><span><b>Cek kembali.</b> Apakah satuannya tepat (kg, liter, rupiah)? Apakah hasilnya masuk akal?</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 6. CONTOH PENYELESAIAN ======== -->
+<section class="slide" data-title="Contoh Penyelesaian">
+  <div class="inner">
+    <div class="kicker">Materi · Contoh</div>
+    <h2 class="h2">Contoh penyelesaian <em>soal cerita</em></h2>
+    <div class="demo-card">
+      <div class="ex-top">
+        <div class="demo-q"><b>Contoh 1.</b> Sebuah bak berisi <b>20 liter</b> air. Air <mark class="kw">dipakai</mark> <b>1/4 bagian</b> untuk menyiram kebun, lalu bak <mark class="kw">ditambah</mark> air sebanyak <b>25% <mark class="kw">dari</mark></b> volume awal. Berapa liter air di bak sekarang?</div>
+        <button class="btn sm ghost exbtn" data-tg="cs1"><i data-lucide="eye"></i> Tampilkan langkah</button>
+      </div>
+      <div class="sol" id="cs1">
+        <ol>
+          <li>"Dipakai 1/4 bagian" → kali, lalu kurang: 1/4 × 20 = 5 L → sisa = 20 − 5 = <b>15 L</b>.</li>
+          <li>"Ditambah 25% dari volume awal" → 25% × 20 = 0,25 × 20 = <b>5 L</b>.</li>
+          <li>Jumlahkan: 15 + 5 = <b>20 liter</b>.</li>
+        </ol>
+        <div class="sol-ans">Jadi, air di bak sekarang 20 liter.</div>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="ex-top">
+        <div class="demo-q"><b>Contoh 2.</b> Ayah memiliki uang <b>Rp100.000</b>. Ia membelanjakan <mark class="kw">0,3 bagiannya</mark> untuk makan siang, lalu <b>1/2 <mark class="kw">dari sisa</mark></b> untuk transportasi. Berapa sisa uang Ayah?</div>
+        <button class="btn sm ghost exbtn" data-tg="cs2"><i data-lucide="eye"></i> Tampilkan langkah</button>
+      </div>
+      <div class="sol" id="cs2">
+        <ol>
+          <li>Makan = 0,3 × 100.000 = Rp30.000 → sisa = 100.000 − 30.000 = <b>Rp70.000</b>.</li>
+          <li>Transport = 1/2 × 70.000 = <b>Rp35.000</b>. Hati-hati: "dari sisa", bukan dari uang awal!</li>
+          <li>Sisa akhir = 70.000 − 35.000 = <b>Rp35.000,00</b>.</li>
+        </ol>
+        <div class="sol-ans">Jadi, sisa uang Ayah Rp35.000,00.</div>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="ex-top">
+        <div class="demo-q"><b>Contoh 3.</b> Dari <b>120 siswa</b>, <mark class="kw">25%</mark> ikut pramuka dan <mark class="kw">0,25 bagian</mark> ikut basket. Sisanya belajar di kelas. Berapa siswa yang belajar di kelas?</div>
+        <button class="btn sm ghost exbtn" data-tg="cs3"><i data-lucide="eye"></i> Tampilkan langkah</button>
+      </div>
+      <div class="sol" id="cs3">
+        <ol>
+          <li>Bagian terpakai = 25% + 0,25 = 0,25 + 0,25 = 0,50 = 50%.</li>
+          <li>Sisa = (100% − 50%) × 120 = 0,5 × 120 = <b>60 siswa</b>.</li>
+        </ol>
+        <div class="sol-ans">Jadi, 60 siswa belajar di kelas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 7. UJIAN 50 SOAL ======== -->
+<section class="slide" data-title="Ujian · 50 Soal" id="slide-exam">
+  <div class="inner">
+    <div class="kicker">Ujian · Bank 50 Soal Cerita</div>
+    <h2 class="h2">Pilih nomormu, <em>buktikan kemampuanmu!</em></h2>
+    <p class="howto">Pilih nomor <b>1–50</b> pada kotak angka → soal muncul → pilih jawaban <b>A/B/C/D</b> → tekan <b>Cek Jawaban</b>. Jawaban benar = <b>+1 poin</b> (satu kali per soal). Salah? Ubah pilihanmu lalu cek lagi, atau buka <b>Pembahasan</b>. Panel kiri untuk <b class="s1t" data-n1>Siswa 1</b>, panel kanan untuk <b class="s2t" data-n2>Siswa 2</b> — nomor boleh sama, nilainya dihitung terpisah.</p>
+    <div class="legend">
+      <span><span class="sw ok"></span>benar</span>
+      <span><span class="sw miss"></span>pernah salah</span>
+      <span><span class="sw cur"></span>sedang dibuka</span>
+    </div>
+    <div class="duo">
+      <div class="panel">
+        <div class="panel-head p1"><span class="pavatar" data-av1>S</span><span class="pname" data-n1>Siswa 1</span>
+          <span class="pscore">Skor <b id="xScore1">0</b> · <span id="xDone1">0</span>/50</span></div>
+        <div class="numgrid" id="grid1"></div>
+        <div class="qbody" id="qbody1"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head p2"><span class="pavatar" data-av2>S</span><span class="pname" data-n2>Siswa 2</span>
+          <span class="pscore">Skor <b id="xScore2">0</b> · <span id="xDone2">0</span>/50</span></div>
+        <div class="numgrid" id="grid2"></div>
+        <div class="qbody" id="qbody2"></div>
+      </div>
+    </div>
+    <div class="exam-actions">
+      <button class="btn big fin" id="btnFinish"><i data-lucide="flag"></i> Finished Exam — Lihat Hasil</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 8. HASIL ======== -->
+<section class="slide" data-title="Hasil Pengerjaan" id="slide-results">
+  <div class="inner">
+    <div class="kicker">Hasil Pengerjaan Ujian</div>
+    <h2 class="h2">Bagaimana <em>hasilmu</em> hari ini?</h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-head rh1"><span class="pavatar" data-av1>S</span><span class="pname" data-n1>Siswa 1</span></div>
+        <div class="res-body">
+          <div class="res-big"><span id="resScore1">0</span><small> / 50 poin</small></div>
+          <div class="rbar"><i id="resBar1"></i></div>
+          <div class="res-row"><span>Soal dikerjakan</span><b id="resKerja1">0 soal</b></div>
+          <div class="res-row"><span>Penguasaan (skor ÷ 50)</span><b id="resPct1">0%</b></div>
+          <div class="res-nums" id="resChips1"></div>
+          <div class="res-msg" id="resMsg1"></div>
+        </div>
+      </div>
+      <div class="res-card">
+        <div class="res-head rh2"><span class="pavatar" data-av2>S</span><span class="pname" data-n2>Siswa 2</span></div>
+        <div class="res-body">
+          <div class="res-big"><span id="resScore2">0</span><small> / 50 poin</small></div>
+          <div class="rbar"><i id="resBar2"></i></div>
+          <div class="res-row"><span>Soal dikerjakan</span><b id="resKerja2">0 soal</b></div>
+          <div class="res-row"><span>Penguasaan (skor ÷ 50)</span><b id="resPct2">0%</b></div>
+          <div class="res-nums" id="resChips2"></div>
+          <div class="res-msg" id="resMsg2"></div>
+        </div>
+      </div>
+    </div>
+    <div class="winner" id="resWinner"></div>
+    <div class="res-actions">
+      <button class="btn ghost" id="btnBackExam"><i data-lucide="arrow-left-right"></i> Kembali ke Ujian</button>
+      <button class="btn" id="btnToSum">Lanjut ke Kesimpulan <i data-lucide="arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 9. KESIMPULAN ======== -->
+<section class="slide" data-title="Kesimpulan">
+  <div class="inner">
+    <div class="kicker">Kesimpulan</div>
+    <h2 class="h2">Bawa pulang <em>lembar contekan</em> ini.</h2>
+    <ol class="sum">
+      <li><b>Samakan bentuknya dulu.</b> Pecahan → desimal dengan pembagian; persen → desimal dengan bagi 100. Mengubah semuanya ke desimal membuat operasi campuran jauh lebih mudah.</li>
+      <li><b>Operasi pecahan.</b> Tambah/kurang: samakan penyebut. Kali: langsung kalikan. Bagi: balik pecahan kedua lalu kalikan. Pecahan campuran diubah ke pecahan biasa lebih dulu.</li>
+      <li><b>Urutan operasi.</b> Tanda kurung → kali &amp; bagi → tambah &amp; kurang, dikerjakan dari kiri ke kanan.</li>
+      <li><b>Kata kunci soal cerita.</b> jumlah/total (+) · sisa/selisih/dipakai (−) · dari/kali lipat (×) · dibagi rata/per (:). "Sisa" cepat dihitung dengan (100% − terpakai) × total.</li>
+      <li><b>Selalu periksa.</b> Tulis satuan jawaban (kg, liter, rupiah) dan pastikan hasilnya masuk akal.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======== 10. REFLEKSI ======== -->
+<section class="slide" data-title="Refleksi">
+  <div class="inner">
+    <div class="kicker">Refleksi</div>
+    <h2 class="h2">Bagaimana perasaanmu <em>hari ini?</em></h2>
+    <p class="howto">Klik penilaian yang paling mewakili, lalu tulis catatanmu. Diskusikan bersama guru.</p>
+    <div class="duo">
+      <div class="card">
+        <div class="panel-head p1" style="border-radius:11px;margin-bottom:14px;padding:11px 16px"><span class="pavatar" data-av1>S</span><span class="pname" data-n1>Siswa 1</span></div>
+        <div class="rrow"><span class="rtopic">Operasi pecahan</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow"><span class="rtopic">Operasi desimal &amp; persen</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow"><span class="rtopic">Urutan operasi campuran</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow" style="border-bottom:none"><span class="rtopic">Soal cerita &amp; kata kunci</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <textarea class="rnote" placeholder="Soal nomor berikutulah yang paling menantang, karena…"></textarea>
+      </div>
+      <div class="card">
+        <div class="panel-head p2" style="border-radius:11px;margin-bottom:14px;padding:11px 16px"><span class="pavatar" data-av2>S</span><span class="pname" data-n2>Siswa 2</span></div>
+        <div class="rrow"><span class="rtopic">Operasi pecahan</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow"><span class="rtopic">Operasi desimal &amp; persen</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow"><span class="rtopic">Urutan operasi campuran</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <div class="rrow" style="border-bottom:none"><span class="rtopic">Soal cerita &amp; kata kunci</span>
+          <div class="rchips"><button class="rchip" data-v="hi">Mantap!</button><button class="rchip" data-v="mid">Cukup</button><button class="rchip" data-v="lo">Perlu latihan</button></div></div>
+        <textarea class="rnote" placeholder="Soal nomor berikutulah yang paling menantang, karena…"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 11. PENUTUP ======== -->
+<section class="slide" data-title="Sampai Jumpa" id="slide-thanks">
+  <div class="inner thanks center">
+    <div class="kicker center">Sesi Selesai</div>
+    <h1 class="display">Thank You <em>for Today!</em></h1>
+    <p class="lede">Kerja bagus, <b data-n1>Siswa 1</b> &amp; <b data-n2>Siswa 2</b> — sampai jumpa di pertemuan berikutnya. Ingat: ubah dulu ke desimal, ikuti kata kuncinya, dan hitung dengan urutan yang benar!</p>
+    <div class="card recap">
+      <table class="rtbl">
+        <caption>Rekap Ujian Hari Ini</caption>
+        <tr><th></th><th class="s1t" data-ns1>Siswa 1</th><th class="s2t" data-ns2>Siswa 2</th></tr>
+        <tr><td>Skor (dari 50)</td><td class="tot" id="thS1">0</td><td class="tot" id="thS2">0</td></tr>
+        <tr><td>Penguasaan</td><td class="tot" id="thP1">0%</td><td class="tot" id="thP2">0%</td></tr>
+      </table>
+      <div class="winner" id="thWinner"></div>
+    </div>
+    <div><button class="btn ghost" id="btnRestart"><i data-lucide="rotate-ccw"></i> Ulangi Sesi</button></div>
+  </div>
+</section>
+
+<!-- ======== NAVIGASI ======== -->
+<div class="navbtns">
+  <button class="navbtn" id="btnPrev" aria-label="Slide sebelumnya"><i data-lucide="chevron-left"></i></button>
+  <button class="navbtn" id="btnNext" aria-label="Slide berikutnya"><i data-lucide="chevron-right"></i></button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+/* ================= UTIL ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=v=>String(Math.round(v*1e6)/1e6).replace('.',',');
+const fracHTML=(a,b)=>`<span class="fr"><b>${a}</b><i>${b}</i></span>`;
+/* ubah "2 1/2" dan "3/8" di teks menjadi pecahan yang tertata rapi */
+function richMath(t){
+  return t
+    .replace(/(\d+)\s+(\d+)\/(\d+)/g,(m,w,n,d)=>`${w}<span class="fr sm"><b>${n}</b><i>${d}</i></span>`)
+    .replace(/\b(\d+)\/(\d+)\b/g,(m,n,d)=>`<span class="fr sm"><b>${n}</b><i>${d}</i></span>`);
+}
+const refreshIcons=()=>{ if(window.lucide) lucide.createIcons(); };
+const setT=(id,v)=>{const e=document.getElementById(id); if(e)e.textContent=v;};
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+
+/* ================= STATE & NAMA ================= */
+const S={s1:'Siswa 1', s2:'Siswa 2'};
+const short=n=>{const p=n.trim().split(/\s+/)[0]||n; return p.length>12?p.slice(0,11)+'…':p;};
+function applyNames(){
+  S.s1=$('#inName1').value.trim()||'Siswa 1'; S.s2=$('#inName2').value.trim()||'Siswa 2';
+  $$('[data-n1]').forEach(e=>e.textContent=S.s1); $$('[data-n2]').forEach(e=>e.textContent=S.s2);
+  $$('[data-ns1]').forEach(e=>e.textContent=short(S.s1)); $$('[data-ns2]').forEach(e=>e.textContent=short(S.s2));
+  $$('[data-av1]').forEach(e=>e.textContent=S.s1[0].toUpperCase()); $$('[data-av2]').forEach(e=>e.textContent=S.s2[0].toUpperCase());
+}
+function updateScores(){
+  setT('duelS1',examState[0].score); setT('duelS2',examState[1].score);
+  setT('xScore1',examState[0].score); setT('xScore2',examState[1].score);
+  setT('xDone1',examState[0].status.filter(x=>x!=='idle').length);
+  setT('xDone2',examState[1].status.filter(x=>x!=='idle').length);
+}
+
+/* ================= NAVIGASI SLIDE ================= */
+const slides=$$('.slide'); let cur=0;
+const idxOf=id=>slides.findIndex(s=>s.id===id);
+function go(n){
+  if(n<0||n>=slides.length)return;
+  slides[cur].classList.remove('active'); cur=n; slides[cur].classList.add('active');
+  window.scrollTo({top:0});
+  setT('metaNo',String(cur+1).padStart(2,'0')+' / '+slides.length);
+  setT('metaTitle',slides[cur].dataset.title||'');
+  $('#progFill').style.width=(cur/(slides.length-1)*100)+'%';
+  $('#btnPrev').disabled=cur===0; $('#btnNext').disabled=cur===slides.length-1;
+  if(slides[cur].id==='slide-results')buildResults();
+  if(slides[cur].id==='slide-thanks')fillThanks();
+}
+ $('#btnPrev').addEventListener('click',()=>go(cur-1));
+ $('#btnNext').addEventListener('click',()=>go(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input, textarea, select'))return;
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+
+/* ================= SAMPUL ================= */
+ $('#btnStart').addEventListener('click',()=>{applyNames();toast(`Selamat datang, ${S.s1} & ${S.s2}!`);go(1);});
+['inName1','inName2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#btnStart').click();}));
+
+/* ================= CONTOH (REVEAL) ================= */
+ $$('.exbtn').forEach(b=>b.addEventListener('click',()=>{
+  const s=document.getElementById(b.dataset.tg);
+  s.classList.toggle('open');
+  b.innerHTML = s.classList.contains('open') ? `<i data-lucide="eye"></i> Tutup langkah` : `<i data-lucide="eye"></i> Tampilkan langkah`;
+  refreshIcons();
+}));
+
+/* ================= BANK 50 SOAL =================
+   q: soal · o: 4 opsi · a: indeks jawaban benar (0=A..3=D) · e: pembahasan */
+const QBANK=[
+{q:"Ibu membeli 2 1/2 kg beras di warung. Kemudian Ibu membeli lagi 1,75 kg beras di supermarket. Sesampainya di rumah, 15% dari total beras tersebut disimpan untuk persediaan darurat, sedangkan sisanya dibagi rata ke dalam 2 toples. Berapa kg beras dalam setiap toples?",
+ o:["1,65 kg","1,725 kg","1,9125 kg","1,80625 kg"],a:3,
+ e:"Total beras = 2,5 + 1,75 = 4,25 kg.<br>Sisa setelah disimpan 15% = (100% − 15%) × 4,25 = 0,85 × 4,25 = 3,6125 kg.<br>Setiap toples = 3,6125 ÷ 2 = <b>1,80625 kg (D)</b>."},
+{q:"Pak Budi memiliki sebidang tanah seluas 1.200 m². Sebanyak 3/8 bagian ditanami jagung, 0,25 bagian ditanami singkong, dan 20% dibuat kolam ikan. Sisanya dibangun pondok santai. Berapa luas tanah yang dibangun pondok?",
+ o:["180 m²","240 m²","150 m²","210 m²"],a:3,
+ e:"Terpakai = 3/8 + 0,25 + 20% = 0,375 + 0,25 + 0,20 = 0,825 bagian.<br>Sisa = 1 − 0,825 = 0,175 bagian.<br>Luas pondok = 0,175 × 1.200 = <b>210 m² (D)</b>. <i>(Kunci dokumen menulis C — hasil hitung sesuai opsi D.)</i>"},
+{q:"Rina memiliki pita sepanjang 5,6 meter. Ia memberikan 35% pitanya kepada adiknya. Dari sisa pita tersebut, ia menggunakan 1 1/4 meter untuk menghias kado. Berapa meter sisa panjang pita Rina sekarang?",
+ o:["2,45 m","2,29 m","2,15 m","2,39 m"],a:3,
+ e:"Pita adik = 35% × 5,6 = 1,96 m.<br>Sisa = 5,6 − 1,96 = 3,64 m.<br>Untuk kado = 1 1/4 = 1,25 m.<br>Sisa akhir = 3,64 − 1,25 = <b>2,39 m (D)</b>."},
+{q:"Sebuah botol berisi 1 4/5 liter minyak goreng. Ibu menggunakan 0,65 liter minyak untuk menggoreng ikan, lalu menambahkan 30% dari kapasitas awal minyak ke dalam botol. Berapa volume minyak di dalam botol sekarang?",
+ o:["1,72 liter","1,54 liter","1,69 liter","1,48 liter"],a:2,
+ e:"Isi awal = 1 4/5 = 1,8 liter.<br>Setelah dipakai = 1,8 − 0,65 = 1,15 liter.<br>Ditambah 30% × 1,8 = 0,54 liter.<br>Volume sekarang = 1,15 + 0,54 = <b>1,69 liter (C)</b>."},
+{q:"Dalam sebuah bak terdapat 45,5 liter air. Air tersebut diambil sebanyak 3/5 bagian untuk menyiram kebun. Kemudian bak diisi kembali dengan air sebanyak 40% dari volume sisa air tersebut. Berapa liter air di bak sekarang?",
+ o:["23,66 liter","24,18 liter","26,02 liter","25,48 liter"],a:3,
+ e:"Sisa setelah disiram = (1 − 3/5) × 45,5 = 0,4 × 45,5 = 18,2 liter.<br>Ditambah 40% × 18,2 = 7,28 liter.<br>Total = 18,2 + 7,28 = <b>25,48 liter (D)</b>."},
+{q:"Seorang pedagang buah membeli 80 kg jeruk seharga Rp12.000,00 per kg. Sebanyak 1/4 bagian dijual dengan diskon 10%, 0,5 bagian dijual dengan harga normal, dan sisanya membusuk tidak terjual. Jika harga jual normal adalah Rp16.000,00 per kg, berapa total uang hasil penjualan jeruk tersebut?",
+ o:["Rp960.000,00","Rp1.024.000,00","Rp880.000,00","Rp928.000,00"],a:3,
+ e:"Diskon: 1/4 × 80 = 20 kg; harga = 16.000 − (10% × 16.000) = 14.400; hasil = 20 × 14.400 = Rp288.000.<br>Normal: 0,5 × 80 = 40 kg; hasil = 40 × 16.000 = Rp640.000.<br>Total = <b>Rp928.000,00 (D)</b>."},
+{q:"Pak Danu memiliki tabungan sebesar Rp4.500.000,00. Sebanyak 2/5 tabungan digunakan untuk membayar uang sekolah, 15% untuk belanja bulanan, dan 0,15 bagian untuk ditabung kembali di deposito. Berapa sisa uang tabungan Pak Danu?",
+ o:["Rp1.450.000,00","Rp1.250.000,00","Rp1.350.000,00","Rp1.500.000,00"],a:2,
+ e:"Terpakai = 2/5 + 15% + 0,15 = 40% + 15% + 15% = 70%.<br>Sisa = 30% × Rp4.500.000 = <b>Rp1.350.000,00 (C)</b>."},
+{q:"Untuk membuat sebuah kue tart diperlukan 2 1/4 cangkir tepung terigu, 0,75 cangkir gula halus, dan bubuk cokelat sebanyak 20% dari total berat terigu dan gula. Berapa cangkir bubuk cokelat yang diperlukan?",
+ o:["0,6 cangkir","0,8 cangkir","0,5 cangkir","0,75 cangkir"],a:0,
+ e:"Total terigu + gula = 2,25 + 0,75 = 3 cangkir.<br>Cokelat = 20% × 3 = <b>0,6 cangkir (A)</b>. <i>(Kunci dokumen menulis C — hasil hitung sesuai opsi A.)</i>"},
+{q:"Panjang seutas kawat adalah 18,4 meter. Kawat dipotong 3 3/4 meter untuk jemuran dan dipotong lagi 40% dari sisa kawat untuk pagar kebun. Berapa panjang kawat yang tersisa sekarang?",
+ o:["8,79 meter","9,12 meter","8,65 meter","7,85 meter"],a:0,
+ e:"Sisa potongan pertama = 18,4 − 3,75 = 14,65 m.<br>Pagar = 40% × 14,65 = 5,86 m.<br>Sisa = 14,65 − 5,86 = <b>8,79 meter (A)</b>."},
+{q:"Sebuah mobil menempuh perjalanan sejauh 240 km. Pada etape pertama ditempuh 3/8 dari total perjalanan, etape kedua 0,35 dari total, dan sisanya pada etape ketiga dengan kecepatan rata-rata 66 km/jam. Berapa jarak etape ketiga?",
+ o:["60 km","72 km","66 km","54 km"],a:2,
+ e:"Etape I = 3/8 × 240 = 90 km.<br>Etape II = 0,35 × 240 = 84 km.<br>Etape III = 240 − (90 + 84) = <b>66 km (C)</b>."},
+{q:"Pak Joko memanen 150 kg mangga. Sebanyak 2/3 bagian dijual ke pasar. Dari mangga yang tidak dijual, 40% diberikan kepada tetangga, dan sisanya disimpan di rumah. Berapa kg mangga yang disimpan di rumah?",
+ o:["35 kg","25 kg","20 kg","30 kg"],a:3,
+ e:"Tidak dijual = (1 − 2/3) × 150 = 50 kg.<br>Disimpan = (100% − 40%) × 50 = 0,6 × 50 = <b>30 kg (D)</b>."},
+{q:"Sebuah drum minyak terisi 75% dari kapasitas penuhnya. Jika kapasitas penuh drum adalah 120 liter, lalu dikeluarkan sebanyak 2 1/2 jeriken dengan isi masing-masing 14,2 liter, berapa liter minyak yang tersisa di dalam drum?",
+ o:["58,0 liter","52,5 liter","56,2 liter","54,5 liter"],a:3,
+ e:"Isi awal = 75% × 120 = 90 liter.<br>Dikeluarkan = 2,5 × 14,2 = 35,5 liter.<br>Sisa = 90 − 35,5 = <b>54,5 liter (D)</b>."},
+{q:"Dina memiliki uang Rp250.000,00. Ia membelanjakan 0,3 bagian untuk buku tulis, 1 1/5 dari pengeluaran buku untuk novel, dan 25% dari sisa uang akhir untuk membeli camilan. Berapa sisa uang Dina sekarang?",
+ o:["Rp67.250,00","Rp75.000,00","Rp63.750,00","Rp58.500,00"],a:2,
+ e:"Buku = 0,3 × 250.000 = Rp75.000.<br>Novel = 1,2 × 75.000 = Rp90.000.<br>Sisa = 250.000 − 165.000 = Rp85.000.<br>Camilan = 25% × 85.000 = Rp21.250.<br>Sisa akhir = <b>Rp63.750,00 (C)</b>."},
+{q:"Pekerja bangunan membutuhkan 4 1/2 sak semen untuk plester dinding. Sebanyak 1,25 sak telah dihabiskan pada hari pertama, dan 60% dari sisa kebutuhan semen diselesaikan pada hari kedua. Berapa sak semen lagi yang dibutuhkan pada hari ketiga?",
+ o:["1,2 sak","1,5 sak","1,4 sak","1,3 sak"],a:3,
+ e:"Sisa hari pertama = 4,5 − 1,25 = 3,25 sak.<br>Hari kedua = 60% × 3,25 = 1,95 sak.<br>Hari ketiga = 3,25 − 1,95 = <b>1,3 sak (D)</b>."},
+{q:"Sebuah kolam renang anak-anak berisi 60% air dari daya tampung totalnya yang sebesar 1.500 liter. Karena hujan deras, volume air bertambah sebanyak 1 1/4 kali lipat dari volume awal. Jika kemudian air dialirkan keluar sebanyak 325,5 liter, berapakah liter volume air kolam sekarang?",
+ o:["799,5 liter","815,5 liter","825,5 liter","785,0 liter"],a:0,
+ e:"Volume awal = 60% × 1.500 = 900 liter.<br>Setelah hujan = 1,25 × 900 = 1.125 liter.<br>Setelah dialirkan = 1.125 − 325,5 = <b>799,5 liter (A)</b>."},
+{q:"Seorang koki menyiapkan adonan roti dengan 3 1/2 kg tepung gandum, 0,85 kg gula pasir, dan mentega seberat 15% dari total gandum dan gula. Jika adonan tersebut dibagi menjadi 20 porsi sama besar, berapa gram berat mentega untuk setiap porsi? (1 kg = 1.000 gram)",
+ o:["35,125 gram","32,625 gram","31,500 gram","34,250 gram"],a:1,
+ e:"Total gandum + gula = 3,5 + 0,85 = 4,35 kg.<br>Mentega = 15% × 4,35 = 0,6525 kg = 652,5 gram.<br>Per porsi = 652,5 ÷ 20 = <b>32,625 gram (B)</b>."},
+{q:"Toko busana memberikan diskon ganda pada sebuah baju seharga Rp200.000,00. Diskon pertama adalah 20%, kemudian dari harga setelah diskon pertama diberikan potongan tambahan sebesar 1/10 bagian. Berapa harga akhir yang harus dibayar pembeli?",
+ o:["Rp140.000,00","Rp138.000,00","Rp150.000,00","Rp144.000,00"],a:3,
+ e:"Setelah diskon 20% = 0,8 × 200.000 = Rp160.000.<br>Potongan kedua = 1/10 × 160.000 = Rp16.000.<br>Harga akhir = <b>Rp144.000,00 (D)</b>."},
+{q:"Seorang pedagang beras memiliki stok 3,5 kuintal beras. Ia menjual 1 3/4 kuintal ke rumah makan dan 40% dari sisa beras ke toko kelontong. Berapa kuintal beras yang belum terjual?",
+ o:["0,95 kuintal","1,20 kuintal","1,05 kuintal","1,15 kuintal"],a:2,
+ e:"Sisa setelah rumah makan = 3,5 − 1,75 = 1,75 kuintal.<br>Belum terjual = 60% × 1,75 = <b>1,05 kuintal (C)</b>."},
+{q:"Sebuah tangki air berisi 800 liter. Sebanyak 0,4 bagian air digunakan untuk mandi dan mencuci pakaian, 25% dari kapasitas awal untuk menyiram tanaman, dan 1 1/2 ember (setiap ember 20 liter) untuk mencuci mobil. Berapa liter sisa air di tangki?",
+ o:["240 liter","290 liter","270 liter","250 liter"],a:3,
+ e:"Mandi & cuci = 0,4 × 800 = 320 L. Tanaman = 25% × 800 = 200 L. Mobil = 1,5 × 20 = 30 L.<br>Total terpakai = 550 L.<br>Sisa = 800 − 550 = <b>250 liter (D)</b>."},
+{q:"Ayah membagi uang bonus kerja sebesar Rp2.400.000,00 kepada 3 anaknya. Anak sulung mendapat 3/8 bagian, anak kedua mendapat 0,35 bagian, dan sisanya diberikan kepada anak bungsu. Berapa rupiah uang yang diterima anak bungsu?",
+ o:["Rp660.000,00","Rp600.000,00","Rp720.000,00","Rp540.000,00"],a:0,
+ e:"Sulung = 3/8 × 2.400.000 = Rp900.000.<br>Kedua = 0,35 × 2.400.000 = Rp840.000.<br>Bungsu = 2.400.000 − 1.740.000 = <b>Rp660.000,00 (A)</b>."},
+{q:"Seorang peternak ayam memiliki 500 butir telur. Sebanyak 15% pecah saat pengiriman. Dari telur yang utuh, 3/5 bagian dijual ke pedagang pasar dan sisanya dimasukkan ke dalam beberapa kotak dengan isi masing-masing 17 butir telur. Berapa banyak kotak yang terisi penuh?",
+ o:["10 kotak","14 kotak","8 kotak","12 kotak"],a:0,
+ e:"Utuh = 85% × 500 = 425 butir.<br>Sisa setelah dijual 3/5 = 2/5 × 425 = 170 butir.<br>Kotak penuh = 170 ÷ 17 = <b>10 kotak (A)</b>."},
+{q:"Pak Hasan menempuh perjalanan bersepeda sejauh 32,4 km dalam 3 etape. Etape pertama menempuh 1/3 rute, etape kedua menempuh 45% rute, dan etape ketiga menempuh sisanya. Berapa kilometer jarak yang ditempuh pada etape ketiga?",
+ o:["7,02 km","7,48 km","6,85 km","7,20 km"],a:0,
+ e:"Etape I = 1/3 × 32,4 = 10,8 km.<br>Etape II = 45% × 32,4 = 14,58 km.<br>Etape III = 32,4 − 25,38 = <b>7,02 km (A)</b>."},
+{q:"Sebuah botol termos berisi 2 1/2 liter teh manis hangat. Sebanyak 0,4 liter dituangkan ke cangkir Ayah, 15% dari sisa teh dituangkan ke cangkir Ibu. Berapa liter teh yang masih tersisa di dalam termos?",
+ o:["1,825 liter","1,745 liter","1,695 liter","1,785 liter"],a:3,
+ e:"Sisa setelah Ayah = 2,5 − 0,4 = 2,1 liter.<br>Sisa setelah Ibu = 85% × 2,1 = <b>1,785 liter (D)</b>."},
+{q:"Bu Maya memiliki 12,5 meter kain batik. Sebanyak 2 3/4 meter digunakan untuk gamis, 1,8 meter untuk kemeja pendek, dan 20% dari total panjang kain awal digunakan untuk rok lilit. Berapa meter sisa kain batik Bu Maya?",
+ o:["5,65 meter","4,95 meter","5,45 meter","5,25 meter"],a:2,
+ e:"Terpakai = 2,75 + 1,8 + (20% × 12,5 = 2,5) = 7,05 m.<br>Sisa = 12,5 − 7,05 = <b>5,45 meter (C)</b>."},
+{q:"Sebuah pabrik roti membutuhkan tepung terigu sebanyak 480 kg setiap minggu. Sebanyak 3/8 bagian digunakan untuk roti tawar, 0,3 bagian untuk roti manis, dan 20% untuk kue kering. Sisanya adalah cadangan rusak/susut. Berapa kg tepung yang dijadikan cadangan rusak/susut?",
+ o:["84 kg","60 kg","72 kg","48 kg"],a:1,
+ e:"Terpakai = 37,5% + 30% + 20% = 87,5%.<br>Sisa = 12,5% = 1/8 × 480 = <b>60 kg (B)</b>."},
+{q:"Andi memiliki tabungan sebesar Rp800.000,00. Sebanyak 1/4 bagian digunakan untuk membeli sepatu olahraga. Dari sisa uangnya, Andi menggunakan 30% untuk membeli tas ransel, lalu 0,1 bagian dari sisa setelah membeli tas untuk membeli kaos kaki. Berapa sisa uang Andi sekarang?",
+ o:["Rp360.000,00","Rp410.000,00","Rp378.000,00","Rp392.000,00"],a:2,
+ e:"Setelah sepatu = 0,75 × 800.000 = Rp600.000.<br>Setelah tas = 0,7 × 600.000 = Rp420.000.<br>Setelah kaos kaki = 0,9 × 420.000 = <b>Rp378.000,00 (C)</b>."},
+{q:"Sebuah drum berisi 125,5 liter air. Air dialirkan ke dalam 4 ember dengan isi masing-masing 12 1/4 liter. Kemudian 40% dari sisa air di dalam drum diambil lagi untuk mencuci teras. Berapa liter air yang masih tersisa di dalam drum?",
+ o:["39,8 liter","48,2 liter","42,6 liter","45,9 liter"],a:3,
+ e:"Ke 4 ember = 4 × 12,25 = 49 liter.<br>Sisa drum = 125,5 − 49 = 76,5 liter.<br>Sisa akhir = 60% × 76,5 = <b>45,9 liter (D)</b>."},
+{q:"Pak Surya memiliki kebun seluas 2 1/2 hektare. Sebanyak 0,4 bagian ditanami pohon kelapa sawit, 35% ditanami pohon karet, dan sisanya ditanami aneka buah-buahan. Berapa hektare luas kebun buah-buahan Pak Surya?",
+ o:["0,75 hektare","0,825 hektare","0,625 hektare","0,55 hektare"],a:2,
+ e:"Buah = 100% − 40% − 35% = 25% = 1/4 × 2,5 = <b>0,625 hektare (C)</b>."},
+{q:"Di sebuah toko buku, 3/5 dari total buku adalah buku fiksi. Dari buku fiksi tersebut, 0,25 bagian adalah komik, dan 20% dari komik tersebut berbahasa Inggris. Jika total ada 2.000 buku di toko, berapa banyak komik berbahasa Inggris?",
+ o:["90 buku","75 buku","60 buku","50 buku"],a:2,
+ e:"Fiksi = 3/5 × 2.000 = 1.200 buku.<br>Komik = 0,25 × 1.200 = 300 buku.<br>Inggris = 20% × 300 = <b>60 buku (C)</b>."},
+{q:"Ibu mempunyai 4 1/2 kg gula pasir. Sebanyak 1,2 kg dipakai untuk membuat sirup, 75% dari sisa gula dipakai membuat kue basah, dan sisanya disimpan di wadah kedap udara. Berapa kg gula di wadah kedap udara?",
+ o:["0,825 kg","0,75 kg","0,925 kg","0,65 kg"],a:0,
+ e:"Sisa setelah sirup = 4,5 − 1,2 = 3,3 kg.<br>Kedap udara = 25% × 3,3 = <b>0,825 kg (A)</b>."},
+{q:"Sebuah tangki penampungan minyak tanah berkapasitas 2.400 liter terisi 3/4 bagian. Minyak tersebut dijual ke 15 pedagang kecil masing-masing sebanyak 80,5 liter. Sebanyak 10% dari sisa minyak kemudian menguap karena panas. Berapa liter sisa minyak dalam tangki?",
+ o:["545,00 liter","533,25 liter","512,75 liter","524,50 liter"],a:1,
+ e:"Isi awal = 3/4 × 2.400 = 1.800 liter.<br>Dijual = 15 × 80,5 = 1.207,5 liter.<br>Sisa = 592,5 liter.<br>Setelah menguap 10% = 90% × 592,5 = <b>533,25 liter (B)</b>."},
+{q:"Seorang pelari marathon menyelesaikan rute 42 km. Pada km 0 sampai 1/4 rute ia berlari konstan, 0,35 rute berikutnya ia menaikkan kecepatan, dan pada 20% rute selanjutnya ia menurunkan kecepatan. Berapa kilometer jarak yang tersisa menuju garis finis?",
+ o:["8,4 km","10,5 km","7,8 km","9,2 km"],a:0,
+ e:"Sisa rute = 1 − (0,25 + 0,35 + 0,20) = 0,20 = 20%.<br>Jarak = 20% × 42 = <b>8,4 km (A)</b>."},
+{q:"Pak Rahmat memiliki modal Rp5.000.000,00. Sebanyak 2 1/4 juta rupiah digunakan untuk membeli bibit ikan lele, 0,2 bagian dari modal untuk membeli pakan, dan 15% dari modal untuk perlengkapan kolam. Berapa rupiah sisa modal Pak Rahmat?",
+ o:["Rp1.000.000,00","Rp1.150.000,00","Rp950.000,00","Rp1.200.000,00"],a:0,
+ e:"Bibit = Rp2.250.000. Pakan = 0,2 × 5.000.000 = Rp1.000.000. Perlengkapan = 15% × 5.000.000 = Rp750.000.<br>Total = Rp4.000.000.<br>Sisa = <b>Rp1.000.000,00 (A)</b>."},
+{q:"Satu gulung kawat panjangnya 50 meter. Tukang bangunan memotong 1/5 bagian untuk pagar kawat, 12,4 meter untuk mengikat rangka atap, dan 30% dari sisa kawat untuk membuat kandang burung. Berapa meter panjang kawat yang tersisa sekarang?",
+ o:["20,45 meter","21,12 meter","19,32 meter","18,50 meter"],a:2,
+ e:"Pagar = 1/5 × 50 = 10 m.<br>Sisa sebelum kandang = 50 − (10 + 12,4) = 27,6 m.<br>Sisa akhir = 70% × 27,6 = <b>19,32 meter (C)</b>."},
+{q:"Sebuah toko pakaian memberikan potongan harga sebesar 25% untuk setiap pembelian kemeja seharga Rp180.000,00. Jika seorang pembeli menggunakan voucher tambahan senilai 1/10 dari harga setelah diskon, berapa uang yang harus ia bayar?",
+ o:["Rp125.000,00","Rp118.500,00","Rp121.500,00","Rp130.000,00"],a:2,
+ e:"Setelah diskon = 0,75 × 180.000 = Rp135.000.<br>Voucher = 1/10 × 135.000 = Rp13.500.<br>Bayar = <b>Rp121.500,00 (C)</b>."},
+{q:"Di sebuah peternakan, 4/9 dari total hewan ternak adalah sapi, 0,3 bagian adalah kambing, dan sisanya adalah 115 ekor domba. Berapa total seluruh hewan ternak di peternakan tersebut?",
+ o:["400 ekor","500 ekor","540 ekor","450 ekor"],a:3,
+ e:"Sapi + kambing = 4/9 + 3/10 = 40/90 + 27/90 = 67/90 bagian.<br>Sisa domba = 23/90 × Total = 115 → Total = 115 × 90 ÷ 23 = <b>450 ekor (D)</b>."},
+{q:"Sebuah botol sirup berisi 1 3/5 liter konsentrat jeruk. Setiap porsi minuman membutuhkan 0,08 liter sirup ditambah air. Setelah membuat 15 porsi minuman, 20% dari sisa sirup dalam botol tumpah. Berapa liter sirup yang masih tersisa?",
+ o:["0,28 liter","0,32 liter","0,36 liter","0,40 liter"],a:1,
+ e:"Awal = 1,6 liter. Dipakai = 15 × 0,08 = 1,2 liter.<br>Sisa = 0,4 liter.<br>Setelah tumpah 20% = 80% × 0,4 = <b>0,32 liter (B)</b>."},
+{q:"Sebuah kolam ikan diisi air dengan debit konstan. Dalam 1 jam pertama terisi 30% dari kapasitas kolam. Dalam 1,5 jam berikutnya terisi 3/8 dari kapasitas kolam. Jika kapasitas total kolam adalah 4.000 liter, berapa liter air yang masih perlu ditambahkan agar kolam penuh?",
+ o:["1.300 liter","1.400 liter","1.250 liter","1.150 liter"],a:0,
+ e:"Jam I = 30% × 4.000 = 1.200 liter. Berikutnya = 3/8 × 4.000 = 1.500 liter.<br>Terisi = 2.700 liter.<br>Kekurangan = 4.000 − 2.700 = <b>1.300 liter (A)</b>."},
+{q:"Seorang pedagang membeli 5 karung beras masing-masing bermassa 25 kg. Sebanyak 0,2 bagian dari total beras disumbangkan ke panti asuhan, 35% dijual secara eceran seharga Rp14.000/kg, dan sisanya dikemas menjadi kantong 2,5 kg. Berapa banyak kantong beras yang dihasilkan dari sisa tersebut?",
+ o:["20 kantong","22 kantong","24 kantong","25 kantong"],a:1,
+ e:"Total = 5 × 25 = 125 kg.<br>Sisa = (100% − 20% − 35%) × 125 = 45% × 125 = 56,25 kg.<br>Kantong = 56,25 ÷ 2,5 = <b>22,5 → 22 kantong penuh (B)</b>."},
+{q:"Pak Heru membagi warisan uang tunai Rp120.000.000,00 kepada ketiga anaknya. Anak pertama memperoleh 3/8 bagian, anak kedua memperoleh 0,3 bagian, dan anak ketiga memperoleh sisanya setelah dipotong zakat 2,5% dari total warisan. Berapa rupiah uang yang diterima anak ketiga?",
+ o:["Rp37.500.000,00","Rp39.000.000,00","Rp33.000.000,00","Rp36.000.000,00"],a:3,
+ e:"Anak I = 3/8 × 120 jt = Rp45.000.000. Anak II = 0,3 × 120 jt = Rp36.000.000. Zakat = 2,5% × 120 jt = Rp3.000.000.<br>Anak III = 120 − (45 + 36 + 3) = <b>Rp36.000.000,00 (D)</b>."},
+{q:"Sebuah resep membuat 24 kue mangkok memerlukan 2 1/4 gelas santan, 1,5 gelas tepung beras, dan 0,75 gelas gula pasir. Jika Rani ingin membuat 36 kue mangkok, berapa total gelas bahan cair dan padat yang dibutuhkan?",
+ o:["7,25 gelas","6,50 gelas","6,75 gelas","7,00 gelas"],a:2,
+ e:"Bahan 24 kue = 2,25 + 1,5 + 0,75 = 4,5 gelas.<br>Faktor = 36 ÷ 24 = 1,5.<br>Total = 1,5 × 4,5 = <b>6,75 gelas (C)</b>."},
+{q:"Seorang pedagang kelontong memiliki persediaan 60 liter minyak tanah. Hari pertama terjual 1/3 bagian, hari kedua terjual 0,25 dari sisa hari pertama, dan hari ketiga terjual 50% dari sisa setelah hari kedua. Berapa liter minyak tanah yang masih tersisa?",
+ o:["18 liter","12 liter","15 liter","20 liter"],a:2,
+ e:"Hari I: 1/3 × 60 = 20 → sisa 40. Hari II: 0,25 × 40 = 10 → sisa 30. Hari III: 50% × 30 = 15 → sisa akhir = <b>15 liter (C)</b>."},
+{q:"Sebuah tiang bendera dicat dalam 3 tahap warna: 2/5 bagian dicat merah, 0,35 bagian dicat putih, dan sisanya sepanjang 1,25 meter dicat emas. Berapa meter tinggi tiang bendera tersebut seluruhnya?",
+ o:["6,0 meter","4,5 meter","5,5 meter","5,0 meter"],a:3,
+ e:"Merah + putih = 0,40 + 0,35 = 0,75 bagian.<br>Emas = 1 − 0,75 = 0,25 × Tinggi = 1,25.<br>Tinggi = 1,25 ÷ 0,25 = <b>5,0 meter (D)</b>."},
+{q:"Dalam lomba lari estafet 4 × 100 meter, pelari pertama mencatat waktu 12,45 detik, pelari kedua 11 4/5 detik, pelari ketiga 12,15 detik, dan pelari keempat 11,80 detik. Berapakah total waktu tempuh regu estafet tersebut?",
+ o:["49,10 detik","48,20 detik","48,50 detik","47,80 detik"],a:1,
+ e:"Pelari II = 11 4/5 = 11,8 detik.<br>Total = 12,45 + 11,8 + 12,15 + 11,8 = <b>48,20 detik (B)</b>."},
+{q:"Ibu membeli 3 1/2 lusin pensil. Sebanyak 25% diberikan kepada keponakannya, 0,5 bagian dari total awal disimpan di laci, dan sisanya dibagikan sama rata kepada 7 anak tetangga. Berapa buah pensil yang diterima masing-masing anak tetangga? (1 lusin = 12 buah)",
+ o:["2 buah","1,5 buah","1 buah","3 buah"],a:1,
+ e:"Total = 3,5 × 12 = 42 buah.<br>Keponakan = 25% × 42 = 10,5. Laci = 0,5 × 42 = 21.<br>Sisa = 42 − 31,5 = 10,5 buah.<br>Tiap anak = 10,5 ÷ 7 = <b>1,5 buah (B)</b>."},
+{q:"Sebuah mobil tangki memuat 8.000 liter bensin. Sebanyak 45% disalurkan ke SPBU A, 3/10 bagian disalurkan ke SPBU B, dan 0,15 bagian ke SPBU C. Sisanya masih ada di tangki. Berapa liter sisa bensin dalam tangki?",
+ o:["900 liter","800 liter","750 liter","600 liter"],a:1,
+ e:"Terpakai = 45% + 30% + 15% = 90%.<br>Sisa = 10% × 8.000 = <b>800 liter (B)</b>."},
+{q:"Seorang penjahit membeli 20 meter kain. Digunakan 2 3/4 meter untuk celana panjang, 1,65 meter untuk kemeja, dan 35% dari sisa kain digunakan untuk membuat seprai. Berapa meter kain yang belum digunakan?",
+ o:["11,20 meter","9,85 meter","10,50 meter","10,14 meter"],a:3,
+ e:"Sisa setelah celana & kemeja = 20 − (2,75 + 1,65) = 15,6 m.<br>Seprai = 35% × 15,6 = 5,46 m.<br>Belum digunakan = 65% × 15,6 = <b>10,14 meter (D)</b>."},
+{q:"Pak Burhan memperoleh gaji Rp6.000.000,00 sebulan. Sebanyak 1/3 bagian digunakan untuk keperluan dapur, 0,25 bagian untuk cicilan rumah, 15% untuk pendidikan anak, dan sisanya ditabung. Berapa jumlah uang yang ditabung Pak Burhan?",
+ o:["Rp1.500.000,00","Rp1.800.000,00","Rp1.600.000,00","Rp1.400.000,00"],a:2,
+ e:"Dapur = Rp2.000.000. Cicilan = Rp1.500.000. Pendidikan = Rp900.000.<br>Total = Rp4.400.000.<br>Ditabung = <b>Rp1.600.000,00 (C)</b>."},
+{q:"Sebuah kolam ikan berbentuk persegi panjang memiliki panjang 15,5 meter dan lebar 8 1/4 meter. Jika 30% dari luas permukaan kolam ditutupi tanaman teratai, berapa meter persegi luas permukaan kolam yang bebas dari tanaman teratai?",
+ o:["87,6500 m²","89,5125 m²","88,4250 m²","90,1250 m²"],a:1,
+ e:"Luas = 15,5 × 8,25 = 127,875 m².<br>Bebas teratai = 70% × 127,875 = <b>89,5125 m² (B)</b>."},
+{q:"Sebuah wadah berisi 4,8 liter jus buah campuran. Komposisinya adalah 2 1/4 liter jus apel, 1,35 liter jus jeruk, dan sisanya jus mangga. Jika kemudian ditambahkan jus mangga sebanyak 20% dari total jus mangga awal, berapakah total volume jus mangga di dalam wadah sekarang?",
+ o:["1,38 liter","1,50 liter","1,25 liter","1,44 liter"],a:3,
+ e:"Mangga awal = 4,8 − (2,25 + 1,35) = 1,2 liter.<br>Penambahan = 20% × 1,2 = 0,24 liter.<br>Total = 1,2 + 0,24 = <b>1,44 liter (D)</b>."}
+];
+
+/* ================= MESIN UJIAN ================= */
+const mkState=()=>({cur:-1,sel:Array(50).fill(null),status:Array(50).fill('idle'),score:0});
+const examState=[mkState(),mkState()];
+
+function buildGrid(s){
+  const g=$('#grid'+(s+1)); g.innerHTML='';
+  for(let i=0;i<50;i++)
+    g.insertAdjacentHTML('beforeend',`<button class="numbtn" data-s="${s}" data-i="${i}" title="Soal ${i+1}">${i+1}</button>`);
+}
+function paintGrid(s){
+  const st=examState[s];
+  $$('#grid'+(s+1)+' .numbtn').forEach(b=>{
+    const i=+b.dataset.i;
+    b.classList.toggle('cur', st.cur===i);
+    b.classList.toggle('done', st.status[i]==='correct');
+    b.classList.toggle('miss', st.status[i]==='wrong');
+  });
+}
+function renderQ(s){
+  const st=examState[s], body=$('#qbody'+(s+1));
+  if(st.cur<0){
+    body.innerHTML=`<div class="qempty"><i data-lucide="mouse-pointer-click"></i><p>Halo, <b>${S['s'+(s+1)]}</b>!<br>Pilih nomor soal (1–50) pada kotak angka di atas untuk mulai mengerjakan.</p></div>`;
+    refreshIcons(); return;
+  }
+  const i=st.cur, q=QBANK[i], stt=st.status[i], locked=stt==='correct';
+  const chip = locked ? `<span class="stchip ok"><i data-lucide="check"></i> Benar</span>`
+    : stt==='wrong' ? `<span class="stchip miss"><i data-lucide="rotate-ccw"></i> Coba lagi</span>` : '';
+  body.innerHTML=`
+    <div class="qhead"><span class="qbadge">Soal ${i+1} <small>/ 50</small></span>${chip}</div>
+    <p class="qtext">${richMath(q.q)}</p>
+    <div class="opts">${q.o.map((t,k)=>`
+      <button class="opt ${st.sel[i]===k?'sel':''} ${locked&&k===q.a?'ok':''}" data-k="${k}" ${locked?'disabled':''}>
+        <span class="letter">${'ABCD'[k]}</span><span class="otext">${richMath(t)}</span>
+      </button>`).join('')}
+    </div>
+    <div class="qactions">
+      <button class="btn sm" data-act="cek" ${locked?'disabled':''}><i data-lucide="check"></i> Cek Jawaban</button>
+      <button class="btn sm ghost" data-act="sol"><i data-lucide="eye"></i> Pembahasan</button>
+    </div>
+    <div class="qfeed" id="qf${s}"></div>
+    <div class="qsol"><b>Pembahasan:</b><br>${q.e}</div>`;
+  refreshIcons();
+}
+function wireExam(s){
+  $('#grid'+(s+1)).addEventListener('click',e=>{
+    const b=e.target.closest('.numbtn'); if(!b)return;
+    examState[s].cur=+b.dataset.i;
+    paintGrid(s); renderQ(s);
+    $('#qbody'+(s+1)).scrollTop=0;
+  });
+  $('#qbody'+(s+1)).addEventListener('click',e=>{
+    const st=examState[s];
+    const opt=e.target.closest('.opt');
+    if(opt && !opt.disabled){
+      const i=st.cur,k=+opt.dataset.k;
+      st.sel[i]=k;
+      $$('#qbody'+(s+1)+' .opt').forEach(o=>o.classList.remove('sel','bad'));
+      opt.classList.add('sel');
+      const f=$('#qf'+s); if(f)f.innerHTML='';
+      return;
+    }
+    const btn=e.target.closest('[data-act]'); if(!btn)return;
+    const i=st.cur, q=QBANK[i];
+    if(btn.dataset.act==='sol'){$('#qbody'+(s+1)+' .qsol').classList.toggle('open');return;}
+    if(st.status[i]==='correct')return;
+    const sel=st.sel[i];
+    if(sel==null){toast('Pilih dulu salah satu jawaban A–D.');return;}
+    if(sel===q.a){
+      st.status[i]='correct'; st.score++;
+      updateScores(); paintGrid(s); renderQ(s);
+      $('#qf'+s).innerHTML=`<span class="feed-ok"><i data-lucide="check"></i> Benar! +1 poin untuk ${S['s'+(s+1)]}. Skor: ${st.score}/50.</span>`;
+    }else{
+      st.status[i]='wrong'; paintGrid(s);
+      $$('#qbody'+(s+1)+' .opt')[sel].classList.add('bad');
+      $('#qf'+s).innerHTML=`<span class="feed-no">Belum tepat.</span> Periksa kembali pilihanmu, atau buka pembahasan.`;
+    }
+    refreshIcons();
+  });
+}
+
+/* ================= HASIL ================= */
+function buildResults(){
+  [0,1].forEach(s=>{
+    const st=examState[s], benar=st.score;
+    const kerja=st.status.filter(x=>x!=='idle').length;
+    setT('resScore'+(s+1), benar);
+    setT('resKerja'+(s+1), kerja+' soal');
+    setT('resPct'+(s+1), fmt(benar/50*100)+'%');
+    $('#resBar'+(s+1)).style.width=(benar/50*100)+'%';
+    const chips=[...Array(50)].map((_,i)=>
+      st.status[i]==='correct'?`<span class="rnum ok">${i+1}</span>`:
+      st.status[i]==='wrong'?`<span class="rnum miss">${i+1}</span>`:'').join('');
+    $('#resChips'+(s+1)).innerHTML=chips||'<span class="dim">belum mengerjakan soal apa pun</span>';
+    const p=benar/50;
+    setT('resMsg'+(s+1), p>=0.8?'Luar biasa — sangat menguasai materi!':p>=0.6?'Bagus! Sedikit lagi sempurna.':p>=0.4?'Cukup baik — terus berlatih ya.':'Ayo semangat, perbanyak latihan soal cerita!');
+  });
+  const a=examState[0].score, b=examState[1].score, w=$('#resWinner');
+  w.innerHTML = a===b
+    ? (a===0?'Belum ada poin — mari diskusikan pembahasannya bersama!':`Kedua siswa <b>seri</b> ${a}–${b}. Hebat!`)
+    : `<i data-lucide="trophy"></i> Skor tertinggi: <b>${a>b?S.s1:S.s2}</b> (${Math.max(a,b)}–${Math.min(a,b)})`;
+  refreshIcons();
+}
+ $('#btnFinish').addEventListener('click',()=>{updateScores();go(idxOf('slide-results'));});
+ $('#btnBackExam').addEventListener('click',()=>go(idxOf('slide-exam')));
+ $('#btnToSum').addEventListener('click',()=>go(idxOf('slide-results')+1));
+
+/* ================= PENUTUP ================= */
+function fillThanks(){
+  setT('thS1',examState[0].score); setT('thS2',examState[1].score);
+  setT('thP1',fmt(examState[0].score/50*100)+'%'); setT('thP2',fmt(examState[1].score/50*100)+'%');
+  const a=examState[0].score, b=examState[1].score, w=$('#thWinner');
+  w.innerHTML = a===b
+    ? (a===0?'Mari kerjakan ulang soalnya bersama-sama!':`Duel berakhir <b>seri</b> ${a}–${b} — kerja bagus!`)
+    : `<i data-lucide="trophy"></i> Juara ujian: <b>${a>b?S.s1:S.s2}</b> (${Math.max(a,b)}–${Math.min(a,b)})`;
+  refreshIcons();
+}
+ $('#btnRestart').addEventListener('click',()=>location.reload());
+
+/* ================= REFLEKSI ================= */
+ $$('.rchips').forEach(g=>g.addEventListener('click',e=>{
+  const c=e.target.closest('.rchip'); if(!c)return;
+  [...g.children].forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+}));
+
+/* ================= INISIALISASI ================= */
+buildGrid(0); buildGrid(1);
+paintGrid(0); paintGrid(1);
+renderQ(0); renderQ(1);
+wireExam(0); wireExam(1);
+applyNames();
+updateScores();
+go(0);
+refreshIcons();
+</script>
+</body>
+</html>
