@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penjumlahan &amp; Pengurangan Pecahan — Presentasi Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --paper:#F5EFE2; --paper2:#FFFDF6; --panel:#FBF6E9;
+    --ink:#26221A; --ink2:#6A6150; --line:#D9CEB3; --grid:rgba(38,34,26,.055);
+    --red:#C0431C; --red-soft:#F4DDD2; --green:#2F6B4C; --green-soft:#E2EDE4;
+    --gold:#C98A1B; --gold-soft:#F6EBD2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'Space Grotesk',sans-serif; color:var(--ink); background:var(--paper);
+    overflow:hidden;
+  }
+  body::before{ /* pola kertas kotak-kotak buku matematika */
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',serif}
+  button{font-family:inherit}
+
+  /* ====== kerangka deck ====== */
+  .progress{position:fixed;top:0;left:0;right:0;height:4px;background:var(--line);z-index:60}
+  #progressBar{height:100%;width:0;background:var(--red);transition:width .4s ease}
+  .topbar{
+    position:fixed;top:4px;left:0;right:0;height:56px;z-index:50;
+    display:flex;align-items:center;gap:14px;padding:0 18px;
+    border-bottom:1.5px solid var(--ink);background:rgba(245,239,226,.92);backdrop-filter:blur(6px);
+  }
+  .brand{font-weight:700;font-size:15px;letter-spacing:.02em}
+  .brand span{color:var(--red)}
+  .chip{
+    margin-left:auto;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--paper2);
+    white-space:nowrap;max-width:44vw;overflow:hidden;text-overflow:ellipsis;
+  }
+  .iconbtn{
+    width:38px;height:38px;border:1.5px solid var(--ink);border-radius:10px;background:var(--paper2);
+    display:grid;place-items:center;cursor:pointer;transition:.15s;color:var(--ink);
+  }
+  .iconbtn:hover{background:var(--ink);color:var(--paper)}
+  .iconbtn svg{width:19px;height:19px}
+
+  #menu{
+    position:fixed;top:0;bottom:0;left:0;width:min(340px,88vw);z-index:70;background:var(--paper2);
+    border-right:1.5px solid var(--ink);transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    display:flex;flex-direction:column;
+  }
+  #menu.open{transform:none}
+  .menu-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1.5px solid var(--ink)}
+  .menu-head b{font-family:'Fraunces',serif;font-size:18px}
+  #menuList{list-style:none;overflow-y:auto;padding:10px 8px 20px;flex:1}
+  #menuList li button{
+    width:100%;display:flex;gap:12px;align-items:center;text-align:left;background:none;border:0;
+    padding:9px 10px;border-radius:9px;cursor:pointer;font-size:14px;color:var(--ink);
+  }
+  #menuList li button:hover{background:var(--panel)}
+  #menuList li.on button{background:var(--ink);color:var(--paper)}
+  #menuList .mnum{font-family:'Fraunces',serif;font-weight:700;font-size:12px;width:24px;color:var(--red)}
+  #menuList li.on .mnum{color:var(--gold)}
+
+  #deck{position:fixed;inset:0;z-index:1}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;padding:74px 26px 78px}
+  .slide.active{display:flex}
+  .wrap{width:100%;max-width:1120px;margin:0 auto;display:flex;flex-direction:column;flex:1;min-height:0}
+  .slide.active .wrap{animation:rise .5s cubic-bezier(.2,.8,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .s-body{flex:1;overflow-y:auto;min-height:0;padding:6px 6px 26px;scrollbar-width:thin}
+
+  .kicker{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+  .kicker::before{content:"";width:26px;height:2px;background:var(--red)}
+  .s-title{font-size:clamp(26px,3.4vw,42px);font-weight:700;letter-spacing:-.01em;line-height:1.08;margin-bottom:10px}
+  .lead{color:var(--ink2);font-size:15.5px;max-width:72ch;line-height:1.55}
+  .hand{font-family:'Caveat',cursive;font-size:21px;color:var(--gold);transform:rotate(-1.5deg);display:inline-block}
+
+  .deckbar{
+    position:fixed;bottom:0;left:0;right:0;height:60px;z-index:50;
+    display:flex;align-items:center;gap:14px;padding:0 18px;
+    border-top:1.5px solid var(--ink);background:rgba(245,239,226,.92);backdrop-filter:blur(6px);
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);border-radius:999px;
+    background:var(--paper2);color:var(--ink);padding:10px 18px;font-weight:600;font-size:14px;cursor:pointer;
+    transition:.15s;box-shadow:2.5px 2.5px 0 rgba(38,34,26,.22);
+  }
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(38,34,26,.25)}
+  .btn:active{transform:translate(1px,1px);box-shadow:none}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:2.5px 2.5px 0 rgba(38,34,26,.12)}
+  .btn svg{width:16px;height:16px}
+  .btn-primary{background:var(--red);border-color:var(--red);color:#FFF7EC}
+  .btn-primary:hover{background:#A33512}
+  .btn-sm{padding:7px 13px;font-size:13px;box-shadow:2px 2px 0 rgba(38,34,26,.18)}
+  .btn.ghost{box-shadow:none;background:transparent}
+  .pager{font-family:'Fraunces',serif;font-weight:700;font-size:15px;margin-left:auto}
+  .pager small{font-family:'Space Grotesk';font-weight:500;color:var(--ink2);font-size:11px;display:block;letter-spacing:.12em;text-transform:uppercase}
+
+  /* ====== pecahan ====== */
+  .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.42em;line-height:1.06;font-family:'Fraunces',serif;font-weight:600;margin:0 .14em}
+  .fr .fr-n{padding:0 .32em .1em;border-bottom:.085em solid currentColor}
+  .fr .fr-d{padding:.1em .32em 0}
+  .mixed{display:inline-flex;align-items:center;font-family:'Fraunces',serif;font-weight:600}
+  .mixed .fr{margin-left:.2em;vertical-align:baseline}
+  .blank{display:inline-grid;place-items:center;min-width:2em;border-bottom:2px solid var(--ink);color:var(--red);font-weight:700}
+
+  /* ====== panel & kartu ====== */
+  .panel{background:var(--paper2);border:1.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 rgba(38,34,26,.14);padding:18px 20px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .grid2-uneven{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+  @media(max-width:900px){.grid2,.grid2-uneven{grid-template-columns:1fr}}
+
+  /* ====== bar sel ====== */
+  .cells{display:flex;gap:4px;margin-top:8px}
+  .cells .cell{flex:1;height:34px;border:1.5px solid var(--ink);border-radius:7px;background:transparent}
+  .cells .cell.on{background:var(--red)}
+  .cells .cell.on.g{background:var(--green)}
+
+  /* ====== pie ====== */
+  .pie{width:min(340px,72vw);display:block;margin:0 auto}
+  .pie path{fill:#F1DCAC;stroke:var(--ink);stroke-width:2.5;cursor:pointer;transition:transform .15s;transform-box:fill-box;transform-origin:center}
+  .pie path:hover{transform:scale(1.05)}
+  .pie path.s-a{fill:var(--red)} .pie path.s-b{fill:var(--green)}
+
+  /* legend & baris data */
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;font-weight:600;margin-top:10px}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:4px;border:1.5px solid var(--ink);vertical-align:-1px;margin-right:6px}
+  .dot.a{background:var(--red)} .dot.b{background:var(--green)}
+  .statline{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:14.5px}
+  .statline b{font-size:17px}
+
+  /* gelas jus */
+  .glass{width:150px;height:220px;margin:6px auto;border:2.5px solid var(--ink);border-top-width:2px;border-radius:8px 8px 16px 16px;
+    display:flex;flex-direction:column-reverse;padding:5px;gap:4px;background:var(--paper2);cursor:pointer}
+  .glass .jcell{flex:1;border:1.5px dashed var(--line);border-radius:5px;transition:.25s}
+  .glass .jcell.full{background:var(--gold);border:1.5px solid var(--ink);animation:pour .4s}
+  @keyframes pour{from{transform:scaleY(.1);opacity:.2}}
+
+  /* ====== lab pecahan ====== */
+  .lab-row{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center;margin-bottom:14px}
+  @media(max-width:760px){.lab-row{grid-template-columns:1fr}}
+  .lab-lab{font-weight:700;font-size:14px}
+  .lab-lab small{display:block;font-weight:500;color:var(--ink2);font-size:11.5px}
+  .pbar{display:flex;gap:5px;height:52px}
+  .pbar .cell{flex:1;border:1.5px solid var(--ink);border-radius:8px;cursor:pointer;transition:background .15s,transform .15s;background:transparent}
+  .pbar .cell:hover{transform:translateY(-2px)}
+  .pbar .cell.onA{background:var(--red)} .pbar .cell.onB{background:var(--green)}
+  select{
+    font:inherit;font-size:13.5px;font-weight:600;border:1.5px solid var(--ink);border-radius:9px;
+    padding:6px 8px;background:var(--paper2);cursor:pointer;margin-top:6px;
+  }
+  .seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--paper2)}
+  .seg button{border:0;background:none;padding:9px 20px;font-weight:700;cursor:pointer;font-size:14px;display:inline-flex;gap:7px;align-items:center;color:var(--ink)}
+  .seg button.on{background:var(--ink);color:var(--paper)}
+  .seg button svg{width:15px;height:15px}
+  .rbar{display:flex;gap:4px;height:46px;margin-top:8px}
+  .rbar .rc{flex:1;border:1.5px solid var(--ink);border-radius:7px;background:transparent}
+  .rc.pop-a{background:var(--red);animation:pop .4s backwards}
+  .rc.pop-b{background:var(--green);animation:pop .4s backwards}
+  .rc.pop-r{background:var(--gold);animation:pop .4s backwards}
+  .rc.cut-b{background:var(--green);animation:cutAway .7s backwards}
+  @keyframes pop{from{transform:scaleY(.15);opacity:0}}
+  @keyframes cutAway{0%{background:var(--green);opacity:1}55%{background:var(--green);opacity:1}100%{background:transparent;opacity:.25}}
+  .lab-eq{font-size:clamp(18px,2.4vw,26px);font-family:'Fraunces',serif;font-weight:600;margin:14px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .lab-note{font-size:13.5px;color:var(--ink2);margin-top:8px;line-height:1.5}
+  .lab-note b{color:var(--ink)}
+
+  /* ====== stepper ====== */
+  .steps{list-style:none;display:flex;flex-direction:column;gap:9px;margin:14px 0}
+  .step{display:flex;gap:12px;align-items:flex-start;background:var(--paper2);border:1.5px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:12px;padding:11px 14px;font-size:15px;line-height:1.55;animation:stepIn .45s backwards}
+  .step .sn{flex:none;width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:13px;background:var(--gold-soft)}
+  @keyframes stepIn{from{opacity:0;transform:translateY(10px)}}
+  .step-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .st-count{font-size:12.5px;font-weight:600;color:var(--ink2);margin-left:auto;letter-spacing:.06em}
+  .chipbtn{border:1.5px solid var(--ink);background:var(--paper2);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13.5px;cursor:pointer;transition:.15s}
+  .chipbtn:hover{transform:translateY(-1px)}
+  .chipbtn.on{background:var(--ink);color:var(--paper)}
+  .twin-col h3{font-size:16px;margin-bottom:2px}
+  .twin-col .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--red);margin-bottom:4px;display:block}
+
+  /* ====== latihan ====== */
+  .ex{border-top:2.5px solid var(--ink);margin-top:8px}
+  .ex-top{display:flex;align-items:center;gap:12px;padding:13px 2px;flex-wrap:wrap}
+  .ex-top h3{font-size:17px}
+  .ex-counter{margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);
+    border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--paper2)}
+  .exq{padding:16px 0 18px;border-bottom:1px dashed var(--line)}
+  .exq-grid{display:grid;grid-template-columns:44px 1fr;gap:14px}
+  .exq-num{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;
+    font-family:'Fraunces',serif;font-weight:700;font-size:16px;background:var(--gold-soft)}
+  .exq-text{font-size:15.5px;line-height:1.6;margin-bottom:12px}
+  .exq-text .cells{max-width:420px}
+  .ansrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .ansin{
+    font:inherit;font-family:'Fraunces',serif;font-size:17px;font-weight:600;width:200px;
+    border:1.5px solid var(--ink);border-radius:10px;padding:9px 13px;background:var(--paper2);
+  }
+  .ansin:focus{outline:2.5px solid var(--gold);outline-offset:1px}
+  .ansin.good{border-color:var(--green);background:var(--green-soft)}
+  .ansin::placeholder{color:#B3A88E;font-weight:500;font-size:13.5px;font-family:'Space Grotesk'}
+  .unit{font-size:13.5px;color:var(--ink2);font-weight:600}
+  .exq-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px;margin-bottom:12px}
+  .choice{display:flex;gap:10px;align-items:center;text-align:left;border:1.5px solid var(--line);border-radius:12px;
+    padding:9px 12px;background:var(--paper2);cursor:pointer;font-size:14.5px;transition:.13s;color:var(--ink)}
+  .choice:hover{border-color:var(--ink)}
+  .choice .cl{flex:none;width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:13px}
+  .choice.sel{border-color:var(--ink);box-shadow:2.5px 2.5px 0 rgba(38,34,26,.2)}
+  .choice.correct{border-color:var(--green);background:var(--green-soft)}
+  .choice.correct .cl{background:var(--green);color:#fff;border-color:var(--green)}
+  .choice.wrong{border-color:var(--red);background:var(--red-soft)}
+  .choice.wrong .cl{background:var(--red);color:#fff;border-color:var(--red)}
+  .fb{display:none;align-items:center;gap:9px;margin-top:11px;font-weight:600;font-size:14px;padding:9px 13px;border-radius:11px}
+  .fb.show{display:flex;animation:stepIn .35s}
+  .fb svg{width:19px;height:19px;flex:none}
+  .fb.ok{background:var(--green-soft);color:var(--green);border:1.5px solid var(--green)}
+  .fb.no{background:var(--red-soft);color:var(--red);border:1.5px solid var(--red)}
+  .explain{display:none;margin-top:12px;border-left:4px solid var(--gold);background:var(--gold-soft);border-radius:0 12px 12px 0;padding:13px 16px;font-size:14.5px;line-height:1.7}
+  .explain.open{display:block;animation:stepIn .35s}
+  .explain b{color:var(--ink)}
+  .explain .et{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:5px}
+
+  /* ====== tujuan ====== */
+  .goal{display:grid;grid-template-columns:88px 1fr;gap:18px;align-items:start;padding:20px 0;border-bottom:1px solid var(--line)}
+  .goal .gn{font-family:'Fraunces',serif;font-size:44px;font-weight:700;color:var(--red);line-height:1}
+  .goal h3{font-size:18px;margin-bottom:5px}
+  .goal p{color:var(--ink2);font-size:14.5px;line-height:1.55}
+
+  /* ====== rapor ====== */
+  .res-row{display:grid;grid-template-columns:1fr 110px 220px;gap:14px;align-items:center;padding:13px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+  @media(max-width:700px){.res-row{grid-template-columns:1fr 70px}.res-row .res-track{display:none}}
+  .res-track{height:12px;border:1.5px solid var(--ink);border-radius:999px;background:var(--paper2);overflow:hidden}
+  .res-fill{height:100%;background:var(--green);width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+  .res-fill.mid{background:var(--gold)} .res-fill.low{background:var(--red)}
+  .res-num{font-family:'Fraunces',serif;font-weight:700;font-size:17px;text-align:right}
+  .res-total{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:20px 0 8px}
+  .res-total .big{font-family:'Fraunces',serif;font-size:clamp(46px,7vw,76px);font-weight:800;line-height:1;color:var(--red)}
+  .res-msg{font-family:'Caveat',cursive;font-size:26px;color:var(--green);transform:rotate(-1deg)}
+
+  /* ====== kesimpulan & refleksi ====== */
+  .rule{display:grid;grid-template-columns:60px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
+  .rule .rn{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:12px;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;background:var(--paper2);box-shadow:2.5px 2.5px 0 rgba(38,34,26,.18)}
+  .rule h3{font-size:16.5px;margin-bottom:4px}
+  .rule p{font-size:14.5px;color:var(--ink2);line-height:1.6}
+  .rule p b{color:var(--ink)}
+  textarea{
+    width:100%;min-height:86px;font:inherit;font-size:14.5px;border:1.5px solid var(--ink);border-radius:12px;
+    padding:12px 14px;background:var(--paper2);resize:vertical;
+  }
+  textarea:focus{outline:2.5px solid var(--gold);outline-offset:1px}
+  .scale{display:flex;gap:10px;margin:8px 0 4px}
+  .scale button{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper2);
+    font-family:'Fraunces',serif;font-weight:700;font-size:17px;cursor:pointer;transition:.13s;color:var(--ink)}
+  .scale button:hover{transform:translateY(-2px)}
+  .scale button.on{background:var(--red);color:#FFF7EC;border-color:var(--red)}
+
+  /* ====== cover & penutup ====== */
+  .cover-grid{display:grid;grid-template-columns:1.2fr .9fr;gap:36px;align-items:center;flex:1}
+  @media(max-width:900px){.cover-grid{grid-template-columns:1fr}}
+  .cover-title{font-size:clamp(38px,5.6vw,68px);font-weight:800;line-height:1.02;letter-spacing:-.015em;margin:14px 0 18px}
+  .cover-title em{font-style:italic;color:var(--red)}
+  .cover-eq{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(20px,2.6vw,30px);margin-top:14px;min-height:44px}
+
+  /* ====== toast ====== */
+  #toasts{position:fixed;bottom:76px;right:20px;z-index:90;display:flex;flex-direction:column;gap:9px}
+  .toast{background:var(--ink);color:var(--paper);border-radius:12px;padding:11px 16px;font-size:13.5px;font-weight:600;
+    box-shadow:4px 4px 0 rgba(38,34,26,.25);animation:stepIn .3s;max-width:320px;display:flex;gap:9px;align-items:center}
+  .toast svg{width:17px;height:17px;flex:none;color:var(--gold)}
+  .toast.out{opacity:0;transform:translateY(8px);transition:.3s}
+
+  ::selection{background:var(--gold);color:#fff}
+  @media(max-width:640px){
+    .slide{padding:70px 14px 72px}
+    .chip{display:none}
+    .btn .btxt{display:none}
+    .deckbar{gap:8px}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="progressBar"></div></div>
+
+<header class="topbar">
+  <button class="iconbtn" id="menuBtn" title="Daftar isi"><i data-lucide="list"></i></button>
+  <div class="brand">Matematika <span>Kelas V</span> · Bilangan Pecahan</div>
+  <div class="chip" id="chipNow">Sampul</div>
+</header>
+
+<aside id="menu">
+  <div class="menu-head"><b>Daftar Isi</b><button class="iconbtn" id="menuClose"><i data-lucide="x"></i></button></div>
+  <ol id="menuList"></ol>
+</aside>
+
+<main id="deck">
+
+<!-- ============ 1. COVER ============ -->
+<section class="slide" data-title="Sampul">
+  <div class="wrap">
+    <div class="cover-grid">
+      <div>
+        <div class="kicker">Matematika · Kelas V Sekolah Dasar</div>
+        <h1 class="cover-title">Penjumlahan &amp; Pengurangan <em>Pecahan</em></h1>
+        <p class="lead">Menghitung bagian-bagian dari sebuah keseluruhan — mulai dari potongan pizza di meja makan sampai pecahan campuran di buku latihan. Presentasi ini penuh interaksi: klik, geser, jawab, dan pantau rapormu sendiri.</p>
+        <div class="cover-eq" id="coverEq">Klik potongan pie di samping →</div>
+        <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="startBtn"><i data-lucide="play"></i> Mulai Belajar</button>
+          <span class="hand">24 slide seru menantimu!</span>
+        </div>
+      </div>
+      <div class="panel" style="text-align:center">
+        <svg class="pie" id="coverPie" viewBox="-112 -112 224 224"></svg>
+        <div class="legend"><span><span class="dot a"></span>Porsi pertama</span><span><span class="dot b"></span>Porsi kedua</span></div>
+        <button class="btn btn-sm ghost" id="coverReset" style="margin-top:10px"><i data-lucide="rotate-ccw"></i> <span class="btxt">Kosongkan pie</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. KEHIDUPAN SEHARI-HARI: PIZZA ============ -->
+<section class="slide" data-title="Pizza — Berbagi Bersama">
+  <div class="wrap">
+    <div class="kicker">Dari kehidupan sehari-hari · 1 dari 2</div>
+    <h2 class="s-title">Berbagi Satu Pizza</h2>
+    <p class="lead">Sore ini keluarga membeli <b>satu pizza utuh</b> yang dipotong menjadi <b>8 bagian sama besar</b>. Setiap potongan bernilai <b>1/8</b>. Cobalah sendiri: klik potongan pizza — sekali untuk porsi <b style="color:var(--red)">Adik</b>, dua kali untuk porsi <b style="color:var(--green)">Kakak</b>, tiga kali untuk mengosongkannya lagi.</p>
+    <div class="s-body">
+      <div class="grid2-uneven" style="margin-top:16px">
+        <div class="panel" style="text-align:center">
+          <svg class="pie" id="pizzaSvg" viewBox="-112 -112 224 224" style="width:min(320px,68vw)"></svg>
+          <div class="legend" style="justify-content:center"><span><span class="dot a"></span>Porsi Adik</span><span><span class="dot b"></span>Porsi Kakak</span></div>
+          <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+            <button class="btn btn-sm chipbtn pz-preset" data-a="3" data-b="2">Skenario: Adik 3, Kakak 2</button>
+            <button class="btn btn-sm chipbtn pz-preset" data-a="1" data-b="4">Skenario: Adik 1, Kakak 4</button>
+            <button class="btn btn-sm ghost" id="pzReset"><i data-lucide="rotate-ccw"></i> Kosongkan</button>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <div class="statline"><span>Porsi Adik</span><b id="pzA" style="color:var(--red)">0/8</b></div>
+            <div class="statline"><span>Porsi Kakak</span><b id="pzB" style="color:var(--green)">0/8</b></div>
+            <div class="statline"><span>Total yang dimakan keduanya</span><b id="pzSum">0/8</b></div>
+            <div class="statline" style="border-bottom:0"><span>Sisa pizza di kotak</span><b id="pzSisa">8/8</b></div>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <span class="tag" style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--red)">Penulisan matematikanya</span>
+            <div class="lab-eq" id="pzEq" style="margin-top:6px">—</div>
+            <p class="lab-note">Perhatikan: penyebutnya <b>tetap 8</b> karena potongannya sama besar — kita hanya menghitung berapa potongan yang diambil.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. KEHIDUPAN SEHARI-HARI: JUS ============ -->
+<section class="slide" data-title="Jus — Minum Bertahap">
+  <div class="wrap">
+    <div class="kicker">Dari kehidupan sehari-hari · 2 dari 2</div>
+    <h2 class="s-title">Segelas Jus Jeruk yang Berkurang</h2>
+    <p class="lead">Sekarang kebalikannya: sesuatu yang <b>berkurang</b>. Segelas jus jeruk di bagi menjadi <b>4 bagian sama besar</b>, tiap bagian bernilai <b>1/4</b>. Klik gelas untuk mengatur sisa jus, atau tekan tombol <b>Minum satu bagian</b> dan amati bagaimana pengurangan terjadi.</p>
+    <div class="s-body">
+      <div class="grid2-uneven" style="margin-top:16px">
+        <div class="panel" style="text-align:center">
+          <div class="glass" id="juiceCells"></div>
+          <p class="hand" style="font-size:19px;margin-top:6px">klik gelas untuk mengatur sisa jus</p>
+          <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+            <button class="btn btn-sm btn-primary" id="jDrink"><i data-lucide="cup-soda"></i> Minum satu bagian</button>
+            <button class="btn btn-sm" id="jFull"><i data-lucide="rotate-ccw"></i> Isi penuh</button>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <div class="statline"><span>Jus mula-mula</span><b>4/4 gelas</b></div>
+            <div class="statline"><span>Yang diminum</span><b id="jMinum" style="color:var(--red)">0/4</b></div>
+            <div class="statline" style="border-bottom:0"><span>Sisa jus di gelas</span><b id="jSisa" style="color:var(--green)">4/4</b></div>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <span class="tag" style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--red)">Penulisan matematikanya</span>
+            <div class="lab-eq" id="jEq" style="margin-top:6px">—</div>
+            <p class="lab-note">Inilah <b>pengurangan pecahan</b>: dari keseluruhan (4/4) kita ambil sebanyak bagian yang diminum. Penyebut tetap 4, pembilangnya yang berkurang.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. TUJUAN ============ -->
+<section class="slide" data-title="Tujuan Pembelajaran">
+  <div class="wrap">
+    <div class="kicker">Sebelum berangkat</div>
+    <h2 class="s-title">Tujuan Pembelajaran</h2>
+    <p class="lead">Setelah mengikuti seluruh presentasi ini, kamu diharapkan mampu: <span class="hand">baca pelan-pelan, ya!</span></p>
+    <div class="s-body">
+      <div class="goal"><div class="gn">01</div><div><h3>Memahami makna operasi pecahan secara konkret</h3><p>Menjelaskan penjumlahan dan pengurangan pecahan menggunakan benda nyata, gambar, dan diagram bagian-bagian.</p></div></div>
+      <div class="goal"><div class="gn">02</div><div><h3>Mengoperasikan pecahan senama dan beda penyebut</h3><p>Menghitung hasil tambah-kurang pecahan dengan penyebut sama, serta menyamakan penyebut menggunakan KPK untuk pecahan yang berbeda.</p></div></div>
+      <div class="goal"><div class="gn">03</div><div><h3>Mengoperasikan pecahan campuran dengan dua cara</h3><p>Menghitung campuran ± campuran melalui pengubahan ke pecahan biasa, maupun dengan memisahkan bagian cacah dan pecahannya.</p></div></div>
+      <div class="goal"><div class="gn">04</div><div><h3>Mengoperasikan bilangan cacah dengan pecahan</h3><p>Menghitung bentuk seperti 5 − 1/2 dengan mengubah bilangan cacah menjadi pecahan atau dengan strategi meminjam 1.</p></div></div>
+      <div class="goal" style="border-bottom:0"><div class="gn">05</div><div><h3>Memecahkan masalah sehari-hari</h3><p>Menerjemahkan soal cerita ke dalam model pecahan, menghitungnya, dan menuliskan kesimpulannya dengan satuan yang tepat.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. REVIEW 1 ============ -->
+<section class="slide" data-title="Review · Membentuk Pecahan">
+  <div class="wrap">
+    <div class="kicker">Pemanasan · Review 1 dari 5</div>
+    <h2 class="s-title">Membentuk Pecahan</h2>
+    <p class="lead"><b>Pecahan</b> menyatakan <b>bagian dari keseluruhan yang dibagi sama besar</b>. Angka di atas (pembilang) = banyak bagian yang diambil; angka di bawah (penyebut) = banyak seluruh bagian. Contoh: batang di bawah menunjukkan
+      <span class="fr"><span class="fr-n">3</span><span class="fr-d">8</span></span> — tiga dari delapan bagian.</p>
+    <div class="s-body">
+      <div class="panel" style="max-width:460px"><div class="cells" id="rvBar1"></div></div>
+      <div class="ex" id="exR1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. REVIEW 2 ============ -->
+<section class="slide" data-title="Review · Pecahan Senilai">
+  <div class="wrap">
+    <div class="kicker">Pemanasan · Review 2 dari 5</div>
+    <h2 class="s-title">Pecahan Senilai</h2>
+    <p class="lead">Dua pecahan <b>senilai</b> jika nilainya sama meski bentuknya berbeda. Dapatkan dengan <b>mengalikan atau membagi</b> pembilang dan penyebut dengan bilangan yang sama. Lihat:
+      <span class="fr"><span class="fr-n">1</span><span class="fr-d">2</span></span> = <span class="fr"><span class="fr-n">2</span><span class="fr-d">4</span></span> = <span class="fr"><span class="fr-n">4</span><span class="fr-d">8</span></span> — ketiganya menempati separuh batang yang sama.</p>
+    <div class="s-body">
+      <div class="panel" style="max-width:560px;display:grid;gap:10px">
+        <div style="display:flex;align-items:center;gap:14px"><b class="serif" style="width:74px">1/2</b><div class="cells" style="flex:1" id="rvBar2a"></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><b class="serif" style="width:74px">2/4</b><div class="cells" style="flex:1" id="rvBar2b"></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><b class="serif" style="width:74px">4/8</b><div class="cells" style="flex:1" id="rvBar2c"></div></div>
+      </div>
+      <div class="ex" id="exR2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. REVIEW 3 ============ -->
+<section class="slide" data-title="Review · Biasa ↔ Campuran">
+  <div class="wrap">
+    <div class="kicker">Pemanasan · Review 3 dari 5</div>
+    <h2 class="s-title">Pecahan Biasa ↔ Pecahan Campuran</h2>
+    <p class="lead"><b>Biasa → campuran:</b> bagi pembilang dengan penyebut — hasil bagi jadi bilangan cacah, sisanya jadi pembilang baru.
+      <span class="fr"><span class="fr-n">7</span><span class="fr-d">3</span></span> = 7 ÷ 3 = 2 sisa 1 = <span class="mixed">2<span class="fr"><span class="fr-n">1</span><span class="fr-d">3</span></span></span>.
+      <b>Campuran → biasa:</b> (cacah × penyebut) + pembilang:
+      <span class="mixed">2<span class="fr"><span class="fr-n">1</span><span class="fr-d">6</span></span></span> = <span class="fr"><span class="fr-n">13</span><span class="fr-d">6</span></span>.</p>
+    <div class="s-body"><div class="ex" id="exR3"></div></div>
+  </div>
+</section>
+
+<!-- ============ 8. REVIEW 4 ============ -->
+<section class="slide" data-title="Review · Membandingkan Pecahan">
+  <div class="wrap">
+    <div class="kicker">Pemanasan · Review 4 dari 5</div>
+    <h2 class="s-title">Membandingkan Pecahan</h2>
+    <p class="lead">Untuk membandingkan, <b>samakan dulu penyebutnya</b>. Misal
+      <span class="fr"><span class="fr-n">2</span><span class="fr-d">3</span></span> dan
+      <span class="fr"><span class="fr-n">3</span><span class="fr-d">5</span></span> → KPK(3,5) = 15, menjadi
+      <span class="fr"><span class="fr-n">10</span><span class="fr-d">15</span></span> dan
+      <span class="fr"><span class="fr-n">9</span><span class="fr-d">15</span></span>. Karena 10 &gt; 9, maka
+      <span class="fr"><span class="fr-n">2</span><span class="fr-d">3</span></span> &gt;
+      <span class="fr"><span class="fr-n">3</span><span class="fr-d">5</span></span>.</p>
+    <div class="s-body"><div class="ex" id="exR4"></div></div>
+  </div>
+</section>
+
+<!-- ============ 9. REVIEW 5 ============ -->
+<section class="slide" data-title="Review · Cacah menjadi Pecahan">
+  <div class="wrap">
+    <div class="kicker">Pemanasan · Review 5 dari 5</div>
+    <h2 class="s-title">Mengubah Bilangan Cacah menjadi Pecahan</h2>
+    <p class="lead">Setiap bilangan cacah <b>n</b> dapat ditulis sebagai
+      <span class="fr"><span class="fr-n">n</span><span class="fr-d">1</span></span>, lalu dikalikan bentuk senilai apa pun:
+      <b>n</b> = <span class="fr"><span class="fr-n">n×k</span><span class="fr-d">k</span></span>. Contoh: 4 =
+      <span class="fr"><span class="fr-n">12</span><span class="fr-d">3</span></span> karena 4 × 3 = 12. Kemampuan ini akan sangat dipakai di materi inti!</p>
+    <div class="s-body"><div class="ex" id="exR5"></div></div>
+  </div>
+</section>
+
+<!-- ============ 10. MATERI A: LAB ============ -->
+<section class="slide" data-title="Lab Pecahan (Visual)" data-hook="lab">
+  <div class="wrap">
+    <div class="kicker">Materi inti · 1 dari 4</div>
+    <h2 class="s-title">Laboratorium Pecahan — Lihat Operasinya!</h2>
+    <p class="lead">Sebelum menulis simbol, kita <b>melihatnya dulu</b>. Atur bar A dan bar B: pilih penyebut, lalu <b>klik sel-sel bar</b> untuk mengisi bagian. Pilih operasi, tekan <b>Lakukan!</b>, dan perhatikan bagaimana potongan-potongan bergabung (atau diambil) di bar hasil.</p>
+    <div class="s-body">
+      <div class="panel" style="margin-top:14px">
+        <div class="lab-row">
+          <div class="lab-lab">Bar A <small>Pecahan pertama</small><select id="labSA"></select></div>
+          <div><div class="pbar" id="labBarA"></div><div class="lab-eq" id="labFrA" style="font-size:19px;margin:6px 0 0"></div></div>
+        </div>
+        <div class="lab-row">
+          <div class="lab-lab">Bar B <small>Pecahan kedua</small><select id="labSB"></select></div>
+          <div><div class="pbar" id="labBarB"></div><div class="lab-eq" id="labFrB" style="font-size:19px;margin:6px 0 0"></div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px">
+          <div class="seg" id="labOps">
+            <button data-op="add" class="on"><i data-lucide="plus"></i> Jumlahkan</button>
+            <button data-op="sub"><i data-lucide="minus"></i> Kurangkan</button>
+          </div>
+          <button class="btn btn-primary" id="labRun"><i data-lucide="zap"></i> Lakukan!</button>
+          <button class="btn ghost" id="labReset"><i data-lucide="rotate-ccw"></i> Atur ulang</button>
+        </div>
+      </div>
+      <div id="labOut" style="margin-top:16px"></div>
+      <p class="lab-note" style="margin-top:14px"><b>Catatan penting:</b> penyebut menentukan <b>ukuran potongan</b>. Jika penyebut A dan B berbeda, potongan tidak bisa langsung digabung — laboratorium ini otomatis <b>membagi ulang keduanya menjadi potongan seukuran KPK</b>, persis seperti yang akan kita lakukan dengan angka di slide berikutnya.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. LATIHAN A ============ -->
+<section class="slide" data-title="Latihan 1 · Pecahan Senama">
+  <div class="wrap">
+    <div class="kicker">Latihan langsung · setelah materi visual</div>
+    <h2 class="s-title">Latihan 1 — Pecahan dengan Penyebut Sama</h2>
+    <p class="lead">Kunci utamanya: <b>penyebut tetap, pembilang yang dijumlah atau dikurangkan</b>. Tulis jawabanmu, lalu tekan <b>Cek Jawaban</b>; butuh bantuan? Buka <b>Pembahasan</b>. Contoh penulisan jawaban: <b>3/8</b> (pecahan biasa) atau <b>1 2/5</b> (pecahan campuran).</p>
+    <div class="s-body"><div class="ex" id="exA"></div></div>
+  </div>
+</section>
+
+<!-- ============ 12. MATERI B: BENTUK MATEMATIS ============ -->
+<section class="slide" data-title="Materi · Bentuk Matematis">
+  <div class="wrap">
+    <div class="kicker">Materi inti · 2 dari 4</div>
+    <h2 class="s-title">Menulisnya dengan Angka</h2>
+    <div class="s-body" style="margin-top:4px">
+      <div class="panel" style="margin-bottom:18px">
+        <h3 style="font-size:17px;margin-bottom:8px">Dua aturan dasar</h3>
+        <div class="grid2">
+          <div>
+            <span class="tag" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--green)">Penyebut sama (senama)</span>
+            <p style="font-size:14.5px;line-height:1.6">Jumlahkan / kurangkan <b>pembilangnya</b>, penyebut tetap:
+              <span class="fr"><span class="fr-n">2</span><span class="fr-d">7</span></span> + <span class="fr"><span class="fr-n">3</span><span class="fr-d">7</span></span> = <span class="fr"><span class="fr-n">5</span><span class="fr-d">7</span></span></p>
+          </div>
+          <div>
+            <span class="tag" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--red)">Penyebut berbeda</span>
+            <p style="font-size:14.5px;line-height:1.6"><b>Samakan dulu</b> dengan KPK → ubah ke pecahan senilai → baru jumlahkan / kurangkan. Urutannya selalu begini!</p>
+          </div>
+        </div>
+      </div>
+      <h3 style="font-size:18px;margin-bottom:6px">Stepper: beda penyebut, langkah demi langkah</h3>
+      <p style="font-size:14px;color:var(--ink2);margin-bottom:10px">Pilih contoh, lalu tekan <b>Langkah berikutnya</b> berulang kali dan baca setiap alasannya.</p>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:4px" id="mbChips"></div>
+      <div id="mbBox"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13. LATIHAN B ============ -->
+<section class="slide" data-title="Latihan 2 · Beda Penyebut">
+  <div class="wrap">
+    <div class="kicker">Latihan langsung · setelah materi bentuk matematis</div>
+    <h2 class="s-title">Latihan 2 — Pecahan Beda Penyebut</h2>
+    <p class="lead">Ingat ritmenya: <b>cari KPK → ubah ke pecahan senilai → hitung → sederhanakan</b> (jika bisa). Tulis hasil <b>paling sederhana</b>, misalnya 2/3 alih-alih 4/6.</p>
+    <div class="s-body"><div class="ex" id="exB"></div></div>
+  </div>
+</section>
+
+<!-- ============ 14. MATERI C: CAMPURAN ============ -->
+<section class="slide" data-title="Materi · Pecahan Campuran">
+  <div class="wrap">
+    <div class="kicker">Materi inti · 3 dari 4</div>
+    <h2 class="s-title">Campuran ± Campuran: Dua Jalan, Satu Tujuan</h2>
+    <div class="s-body" style="margin-top:4px">
+      <p style="font-size:14.5px;color:var(--ink2);margin-bottom:12px">Ada dua cara yang sama-sama benar. Pilih contoh di bawah, lalu jalankan stepper — kedua kolom maju <b>beriringan</b>, jadi kamu bisa membandingkan kedua cara untuk langkah yang sama.</p>
+      <div id="mcBox"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 15. LATIHAN C ============ -->
+<section class="slide" data-title="Latihan 3 · Campuran">
+  <div class="wrap">
+    <div class="kicker">Latihan langsung · setelah materi pecahan campuran</div>
+    <h2 class="s-title">Latihan 3 — Pecahan Campuran</h2>
+    <p class="lead">Pakai cara mana pun yang paling nyaman — <b>ubah ke pecahan biasa</b> atau <b>pisahkan cacah dan pecahannya</b>. Kalau pecahannya "tidak cukup" saat dikurangkan, ingat trik <b>meminjam 1</b>!</p>
+    <div class="s-body"><div class="ex" id="exC"></div></div>
+  </div>
+</section>
+
+<!-- ============ 16. MATERI D: CACAH ± PECAHAN ============ -->
+<section class="slide" data-title="Materi · Cacah ± Pecahan">
+  <div class="wrap">
+    <div class="kicker">Materi inti · 4 dari 4</div>
+    <h2 class="s-title">Bilangan Cacah ± Pecahan</h2>
+    <div class="s-body" style="margin-top:4px">
+      <p style="font-size:14.5px;color:var(--ink2);margin-bottom:12px">Dua kasus paling sering muncul. Jalankan masing-masing stepper untuk melihat akalinya.</p>
+      <div class="grid2">
+        <div class="panel twin-col">
+          <span class="tag">Kasus 1 · Penjumlahan</span>
+          <h3>4 + 1/3 — tinggal "ditempel"</h3>
+          <p style="font-size:13.5px;color:var(--ink2);margin-bottom:6px">Tidak ada pecahan lain untuk disamakan, jadi cacah dan pecahan langsung berdampingan.</p>
+          <div id="md1"></div>
+        </div>
+        <div class="panel twin-col">
+          <span class="tag">Kasus 2 · Pengurangan</span>
+          <h3>5 − 1/2 — butuh sedikit akal</h3>
+          <p style="font-size:13.5px;color:var(--ink2);margin-bottom:6px">5 tidak punya bagian pecahan, jadi kita "memecah" 5 menjadi pecahan yang sepenyebut.</p>
+          <div id="md2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 17. LATIHAN D ============ -->
+<section class="slide" data-title="Latihan 4 · Cacah ± Pecahan">
+  <div class="wrap">
+    <div class="kicker">Latihan langsung · setelah materi cacah ± pecahan</div>
+    <h2 class="s-title">Latihan 4 — Bilangan Cacah ± Pecahan</h2>
+    <p class="lead">Jawaban boleh ditulis sebagai <b>pecahan campuran</b> (contoh penulisan: <b>1 2/5</b>) atau <b>pecahan biasa</b> (contoh penulisan: <b>7/5</b>) — keduanya dianggap benar selama nilainya sama.</p>
+    <div class="s-body"><div class="ex" id="exD"></div></div>
+  </div>
+</section>
+
+<!-- ============ 18. SOAL CERITA: CONTOH ============ -->
+<section class="slide" data-title="Soal Cerita · Contoh">
+  <div class="wrap">
+    <div class="kicker">Soal cerita</div>
+    <h2 class="s-title">Membaca Cerita, Menulis Pecahan</h2>
+    <div class="s-body" style="margin-top:4px">
+      <div class="panel" style="margin-bottom:18px">
+        <h3 style="font-size:17px;margin-bottom:10px">Strategi 3 langkah (selalu berhasil!)</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+          <div><b class="serif" style="color:var(--red);font-size:20px">1.</b> <b>Pahami &amp; tandai.</b><p style="font-size:13.5px;color:var(--ink2);margin-top:3px">Apa yang diketahui? Apa yang ditanya? Garis bawahi semua pecahan dan satuannya.</p></div>
+          <div><b class="serif" style="color:var(--red);font-size:20px">2.</b> <b>Tulis model.</b><p style="font-size:13.5px;color:var(--ink2);margin-top:3px">Terjemahkan cerita menjadi operasi matematika: digabung → tambah, diambil/sisa → kurang.</p></div>
+          <div><b class="serif" style="color:var(--red);font-size:20px">3.</b> <b>Hitung &amp; simpulkan.</b><p style="font-size:13.5px;color:var(--ink2);margin-top:3px">Kerjakan, sederhanakan, dan tulis jawaban lengkap dengan kalimat + satuan.</p></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel twin-col">
+          <span class="tag">Contoh 1 · Pengurangan</span>
+          <h3 style="font-size:15.5px">Sisa gula Ibu</h3>
+          <p style="font-size:13.5px;color:var(--ink2);margin-bottom:4px">Ibu membeli 2 1/2 kg gula. Untuk membuat kue terpakai 3/4 kg. Berapa kg sisa gula Ibu?</p>
+          <div id="st1"></div>
+        </div>
+        <div class="panel twin-col">
+          <span class="tag">Contoh 2 · Penjumlahan</span>
+          <h3 style="font-size:15.5px">Jarak lari Andi</h3>
+          <p style="font-size:13.5px;color:var(--ink2);margin-bottom:4px">Andi berlari 1 1/4 km, lalu berjalan 2/5 km lagi. Berapa km jarak seluruh perjalanan Andi?</p>
+          <div id="st2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 19-20. SOAL CERITA PG ============ -->
+<section class="slide" data-title="Soal Cerita · Soal 1–5">
+  <div class="wrap">
+    <div class="kicker">Soal cerita · pilihan ganda 1–5 dari 10</div>
+    <h2 class="s-title">Uji Kemampuanmu: Soal Cerita</h2>
+    <p class="lead">Pilih satu jawaban yang paling tepat untuk tiap soal, lalu tekan <b>Cek Jawaban</b>. Pembahasan otomatis terbuka setelah kamu menjawab.</p>
+    <div class="s-body"><div class="ex" id="story1"></div></div>
+  </div>
+</section>
+<section class="slide" data-title="Soal Cerita · Soal 6–10">
+  <div class="wrap">
+    <div class="kicker">Soal cerita · pilihan ganda 6–10 dari 10</div>
+    <h2 class="s-title">Uji Kemampuanmu: Lanjutan</h2>
+    <p class="lead">Lima soal terakhir — banyak yang menggabungkan pecahan campuran. Tetap tenang dan pakai strategi 3 langkah.</p>
+    <div class="s-body"><div class="ex" id="story2"></div></div>
+  </div>
+</section>
+
+<!-- ============ 21. HASIL ============ -->
+<section class="slide" data-title="Rapor Latihan" data-hook="results">
+  <div class="wrap">
+    <div class="kicker">Bagian penutup · 1 dari 4</div>
+    <h2 class="s-title">Rapor Latihanmu</h2>
+    <p class="lead">Semua jawaban yang kamu periksa terkumpul di sini. Skor dihitung dari jawaban yang <b>benar</b> — kamu boleh membuka soal lagi dan memperbaikinya, rapor akan ikut diperbarui.</p>
+    <div class="s-body">
+      <div class="res-total"><span class="big" id="resScore">–</span>
+        <div><div id="resOf" style="font-weight:700;font-size:16px"></div><div class="res-msg" id="resMsg"></div></div>
+      </div>
+      <div id="resRows" style="margin-bottom:18px"></div>
+      <button class="btn" id="resReset"><i data-lucide="rotate-ccw"></i> Ulangi semua latihan dari nol</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 22. KESIMPULAN ============ -->
+<section class="slide" data-title="Kesimpulan">
+  <div class="wrap">
+    <div class="kicker">Bagian penutup · 2 dari 4</div>
+    <h2 class="s-title">Kesimpulan: Simpan di Ingatanmu</h2>
+    <div class="s-body" style="margin-top:4px">
+      <div class="rule"><div class="rn">1</div><div><h3>Penyebut sama → langsung hitung pembilang</h3><p><b>a/c + b/c = (a+b)/c</b> dan <b>a/c − b/c = (a−b)/c</b>. Penyebut tidak pernah ikut dijumlahkan — ia hanya nama ukuran potongan.</p></div></div>
+      <div class="rule"><div class="rn">2</div><div><h3>Penyebut beda → samakan dengan KPK dulu</h3><p>Ubah tiap pecahan menjadi <b>pecahan senilai</b> berpenyebut KPK, baru dijumlahkan atau dikurangkan, lalu <b>sederhanakan</b> hasilnya.</p></div></div>
+      <div class="rule"><div class="rn">3</div><div><h3>Campuran ± campuran → dua jalan sah</h3><p>Cara 1: ubah semua ke <b>pecahan biasa</b>, hitung, kembalikan ke campuran. Cara 2: <b>pisahkan</b> cacah dengan pecahan, hitung terpisah. Jika bagian pecahan kurang, <b>pinjam 1</b> dari cacahnya.</p></div></div>
+      <div class="rule"><div class="rn">4</div><div><h3>Cacah ± pecahan → cacah jadi pecahan</h3><p>Tulis <b>n = nk/k</b> agar sepenyebut. Untuk penjumlahan murni (mis. 4 + 1/3), cukup menempel: hasilnya <b>4 1/3</b>.</p></div></div>
+      <div class="rule" style="border-bottom:0"><div class="rn">5</div><div><h3>Soal cerita → model dulu, hitung kemudian</h3><p>Digabung/ditambah → <b>penjumlahan</b>; dipakai/dipotong/sisa → <b>pengurangan</b>. Selalu akhiri dengan <b>satuan</b> (kg, km, liter, gelas…).</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 23. REFLEKSI ============ -->
+<section class="slide" data-title="Refleksi" data-hook="reflect">
+  <div class="wrap">
+    <div class="kicker">Bagian penutup · 3 dari 4</div>
+    <h2 class="s-title">Refleksi Diri</h2>
+    <p class="lead">Sebelum pulang, luangkan waktu sejenak. Tidak ada jawaban benar atau salah di sini — ini tentang perjalanan belajarmu hari ini.</p>
+    <div class="s-body">
+      <div class="grid2" style="margin-top:16px">
+        <div class="panel">
+          <label style="font-weight:700;font-size:14.5px">1 · Bagian mana yang paling kamu sukai atau paling membuatmu "akhirnya paham"?</label>
+          <textarea id="rT1" style="margin-top:10px" placeholder="Tulis di sini…"></textarea>
+        </div>
+        <div class="panel">
+          <label style="font-weight:700;font-size:14.5px">2 · Bagian mana yang masih terasa sulit? Apa yang mau kamu tanyakan?</label>
+          <textarea id="rT2" style="margin-top:10px" placeholder="Tulis di sini…"></textarea>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <label style="font-weight:700;font-size:14.5px">3 · Seberapa paham kamu materi hari ini? <span class="hand">jujur saja ya!</span></label>
+        <div class="scale" id="rScale">
+          <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink2)">1 = masih bingung sekali · 3 = paham sebagian · 5 = siap mengajar teman!</p>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;margin-top:18px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="rSave"><i data-lucide="send"></i> Kirim Refleksi</button>
+        <span id="rDone" class="hand" style="display:none">Refleksimu tersimpan. Terima kasih jujur berbagi!</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 24. THANK YOU ============ -->
+<section class="slide" data-title="Terima Kasih">
+  <div class="wrap" style="justify-content:center">
+    <div class="cover-grid">
+      <div>
+        <div class="kicker">Sampai jumpa</div>
+        <h1 class="cover-title">Terima kasih <em>untuk hari ini!</em></h1>
+        <p class="lead">Kamu telah berkeliling dari potongan pizza sampai pecahan campuran — dan membuktikannya lewat 40 soal. Terus berlatih, karena matematika adalah keterampilan yang tumbuh dengan dicoba, bukan dihafal.</p>
+        <p class="hand" style="font-size:26px;margin-top:14px">"Bagian kecil yang digabung dengan benar selalu menjadi utuh."</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+          <button class="btn btn-primary" id="againBtn"><i data-lucide="rotate-ccw"></i> Mulai lagi dari awal</button>
+          <button class="btn" id="seeResBtn"><i data-lucide="clipboard-check"></i> Lihat raporku</button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <svg class="pie" id="endPie" viewBox="-112 -112 224 224" style="width:min(280px,60vw)"></svg>
+        <p class="serif" style="font-weight:700;font-size:18px;margin-top:10px">5/8 + 2/8 = 7/8 — dan sisa 1/8 untukmu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="deckbar">
+  <button class="btn" id="prevBtn"><i data-lucide="chevron-left"></i><span class="btxt">Sebelumnya</span></button>
+  <div class="pager"><small id="pagerTitle">Sampul</small><span id="pagerNum">1 / 24</span></div>
+  <button class="btn" id="nextBtn"><span class="btxt">Berikutnya</span><i data-lucide="chevron-right"></i></button>
+</footer>
+
+<div id="toasts"></div>
+
+<script>
+/* ================= util dasar ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const lcm=(a,b)=>a*b/gcd(a,b);
+
+/* render pecahan & campuran sebagai HTML */
+function fr(n,d){return `<span class="fr"><span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`}
+function mix(w,n,d){return `<span class="mixed">${w}<span class="fr"><span class="fr-n">${n}</span><span class="fr-d">${d}</span></span></span>`}
+
+/* bar sel statis (untuk soal/gambar) */
+function barCells(d,filled,alt){let s='<div class="cells">';for(let i=0;i<d;i++)s+=`<div class="cell ${i<filled?(alt?'on g':'on'):''}"></div>`;return s+'</div>'}
+
+/* parse jawaban: "3/4", "1 1/2", "12", "2.5" → nilai */
+function parseAns(raw){
+  raw=(raw||'').trim().replace(/\s+/g,' ').replace(',','.');
+  if(!raw)return null;
+  let m=raw.match(/^(-?\d+) (\d+)\/(\d+)$/); if(m)return +m[1]+(+m[2])/(+m[3]);
+  m=raw.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/); if(m&&+m[2]!==0)return (+m[1])/(+m[2]);
+  m=raw.match(/^-?\d+(?:\.\d+)?$/); if(m)return parseFloat(raw);
+  return null;
+}
+const near=(a,b)=>Math.abs(a-b)<1e-9;
+
+function toast(msg){
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<i data-lucide="sparkles"></i><span>${msg}</span>`;
+  $('#toasts').appendChild(t);lucide.createIcons();
+  setTimeout(()=>t.classList.add('out'),2600);setTimeout(()=>t.remove(),3000);
+}
+
+/* ================= navigasi slide ================= */
+const slides=$$('.slide');let cur=0;
+const hooks={
+  lab(){ if(!labInit){initLab();labInit=true;} },
+  results(){ renderResults(); },
+  reflect(){ loadReflect(); }
+};
+function show(i){
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');
+  cur=i;
+  const s=slides[cur];
+  s.classList.add('active');
+  s.querySelector('.s-body')&&(s.querySelector('.s-body').scrollTop=0);
+  $('#chipNow').textContent=s.dataset.title;
+  $('#pagerNum').textContent=`${cur+1} / ${slides.length}`;
+  $('#pagerTitle').textContent=s.dataset.title;
+  $('#progressBar').style.width=((cur+1)/slides.length*100)+'%';
+  $$('#menuList li').forEach((li,k)=>li.classList.toggle('on',k===cur));
+  if(s.dataset.hook&&hooks[s.dataset.hook])hooks[s.dataset.hook]();
+}
+ $('#nextBtn').onclick=()=>show(cur+1);
+ $('#prevBtn').onclick=()=>show(cur-1);
+ $('#startBtn').onclick=()=>show(1);
+ $('#againBtn').onclick=()=>show(0);
+ $('#seeResBtn').onclick=()=>show(20);
+ $('#menuBtn').onclick=()=>$('#menu').classList.add('open');
+ $('#menuClose').onclick=()=>$('#menu').classList.remove('open');
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(cur+1)}
+  if(e.key==='ArrowLeft'){e.preventDefault();show(cur-1)}
+  if(e.key==='Escape')$('#menu').classList.remove('open');
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>70&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)===false)show(cur+(dx<0?1:-1));
+},{passive:true});
+slides.forEach((s,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML=`<button><span class="mnum">${String(i+1).padStart(2,'0')}</span><span>${s.dataset.title}</span></button>`;
+  li.querySelector('button').onclick=()=>{show(i);$('#menu').classList.remove('open')};
+  $('#menuList').appendChild(li);
+});
+
+/* ================= pie interaktif ================= */
+function buildPie(svg,n,onCycle){
+  const R=100;let paths='';
+  for(let i=0;i<n;i++){
+    const a1=i/n*2*Math.PI-Math.PI/2,a2=(i+1)/n*2*Math.PI-Math.PI/2;
+    const x1=(R*Math.cos(a1)).toFixed(2),y1=(R*Math.sin(a1)).toFixed(2);
+    const x2=(R*Math.cos(a2)).toFixed(2),y2=(R*Math.sin(a2)).toFixed(2);
+    paths+=`<path data-i="${i}" d="M0 0 L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} Z"/>`;
+  }
+  svg.innerHTML=paths;
+  svg.querySelectorAll('path').forEach(p=>p.addEventListener('click',()=>onCycle(+p.dataset.i,p)));
+}
+/* cover */
+const cov={a:0,b:0};
+function coverDraw(p,cls){
+  p.classList.remove('s-a','s-b');
+  if(cls)p.classList.add(cls);
+}
+function coverEq(){
+  $('#coverEq').innerHTML=(cov.a+cov.b)
+    ? `${fr(cov.a,8)} + ${fr(cov.b,8)} = ${fr(cov.a+cov.b,8)} ${cov.a+cov.b===8?'— utuh sempurna!':''}`
+    : 'Klik potongan pie di samping →';
+}
+buildPie($('#coverPie'),8,(i,p)=>{
+  if(!p.classList.contains('s-a')&&!p.classList.contains('s-b')){cov.a++;coverDraw(p,'s-a')}
+  else if(p.classList.contains('s-a')){cov.a--;cov.b++;coverDraw(p,'s-b')}
+  else{cov.b--;coverDraw(p)}
+  coverEq();
+});
+ $('#coverReset').onclick=()=>{cov.a=0;cov.b=0;$$('#coverPie path').forEach(p=>coverDraw(p));coverEq()};
+
+/* pizza slide */
+const pz={a:0,b:0};
+function pzDraw(p){p.classList.remove('s-a','s-b');const c=p.dataset.c;if(c)p.classList.add(c)}
+function pzUpdate(){
+  $('#pzA').textContent=`${pz.a}/8`;$('#pzB').textContent=`${pz.b}/8`;
+  $('#pzSum').textContent=`${pz.a+pz.b}/8`;$('#pzSisa').textContent=`${8-pz.a-pz.b}/8`;
+  $('#pzEq').innerHTML=(pz.a+pz.b)
+    ? `${fr(pz.a,8)} + ${fr(pz.b,8)} = ${fr(pz.a+pz.b,8)} &nbsp;→&nbsp; sisa ${fr(8-pz.a-pz.b,8)}`
+    : '—';
+}
+buildPie($('#pizzaSvg'),8,(i,p)=>{
+  if(!p.dataset.c){p.dataset.c='s-a';pz.a++}
+  else if(p.dataset.c==='s-a'){p.dataset.c='s-b';pz.a--;pz.b++}
+  else{delete p.dataset.c;pz.b--}
+  pzDraw(p);pzUpdate();
+});
+ $$('.pz-preset').forEach(b=>b.onclick=()=>{
+  pz.a=0;pz.b=0;
+  $$('#pizzaSvg path').forEach(p=>{delete p.dataset.c;pzDraw(p)});
+  $$('#pizzaSvg path').slice(0,+b.dataset.a).forEach(p=>{p.dataset.c='s-a';pz.a++;pzDraw(p)});
+  $$('#pizzaSvg path').slice(+b.dataset.a,+b.dataset.a+ +b.dataset.b).forEach(p=>{p.dataset.c='s-b';pz.b++;pzDraw(p)});
+  pzUpdate();
+  toast(`Skenario dipasang: Adik ${b.dataset.a}/8, Kakak ${b.dataset.b}/8`);
+});
+ $('#pzReset').onclick=()=>{pz.a=0;pz.b=0;$$('#pizzaSvg path').forEach(p=>{delete p.dataset.c;pzDraw(p)});pzUpdate()};
+
+/* jus slide */
+let jLevel=4;
+function juiceRender(){
+  const c=$('#juiceCells');c.innerHTML='';
+  for(let i=0;i<4;i++){
+    const d=document.createElement('div');d.className='jcell'+(i<jLevel?' full':'');
+    d.onclick=()=>{jLevel=(jLevel===i+1)?i:i+1;juiceRender()};
+    c.appendChild(d);
+  }
+  const min=4-jLevel;
+  $('#jMinum').textContent=`${min}/4`;$('#jSisa').textContent=`${jLevel}/4`;
+  $('#jEq').innerHTML=`${fr(4,4)} − ${fr(min,4)} = ${fr(jLevel,4)}`;
+}
+ $('#jDrink').onclick=()=>{if(jLevel>0){jLevel--;juiceRender()}else toast('Gelasnya sudah kosong, isi dulu ya!')};
+ $('#jFull').onclick=()=>{jLevel=4;juiceRender()};
+juiceRender();
+
+/* bar-bar statis review */
+ $('#rvBar1').outerHTML=barCells(8,3).replace('class="cells"','class="cells" id="rvBar1"');
+ $('#rvBar2a').outerHTML=barCells(2,1).replace('class="cells"','class="cells" id="rvBar2a"');
+ $('#rvBar2b').outerHTML=barCells(4,2).replace('class="cells"','class="cells" id="rvBar2b"');
+ $('#rvBar2c').outerHTML=barCells(8,4).replace('class="cells"','class="cells" id="rvBar2c"');
+
+/* ================= mesin latihan ================= */
+const score={}; const exerciseDefs=[];
+function refreshCounter(mount,key){
+  const arr=score[key],right=arr.filter(v=>v).length,ans=arr.filter(v=>v!==null).length;
+  const el=mount.querySelector('.ex-counter');
+  if(el)el.textContent=`Terjawab ${ans}/${arr.length} · Benar ${right}`;
+}
+function buildExercise(mountId,key,label,qs){
+  exerciseDefs.push({mountId,key,label,qs});
+  const mount=document.getElementById(mountId);
+  score[key]=Array(qs.length).fill(null);
+  mount.innerHTML=`<div class="ex-top"><h3>${label}</h3><span class="ex-counter">Terjawab 0/${qs.length} · Benar 0</span></div>`;
+  qs.forEach((q,i)=>{
+    const el=document.createElement('div');el.className='exq';
+    let ansHtml='';
+    if(q.type==='mc'){
+      ansHtml='<div class="choices">'+q.choices.map((c,ci)=>
+        `<button type="button" class="choice" data-ci="${ci}"><span class="cl">${'ABCD'[ci]}</span><span class="ct">${c}</span></button>`).join('')+'</div>';
+    }else{
+      /* placeholder hanya contoh FORMAT PENULISAN — seragam di semua soal, tidak membocorkan jawaban */
+      ansHtml=`<div class="ansrow"><input type="text" class="ansin" placeholder="${q.ph||'contoh penulisan: 3/8 atau 1 2/5'}" autocomplete="off">${q.unit?`<span class="unit">satuan: ${q.unit}</span>`:''}</div>`;
+    }
+    el.innerHTML=`
+      <div class="exq-grid"><div class="exq-num">${i+1}</div><div class="exq-main">
+        <div class="exq-text">${q.q}</div>${ansHtml}
+        <div class="exq-btns">
+          <button type="button" class="btn btn-sm btn-primary act-check"><i data-lucide="check"></i> Cek Jawaban</button>
+          <button type="button" class="btn btn-sm act-explain"><i data-lucide="lightbulb"></i> Pembahasan</button>
+        </div>
+        <div class="fb"></div>
+        <div class="explain"><span class="et">Pembahasan</span>${q.ex}</div>
+      </div></div>`;
+    mount.appendChild(el);
+    const fb=el.querySelector('.fb'),exp=el.querySelector('.explain');
+    const openExp=()=>exp.classList.add('open');
+    el.querySelector('.act-explain').onclick=()=>exp.classList.toggle('open');
+    function setFb(ok,msg){
+      fb.className='fb show '+(ok?'ok':'no');
+      fb.innerHTML=`<i data-lucide="${ok?'check-circle-2':'x-circle'}"></i><span>${msg}</span>`;
+      lucide.createIcons();
+    }
+    if(q.type==='mc'){
+      let picked=-1;
+      el.querySelectorAll('.choice').forEach(ch=>ch.onclick=()=>{
+        picked=+ch.dataset.ci;
+        el.querySelectorAll('.choice').forEach(x=>x.classList.remove('sel','correct','wrong'));
+        ch.classList.add('sel');
+      });
+      const check=el.querySelector('.act-check');
+      check.onclick=()=>{
+        if(picked<0){toast('Pilih salah satu jawaban dulu, ya!');return}
+        const ok=picked===q.a;
+        el.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','wrong'));
+        el.querySelector(`.choice[data-ci="${q.a}"]`).classList.add('correct');
+        if(!ok)el.querySelector(`.choice[data-ci="${picked}"]`).classList.add('wrong');
+        setFb(ok,ok?'Benar! Kerja bagus.':'Belum tepat — jawaban yang benar ditandai hijau. Baca pembahasannya, ya.');
+        score[key][i]=ok;refreshCounter(mount,key);openExp();
+      };
+    }else{
+      const inp=el.querySelector('.ansin'),check=el.querySelector('.act-check');
+      const doCheck=()=>{
+        const raw=inp.value;
+        if(!raw.trim()){toast('Tulis jawabanmu dulu, ya!');return}
+        let ok;
+        if(q.check)ok=q.check(raw);
+        else{const p=parseAns(raw);ok=p!==null&&near(p,q.answer)}
+        setFb(ok,ok?'Benar! Kerja bagus.':'Belum tepat. Periksa lagi — atau buka pembahasan untuk petunjuk.');
+        if(ok){inp.classList.add('good');inp.readOnly=true;check.disabled=true}
+        score[key][i]=ok;refreshCounter(mount,key);openExp();
+      };
+      check.onclick=doCheck;
+      inp.addEventListener('keydown',e=>{if(e.key==='Enter')doCheck()});
+    }
+  });
+  lucide.createIcons();
+  refreshCounter(mount,key);
+}
+function rebuildExercises(){
+  exerciseDefs.forEach(d=>buildExercise(d.mountId,d.key,d.label,d.qs));
+}
+
+/* ================= stepper ================= */
+function makeStepper(steps,mountId){
+  const m=document.getElementById(mountId);
+  m.innerHTML=`<ol class="steps"></ol>
+    <div class="step-ctrl">
+      <button class="btn btn-sm btn-primary st-next"><i data-lucide="corner-down-right"></i><span>Langkah berikutnya</span></button>
+      <button class="btn btn-sm st-reset"><i data-lucide="rotate-ccw"></i> Ulangi</button>
+      <span class="st-count"></span>
+    </div>`;
+  const list=m.querySelector('.steps'),cnt=m.querySelector('.st-count'),
+        nxt=m.querySelector('.st-next'),rst=m.querySelector('.st-reset');
+  let i=0;
+  const span=nxt.querySelector('span');
+  function sync(){
+    list.innerHTML=steps.slice(0,i).map((s,k)=>`<li class="step"><span class="sn">${k+1}</span><span>${s}</span></li>`).join('');
+    cnt.textContent=`langkah ${i} / ${steps.length}`;
+    nxt.disabled=i>=steps.length;
+    span.textContent=i>=steps.length?'Selesai':'Langkah berikutnya';
+  }
+  nxt.onclick=()=>{if(i<steps.length){i++;sync()}};
+  rst.onclick=()=>{i=0;sync()};
+  sync();lucide.createIcons();
+}
+/* stepper kembar: dua cara berjalan beriringan */
+function makeTwin(mountId,groups){
+  const m=document.getElementById(mountId);
+  let cur='add',i=0;
+  function render(){
+    const g=groups[cur];
+    m.innerHTML=`
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px">
+        ${Object.entries(groups).map(([k,v])=>`<button class="chipbtn ${k===cur?'on':''}" data-k="${k}">${v.label}</button>`).join('')}
+      </div>
+      <div class="grid2">
+        <div class="panel twin-col"><span class="tag">Cara 1 — ubah ke pecahan biasa</span><ol class="steps" id="twA"></ol></div>
+        <div class="panel twin-col"><span class="tag">Cara 2 — pisahkan cacah &amp; pecahan</span><ol class="steps" id="twB"></ol></div>
+      </div>
+      <div class="step-ctrl" style="margin-top:12px">
+        <button class="btn btn-sm btn-primary tw-next"><i data-lucide="corner-down-right"></i><span>Langkah berikutnya</span></button>
+        <button class="btn btn-sm tw-reset"><i data-lucide="rotate-ccw"></i> Ulangi</button>
+        <span class="st-count"></span>
+      </div>`;
+    m.querySelectorAll('.chipbtn').forEach(b=>b.onclick=()=>{cur=b.dataset.k;i=0;render()});
+    const next=m.querySelector('.tw-next'),reset=m.querySelector('.tw-reset'),
+          cnt=m.querySelector('.st-count'),span=next.querySelector('span');
+    const draw=()=>{
+      ['twA','twB'].forEach((id,c)=>{
+        document.getElementById(id).innerHTML=g[c?'b':'a'].slice(0,i)
+          .map((s,k)=>`<li class="step"><span class="sn">${k+1}</span><span>${s}</span></li>`).join('');
+      });
+      cnt.textContent=`langkah ${i} / ${g.a.length}`;
+      next.disabled=i>=g.a.length;
+      span.textContent=i>=g.a.length?'Selesai':'Langkah berikutnya';
+    };
+    next.onclick=()=>{if(i<g.a.length){i++;draw()}};
+    reset.onclick=()=>{i=0;draw()};
+    draw();
+  }
+  render();lucide.createIcons();
+}
+
+/* ================= lab pecahan ================= */
+let labInit=false;
+const lab={A:{d:4,n:1},B:{d:4,n:2},op:'add'};
+function labBar(side){
+  const o=lab[side],bar=document.getElementById(side==='A'?'labBarA':'labBarB');
+  bar.innerHTML='';
+  for(let i=0;i<o.d;i++){
+    const c=document.createElement('div');c.className='cell';
+    if(i<o.n)c.classList.add(side==='A'?'onA':'onB');
+    c.onclick=()=>{o.n=(o.n===i+1)?i:i+1;labBar(side);labFr(side)};
+    bar.appendChild(c);
+  }
+}
+function labFr(side){
+  const o=lab[side];
+  document.getElementById(side==='A'?'labFrA':'labFrB').innerHTML=fr(o.n,o.d);
+}
+function labRun(){
+  const L=lcm(lab.A.d,lab.B.d),fA=lab.A.n*(L/lab.A.d),fB=lab.B.n*(L/lab.B.d);
+  const out=$('#labOut');
+  if(lab.op==='sub'&&fB>fA){toast('Bagian B lebih besar daripada bagian A — hasil pengurangan tidak boleh kurang dari nol. Atur ulang bar A/B, ya!');return}
+  if(fA===0&&fB===0){toast('Isi dulu sedikit bagian di bar A atau B.');return}
+  const opSym=lab.op==='add'?'+':'−';
+  const total=lab.op==='add'?fA+fB:fA-fB;
+  const g=gcd(total,L),tn=total/g,td=L/g;
+  let bars='',note='';
+  if(lab.op==='add'&&total>L){
+    const whole=Math.floor(total/L),rem=total-L;
+    bars+=`<p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-top:6px">1 utuh (penyebut ${L})</p><div class="rbar">`;
+    for(let i=0;i<L;i++){
+      const cls=i<fA?'pop-a':(i<fA+fB?'pop-b':'');
+      bars+=`<div class="rc ${cls}" style="animation-delay:${i*45}ms"></div>`;
+    }
+    bars+='</div>';
+    if(rem>0){
+      bars+=`<p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-top:10px">sisa (penyebut ${L})</p><div class="rbar">`;
+      for(let i=0;i<rem;i++)bars+=`<div class="rc pop-r" style="animation-delay:${(L+i)*45}ms"></div>`;
+      bars+='</div>';
+    }
+    const gg=gcd(rem,L),rn=rem/gg,rd=L/gg;
+    note=`Hasilnya lebih dari 1 utuh! Dalam bentuk campuran: <b>${whole===0?'':whole+' '}${fr(rn,rd)}</b>`;
+  }else if(lab.op==='sub'){
+    bars+=`<p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-top:6px">bar A diperluas ke penyebut ${L} — lalu bagian B "diambil"</p><div class="rbar">`;
+    for(let i=0;i<L;i++){
+      if(i<fA){
+        const cut=i>=fA-fB;
+        bars+=`<div class="rc ${cut?'cut-b':'pop-a'}" style="animation-delay:${i*45}ms"></div>`;
+      }else bars+='<div class="rc"></div>';
+    }
+    bars+='</div>';
+    note=`Sel <b>hijau</b> adalah bagian B yang diambil — perhatikan ia menghilang dari bar. Yang tersisa (merah) adalah jawabannya.`;
+  }else{
+    bars+=`<p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-top:6px">hasil (penyebut ${L}) — merah dari A, hijau dari B</p><div class="rbar">`;
+    for(let i=0;i<L;i++){
+      const cls=i<fA?'pop-a':(i<fA+fB?'pop-b':'');
+      bars+=`<div class="rc ${cls}" style="animation-delay:${i*45}ms"></div>`;
+    }
+    bars+='</div>';
+  }
+  out.innerHTML=`<div class="panel">
+    <div class="lab-eq">${fr(lab.A.n,lab.A.d)} ${opSym} ${fr(lab.B.n,lab.B.d)} = ${fr(fA,L)} ${opSym} ${fr(fB,L)} = ${fr(total,L)}</div>
+    ${bars}
+    <p class="lab-note">${note}${g>1?` — disederhanakan: ${fr(total,L)} = <b>${tn===td?tn:fr(tn,td)}</b>`:''}</p>
+  </div>`;
+}
+function initLab(){
+  ['labSA','labSB'].forEach(id=>{
+    const sel=document.getElementById(id);
+    [2,3,4,5,6,8,10,12].forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent='penyebut '+d;sel.appendChild(o)});
+    sel.value=4;
+    sel.onchange=()=>{
+      const side=id==='labSA'?'A':'B';
+      lab[side].d=+sel.value;lab[side].n=Math.min(lab[side].n,sel.value);
+      labBar(side);labFr(side);
+    };
+  });
+  labBar('A');labBar('B');labFr('A');labFr('B');
+  $$('#labOps button').forEach(b=>b.onclick=()=>{
+    $$('#labOps button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');lab.op=b.dataset.op;
+  });
+  $('#labRun').onclick=labRun;
+  $('#labReset').onclick=()=>{
+    lab.A={d:4,n:1};lab.B={d:4,n:2};
+    $('#labSA').value=4;$('#labSB').value=4;
+    labBar('A');labBar('B');labFr('A');labFr('B');
+    $('#labOut').innerHTML='';
+  };
+}
+
+/* ================= data materi: stepper ================= */
+function initSteppers(){
+  /* materi B — beda penyebut */
+  const mB={
+    s1:{label:'1/2 + 1/4',steps:[
+      `Tulis soalnya: ${fr(1,2)} + ${fr(1,4)}`,
+      `Cek penyebut: 2 dan 4 <b>berbeda</b> — potongannya tidak seukuran, belum bisa langsung digabung.`,
+      `Cari KPK dari 2 dan 4 → <b>4</b> (penyebut bersama).`,
+      `Ubah ke pecahan senilai: ${fr(1,2)} = ${fr(2,4)} (dikali 2 atas-bawah). ${fr(1,4)} tetap.`,
+      `Sekarang senama: ${fr(2,4)} + ${fr(1,4)} = ${fr(3,4)}.`,
+      `${fr(3,4)} sudah paling sederhana. Jadi ${fr(1,2)} + ${fr(1,4)} = <b>${fr(3,4)}</b>.`]},
+    s2:{label:'2/3 + 1/6',steps:[
+      `Tulis soalnya: ${fr(2,3)} + ${fr(1,6)}`,
+      `Penyebut 3 dan 6 berbeda. KPK(3,6) = <b>6</b>.`,
+      `Ubah: ${fr(2,3)} = ${fr(4,6)} (dikali 2 atas-bawah). ${fr(1,6)} sudah berpenyebut 6.`,
+      `Jumlahkan pembilangnya: ${fr(4,6)} + ${fr(1,6)} = ${fr(5,6)}.`,
+      `Jadi ${fr(2,3)} + ${fr(1,6)} = <b>${fr(5,6)}</b>. Sudah paling sederhana.`]},
+    s3:{label:'5/6 − 1/4',steps:[
+      `Tulis soalnya: ${fr(5,6)} − ${fr(1,4)}`,
+      `Penyebut 6 dan 4 berbeda. KPK(6,4) = <b>12</b>.`,
+      `Ubah keduanya: ${fr(5,6)} = ${fr(10,12)} dan ${fr(1,4)} = ${fr(3,12)}.`,
+      `Kurangkan pembilangnya: ${fr(10,12)} − ${fr(3,12)} = ${fr(7,12)}.`,
+      `Jadi ${fr(5,6)} − ${fr(1,4)} = <b>${fr(7,12)}</b>. Tidak bisa disederhanakan lagi.`]}
+  };
+  const chips=$('#mbChips');
+  Object.entries(mB).forEach(([k,v])=>{
+    const b=document.createElement('button');b.className='chipbtn'+(k==='s1'?' on':'');b.textContent=v.label;
+    b.onclick=()=>{chips.querySelectorAll('.chipbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');makeStepper(v.steps,'mbBox')};
+    chips.appendChild(b);
+  });
+  makeStepper(mB.s1.steps,'mbBox');
+
+  /* materi C — twin stepper */
+  makeTwin('mcBox',{
+    add:{label:'2 1/2 + 1 1/4',
+      a:[
+        `Tulis soalnya: ${mix(2,1,2)} + ${mix(1,1,4)}`,
+        `Ubah tiap campuran ke pecahan biasa: ${mix(2,1,2)} = ${fr(5,2)} dan ${mix(1,1,4)} = ${fr(5,4)}`,
+        `Samakan penyebut — KPK(2,4) = 4: ${fr(5,2)} = ${fr(10,4)}`,
+        `Jumlahkan: ${fr(10,4)} + ${fr(5,4)} = ${fr(15,4)}`,
+        `Kembalikan ke campuran: ${fr(15,4)} = <b>${mix(3,3,4)}</b>`],
+      b:[
+        `Tulis soalnya: ${mix(2,1,2)} + ${mix(1,1,4)}`,
+        `Pisahkan bagian cacah dan pecahan: (2 + 1) dan (${fr(1,2)} + ${fr(1,4)})`,
+        `Bagian cacah: 2 + 1 = <b>3</b>`,
+        `Bagian pecahan: ${fr(1,2)} + ${fr(1,4)} = ${fr(2,4)} + ${fr(1,4)} = ${fr(3,4)}`,
+        `Gabungkan kembali: <b>${mix(3,3,4)}</b> — dua jalan, hasil sama!`]},
+    sub:{label:'3 1/4 − 1 1/2',
+      a:[
+        `Tulis soalnya: ${mix(3,1,4)} − ${mix(1,1,2)}`,
+        `Ubah ke pecahan biasa: ${mix(3,1,4)} = ${fr(13,4)} dan ${mix(1,1,2)} = ${fr(3,2)}`,
+        `Samakan penyebut: ${fr(3,2)} = ${fr(6,4)}`,
+        `Kurangkan: ${fr(13,4)} − ${fr(6,4)} = ${fr(7,4)}`,
+        `Kembalikan ke campuran: ${fr(7,4)} = <b>${mix(1,3,4)}</b>`],
+      b:[
+        `Tulis soalnya: ${mix(3,1,4)} − ${mix(1,1,2)}`,
+        `Coba pisahkan… tapi tunggu: ${fr(1,4)} − ${fr(1,2)} hasilnya <b>kurang dari 0</b> — pecahannya tidak cukup!`,
+        `Trik <b>pinjam 1</b>: 1 = ${fr(4,4)}, jadi ${mix(3,1,4)} = ${mix(2,5,4)}`,
+        `Sekarang aman: cacah 2 − 1 = 1; pecahan ${fr(5,4)} − ${fr(2,4)} = ${fr(3,4)}`,
+        `Gabungkan: <b>${mix(1,3,4)}</b> — trik pinjam berhasil!`]}
+  });
+
+  /* materi D */
+  makeStepper([
+    `Tulis soalnya: 4 + ${fr(1,3)}`,
+    `Tidak ada pecahan lain yang harus disamakan — penjumlahannya "murni menempel".`,
+    `Maka hasilnya langsung: <b>${mix(4,1,3)}</b> (empat utuh dan sepertiga).`,
+    `Bentuk pecahan biasa juga sah: ${mix(4,1,3)} = ${fr(13,3)}.`],'md1');
+  makeStepper([
+    `Tulis soalnya: 5 − ${fr(1,2)}`,
+    `5 belum punya "bagian pecahan". Ubah 5 = ${fr(10,2)} supaya sepenyebut.`,
+    `Kurangkan: ${fr(10,2)} − ${fr(1,2)} = ${fr(9,2)}.`,
+    `Kembalikan ke campuran: ${fr(9,2)} = <b>${mix(4,1,2)}</b>.`,
+    `Cara pintas: "pinjam" 1 dari 5 → 4 ${fr(2,2)}; lalu ${fr(2,2)} − ${fr(1,2)} = ${fr(1,2)} → <b>${mix(4,1,2)}</b>. Sama!`],'md2');
+
+  /* soal cerita: contoh */
+  makeStepper([
+    `<b>Tandai data:</b> punya ${mix(2,1,2)} kg, terpakai ${fr(3,4)} kg. Ditanya: sisa? Kata "sisa" → <b>pengurangan</b>.`,
+    `<b>Model:</b> ${mix(2,1,2)} − ${fr(3,4)}`,
+    `Ubah &amp; samakan penyebut: ${mix(2,1,2)} = ${fr(5,2)} = ${fr(10,4)}; ${fr(3,4)} tetap.`,
+    `Hitung: ${fr(10,4)} − ${fr(3,4)} = ${fr(7,4)} = ${mix(1,3,4)}`,
+    `<b>Simpulkan:</b> Sisa gula Ibu adalah <b>${mix(1,3,4)} kg</b>. Jangan lupa satuannya!`],'st1');
+  makeStepper([
+    `<b>Tandai data:</b> berlari ${mix(1,1,4)} km, berjalan ${fr(2,5)} km. Ditanya: total jarak → <b>penjumlahan</b>.`,
+    `<b>Model:</b> ${mix(1,1,4)} + ${fr(2,5)}`,
+    `Samakan penyebut — KPK(4,5) = 20: ${fr(5,4)} = ${fr(25,20)} dan ${fr(2,5)} = ${fr(8,20)}`,
+    `Hitung: ${fr(25,20)} + ${fr(8,20)} = ${fr(33,20)} = ${mix(1,13,20)}`,
+    `<b>Simpulkan:</b> Jarak seluruh perjalanan Andi adalah <b>${mix(1,13,20)} km</b>.`],'st2');
+}
+
+/* ================= bank soal ================= */
+function initExercises(){
+  buildExercise('exR1','r1','Latihan pemanasan — 2 soal',[
+    {q:`Perhatikan batang berikut. Pecahan yang tepat untuk bagian yang diwarnai adalah …<br>${barCells(10,4)}`,
+     answer:0.4,
+     ex:`Batang dibagi <b>10 bagian sama besar</b> dan <b>4 bagian</b> berwarna → ${fr(4,10)}. Disederhanakan (dibagi 2) menjadi <b>${fr(2,5)}</b> — keduanya benar.`},
+    {q:`Semangkuk buah berisi <b>15 strawberi</b>, dan <b>5</b> di antaranya busuk. Pecahan yang menyatakan banyak strawberi yang busuk adalah …`,
+     answer:1/3,
+     ex:`Busuk 5 dari total 15 → ${fr(5,15)}. Jika disederhanakan: ${fr(5,15)} = <b>${fr(1,3)}</b> (dibagi 5). Jawaban 5/15 atau 1/3 sama-sama benar.`}
+  ]);
+  buildExercise('exR2','r2','Latihan pemanasan — 2 soal',[
+    {q:`Lengkapi pecahan senilai berikut: ${fr(3,5)} = <span class="blank">?</span>/15 &nbsp;— tulis <b>angka pembilangnya saja</b>.`,
+     check:r=>{const m=r.trim().match(/^(\d+(?:\.\d+)?)$/);return m&&near(+m[1],9)},
+     ph:'tulis angkanya saja',
+     ex:`Dari 5 menjadi 15, penyebut dikali <b>3</b>. Agar senilai, pembilang juga dikali 3: 3 × 3 = <b>9</b>. Jadi ${fr(3,5)} = ${fr(9,15)}.`},
+    {q:`Manakah yang <b>senilai</b> dengan ${fr(2,3)}?`,
+     type:'mc',a:1,
+     choices:[`${fr(3,4)}`,`${fr(4,6)}`,`${fr(2,6)}`,`${fr(8,9)}`],
+     ex:`${fr(2,3)} × 2 atas-bawah = ${fr(4,6)} ✓. Cek lain: ${fr(3,4)} = 0,75 dan ${fr(2,3)} ≈ 0,67 (beda); ${fr(2,6)} = ${fr(1,3)} (beda); ${fr(8,9)} ≈ 0,89 (beda).`}
+  ]);
+  buildExercise('exR3','r3','Latihan pemanasan — 2 soal',[
+    {q:`Ubah <b>${fr(11,4)}</b> menjadi pecahan campuran.`,
+     answer:11/4,
+     ex:`11 ÷ 4 = 2 sisa 3 → hasil bagi jadi cacah, sisa jadi pembilang: <b>${mix(2,3,4)}</b>. Cek: ${mix(2,3,4)} = ${fr(11,4)} ✓`},
+    {q:`Ubah <b>${mix(3,2,5)}</b> menjadi pecahan biasa.`,
+     answer:17/5,
+     ex:`(3 × 5) + 2 = 17, penyebut tetap 5 → <b>${fr(17,5)}</b>.`}
+  ]);
+  buildExercise('exR4','r4','Latihan pemanasan — 2 soal',[
+    {q:`Isi tanda yang tepat pada kotak: ${fr(3,4)} <span class="blank">?</span> ${fr(7,8)} &nbsp;— tulis <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b>.`,
+     check:r=>{const v=r.trim().toLowerCase();return v==='<'||v==='kurang dari'},
+     ph:'tulis <, > atau =',
+     ex:`KPK(4,8) = 8 → ${fr(3,4)} = ${fr(6,8)}. Karena 6 &lt; 7, maka ${fr(3,4)} <b>&lt;</b> ${fr(7,8)}.`},
+    {q:`Manakah pernyataan yang <b>benar</b>?`,
+     type:'mc',a:2,
+     choices:[`${fr(2,3)} &gt; ${fr(3,4)}`,`${fr(2,5)} &lt; ${fr(2,7)}`,`${fr(1,2)} = ${fr(4,8)}`,`${fr(3,5)} &gt; ${fr(5,6)}`],
+     ex:`A salah: ${fr(2,3)} = ${fr(8,12)} &lt; ${fr(9,12)} = ${fr(3,4)}. B salah: penyebut besar = potongan kecil, jadi ${fr(2,5)} &gt; ${fr(2,7)}. C benar: ${fr(1,2)} × 4 atas-bawah = ${fr(4,8)} ✓. D salah: ${fr(3,5)} = 0,6 &lt; ${fr(5,6)} ≈ 0,83.`}
+  ]);
+  buildExercise('exR5','r5','Latihan pemanasan — 2 soal',[
+    {q:`Tuliskan <b>5</b> sebagai pecahan <b>berpenyebut 3</b>.`,
+     check:r=>{const m=r.trim().match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);return m&&near(+m[2],3)&&near(+m[1],15)},
+     ex:`5 = ${fr(5,1)}. Agar berpenyebut 3, kalikan 3 atas-bawah: 5 × 3 = 15 → <b>${fr(15,3)}</b>. Cek: 15 ÷ 3 = 5 ✓`},
+    {q:`Tuliskan <b>7</b> sebagai pecahan <b>berpenyebut 4</b>.`,
+     check:r=>{const m=r.trim().match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);return m&&near(+m[2],4)&&near(+m[1],28)},
+     ex:`7 × 4 = 28 → <b>${fr(28,4)}</b>, karena 28 ÷ 4 = 7 ✓`}
+  ]);
+
+  buildExercise('exA','exA','5 soal — penyebut sama',[
+    {q:`${fr(2,5)} + ${fr(1,5)} = …`,answer:3/5,ex:`Penyebut tetap 5, pembilang dijumlah: 2 + 1 = 3 → <b>${fr(3,5)}</b>.`},
+    {q:`${fr(4,7)} − ${fr(2,7)} = …`,answer:2/7,ex:`4 − 2 = 2, penyebut tetap 7 → <b>${fr(2,7)}</b>.`},
+    {q:`${fr(1,3)} + ${fr(1,3)} = …`,answer:2/3,ex:`1 + 1 = 2, penyebut tetap 3 → <b>${fr(2,3)}</b>.`},
+    {q:`${fr(5,6)} − ${fr(1,6)} = …`,answer:2/3,ex:`5 − 1 = 4 → ${fr(4,6)}. Disederhanakan (dibagi 2) → <b>${fr(2,3)}</b>. Jawaban 4/6 atau 2/3 sama-sama benar.`},
+    {q:`${fr(7,10)} + ${fr(2,10)} = …`,answer:9/10,ex:`7 + 2 = 9, penyebut tetap 10 → <b>${fr(9,10)}</b>.`}
+  ]);
+  buildExercise('exB','exB','5 soal — beda penyebut',[
+    {q:`${fr(1,2)} + ${fr(1,8)} = …`,answer:5/8,ex:`KPK(2,8) = 8 → ${fr(1,2)} = ${fr(4,8)}. Lalu ${fr(4,8)} + ${fr(1,8)} = <b>${fr(5,8)}</b>.`},
+    {q:`${fr(2,5)} + ${fr(1,2)} = …`,answer:9/10,ex:`KPK(5,2) = 10 → ${fr(2,5)} = ${fr(4,10)} dan ${fr(1,2)} = ${fr(5,10)}. Lalu ${fr(4,10)} + ${fr(5,10)} = <b>${fr(9,10)}</b>.`},
+    {q:`${fr(3,4)} − ${fr(2,5)} = …`,answer:7/20,ex:`KPK(4,5) = 20 → ${fr(3,4)} = ${fr(15,20)} dan ${fr(2,5)} = ${fr(8,20)}. Lalu ${fr(15,20)} − ${fr(8,20)} = <b>${fr(7,20)}</b>.`},
+    {q:`${fr(1,3)} + ${fr(1,6)} = …`,answer:1/2,ph:'contoh penulisan: 3/8 atau 1 2/5',ex:`KPK(3,6) = 6 → ${fr(1,3)} = ${fr(2,6)}. Lalu ${fr(2,6)} + ${fr(1,6)} = ${fr(3,6)} = <b>${fr(1,2)}</b> (jangan lupa menyederhanakan!).`},
+    {q:`${fr(2,3)} − ${fr(1,4)} = …`,answer:5/12,ex:`KPK(3,4) = 12 → ${fr(2,3)} = ${fr(8,12)} dan ${fr(1,4)} = ${fr(3,12)}. Lalu ${fr(8,12)} − ${fr(3,12)} = <b>${fr(5,12)}</b>.`}
+  ]);
+  buildExercise('exC','exC','5 soal — pecahan campuran',[
+    {q:`${mix(1,1,2)} + ${mix(2,3,8)} = …`,answer:31/8,
+     ex:`Cara 2 (pisah): cacah 1+2 = 3; pecahan ${fr(1,2)}+${fr(3,8)} = ${fr(4,8)}+${fr(3,8)} = ${fr(7,8)} → <b>${mix(3,7,8)}</b>. (Cara 1: ${fr(3,2)}+${fr(19,8)} = ${fr(12,8)}+${fr(19,8)} = ${fr(31,8)} = ${mix(3,7,8)} ✓)`},
+    {q:`${mix(2,1,3)} + ${mix(1,1,3)} = …`,answer:11/3,
+     ex:`Cacah: 2+1 = 3; pecahan: ${fr(1,3)}+${fr(1,3)} = ${fr(2,3)} → <b>${mix(3,2,3)}</b> = ${fr(11,3)}.`},
+    {q:`${mix(3,1,2)} − ${mix(1,1,4)} = …`,answer:9/4,
+     ex:`Cara 1: ${fr(7,2)}−${fr(5,4)} = ${fr(14,4)}−${fr(5,4)} = ${fr(9,4)} = <b>${mix(2,1,4)}</b>.`},
+    {q:`${mix(1,2,5)} + ${mix(2,1,2)} = …`,answer:3.9,
+     ex:`Cacah: 1+2 = 3. Pecahan: ${fr(2,5)}+${fr(1,2)} = ${fr(4,10)}+${fr(5,10)} = ${fr(9,10)} → <b>${mix(3,9,10)}</b>.`},
+    {q:`${mix(4,1,6)} − ${mix(2,1,2)} = …`,answer:5/3,
+     ex:`Cara 1: ${fr(25,6)}−${fr(5,2)} = ${fr(25,6)}−${fr(15,6)} = ${fr(10,6)} = <b>${mix(1,2,3)}</b>. (Cara pinjam: ${mix(4,1,6)} = ${mix(3,7,6)} → ${mix(3,7,6)}−${mix(2,3,6)} = ${mix(1,4,6)} = ${mix(1,2,3)} ✓)`}
+  ]);
+  buildExercise('exD','exD','5 soal — bilangan cacah ± pecahan',[
+    {q:`5 + ${fr(1,4)} = …`,answer:21/4,ex:`Langsung menempel: <b>${mix(5,1,4)}</b> = ${fr(21,4)}.`},
+    {q:`7 − ${fr(1,2)} = …`,answer:13/2,ex:`7 = ${fr(14,2)} → ${fr(14,2)}−${fr(1,2)} = ${fr(13,2)} = <b>${mix(6,1,2)}</b>.`},
+    {q:`2 + ${fr(3,4)} = …`,answer:11/4,ex:`Langsung: <b>${mix(2,3,4)}</b> = ${fr(11,4)}.`},
+    {q:`3 − ${fr(3,4)} = …`,answer:9/4,ex:`3 = ${fr(12,4)} → ${fr(12,4)}−${fr(3,4)} = ${fr(9,4)} = <b>${mix(2,1,4)}</b>. Atau pinjam: ${mix(2,4,4)}−${fr(3,4)} = ${mix(2,1,4)} ✓`},
+    {q:`6 − ${fr(5,8)} = …`,answer:43/8,ex:`6 = ${fr(48,8)} → ${fr(48,8)}−${fr(5,8)} = ${fr(43,8)} = <b>${mix(5,3,8)}</b>.`}
+  ]);
+  buildExercise('story1','st1','10 soal pilihan ganda — soal 1–5',[
+    {q:`Ayah menyambung dua papan kayu yang panjangnya <b>3/4 m</b> dan <b>1/4 m</b>. Berapa meter panjang papan sekarang?`,
+     type:'mc',a:2,choices:[`${fr(3,8)} m`,`${fr(4,8)} m`,`1 m`,`${mix(1,1,4)} m`],
+     ex:`Penyebut sama: ${fr(3,4)}+${fr(1,4)} = ${fr(4,4)} = <b>1 m</b>. Dua potongan seperempat gabung jadi satu utuh!`},
+    {q:`Sebuah botol berisi <b>3/4 liter</b> jus. Dini meminum <b>1/4 liter</b>. Berapa liter sisa jus dalam botol?`,
+     type:'mc',a:1,choices:[`${fr(1,4)} L`,`${fr(1,2)} L`,`${fr(2,3)} L`,`${fr(3,8)} L`],
+     ex:`${fr(3,4)}−${fr(1,4)} = ${fr(2,4)} = <b>${fr(1,2)} L</b>. Sederhanakan dulu sebelum memilih!`},
+    {q:`Sinta membaca <b>1/4 bagian</b> buku pada hari Senin dan <b>2/4 bagian</b> pada hari Selasa. Berapa bagian buku yang sudah dibaca Sinta?`,
+     type:'mc',a:0,choices:[`${fr(3,4)} bagian`,`${fr(3,8)} bagian`,`1 bagian`,`${fr(2,6)} bagian`],
+     ex:`${fr(1,4)}+${fr(2,4)} = <b>${fr(3,4)} bagian</b>. Pembilang dijumlah, penyebut tetap.`},
+    {q:`Ibu memiliki <b>${mix(2,1,2)} kg</b> tepung, lalu dipakai <b>${mix(1,1,2)} kg</b> untuk membuat kue. Berapa kg sisa tepung Ibu?`,
+     type:'mc',a:2,choices:[`${mix(1,1,2)} kg`,`${fr(1,2)} kg`,`1 kg`,`4 kg`],
+     ex:`${mix(2,1,2)}−${mix(1,1,2)} = ${fr(5,2)}−${fr(3,2)} = ${fr(2,2)} = <b>1 kg</b>.`},
+    {q:`Pak Amir berjalan <b>${mix(2,1,3)} km</b>, lalu berjalan lagi <b>${mix(1,1,3)} km</b>. Berapa km jarak seluruh perjalanan Pak Amir?`,
+     type:'mc',a:0,choices:[`${mix(3,2,3)} km`,`${mix(3,1,3)} km`,`3 km`,`4 km`],
+     ex:`Cacah: 2+1 = 3; pecahan: ${fr(1,3)}+${fr(1,3)} = ${fr(2,3)} → <b>${mix(3,2,3)} km</b>.`}
+  ]);
+  buildExercise('story2','st2','10 soal pilihan ganda — soal 6–10',[
+    {q:`Seutas pita panjangnya <b>5/6 m</b>. Dipotong <b>1/3 m</b> untuk mengikat hadiah. Berapa meter sisa pita?`,
+     type:'mc',a:1,choices:[`${fr(4,3)} m`,`${fr(1,2)} m`,`${fr(2,3)} m`,`${fr(1,3)} m`],
+     ex:`Samakan: ${fr(1,3)} = ${fr(2,6)}. Maka ${fr(5,6)}−${fr(2,6)} = ${fr(3,6)} = <b>${fr(1,2)} m</b>.`},
+    {q:`Rina minum <b>${mix(2,1,4)} gelas</b> air di pagi hari dan <b>${mix(1,3,4)} gelas</b> di siang hari. Berapa gelas total air yang diminum Rina?`,
+     type:'mc',a:0,choices:[`4 gelas`,`${mix(3,1,2)} gelas`,`3 gelas`,`${mix(4,1,4)} gelas`],
+     ex:`Cacah: 2+1 = 3; pecahan: ${fr(1,4)}+${fr(3,4)} = ${fr(4,4)} = 1. Total 3 + 1 = <b>4 gelas</b>.`},
+    {q:`Sebuah kaleng cat berisi <b>${mix(4,1,2)} L</b>. Pakde memakai <b>${mix(1,3,4)} L</b> untuk mengecat pagar. Berapa liter sisa cat?`,
+     type:'mc',a:1,choices:[`${mix(3,1,4)} L`,`${mix(2,3,4)} L`,`2 L`,`${mix(2,1,4)} L`],
+     ex:`${fr(9,2)}−${fr(7,4)} = ${fr(18,4)}−${fr(7,4)} = ${fr(11,4)} = <b>${mix(2,3,4)} L</b>.`},
+    {q:`Satu kue utuh: adik memakan <b>1/3 bagian</b> dan kakak memakan <b>1/2 bagian</b>. Berapa bagian kue yang sudah dimakan keduanya?`,
+     type:'mc',a:2,choices:[`${fr(2,5)} bagian`,`${fr(2,6)} bagian`,`${fr(5,6)} bagian`,`1 bagian`],
+     ex:`KPK(3,2) = 6 → ${fr(2,6)} + ${fr(3,6)} = <b>${fr(5,6)} bagian</b>. Sisa kue hanya ${fr(1,6)}.`},
+    {q:`Air di dalam bak sebanyak <b>${mix(4,1,2)} ember</b>. Ditambah air hujan <b>${mix(2,1,4)} ember</b>. Berapa ember air sekarang di dalam bak?`,
+     type:'mc',a:0,choices:[`${mix(6,3,4)} ember`,`${mix(6,1,4)} ember`,`${mix(6,1,2)} ember`,`7 ember`],
+     ex:`${fr(9,2)}+${fr(9,4)} = ${fr(18,4)}+${fr(9,4)} = ${fr(27,4)} = <b>${mix(6,3,4)} ember</b>.`}
+  ]);
+}
+
+/* ================= rapor ================= */
+function renderResults(){
+  const groups=[
+    ['Pemanasan — Review materi sebelumnya',['r1','r2','r3','r4','r5']],
+    ['Latihan 1 · Pecahan senama',['exA']],
+    ['Latihan 2 · Pecahan beda penyebut',['exB']],
+    ['Latihan 3 · Pecahan campuran',['exC']],
+    ['Latihan 4 · Bilangan cacah ± pecahan',['exD']],
+    ['Soal cerita · Pilihan ganda',['st1','st2']]
+  ];
+  let right=0,total=0,any=false;
+  $('#resRows').innerHTML=groups.map(([label,keys])=>{
+    const r=keys.reduce((s,k)=>s+score[k].filter(v=>v).length,0);
+    const t=keys.reduce((s,k)=>s+score[k].length,0);
+    if(keys.some(k=>score[k].some(v=>v!==null)))any=true;
+    right+=r;total+=t;
+    const pct=t?Math.round(r/t*100):0;
+    const cls=pct>=75?'':(pct>=50?'mid':'low');
+    return `<div class="res-row"><span>${label}</span><span class="res-num">${r}/${t}</span><div class="res-track"><div class="res-fill ${cls}" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+  const pct=Math.round(right/total*100);
+  $('#resScore').textContent=any?`${pct}%`:'–';
+  $('#resOf').textContent=any?`${right} benar dari ${total} soal`:'Belum ada soal yang dikerjakan';
+  $('#resMsg').textContent=!any?'Ayo gulir ke atas dan mulai berlatih!':
+    pct>=90?'Luar biasa! Kamu benar-benar menguasai pecahan.':
+    pct>=75?'Hebat! Sedikit lagi sempurna.':
+    pct>=50?'Bagus! Ulangi bagian yang masih goyah, ya.':
+    'Jangan menyerah — buka pembahasannya, lalu coba lagi!';
+}
+ $('#resReset').onclick=()=>{
+  rebuildExercises();
+  toast('Semua latihan dikosongkan. Selamat berlatih lagi!');
+  show(3);
+};
+
+/* ================= refleksi ================= */
+let rScaleVal=0;
+function loadReflect(){
+  try{
+    const d=JSON.parse(localStorage.getItem('refleksi-pecahan')||'null');
+    if(d){
+      $('#rT1').value=d.t1||'';$('#rT2').value=d.t2||'';
+      rScaleVal=d.scale||0;
+      $$('#rScale button').forEach(b=>b.classList.toggle('on',+b.dataset.v===rScaleVal));
+    }
+  }catch(e){}
+}
+ $$('#rScale button').forEach(b=>b.onclick=()=>{
+  rScaleVal=+b.dataset.v;
+  $$('#rScale button').forEach(x=>x.classList.toggle('on',x===b));
+});
+ $('#rSave').onclick=()=>{
+  try{
+    localStorage.setItem('refleksi-pecahan',JSON.stringify({t1:$('#rT1').value,t2:$('#rT2').value,scale:rScaleVal}));
+  }catch(e){}
+  $('#rDone').style.display='inline-block';
+  toast('Refleksimu berhasil dikirim. Terima kasih!');
+};
+
+/* ================= init ================= */
+lucide.createIcons();
+initExercises();
+initSteppers();
+show(0);
+</script>
+</body>
+</html>
