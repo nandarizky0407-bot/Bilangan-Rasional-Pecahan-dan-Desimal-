@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piala Pecahan — Game Penalti Operasi Hitung Pecahan</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pitch:#2f7a3a; --pitch-d:#286b33; --ink:#232a33; --paper:#fdf9ee; --paper2:#f3ead2;
+  --gold:#f4b41a; --gold-d:#c98f06; --red:#e2543c; --teal:#0f9b8e; --ok:#2e8b57; --board:#161b21;
+}
+html,body{min-height:100%}
+body{
+  font-family:'Baloo 2',sans-serif; color:var(--ink);
+  background:repeating-linear-gradient(90deg,var(--pitch) 0 110px,var(--pitch-d) 110px 220px);
+}
+body::before{content:'';position:fixed;inset:10px;border:4px solid rgba(255,255,255,.13);border-radius:10px;pointer-events:none}
+body::after{content:'';position:fixed;left:50%;top:60%;width:560px;height:560px;transform:translate(-50%,-50%);
+  border:4px solid rgba(255,255,255,.1);border-radius:50%;pointer-events:none}
+h1,h2,h3,h4,.disp{font-family:'Lilita One',cursive;font-weight:400;letter-spacing:.5px}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:16px 16px 46px;position:relative;z-index:1}
+
+/* ============ HEADER ============ */
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+.logo{display:flex;align-items:center;gap:9px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;
+  padding:7px 14px;box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.logo b{font-family:'Lilita One';font-size:20px;font-weight:400}
+.logo b i{color:var(--gold-d);font-style:normal}
+.hud{display:flex;background:var(--board);border:3px solid #000;border-radius:14px;padding:8px 10px;
+  box-shadow:0 5px 0 rgba(0,0,0,.28);align-items:center;flex-wrap:wrap}
+.hud .cell{padding:0 14px;text-align:center;border-right:2px solid rgba(255,255,255,.12)}
+.hud .cell:last-child{border-right:none}
+.hud .lbl{font-size:10px;letter-spacing:1.5px;color:#93a4b5;text-transform:uppercase;font-weight:800}
+.hud .val{font-family:'Lilita One';font-size:22px;color:#fff;line-height:1.15}
+.hud .val.g{color:var(--gold)}
+.hbtns{display:flex;gap:8px;margin-left:auto}
+.iconBtn{width:42px;height:42px;border-radius:12px;background:var(--paper);border:3px solid var(--ink);
+  box-shadow:0 4px 0 rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;transition:transform .12s}
+.iconBtn:hover{transform:translateY(-2px)}
+.iconBtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+
+/* ============ PAPAN SERANGAN ============ */
+.board{background:var(--board);border:3px solid #000;border-radius:18px;padding:12px 14px 15px;
+  box-shadow:0 6px 0 rgba(0,0,0,.3);margin-bottom:14px}
+.boardTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.boardTitle{font-family:'Lilita One';color:#fff;font-size:17px;letter-spacing:1px;display:flex;align-items:center;gap:9px}
+.chip{background:var(--gold);color:var(--ink);font-family:'Lilita One';font-size:13px;padding:3px 13px;
+  border-radius:999px;border:2px solid #000}
+.slotsWrap{overflow-x:auto;padding-bottom:4px}
+.slots{display:flex;align-items:center;gap:10px;justify-content:center;min-width:360px}
+.slot{border:3px dashed rgba(255,255,255,.42);border-radius:14px;height:150px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-weight:800;font-size:10.5px;
+  letter-spacing:1px;flex:none;text-align:center}
+.vslot{width:125px}
+.oslot{width:62px;height:62px;border-radius:14px;align-self:center}
+.slot .q{font-family:'Lilita One';font-size:26px}
+.slot.filled{background:var(--paper);border:3px solid var(--ink);color:var(--ink);
+  box-shadow:0 4px 0 rgba(0,0,0,.35);animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.oslot.filled{background:var(--gold);font-family:'Lilita One';font-size:30px}
+@keyframes pop{0%{transform:scale(.5)}70%{transform:scale(1.07)}100%{transform:scale(1)}}
+.slotVal{font-size:28px;line-height:1.1;padding:4px 3px}
+.intXL{font-family:'Lilita One';font-size:44px}
+.storyTxt{font-size:11px;line-height:1.32;font-weight:600;padding:2px 3px;max-height:104px;overflow:auto;font-family:'Baloo 2'}
+.storyTag{font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--paper2);border-radius:999px;
+  padding:1px 9px;margin-top:4px;border:1.5px solid var(--ink);font-weight:800}
+
+/* pecahan bertumpuk */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 1px;font-family:'Lilita One'}
+.fr .ft{padding:0 .26em}
+.fr .fb{border-top:.14em solid currentColor;padding:0 .26em}
+.mx{display:inline-flex;align-items:center;gap:.04em;vertical-align:middle}
+.wh{font-family:'Lilita One'}
+
+/* kartu wasit */
+.refRow{display:flex;align-items:flex-end;gap:14px;margin-top:12px;flex-wrap:wrap}
+.refRowTitle{color:#93a4b5;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;margin-bottom:5px}
+.refCards{display:flex;gap:9px}
+.refCard{width:58px;height:82px;perspective:600px;flex:none;transition:transform .15s}
+.refCard:not(.open):not(.done):hover{transform:translateY(-3px)}
+.refCard.dead{opacity:.32;filter:grayscale(1);pointer-events:none}
+.refCard .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,1.4,.6,1)}
+.refCard.open .inner{transform:rotateY(180deg)}
+.refCard .f{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:10px;
+  border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.refCard .back{background:var(--gold);font-family:'Lilita One';font-size:30px;color:var(--ink)}
+.refCard .back::before,.refCard .back::after{content:'';position:absolute;left:7px;right:7px;height:3px;background:rgba(0,0,0,.22);border-radius:2px}
+.refCard .back::before{top:7px}.refCard .back::after{bottom:7px}
+.refCard .front{background:#fff;transform:rotateY(180deg);font-family:'Lilita One';font-size:30px}
+.refHint{color:#cfe0d2;font-size:13px;font-weight:600;max-width:330px;line-height:1.35;padding-bottom:4px}
+
+/* ============ AREA PERMAINAN ============ */
+.play{display:flex;gap:14px;align-items:flex-start}
+.field{flex:1.7;min-width:0}
+.fieldPanel{background:var(--paper);border:3px solid var(--ink);border-radius:18px;padding:13px;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.fieldHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.fieldHead h2{font-size:18px}
+.deckInfo{font-size:12px;font-weight:800;color:#8a7a52;background:var(--paper2);padding:3px 11px;border-radius:999px;border:2px solid var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
+.card{aspect-ratio:3/4.1;perspective:600px;position:relative;transition:transform .15s}
+.card:not(.open):hover{transform:translateY(-4px) rotate(-2deg)}
+.card .inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,1.4,.6,1)}
+.card.open .inner{transform:rotateY(180deg)}
+.card.wobble{animation:wobble .3s}
+@keyframes wobble{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:10px;
+  border:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.card .back{background:var(--paper2)}
+.card .back .num{font-family:'Lilita One';font-size:clamp(14px,1.5vw,21px);background:#fff;border:2.5px solid var(--ink);
+  border-radius:50%;width:58%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.card .back .mini{position:absolute;top:4px;right:4px;line-height:0}
+.card .front{background:#fff;transform:rotateY(180deg);font-size:17px;padding:2px}
+.card.used{filter:grayscale(1);opacity:.5}
+.card.used::after{content:'TERPAKAI';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-14deg);
+  font-family:'Lilita One';font-size:10px;letter-spacing:1px;background:var(--red);color:#fff;border:2px solid var(--ink);
+  border-radius:6px;padding:1px 6px;z-index:3;white-space:nowrap}
+.card.inPlay:not(.used){box-shadow:0 0 0 3px var(--gold)}
+.storyMini{display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'Lilita One';font-size:8.5px;letter-spacing:.5px;text-align:center;line-height:1.2}
+
+/* ============ PANEL PELATIH ============ */
+.coach{flex:1;min-width:300px;max-width:430px;display:flex;flex-direction:column;gap:12px}
+.coachPanel{background:var(--paper);border:3px solid var(--ink);border-radius:18px;padding:14px;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.coachPanel h3{font-size:15px;margin-bottom:8px}
+.mascotRow{display:flex;gap:12px;align-items:flex-end}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:10px 13px;
+  font-weight:700;font-size:14px;line-height:1.35;flex:1;margin-bottom:14px;min-height:66px;display:flex;align-items:center}
+.bubble::after{content:'';position:absolute;left:-14px;bottom:14px;border:7px solid transparent;border-right-color:var(--ink)}
+.bubble::before{content:'';position:absolute;left:-8px;bottom:17px;border:5px solid transparent;border-right-color:#fff;z-index:1}
+
+/* maskot */
+.mascot svg{display:block;animation:bob 2.8s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.mascot[data-mood=happy] svg{animation:jump .55s ease-in-out 3}
+@keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-16px) rotate(6deg)}}
+.mascot[data-mood=sad] svg{animation:slump .5s ease forwards}
+@keyframes slump{to{transform:translateY(6px) rotate(-5deg)}}
+.mascot .m-sad{display:none}
+.mascot[data-mood=sad] .m-smile{display:none}
+.mascot[data-mood=sad] .m-sad{display:inline}
+.lid{transform:scaleY(0);transform-box:fill-box;transform-origin:center top;animation:blink 4.4s infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(0)}96.5%{transform:scaleY(1)}}
+
+/* panel jawaban */
+#answerPanel{display:none}
+#answerPanel.show{display:block;animation:pop .35s}
+.exprLbl{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:#8a7a52;margin-bottom:4px}
+.expr{background:#fff;border:2.5px dashed var(--ink);border-radius:12px;padding:8px 10px;font-size:18px;
+  text-align:center;line-height:2.1;margin-bottom:10px}
+.expr .opSep{font-family:'Lilita One';color:var(--red);margin:0 6px}
+.ansRow{display:flex;gap:9px;align-items:stretch}
+#ansInput{flex:1;min-width:0;font-family:'Lilita One';font-size:22px;text-align:center;padding:8px 10px;
+  border:3px solid var(--ink);border-radius:12px;background:#fff;outline:none;color:var(--ink)}
+#ansInput:focus{box-shadow:0 0 0 3px var(--gold)}
+#btnCheck{background:var(--gold);border:3px solid var(--ink);border-radius:12px;font-family:'Lilita One';
+  font-size:15px;padding:8px 14px;box-shadow:0 5px 0 rgba(0,0,0,.3);transition:transform .1s;color:var(--ink)}
+#btnCheck:hover{transform:translateY(-2px)}
+#btnCheck:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.fmtHint{font-size:11.5px;color:#7d7357;font-weight:600;margin-top:8px;text-align:center}
+.fmtHint b{color:var(--ink)}
+
+/* riwayat */
+.hist{max-height:150px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.histItem{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fff;border:2px solid var(--ink);
+  border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700}
+.histItem .mid{font-size:11.5px;color:#7d7357;font-weight:600;flex:1;text-align:right}
+.badge{font-family:'Lilita One';font-size:11px;padding:2px 9px;border-radius:999px;border:2px solid var(--ink)}
+.badge.ok{background:var(--ok);color:#fff}.badge.no{background:var(--red);color:#fff}
+.histEmpty{font-size:12.5px;color:#8b8264;font-weight:600;text-align:center;padding:6px}
+
+/* ============ OVERLAY ============ */
+.overlay{position:fixed;inset:0;background:rgba(9,20,12,.82);display:flex;align-items:flex-start;justify-content:center;
+  padding:22px 14px;z-index:60;overflow:auto}
+.overlay.hidden{display:none}
+.sheet{background:var(--paper);border:4px solid var(--ink);border-radius:22px;box-shadow:0 10px 0 rgba(0,0,0,.35);
+  width:100%;animation:pop .35s}
+.bigBtn{display:block;width:100%;background:var(--gold);border:3px solid var(--ink);border-radius:14px;
+  font-family:'Lilita One';font-size:19px;padding:12px;margin-top:12px;box-shadow:0 6px 0 rgba(0,0,0,.3);
+  transition:transform .12s;color:var(--ink)}
+.bigBtn:hover{transform:translateY(-2px)}
+.bigBtn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+
+/* intro */
+.introSheet{max-width:900px;padding:22px}
+.introTop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.introTitle{font-size:clamp(30px,5vw,46px);line-height:1}
+.introTitle span{color:var(--gold-d)}
+.tagline{font-weight:700;color:#6f6a55;font-size:14.5px;margin-top:3px}
+.introGrid{display:grid;grid-template-columns:1.05fr 1.25fr;gap:18px;margin-top:16px}
+.nameCard{background:#fff;border:3px solid var(--ink);border-radius:16px;padding:16px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.nameCard label{font-weight:800;font-size:13px;letter-spacing:1px}
+#nameInput{width:100%;font-family:'Lilita One';font-size:22px;padding:9px 12px;border:3px solid var(--ink);
+  border-radius:12px;margin-top:6px;outline:none;text-align:center;color:var(--ink)}
+#nameInput:focus{box-shadow:0 0 0 3px var(--gold)}
+.how{background:#fff;border:3px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.how h3{font-size:16px;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.how ol{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:7px}
+.how li{counter-increment:s;position:relative;padding-left:34px;font-size:13.5px;font-weight:600;line-height:1.35}
+.how li::before{content:counter(s);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--gold);
+  border:2.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Lilita One';font-size:13px}
+.how b{color:#a06b00}
+
+/* layar hasil serangan */
+.resSheet{max-width:740px}
+.scene{position:relative;height:250px;background:#123019;border-radius:17px 17px 0 0;border-bottom:4px solid var(--ink);overflow:hidden}
+.sBox{position:absolute;left:4%;bottom:0;width:62%;height:96px;border:3px solid rgba(255,255,255,.3);border-bottom:none}
+.sSpot{position:absolute;left:13%;bottom:24px;width:12px;height:12px;background:#fff;border-radius:50%;opacity:.85}
+.sGoal{position:absolute;right:4%;bottom:44px;width:min(47%,330px);height:172px}
+.sGoal svg{width:100%;height:100%;display:block}
+.sGoal.shakeNet{animation:net .5s}
+@keyframes net{0%,100%{transform:translate(0)}30%{transform:translate(3px,6px) skewX(2deg)}60%{transform:translate(-3px,2px)}}
+.keeper{position:absolute;left:50%;bottom:6px;width:80px;margin-left:-40px;transition:transform .4s cubic-bezier(.3,1.3,.5,1)}
+.sBall{position:absolute;left:7%;bottom:16px;width:46px;height:46px;z-index:5}
+.sBig{position:absolute;left:7%;top:16px;font-family:'Lilita One';font-size:56px;color:var(--gold);
+  text-shadow:3px 3px 0 var(--ink),-2px 2px 0 var(--ink),2px -2px 0 var(--ink),-2px -2px 0 var(--ink);
+  opacity:0;transform:scale(.4);transition:all .3s cubic-bezier(.3,1.8,.5,1);z-index:6}
+.sBig.show{opacity:1;transform:scale(1) rotate(-4deg)}
+.sBig.bad{color:#ff7a5c}
+.sConf{position:absolute;inset:0;pointer-events:none;z-index:7}
+.cf{position:absolute;top:-24px;border-radius:2px;animation:cfFall linear forwards}
+@keyframes cfFall{to{transform:translateY(320px) rotate(var(--r,300deg))}}
+.resBody{padding:16px 18px 20px;display:none}
+.resBody.show{display:block}
+.resPraise{font-size:16px;font-weight:700;margin-bottom:10px}
+.cmp{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.cmpBox{flex:1;min-width:170px;background:#fff;border:3px solid var(--ink);border-radius:12px;padding:8px 12px;text-align:center}
+.cmpBox .t{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:#7d7357}
+.cmpBox .v{font-size:24px;font-family:'Lilita One'}
+.cmpBox.good .v{color:var(--ok)}.cmpBox.bad .v{color:var(--red)}
+.steps{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:10px 14px}
+.steps h4{font-size:14px;margin-bottom:4px}
+.stepCat{font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:#a06b00;margin-top:8px}
+.stepLine{font-size:19px;padding:4px 0;border-bottom:2px dashed #e5dcbc;line-height:1.9}
+.stepLine:last-of-type{border-bottom:none}
+.finalRes{font-size:19px;margin-top:10px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.decNote{font-size:13.5px;font-weight:600;color:#7d7357}
+.noteLine{font-size:13.5px;font-weight:600;color:#5c6b52;margin-bottom:8px}
+
+/* layar akhir */
+.finSheet{max-width:520px;padding:24px;text-align:center}
+.finName{font-size:14px;font-weight:800;color:#6f6a55;letter-spacing:1.5px;text-transform:uppercase}
+.finGoals{font-family:'Lilita One';font-size:54px;color:var(--gold-d);line-height:1.1;margin:4px 0}
+.stars{display:flex;justify-content:center;gap:8px;margin:8px 0}
+.finMsg{font-weight:700;font-size:16.5px;margin:6px 0 14px}
+.finStats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.finStats .cmpBox{min-width:130px}
+
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-90px);background:var(--ink);color:#fff;
+  font-weight:700;font-size:14px;padding:10px 18px;border-radius:12px;border:3px solid #000;z-index:99;
+  transition:transform .3s;box-shadow:0 5px 0 rgba(0,0,0,.3);max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+@media (max-width:1020px){
+  .play{flex-direction:column}
+  .coach{max-width:none;width:100%}
+}
+@media (max-width:640px){
+  .grid{grid-template-columns:repeat(5,1fr)}
+  .slots{justify-content:flex-start}
+  .introGrid{grid-template-columns:1fr}
+  .hbtns{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="wrap">
+  <header>
+    <div class="logo" id="logoBox"><b>PIALA <i>PECAHAN</i></b></div>
+    <div class="hud">
+      <div class="cell"><div class="lbl">Pemain</div><div class="val" id="hudName">—</div></div>
+      <div class="cell"><div class="lbl">Serangan</div><div class="val" id="hudRound">1/25</div></div>
+      <div class="cell"><div class="lbl">Gol</div><div class="val g" id="hudGoals">0</div></div>
+      <div class="cell"><div class="lbl">Tendakan</div><div class="val" id="hudShots">0</div></div>
+    </div>
+    <div class="hbtns">
+      <button class="iconBtn" id="btnSound" title="Suara nyala/mati">
+        <span id="icoOn"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#232a33"/><path d="M16 9a4 4 0 0 1 0 6M18.2 6.6a8 8 0 0 1 0 10.8" stroke="#232a33" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        <span id="icoOff" style="display:none"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#232a33"/><path d="M16 9l5 6M21 9l-5 6" stroke="#232a33" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <button class="iconBtn" id="btnHow" title="Petunjuk bermain"><svg viewBox="0 0 24 24" width="21" height="21"><path d="M8.6 8.8a3.5 3.5 0 1 1 5.3 3c-1.2.8-1.9 1.4-1.9 2.9" fill="none" stroke="#232a33" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="18.4" r="1.5" fill="#232a33"/></svg></button>
+      <button class="iconBtn" id="btnReset" title="Ulangi pertandingan"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4.5 12a7.5 7.5 0 1 1 2.2 5.3" fill="none" stroke="#232a33" stroke-width="2.2" stroke-linecap="round"/><path d="M4 12.5V7.8M4 12.5h4.7" fill="none" stroke="#232a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </header>
+
+  <!-- PAPAN SERANGAN -->
+  <section class="board">
+    <div class="boardTop">
+      <div class="boardTitle" id="boardTitle">PAPAN SERANGAN — SUSUN SOALMU DI SINI</div>
+      <div class="chip" id="phaseChip">Serangan 1 / 25</div>
+    </div>
+    <div class="slotsWrap"><div class="slots" id="slots"></div></div>
+    <div class="refRow">
+      <div>
+        <div class="refRowTitle">Kartu Wasit (Operasi) — buka SATU saja</div>
+        <div class="refCards" id="refCards"></div>
+      </div>
+      <div class="refHint" id="refHint">Kartu wasit akan muncul setelah kamu memilih kartu pecahan pertama.</div>
+    </div>
+  </section>
+
+  <div class="play">
+    <!-- LAPANGAN 50 KARTU -->
+    <section class="field">
+      <div class="fieldPanel">
+        <div class="fieldHead">
+          <h2>Lapangan 50 Kartu</h2>
+          <span class="deckInfo" id="deckInfo">50 kartu tersisa</span>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- PELATIH -->
+    <aside class="coach">
+      <div class="coachPanel">
+        <div class="mascotRow">
+          <div class="mascot" id="mascot" data-mood="idle"></div>
+          <div class="bubble" id="bubble">Halo! Aku BOLO, maskot Piala Pecahan. Ayo bermain!</div>
+        </div>
+      </div>
+
+      <div class="coachPanel" id="answerPanel">
+        <div class="exprLbl">Soalmu</div>
+        <div class="expr" id="exprLine"></div>
+        <div class="ansRow">
+          <input id="ansInput" placeholder="jawabanmu…" autocomplete="off" inputmode="text">
+          <button id="btnCheck">TENDANG &amp; CEK!</button>
+        </div>
+        <div class="fmtHint">Tulis: pecahan <b>3/4</b> &nbsp;•&nbsp; campuran <b>2 1/2</b> &nbsp;•&nbsp; desimal <b>0,5</b></div>
+      </div>
+
+      <div class="coachPanel">
+        <h3>Riwayat Tendangan</h3>
+        <div class="hist" id="hist"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- LAYAR HASIL SERANGAN -->
+<div class="overlay hidden" id="resultOv">
+  <div class="sheet resSheet">
+    <div class="scene" id="scene">
+      <div class="sBox"></div><div class="sSpot"></div>
+      <div class="sGoal" id="goalBox">
+        <svg viewBox="0 0 320 160" preserveAspectRatio="none">
+          <defs><pattern id="netP" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/></pattern></defs>
+          <rect x="6" y="6" width="308" height="150" fill="rgba(255,255,255,.07)"/>
+          <rect x="6" y="6" width="308" height="150" fill="url(#netP)"/>
+          <path d="M3 160 V6 H317 V160" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <div class="keeper" id="keeper">
+          <svg viewBox="0 0 120 150" width="80">
+            <rect x="46" y="112" width="11" height="22" rx="5" fill="#232a33"/>
+            <rect x="63" y="112" width="11" height="22" rx="5" fill="#232a33"/>
+            <rect x="38" y="130" width="21" height="11" rx="5.5" fill="#fff" stroke="#232a33" stroke-width="2.5"/>
+            <rect x="61" y="130" width="21" height="11" rx="5.5" fill="#fff" stroke="#232a33" stroke-width="2.5"/>
+            <path d="M36 70 Q14 62 8 44" stroke="#0f9b8e" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <path d="M84 70 Q106 62 112 44" stroke="#0f9b8e" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <circle cx="8" cy="42" r="9" fill="#fff" stroke="#232a33" stroke-width="3"/>
+            <circle cx="112" cy="42" r="9" fill="#fff" stroke="#232a33" stroke-width="3"/>
+            <rect x="36" y="60" width="48" height="58" rx="15" fill="#0f9b8e" stroke="#232a33" stroke-width="3.5"/>
+            <circle cx="60" cy="38" r="20" fill="#ffcf9e" stroke="#232a33" stroke-width="3.5"/>
+            <path d="M41 33 Q60 8 79 33 Q69 21 60 21 Q51 21 41 33Z" fill="#232a33"/>
+            <circle cx="53" cy="37" r="3.1" fill="#232a33"/><circle cx="67" cy="37" r="3.1" fill="#232a33"/>
+            <ellipse cx="60" cy="47" rx="4" ry="5" fill="#232a33"/>
+          </svg>
+        </div>
+      </div>
+      <div class="sBall" id="sBall"></div>
+      <div class="sBig" id="sBig"></div>
+      <div class="sConf" id="sConf"></div>
+    </div>
+    <div class="resBody" id="resBody">
+      <div class="resPraise" id="resPraise"></div>
+      <div class="cmp">
+        <div class="cmpBox" id="boxYour"><div class="t">Jawabanmu</div><div class="v" id="resYour"></div></div>
+        <div class="cmpBox good" id="boxRight"><div class="t">Jawaban Benar</div><div class="v" id="resRight"></div></div>
+      </div>
+      <div id="resNote"></div>
+      <div class="steps">
+        <h4>Pembahasan</h4>
+        <div id="resSteps"></div>
+      </div>
+      <button class="bigBtn" id="btnNext">SERANGAN BERIKUTNYA</button>
+    </div>
+  </div>
+</div>
+
+<!-- LAYAR AKHIR -->
+<div class="overlay hidden" id="finalOv">
+  <div class="sheet finSheet">
+    <div id="finTrophy"></div>
+    <div class="finName" id="finName"></div>
+    <div class="finGoals" id="finGoals"></div>
+    <div class="stars" id="finStars"></div>
+    <div class="finMsg" id="finMsg"></div>
+    <div class="finStats" id="finStats"></div>
+    <button class="bigBtn" id="btnAgain">MAIN LAGI</button>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="overlay" id="introOv">
+  <div class="sheet introSheet">
+    <div class="introTop">
+      <span id="introBall"></span>
+      <div>
+        <h1 class="introTitle">PIALA <span>PECAHAN</span></h1>
+        <div class="tagline">Pertandingan penalti seru berisi operasi hitung pecahan — susun soalmu sendiri dari 50 kartu!</div>
+      </div>
+    </div>
+    <div class="introGrid">
+      <div>
+        <div class="nameCard">
+          <label for="nameInput">NAMA PEMAIN (1 SISWA)</label>
+          <input id="nameInput" placeholder="Tulis namamu…" maxlength="20">
+          <button class="bigBtn" id="btnStart">MULAI PERTANDINGAN</button>
+        </div>
+        <div class="mascotRow" style="margin-top:14px">
+          <div class="mascot" id="mascotIntro" data-mood="idle"></div>
+          <div class="bubble">Siap-siap tendangan pertamamu! Aku BOLO, aku akan mendukungmu dari pinggir lapangan.</div>
+        </div>
+      </div>
+      <div class="how">
+        <h3 id="howWhistle">Petunjuk Bermain</h3>
+        <ol id="howList"></ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PETUNJUK (dari header) -->
+<div class="overlay hidden" id="howOv">
+  <div class="sheet" style="max-width:580px;padding:20px 22px">
+    <h3 style="font-size:22px;margin-bottom:10px">Petunjuk Bermain</h3>
+    <div class="how" style="box-shadow:none"><ol id="howOvList"></ol></div>
+    <button class="bigBtn" id="btnHowClose">MENGERTI, AYO MAIN!</button>
+  </div>
+</div>
+
+<!-- KONFIRMASI ULANG -->
+<div class="overlay hidden" id="confirmOv">
+  <div class="sheet" style="max-width:380px;padding:20px;text-align:center">
+    <h3 style="font-size:21px">Ulangi pertandingan?</h3>
+    <p style="font-weight:600;font-size:14px;margin:8px 0 4px">Skor akan direset dan 50 kartu diacak ulang dari awal.</p>
+    <div style="display:flex;gap:10px">
+      <button class="bigBtn" id="btnYes" style="margin-top:12px">Ya, ulang!</button>
+      <button class="bigBtn" id="btnNo" style="margin-top:12px;background:#fff">Batal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ==================== UTIL ==================== */
+const $=(s,el=document)=>el.querySelector(s);
+const INK='#232a33', GREEN='#2f7a3a';
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+function fr(n,d){ if(d<0){n=-n;d=-d;} const g=gcd(Math.abs(n),Math.abs(d))||1; return {n:n/g,d:d/g}; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ==================== AUDIO (Web Audio API, tanpa file) ==================== */
+let AC=null, master=null, soundOn=true, _noiseBuf=null;
+function ac(){
+  if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); master=AC.createGain(); master.gain.value=.9; master.connect(AC.destination); }
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+function env(g,t0,a,peak,dur){ g.gain.setValueAtTime(.0001,t0); g.gain.exponentialRampToValueAtTime(peak,t0+a); g.gain.exponentialRampToValueAtTime(.0001,t0+dur); }
+function tone(f0,f1,dur,type='sine',vol=.3,delay=0){
+  if(!soundOn) return;
+  try{
+    const c=ac(),t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();
+    o.type=type; o.frequency.setValueAtTime(f0,t);
+    if(f1&&f1!==f0) o.frequency.exponentialRampToValueAtTime(Math.max(f1,1),t+dur);
+    env(g,t,.012,vol,dur); o.connect(g); g.connect(master); o.start(t); o.stop(t+dur+.06);
+  }catch(e){}
+}
+function noise(dur,fType,fFreq,vol=.3,delay=0,q=1,sweepTo=0){
+  if(!soundOn) return;
+  try{
+    const c=ac(),t=c.currentTime+delay;
+    if(!_noiseBuf){ const b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0); for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; _noiseBuf=b; }
+    const s=c.createBufferSource(); s.buffer=_noiseBuf; s.loop=true;
+    const f=c.createBiquadFilter(); f.type=fType; f.frequency.setValueAtTime(fFreq,t);
+    if(sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo,t+dur);
+    f.Q.value=q;
+    const g=c.createGain(); env(g,t,.03,vol,dur);
+    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+.06);
+  }catch(e){}
+}
+function whistle(delay=0,dur=.55){
+  if(!soundOn) return;
+  try{
+    const c=ac(),t=c.currentTime+delay,o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();
+    o.type='sine'; o.frequency.value=2350;
+    l.frequency.value=38; lg.gain.value=260; l.connect(lg); lg.connect(o.frequency);
+    env(g,t,.02,.22,dur); o.connect(g); g.connect(master);
+    o.start(t); o.stop(t+dur+.06); l.start(t); l.stop(t+dur+.06);
+  }catch(e){}
+}
+const sfx={
+  click(){ tone(420,560,.07,'triangle',.18); },
+  flip(){ tone(300,520,.09,'triangle',.22); tone(900,700,.05,'square',.06,.02); },
+  pop(){ tone(520,880,.12,'triangle',.25); },
+  shake(){ tone(160,120,.16,'square',.18); },
+  kick(){ noise(.12,'lowpass',500,.5,0,.7); tone(140,45,.16,'sine',.5); },
+  whistle,
+  goal(){
+    whistle(0,.4);
+    noise(2.2,'bandpass',900,.35,0,.6,2600);
+    noise(1.8,'highpass',3200,.1,.1);
+    [523,659,784,1047].forEach((f,i)=>tone(f,f,.16,'triangle',.22,.15+i*.12));
+    tone(392,392,.7,'sawtooth',.13,.2); tone(466,466,.7,'sawtooth',.11,.35);
+  },
+  miss(){ tone(320,110,.5,'sawtooth',.25); noise(.9,'lowpass',500,.22,.08); },
+  fanfare(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,f,.22,'triangle',.25,i*.15)); whistle(1,.6); },
+  endLose(){ whistle(0,.3); whistle(.45,.3); whistle(.9,.85); tone(392,392,.9,'triangle',.18,1); },
+};
+
+/* ==================== SVG BANTUAN ==================== */
+function BALL_SVG(sz){ return `<svg viewBox="0 0 60 60" width="${sz}" height="${sz}" style="display:block"><circle cx="30" cy="30" r="26.5" fill="#fff" stroke="${INK}" stroke-width="4"/><polygon points="30,17 41,25.5 36.8,38.5 23.2,38.5 19,25.5" fill="${INK}"/><g stroke="${INK}" stroke-width="3" stroke-linecap="round"><line x1="30" y1="17" x2="30" y2="7"/><line x1="41" y1="25.5" x2="51" y2="20"/><line x1="36.8" y1="38.5" x2="45" y2="48"/><line x1="23.2" y1="38.5" x2="15" y2="48"/><line x1="19" y1="25.5" x2="9" y2="20"/></g></svg>`; }
+function pieSVG(nn,dd,sz){
+  let s=''; const cx=50,cy=50,r=45;
+  for(let i=0;i<dd;i++){
+    const a0=-Math.PI/2+i*2*Math.PI/dd, a1=a0+2*Math.PI/dd;
+    const x0=(cx+r*Math.cos(a0)).toFixed(2), y0=(cy+r*Math.sin(a0)).toFixed(2);
+    const x1=(cx+r*Math.cos(a1)).toFixed(2), y1=(cy+r*Math.sin(a1)).toFixed(2);
+    const la=(2*Math.PI/dd)>Math.PI?1:0;
+    s+=`<path d="M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 ${la} 1 ${x1} ${y1} Z" fill="${i<nn?GREEN:'#fff'}" stroke="${INK}" stroke-width="2.6"/>`;
+  }
+  return `<svg viewBox="0 0 100 100" width="${sz}" height="${sz}" style="display:block">${s}</svg>`;
+}
+function barSVG(nn,dd,sz){
+  const w=90/dd; let s='';
+  for(let i=0;i<dd;i++) s+=`<rect x="${(5+i*w).toFixed(2)}" y="10" width="${(w-2.6).toFixed(2)}" height="80" rx="5" fill="${i<nn?GREEN:'#fff'}" stroke="${INK}" stroke-width="2.6"/>`;
+  return `<svg viewBox="0 0 100 100" width="${Math.round(sz*.95)}" height="${sz}" style="display:block">${s}</svg>`;
+}
+function STAR_SVG(fill){ return `<svg viewBox="0 0 24 24" width="42" height="42"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17l-5.9 3.2 1.3-6.6L2.5 9l6.6-.8z" fill="${fill?'#f4b41a':'none'}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></svg>`; }
+const WHISTLE_SVG=(sz)=>`<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" style="display:inline-block;vertical-align:middle"><path d="M3 10h9l7-4v5l-7 3a5 5 0 1 1-9-4z" fill="#f4b41a" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1.6" fill="${INK}"/></svg>`;
+function MASCOT_SVG(w){
+  return `<svg viewBox="0 0 140 152" width="${w}" style="display:block">
+    <ellipse cx="70" cy="144" rx="36" ry="6" fill="rgba(0,0,0,.22)"/>
+    <rect x="54" y="92" width="11" height="28" rx="5.5" fill="#fff" stroke="${INK}" stroke-width="3.5"/>
+    <rect x="75" y="92" width="11" height="28" rx="5.5" fill="#fff" stroke="${INK}" stroke-width="3.5"/>
+    <rect x="42" y="120" width="28" height="13" rx="6.5" fill="${INK}"/>
+    <rect x="70" y="120" width="28" height="13" rx="6.5" fill="${INK}"/>
+    <rect x="47" y="123" width="5" height="7" rx="2" fill="#fff"/>
+    <rect x="75" y="123" width="5" height="7" rx="2" fill="#fff"/>
+    <path d="M28 62 q-13 7 -10 20" stroke="${INK}" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M112 62 q13 7 10 20" stroke="${INK}" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <circle cx="70" cy="60" r="42" fill="#fff" stroke="${INK}" stroke-width="4"/>
+    <polygon points="70,20 85,31 79.4,48.6 60.6,48.6 55,31" fill="${INK}"/>
+    <g stroke="${INK}" stroke-width="3" stroke-linecap="round">
+      <line x1="85" y1="31" x2="102" y2="26"/><line x1="79.4" y1="48.6" x2="92" y2="62"/>
+      <line x1="60.6" y1="48.6" x2="48" y2="62"/><line x1="55" y1="31" x2="38" y2="26"/>
+    </g>
+    <ellipse cx="56" cy="58" rx="10.5" ry="12.5" fill="#fff" stroke="${INK}" stroke-width="3.2"/>
+    <ellipse cx="84" cy="58" rx="10.5" ry="12.5" fill="#fff" stroke="${INK}" stroke-width="3.2"/>
+    <circle cx="58.5" cy="60" r="4.2" fill="${INK}"/><circle cx="86.5" cy="60" r="4.2" fill="${INK}"/>
+    <rect class="lid" x="45.5" y="45.5" width="21" height="25" rx="10" fill="#fff" stroke="${INK}" stroke-width="3.2"/>
+    <rect class="lid" x="73.5" y="45.5" width="21" height="25" rx="10" fill="#fff" stroke="${INK}" stroke-width="3.2"/>
+    <path class="m-smile" d="M58 76 Q70 88 82 76" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
+    <path class="m-sad" d="M58 86 Q70 75 82 86" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="44" cy="72" r="5.5" fill="#f6a1b0" opacity=".75"/><circle cx="96" cy="72" r="5.5" fill="#f6a1b0" opacity=".75"/>
+  </svg>`;
+}
+function TROPHY_SVG(){
+  return `<svg viewBox="0 0 130 150" width="140" style="display:block;margin:0 auto">
+    <path d="M38 30 h-16 a14 16 0 0 0 16 26" fill="none" stroke="${INK}" stroke-width="7"/>
+    <path d="M92 30 h16 a14 16 0 0 1 -16 26" fill="none" stroke="${INK}" stroke-width="7"/>
+    <path d="M35 16 h60 v30 a30 30 0 0 1 -60 0 z" fill="#f4b41a" stroke="${INK}" stroke-width="4"/>
+    <path d="M44 24 q-2 20 8 32" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+    <rect x="56" y="74" width="18" height="16" fill="#c98f06" stroke="${INK}" stroke-width="3.5"/>
+    <rect x="38" y="90" width="54" height="15" rx="5" fill="#8a5a2b" stroke="${INK}" stroke-width="3.5"/>
+    <rect x="31" y="105" width="68" height="14" rx="5" fill="#232a33"/>
+    <text x="65" y="116" text-anchor="middle" font-family="Lilita One" font-size="10" fill="#f4b41a">PECAHAN</text>
+  </svg>`;
+}
+
+/* ==================== DATA 50 KARTU ==================== */
+function buildDefs(){
+  const D=[];
+  [[1,2],[1,3],[2,3],[1,4],[3,4],[2,5],[3,5],[1,6],[5,6],[3,8],[5,8],[7,8]].forEach(([n,d])=>D.push({t:'frac',n,d}));
+  [[1,1,2],[2,1,2],[1,1,4],[2,1,4],[1,3,4],[1,1,3],[3,1,2],[4,1,2]].forEach(([w,n,d])=>D.push({t:'mix',w,n,d}));
+  [['pie',1,2],['bar',1,3],['pie',2,3],['pie',1,4],['bar',3,4],['bar',1,5],['pie',3,5],['pie',1,6],['pie',5,6],['bar',1,8]]
+    .forEach(([k,n,d])=>D.push({t:'pic',kind:k,n,d}));
+  const sto={
+    '1/4':'Tambahan waktu pertandingan: 1/4 dari satu jam.',
+    '2/3':'Suporter memenuhi 2 dari 3 bagian tribune stadion.',
+    '2/5':'Papan skor menyala di 2 dari 5 bagian layar.',
+    '1/3':'Kiper menutupi 1 dari 3 bagian lebar gawang.',
+    '1/2':'Bola memantul setinggi 1/2 pantulan sebelumnya.',
+    '3/4':'Rumput baru terpasang di 3 dari 4 bagian lapangan.',
+    '3/2':'Kapten tim minum 1 1/2 botol air saat jeda babak.',
+    '9/4':'Maskot BOLO makan 2 1/4 roti usai latihan.',
+    '5/4':'Latihan fisik berlangsung 1 1/4 jam tanpa henti.',
+    '7/2':'Petugas menyiram lapangan pakai 3 1/2 tong air.'
+  };
+  Object.keys(sto).forEach(k=>{ const [n,d]=k.split('/').map(Number); D.push({t:'story',v:fr(n,d),txt:sto[k]}); });
+  for(let i=1;i<=10;i++) D.push({t:'int',v:i});
+  return D; // total 50
+}
+
+/* ==================== STATE ==================== */
+const G={ name:'', phase:'intro', round:1, MAXR:25, goals:0, shots:0, cards:[], first:-1, op:null, second:-1, history:[] };
+const OPCHARS=['+','×','−',':'];
+let cardEls=[];
+
+/* ==================== RENDER PECAHAN ==================== */
+function fracHTML(f,cls=''){ if(f.d===1) return `<span class="wh ${cls}">${f.n}</span>`;
+  return `<span class="fr ${cls}"><span class="ft">${f.n}</span><span class="fb">${f.d}</span></span>`; }
+function mixHTML(f,cls=''){
+  if(f.d===1) return `<span class="wh ${cls}">${f.n}</span>`;
+  const s=f.n<0?'−':''; const a=Math.abs(f.n);
+  if(a>f.d){ const w=Math.floor(a/f.d), r=a-w*f.d;
+    return `<span class="mx ${cls}"><span class="wh">${s}${w}</span>${fracHTML({n:r,d:f.d})}</span>`; }
+  return `<span class="mx ${cls}">${s}${fracHTML({n:a,d:f.d})}</span>`;
+}
+function rawFrac(f){ return f.d===1?`<span class="wh">${f.n}</span>`:`<span class="fr"><span class="ft">${f.n}</span><span class="fb">${f.d}</span></span>`; }
+
+/* ==================== TAMPILAN KARTU ==================== */
+function cardMini(d){
+  switch(d.t){
+    case 'frac': return fracHTML(fr(d.n,d.d));
+    case 'mix' : return mixHTML(fr(d.w*d.d+d.n,d.d));
+    case 'int' : return `<span class="wh" style="font-size:23px">${d.v}</span>`;
+    case 'pic' : return d.kind==='pie'?pieSVG(d.n,d.d,38):barSVG(d.n,d.d,38);
+    case 'story': return `<div class="storyMini">${WHISTLE_SVG(17)}<span>SOAL<br>CERITA</span></div>`;
+  }
+}
+function cardBig(d){
+  switch(d.t){
+    case 'frac': return `<div class="slotVal">${fracHTML(fr(d.n,d.d))}</div>`;
+    case 'mix' : return `<div class="slotVal">${mixHTML(fr(d.w*d.d+d.n,d.d))}</div>`;
+    case 'int' : return `<div class="slotVal intXL">${d.v}</div>`;
+    case 'pic' : return d.kind==='pie'?pieSVG(d.n,d.d,72):barSVG(d.n,d.d,72);
+    case 'story': return `<div class="storyTxt">${d.txt}</div><div class="storyTag">soal cerita</div>`;
+  }
+}
+
+/* ==================== RENDER DASAR ==================== */
+function renderGrid(){
+  const g=$('#grid'); g.innerHTML=''; cardEls=[];
+  G.cards.forEach((c,i)=>{
+    const b=document.createElement('button'); b.className='card';
+    b.innerHTML=`<div class="inner">
+      <div class="face back"><span class="mini">${BALL_SVG(14)}</span><span class="num">${c.num}</span></div>
+      <div class="face front">${cardMini(c.def)}</div></div>`;
+    b.addEventListener('click',()=>onCard(i));
+    g.appendChild(b); cardEls.push(b);
+  });
+}
+function mkSlot(cls,label,id){
+  const d=document.createElement('div'); d.className='slot '+cls; d.id=id;
+  d.innerHTML=cls==='oslot'?`<span class="q">${label}</span>`:`<span>${label}</span>`;
+  return d;
+}
+function buildSlots(){
+  const s=$('#slots'); s.innerHTML='';
+  s.appendChild(mkSlot('vslot','PECAHAN 1','slotV0'));
+  s.appendChild(mkSlot('oslot','?','slotO0'));
+  s.appendChild(mkSlot('vslot','PECAHAN 2','slotV1'));
+}
+function fillV(idx,cardIdx){ const el=$('#slotV'+idx); el.innerHTML=cardBig(G.cards[cardIdx].def); el.classList.add('filled'); }
+function fillO(idx,op){ const el=$('#slotO'+idx); el.innerHTML=`<span>${op}</span>`; el.classList.add('filled'); }
+function spawnRefs(){
+  const wrap=$('#refCards'); wrap.innerHTML='';
+  shuffle([...OPCHARS]).forEach(op=>{
+    const b=document.createElement('button'); b.className='refCard';
+    b.innerHTML=`<div class="inner"><div class="f back"><span>?</span></div><div class="f front"><span>${op}</span></div></div>`;
+    b.addEventListener('click',()=>onRef(b,op));
+    wrap.appendChild(b);
+  });
+  $('#refHint').textContent='Buka SATU kartu wasit — isinya menjadi operasi soalmu!';
+}
+function clearRefs(){ $('#refCards').innerHTML=''; $('#refHint').textContent='Kartu wasit akan muncul setelah kamu memilih kartu pecahan pertama.'; }
+function updateHUD(){
+  $('#hudGoals').textContent=G.goals; $('#hudShots').textContent=G.shots;
+  $('#hudRound').textContent=`${Math.min(G.round,G.MAXR)}/${G.MAXR}`;
+}
+function updateDeckInfo(){ $('#deckInfo').textContent=G.cards.filter(c=>!c.used).length+' kartu tersisa'; }
+function renderHist(){
+  const h=$('#hist');
+  if(!G.history.length){ h.innerHTML='<div class="histEmpty">Belum ada tendangan. Ayo serang!</div>'; return; }
+  h.innerHTML=G.history.map(x=>`<div class="histItem"><span>Serangan ${x.r}</span><span class="mid">${x.ok?'jawabanmu benar':'jawabanmu: '+escapeHtml(x.u)}</span><span class="badge ${x.ok?'ok':'no'}">${x.ok?'GOL':'MELESET'}</span></div>`).join('');
+}
+
+/* ==================== PESAN MASKOT & FASE ==================== */
+const BUBBLES={
+  pickFirst:n=>`Serangan ${n} dimulai, ${G.name}! Pilih SATU kartu pecahan dari lapangan.`,
+  pickOps:()=>`Sekarang buka SATU Kartu Wasit kuning untuk memilih operasi: +, ×, −, atau :`,
+  pickValues:()=>`Terakhir: pilih SATU kartu pecahan lagi untuk melengkapi soalmu.`,
+  answer:()=>`Soal siap, ${G.name}! Hitung dengan teliti, tulis jawabanmu, lalu TENDANG!`
+};
+function setPhase(p){
+  G.phase=p;
+  $('#phaseChip').textContent=`Serangan ${G.round} / ${G.MAXR}`;
+  $('#answerPanel').classList.toggle('show',p==='answer');
+  if(p==='answer'){
+    $('#bubble').innerHTML=BUBBLES.answer(); showExpr();
+    setTimeout(()=>$('#ansInput').focus(),350);
+  } else {
+    $('#bubble').textContent=BUBBLES[p](G.round);
+  }
+  updateDeckInfo();
+}
+function setMood(m){ $('#mascot').dataset.mood=m; }
+
+/* ==================== ALUR PERMAINAN ==================== */
+function newGame(){
+  G.cards=shuffle(buildDefs()).map((def,i)=>({def,num:i+1,open:false,used:false}));
+  G.round=1; G.goals=0; G.shots=0; G.first=-1; G.op=null; G.second=-1; G.history=[];
+  renderGrid(); buildSlots(); clearRefs(); updateHUD(); renderHist(); setPhase('pickFirst');
+}
+function wob(i){ const el=cardEls[i]; el.classList.remove('wobble'); void el.offsetWidth; el.classList.add('wobble'); }
+
+function onCard(i){
+  const c=G.cards[i];
+  if(c.used){ toast('Kartu itu sudah terpakai di serangan sebelumnya.'); sfx.shake(); wob(i); return; }
+  if(c.open){ wob(i); return; }
+  if(G.phase==='pickFirst'){
+    c.open=true; cardEls[i].classList.add('open','inPlay'); sfx.flip();
+    G.first=i; fillV(0,i);
+    spawnRefs();
+    setPhase('pickOps');           // lanjut: buka 1 kartu wasit
+  } else if(G.phase==='pickValues'){
+    c.open=true; cardEls[i].classList.add('open','inPlay'); sfx.flip();
+    G.second=i; fillV(1,i);
+    sfx.pop(); setPhase('answer'); // soal 2 suku tersusun
+  } else if(G.phase==='pickOps'){
+    toast('Buka SATU Kartu Wasit dulu untuk memilih operasi!'); sfx.shake(); wob(i);
+  } else {
+    toast('Soal sudah tersusun. Jawab dulu, lalu lanjut serangan berikutnya!'); sfx.shake(); wob(i);
+  }
+}
+function onRef(b,op){
+  if(G.phase!=='pickOps'){
+    toast(G.phase==='pickFirst'?'Pilih kartu pecahan pertama dulu!':'Kartu wasit sudah kamu pilih untuk serangan ini.');
+    sfx.shake(); return;
+  }
+  if(b.classList.contains('open')) return;
+  b.classList.add('open','done'); sfx.flip();
+  G.op=op; fillO(0,op);
+  // kunci kartu wasit lainnya — cukup SATU operasi
+  document.querySelectorAll('#refCards .refCard').forEach(x=>{ if(x!==b) x.classList.add('dead'); });
+  $('#refHint').textContent=`Operasi terpilih: ${op} — sekarang pilih 1 kartu pecahan lagi!`;
+  setPhase('pickValues');
+}
+
+/* ==================== SUSUNAN SOAL & EVALUASI ==================== */
+function tokensOf(){
+  return [G.first,G.second].map(i=>{
+    const d=G.cards[i].def; let f, mixed=false;
+    switch(d.t){
+      case 'frac': f=fr(d.n,d.d); break;
+      case 'mix' : f=fr(d.w*d.d+d.n,d.d); mixed=true; break;
+      case 'pic' : f=fr(d.n,d.d); break;
+      case 'story': f={...d.v}; mixed=(d.v.d>1&&d.v.n>d.v.d); break;
+      case 'int' : f=fr(d.v,1); break;
+    }
+    return {f,mixed};
+  });
+}
+function showExpr(){
+  const tk=tokensOf();
+  $('#exprLine').innerHTML=mixHTML(tk[0].f)+` <span class="opSep">${G.op}</span> `+mixHTML(tk[1].f)+' <span class="opSep">=</span> ?';
+}
+function evalChain(tk,op){
+  const pre=[];
+  tk.forEach(v=>{ if(v.mixed&&v.f.d!==1&&Math.abs(v.f.n)>v.f.d) pre.push(`${mixHTML(v.f)} = ${rawFrac(v.f)}`); });
+  const a=tk[0].f, b=tk[1].f;
+  let raw;
+  switch(op){
+    case '+': raw={n:a.n*b.d+b.n*a.d, d:a.d*b.d}; break;
+    case '−': raw={n:a.n*b.d-b.n*a.d, d:a.d*b.d}; break;
+    case '×': raw={n:a.n*b.n, d:a.d*b.d}; break;
+    case ':': raw={n:a.n*b.d, d:a.d*b.n}; break;   // a : b = a × 1/b
+  }
+  const r=fr(raw.n,raw.d);
+  return {pre, main:`${rawFrac(a)} ${op} ${rawFrac(b)} = ${rawFrac(raw)}`, raw, r};
+}
+function decStr(f){
+  if(f.d===1) return null;
+  const v=f.n/f.d;
+  const exact=[1,2,4,5,8,10,16,20,25,50,100].includes(f.d);
+  const s=exact?String(parseFloat(v.toFixed(6))).replace('.',','):'≈ '+v.toFixed(3).replace('.',',');
+  return `boleh juga ditulis ${s}`;
+}
+function stepsHTML(ev,target){
+  let h='';
+  if(ev.pre.length) h+=`<div class="stepCat">Ubah pecahan campuran dulu</div><div class="stepLine">${ev.pre.join(' &nbsp;•&nbsp; ')}</div>`;
+  const same=(ev.raw.n===ev.r.n&&ev.raw.d===ev.r.d);
+  h+=`<div class="stepCat">Kerjakan operasinya</div><div class="stepLine">${ev.main}${same?'':' = '+rawFrac(ev.r)}</div>`;
+  const dec=decStr(target);
+  h+=`<div class="finalRes">Hasil akhir: ${mixHTML(target)}${dec?`<span class="decNote">(${dec})</span>`:''}</div>`;
+  return h;
+}
+
+/* ==================== CEK JAWABAN ==================== */
+function parseAnswer(str){
+  let s=(str||'').trim().replace(/\u2212/g,'-').replace(/,/g,'.').replace(/\s+/g,' ');
+  if(!s) return null;
+  let m;
+  if(m=s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/)){ const w=+m[1],a=+m[2],b=+m[3]; if(!b) return null; return (w<0?-1:1)*(Math.abs(w)*b+a)/b; }
+  if(m=s.match(/^(-?\d+)\/(\d+)$/)){ if(+m[2]===0) return null; return +m[1]/+m[2]; }
+  if(m=s.match(/^-?\d+(\.\d+)?$/)) return parseFloat(s);
+  return null;
+}
+const GOAL_TXT=['GOOOL! Tendanganmu tak terbaca kiper, {n}!','GOOOL! Spektakuler, {n}! Tribune langsung meledak!','SIKORR! Jawabanmu tepat sasaran, {n}!','GOOOL! Kamu top scorer sejati, {n}!'];
+const MISS_TXT=['Sedot! Bola melebar tipis. Baca pembahasannya, lalu balas di serangan berikutnya!','Ditepis kiper! Tidak apa-apa, {n} — pemain hebat belajar dari pembahasan.','Kartu kuning untuk jawaban itu! Tenang, {n}, masih banyak peluang gol!'];
+
+function onCheck(){
+  if(G.phase!=='answer') return;
+  const raw=$('#ansInput').value;
+  const u=parseAnswer(raw);
+  if(u===null){ toast('Jawaban belum sesuai format. Contoh: 3/4 atau 2 1/2 atau 0,5'); sfx.shake(); $('#ansInput').focus(); return; }
+  const tk=tokensOf();
+  const ev=evalChain(tk,G.op);
+  const target=ev.r, tv=target.n/target.d;
+  const ok=Math.abs(u-tv)<1e-6*Math.max(1,Math.abs(tv));
+  G.shots++; if(ok) G.goals++;
+  G.history.push({r:G.round,ok,u:raw.trim()});
+  renderHist(); updateHUD();
+  G.phase='result'; $('#ansInput').blur();
+  let simpNote='';
+  const fm=raw.trim().replace(/,/g,'.').match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  if(ok&&fm&&gcd(Math.abs(+fm[1]),Math.abs(+fm[2]))>1)
+    simpNote=`<div class="noteLine">Catatan kecil: jawabanmu benar — tinggal sederhanakan menjadi ${mixHTML(target)} agar lebih rapi.</div>`;
+  openResult(ok,raw.trim(),target,ev,simpNote);
+}
+
+/* ==================== MODAL HASIL + ANIMASI PENALTI ==================== */
+let resTO=[];
+function openResult(ok,raw,target,ev,simpNote){
+  resTO.forEach(clearTimeout); resTO=[];
+  $('#resultOv').classList.remove('hidden');
+  const ball=$('#sBall'),keep=$('#keeper'),big=$('#sBig'),goal=$('#goalBox'),conf=$('#sConf');
+  ball.style.transition='none'; ball.style.transform='none'; ball.style.opacity='1';
+  keep.style.transform='none'; goal.classList.remove('shakeNet');
+  big.className='sBig'; big.textContent=''; conf.innerHTML='';
+  $('#resBody').classList.remove('show');
+  $('#resPraise').textContent=(ok?pick(GOAL_TXT):pick(MISS_TXT)).replace('{n}',G.name);
+  $('#resYour').textContent=raw||'—';
+  $('#resRight').innerHTML=mixHTML(target);
+  $('#boxYour').className='cmpBox '+(ok?'good':'bad');
+  $('#resNote').innerHTML=(ok?'':'<div class="noteLine">Tidak apa-apa! Bandingkan langkah di bawah dengan hitunganmu, ya.</div>')+simpNote;
+  $('#resSteps').innerHTML=stepsHTML(ev,target);
+  $('#btnNext').textContent=G.round>=G.MAXR?'LIHAT HASIL PERTANDINGAN':'SERANGAN BERIKUTNYA';
+  setMood(ok?'happy':'sad');
+  const sc=$('#scene').getBoundingClientRect(), b=ball.getBoundingClientRect(), gr=goal.getBoundingClientRect();
+  const bx=b.left-sc.left+b.width/2, by=b.top-sc.top+b.height/2;
+  const side=Math.random()<.5;
+  const out=!ok&&Math.random()<.5;
+  const fx=side?.74:.2, fy=out?-.3:.42;
+  const tx=gr.left-sc.left+gr.width*fx, ty=gr.top-sc.top+gr.height*fy;
+  resTO.push(setTimeout(()=>{ sfx.kick(); ball.style.transition='transform .12s ease-in'; ball.style.transform='translate(-26px,6px) rotate(-30deg)'; },60));
+  resTO.push(setTimeout(()=>{
+    ball.style.transition='transform .55s cubic-bezier(.25,.8,.4,1)'+(out?', opacity .6s':'');
+    ball.style.transform=out?`translate(${tx-bx}px,${ty-by}px) rotate(680deg)`:`translate(${tx-bx}px,${ty-by}px) scale(.55) rotate(680deg)`;
+    if(out) ball.style.opacity='0';
+  },210));
+  resTO.push(setTimeout(()=>{
+    if(ok){
+      keep.style.transform=`translateX(${side?-64:64}px) rotate(${side?-22:22}deg)`;
+      goal.classList.add('shakeNet');
+      big.textContent=pick(['GOOOL!','GOOOOL!','SIKORR!']);
+      sfx.goal(); confetti();
+    } else if(out){
+      big.textContent='MELESET!'; big.classList.add('bad'); sfx.miss();
+    } else {
+      keep.style.transform=`translateX(${side?26:-26}px) rotate(${side?20:-20}deg)`;
+      big.textContent='DITEPIS!'; big.classList.add('bad');
+      ball.style.transition='transform .5s ease-in, opacity .5s';
+      ball.style.transform=`translate(${(tx-bx)*-.9}px,120px) rotate(-560deg)`;
+      ball.style.opacity='0';
+      sfx.miss();
+    }
+    big.classList.add('show');
+  },760));
+  resTO.push(setTimeout(()=>{ $('#resBody').classList.add('show'); $('#resBody').scrollIntoView({behavior:'smooth',block:'nearest'}); },1350));
+}
+function confetti(){
+  const host=$('#sConf'), colors=['#f4b41a','#ffffff','#7ed957','#ff7a5c','#0f9b8e'];
+  for(let i=0;i<52;i++){
+    const p=document.createElement('i'); p.className='cf';
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.width=(6+Math.random()*8)+'px'; p.style.height=(9+Math.random()*12)+'px';
+    p.style.animationDuration=(1+Math.random()*1.5)+'s';
+    p.style.animationDelay=(Math.random()*.25)+'s';
+    p.style.setProperty('--r',(Math.random()*760-380)+'deg');
+    host.appendChild(p);
+  }
+  setTimeout(()=>{ host.innerHTML=''; },3200);
+}
+
+/* ==================== RONDE BERIKUTNYA & AKHIR ==================== */
+ $('#btnNext').addEventListener('click',()=>{
+  $('#resultOv').classList.add('hidden'); setMood('idle');
+  [G.first,G.second].forEach(i=>{ G.cards[i].used=true; cardEls[i].classList.add('used'); cardEls[i].classList.remove('inPlay'); });
+  if(G.round>=G.MAXR){ showFinal(); return; }
+  G.round++; G.first=-1; G.op=null; G.second=-1;
+  buildSlots(); clearRefs(); setPhase('pickFirst'); updateHUD(); sfx.click();
+});
+function showFinal(){
+  G.phase='done';
+  const g=G.goals;
+  $('#finName').textContent='Pemain: '+G.name;
+  $('#finGoals').textContent=`${g} / ${G.MAXR} GOL`;
+  const stars=g>=20?3:g>=13?2:g>=6?1:0;
+  $('#finStars').innerHTML=[0,1,2].map(i=>STAR_SVG(i<stars)).join('');
+  $('#finMsg').textContent=
+    g>=20?'LUAR BIASA! Kamu top skor Piala Pecahan!':
+    g>=13?'Hebat! Trofi Piala Pecahan adalah milikmu!':
+    g>=6?'Bagus! Terus latihan agar makin banyak gol!':
+    'Jangan menyerah! Baca lagi pembahasannya dan balik menang!';
+  const acc=G.shots?Math.round(g/G.shots*100):0;
+  $('#finStats').innerHTML=
+    `<div class="cmpBox"><div class="t">Tendakan</div><div class="v">${G.shots}</div></div>
+     <div class="cmpBox"><div class="t">Akurasi</div><div class="v">${acc}%</div></div>`;
+  $('#finalOv').classList.remove('hidden');
+  if(g>=13) sfx.fanfare(); else sfx.endLose();
+}
+
+/* ==================== INTRO / KONTROL ==================== */
+const HOW_HTML=`
+<li><b>Mulai:</b> tulis namamu lalu tekan tombol mulai. Peluit berbunyi — pertandingan 25 serangan dimulai!</li>
+<li><b>Serang:</b> pilih 1 kartu pecahan dari 50 kartu lapangan. Isinya bisa pecahan biasa, pecahan campuran, gambar pecahan, soal cerita, atau bilangan cacah.</li>
+<li><b>Kartu wasit:</b> buka SATU kartu kuning berisi operasi +, ×, −, atau :. Operasi itulah yang dipakai soalmu!</li>
+<li><b>Lengkapi:</b> pilih 1 kartu pecahan lagi. Jadilah soal: <b>pecahan [operasi] pecahan</b> ciptaanmu sendiri.</li>
+<li><b>Tendang:</b> tulis jawabanmu (contoh <b>3/4</b>, <b>2 1/2</b>, atau <b>0,5</b>) lalu tekan TENDANG &amp; CEK! Pecahan campuran sebaiknya diubah ke pecahan biasa dulu.</li>
+<li><b>Gol!</b> Jawaban benar = gol, dan setiap serangan selalu ada pembahasan. Habis 50 kartu (25 serangan) = pertandingan selesai!</li>`;
+ $('#howList').innerHTML=HOW_HTML; $('#howOvList').innerHTML=HOW_HTML;
+
+function startGame(){
+  const n=$('#nameInput').value.trim();
+  if(!n){ toast('Tulis dulu namamu, bintang penalti!'); sfx.shake(); $('#nameInput').focus(); return; }
+  G.name=n; ac(); sfx.whistle();
+  $('#hudName').textContent=n;
+  $('#introOv').classList.add('hidden');
+  newGame();
+  toast(`Peluit berbunyi — selamat bertanding, ${n}!`);
+}
+ $('#btnStart').addEventListener('click',startGame);
+ $('#nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') startGame(); });
+ $('#btnCheck').addEventListener('click',onCheck);
+ $('#ansInput').addEventListener('keydown',e=>{ if(e.key==='Enter') onCheck(); });
+ $('#btnAgain').addEventListener('click',()=>{
+  $('#finalOv').classList.add('hidden'); $('#introOv').classList.remove('hidden');
+  G.phase='intro'; sfx.click();
+});
+ $('#btnHow').addEventListener('click',()=>$('#howOv').classList.remove('hidden'));
+ $('#btnHowClose').addEventListener('click',()=>$('#howOv').classList.add('hidden'));
+ $('#btnReset').addEventListener('click',()=>{
+  if(G.phase==='intro'){ toast('Pertandingan belum dimulai.'); return; }
+  $('#confirmOv').classList.remove('hidden');
+});
+ $('#btnNo').addEventListener('click',()=>$('#confirmOv').classList.add('hidden'));
+ $('#btnYes').addEventListener('click',()=>{
+  $('#confirmOv').classList.add('hidden'); $('#finalOv').classList.add('hidden'); $('#resultOv').classList.add('hidden');
+  $('#introOv').classList.remove('hidden'); G.phase='intro'; sfx.click();
+});
+ $('#btnSound').addEventListener('click',()=>{
+  soundOn=!soundOn;
+  $('#icoOn').style.display=soundOn?'block':'none';
+  $('#icoOff').style.display=soundOn?'none':'block';
+  if(soundOn) sfx.pop();
+});
+
+let toastT;
+function toast(msg){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ==================== INIT ==================== */
+ $('#mascot').innerHTML=MASCOT_SVG(112);
+ $('#mascotIntro').innerHTML=MASCOT_SVG(132);
+ $('#introBall').innerHTML=BALL_SVG(54);
+ $('#logoBox').insertAdjacentHTML('afterbegin',BALL_SVG(28));
+ $('#boardTitle').insertAdjacentHTML('afterbegin',WHISTLE_SVG(18));
+ $('#howWhistle').insertAdjacentHTML('afterbegin',WHISTLE_SVG(20));
+ $('#sBall').innerHTML=BALL_SVG(46);
+ $('#finTrophy').innerHTML=TROPHY_SVG();
+renderHist();
+newGame(); // isi lapangan di balik layar intro
+</script>
+</body>
+</html>
