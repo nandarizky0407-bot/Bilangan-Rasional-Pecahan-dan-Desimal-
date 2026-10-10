@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soal Cerita Pecahan - Penyelesaian Masalah</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg1:#FFF4E0;--bg2:#FFE2C7;--bg3:#FFD4A3;--primary:#FF6B35;--primary-dark:#E55120;--secondary:#06A77D;--secondary-dark:#048565;--accent:#FFC60B;--accent-dark:#E0A800;--pink:#FF5A8A;--blue:#3DB4F4;--dark:#2D1B17;--card:#FFFFFF;--shadow:rgba(45,27,23,.18)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Fredoka',sans-serif;background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 50%,var(--bg3) 100%);color:var(--dark);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 10% 20%,rgba(255,107,53,.08) 0,transparent 40%),radial-gradient(circle at 90% 80%,rgba(6,167,125,.08) 0,transparent 40%),radial-gradient(circle at 50% 50%,rgba(255,198,11,.06) 0,transparent 50%);pointer-events:none;z-index:0}
+.float-shape{position:fixed;border-radius:50%;opacity:.4;pointer-events:none;z-index:0;filter:blur(2px);animation:floatUp 20s linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0)}100%{transform:translateY(-100vh) rotate(360deg)}}
+.app{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:18px 22px 60px}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;line-height:1.05;margin:0 3px;font-size:.92em}
+.frac .num{border-bottom:2.5px solid currentColor;padding:0 6px 1px}
+.frac .den{padding:1px 6px 0}
+.frac.big{font-size:1.4em;margin:0 5px}
+.topbar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border:2px solid rgba(255,107,53,.2);border-radius:18px;padding:12px 20px;margin-bottom:20px;box-shadow:0 6px 20px var(--shadow);position:sticky;top:10px;z-index:50}
+.brand{display:flex;align-items:center;gap:12px;font-family:'Baloo 2';font-weight:800}
+.brand-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-size:20px;animation:spin 8s linear infinite;box-shadow:0 4px 14px rgba(255,107,53,.4)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.brand-text{font-size:18px;line-height:1}.brand-text small{display:block;font-size:11px;font-weight:500;color:#777}
+.progress-wrap{flex:1;margin:0 20px;max-width:500px}
+.progress-bar{height:10px;background:rgba(45,27,23,.1);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent),var(--secondary));border-radius:10px;transition:width .5s ease;box-shadow:0 0 12px rgba(255,107,53,.5)}
+.progress-info{text-align:center;font-size:12px;margin-top:4px;color:#666;font-weight:500}
+.nav-btns{display:flex;gap:8px;align-items:center}
+.nav-btn{background:var(--card);border:2px solid var(--primary);color:var(--primary);width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s;box-shadow:0 3px 8px var(--shadow)}
+.nav-btn:hover:not(:disabled){background:var(--primary);color:white;transform:translateY(-2px)}
+.nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.sound-btn{background:var(--card);border:2px solid var(--secondary);color:var(--secondary);width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s;box-shadow:0 3px 8px var(--shadow)}
+.sound-btn:hover{background:var(--secondary);color:white}.sound-btn.muted{border-color:#999;color:#999}
+.slides{position:relative}.slide{display:none;background:var(--card);border-radius:28px;padding:36px 40px;box-shadow:0 12px 40px var(--shadow);border:3px solid white;animation:slideIn .5s ease;position:relative;overflow:hidden}.slide.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(30px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.slide-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.slide-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-weight:800;font-size:20px;box-shadow:0 4px 12px rgba(255,107,53,.4)}
+.slide-title{font-family:'Baloo 2';font-weight:800;font-size:28px;color:var(--dark);line-height:1.1}.slide-subtitle{font-size:14px;color:#888;margin-top:2px;font-weight:500}
+#slide-cover{background:linear-gradient(135deg,#FF6B35 0%,#FFC60B 100%);color:white;text-align:center;padding:50px 40px;border-radius:32px;position:relative;overflow:hidden}
+.cover-pizza{width:160px;height:160px;margin:0 auto 18px;animation:bounce 2s ease-in-out infinite}@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}.cover-pizza svg{width:100%;height:100%;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3))}
+.cover-title{font-family:'Baloo 2';font-weight:800;font-size:48px;line-height:1;text-shadow:0 4px 14px rgba(0,0,0,.25);margin-bottom:8px;position:relative;z-index:2}
+.cover-sub{font-size:20px;font-weight:500;opacity:.95;margin-bottom:30px;position:relative;z-index:2}
+.cover-badge{display:inline-block;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:24px;backdrop-filter:blur(8px);position:relative;z-index:2}
+.names-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:700px;margin:0 auto 28px;position:relative;z-index:2}
+.name-input-wrap{background:rgba(255,255,255,.95);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.name-input-wrap label{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--dark);font-size:14px;margin-bottom:8px}
+.name-input-wrap input{width:100%;padding:12px 14px;border:2px solid #eee;border-radius:12px;font-family:'Fredoka';font-size:16px;font-weight:600;color:var(--dark);transition:all .2s}
+.name-input-wrap input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,107,53,.15)}
+.start-btn{background:white;color:var(--primary);border:none;padding:16px 38px;border-radius:30px;font-family:'Baloo 2';font-weight:800;font-size:20px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:all .2s;position:relative;z-index:2;display:inline-flex;align-items:center;gap:10px}
+.start-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.section-header{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border-radius:18px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.section-header h3{font-family:'Baloo 2';font-size:22px}.section-header p{font-size:13px;opacity:.9}
+.student-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.student-col{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:18px;padding:18px;border:3px solid var(--bg2)}
+.student-col.s1{border-color:var(--primary)}.student-col.s2{border-color:var(--secondary)}
+.student-col h3{font-family:'Baloo 2';font-size:18px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed #ddd;display:flex;align-items:center;gap:8px}
+.student-col.s1 h3{color:var(--primary)}.student-col.s2 h3{color:var(--secondary)}
+.q-item{background:white;border-radius:14px;padding:14px;margin-bottom:12px;border:2px solid #f0f0f0;transition:all .2s}
+.q-item.answered-correct{border-color:var(--secondary);background:#E7F8F1}.q-item.answered-wrong{border-color:#FF5A5A;background:#FFEBEB}
+.q-num{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--dark);width:26px;height:26px;border-radius:50%;font-family:'Baloo 2';font-weight:700;font-size:13px;margin-right:8px;flex-shrink:0}
+.q-text{font-size:14px;line-height:1.6;font-weight:500;display:inline}
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.q-opt{background:#FFF8E7;border:2px solid #eee;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px;min-height:42px;text-align:center}
+.q-opt:hover{border-color:var(--primary)}.q-opt.selected{background:var(--primary);color:white;border-color:var(--primary)}
+.q-actions{display:flex;gap:8px;margin-top:10px}
+.q-btn{flex:1;padding:8px;border-radius:10px;border:none;font-family:'Fredoka';font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-check{background:var(--secondary);color:white}.btn-check:hover{background:var(--secondary-dark)}
+.btn-explain{background:var(--accent);color:var(--dark)}.btn-explain:hover{background:var(--accent-dark)}
+.q-feedback{margin-top:8px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;display:none;line-height:1.5}
+.q-feedback.show{display:block;animation:fadeIn .3s}
+.q-feedback.correct{background:#D4F0E0;color:var(--secondary-dark);border:1px solid var(--secondary)}
+.q-feedback.wrong{background:#FFE0E0;color:#C0392B;border:1px solid #E74C3C}
+.q-feedback.explain{background:#FFF4D6;color:#7D5C00;border:1px solid var(--accent)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.example-box{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:20px;padding:24px;border:3px solid var(--bg2);margin-bottom:18px}
+.example-problem{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border-radius:14px;padding:18px 22px;margin-bottom:18px;font-size:16px;line-height:1.7;font-weight:500}
+.example-problem .badge{display:inline-block;background:rgba(255,255,255,.25);padding:3px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-right:8px;text-transform:uppercase}
+.example-steps{display:grid;gap:14px;min-height:60px}
+.guide-q-card{background:linear-gradient(135deg,#FFF4D6,#FFE9A8);border-radius:14px;padding:16px 18px;margin-bottom:14px;border-left:5px solid var(--accent);display:flex;gap:12px;align-items:flex-start;animation:fadeIn .4s ease}
+.guide-q-card .guide-icon{font-size:24px;color:var(--primary);flex-shrink:0;margin-top:2px}
+.guide-q-card .guide-text{font-size:15px;line-height:1.6;font-weight:600;color:var(--dark)}
+.step-card{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start;background:white;border-radius:14px;padding:16px;border:2px solid #f0f0f0;animation:fadeIn .4s ease}
+.step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--secondary),var(--accent));color:white;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-weight:800;font-size:20px;box-shadow:0 4px 12px rgba(6,167,125,.3)}
+.step-content h4{font-family:'Baloo 2';font-size:16px;color:var(--primary);margin-bottom:6px}
+.step-content p{font-size:14px;line-height:1.6;color:#444}
+.step-visual{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+.pizza-svg{width:100%;max-width:200px;margin:0 auto;display:block}
+.op-symbol{font-family:'Baloo 2';font-size:32px;font-weight:800;color:var(--primary)}
+.step-formula{background:linear-gradient(135deg,#FFF8E7,#FFE9C7);padding:10px;border-radius:10px;text-align:center;font-family:'Baloo 2';font-weight:700;font-size:18px;color:var(--primary);margin-top:10px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px}
+.example-answer{background:linear-gradient(135deg,var(--secondary),var(--secondary-dark));color:white;border-radius:14px;padding:18px 22px;text-align:center;font-family:'Baloo 2';font-weight:800;font-size:22px;margin-top:14px;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;animation:fadeIn .5s}
+.step-reveal-btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border:none;padding:14px 32px;border-radius:14px;font-family:'Baloo 2';font-weight:700;font-size:17px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;margin-top:14px;box-shadow:0 6px 16px rgba(255,107,53,.3)}
+.step-reveal-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,107,53,.4)}
+.ex-btn-wrap{text-align:center;margin-top:10px}
+.kuis-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.kuis-info{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:12px 22px;border-radius:14px;font-family:'Baloo 2';font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 16px rgba(255,107,53,.3);flex:1}
+.diamond-scores{display:flex;gap:14px}
+.diamond-card{background:white;border:2px solid var(--bg2);padding:10px 16px;border-radius:14px;display:flex;align-items:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:18px;box-shadow:0 4px 12px var(--shadow)}
+.diamond-card.s1{border-color:var(--primary);color:var(--primary)}.diamond-card.s2{border-color:var(--secondary);color:var(--secondary)}
+.diamond-card i{font-size:20px;color:var(--accent);animation:shimmer 2s ease-in-out infinite}
+@keyframes shimmer{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.diamond-card small{font-size:11px;font-weight:500;color:#888;display:block}
+.kuis-pickers{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.picker{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:18px;padding:16px;border:3px solid var(--bg2);transition:all .3s}
+.picker.s1{border-color:var(--primary)}.picker.s2{border-color:var(--secondary)}
+.picker.locked{opacity:.55;filter:grayscale(.4)}.picker.locked .number-grid{pointer-events:none}
+.picker-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:2px dashed #ddd;gap:8px}
+.picker-header h3{font-family:'Baloo 2';font-size:16px;display:flex;align-items:center;gap:6px;font-weight:700}
+.picker.s1 .picker-header h3{color:var(--primary)}.picker.s2 .picker-header h3{color:var(--secondary)}
+.picker-status{font-size:11px;font-weight:700;padding:5px 11px;border-radius:10px;background:#E7F8F1;color:var(--secondary-dark);white-space:nowrap}
+.picker-status.busy{background:#FFE9C7;color:#7D5C00;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.number-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.number-grid.compact{gap:6px}
+.num-btn{aspect-ratio:1;background:white;border:2px solid var(--bg2);border-radius:14px;cursor:pointer;font-family:'Baloo 2';font-weight:800;font-size:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .2s;position:relative;box-shadow:0 3px 8px var(--shadow)}
+.number-grid.compact .num-btn{font-size:14px;border-radius:10px;box-shadow:0 2px 6px var(--shadow)}.number-grid.compact .num-btn small{font-size:8px}
+.num-btn:hover:not(:disabled){transform:translateY(-3px);border-color:var(--primary);box-shadow:0 6px 14px var(--shadow)}
+.num-btn small{font-size:9px;color:#888;font-weight:600;text-transform:uppercase}
+.num-btn.easy{background:linear-gradient(135deg,#E7F8F1 0%,#C8F0DC 100%)}.num-btn.medium{background:linear-gradient(135deg,#FFF4D6 0%,#FFE9A8 100%)}.num-btn.hard{background:linear-gradient(135deg,#FFE0E0 0%,#FFB8B8 100%)}
+.num-btn:disabled{cursor:not-allowed;opacity:.7}
+.num-btn.used-easy{background:#A8D8B9;color:white;border-color:var(--secondary)}.num-btn.used-medium{background:#E0C46A;color:white;border-color:var(--accent)}.num-btn.used-hard{background:#E89090;color:white;border-color:#C0392B}
+.num-btn.used-easy small,.num-btn.used-medium small,.num-btn.used-hard small{color:rgba(255,255,255,.85)}
+.kuis-question-area{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.kuis-side{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:18px;padding:20px;min-height:280px;border:3px solid var(--bg2)}
+.kuis-side.s1{border-color:var(--primary)}.kuis-side.s2{border-color:var(--secondary)}
+.kuis-side h3{font-family:'Baloo 2';font-size:18px;margin-bottom:14px;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:2px dashed #ddd}
+.kuis-side.s1 h3{color:var(--primary)}.kuis-side.s2 h3{color:var(--secondary)}.kuis-side h3 .badge{background:var(--accent);color:var(--dark);padding:2px 8px;border-radius:8px;font-size:11px}
+.empty-state{text-align:center;padding:40px 20px;color:#aaa}.empty-state i{font-size:48px;margin-bottom:10px;opacity:.5;display:block}.empty-state p{font-size:14px}
+.kuis-question{background:white;border-radius:14px;padding:16px;margin-bottom:14px;border:2px solid #f0f0f0}
+.kuis-q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px}
+.kuis-level{padding:3px 10px;border-radius:8px;font-weight:700;text-transform:uppercase;font-size:10px}
+.kuis-level.mudah{background:#C8F0DC;color:var(--secondary-dark)}.kuis-level.sedang{background:#FFE9A8;color:#7D5C00}.kuis-level.sulit{background:#FFB8B8;color:#C0392B}
+.kuis-diamond{color:var(--accent-dark);font-weight:700;font-size:13px;display:flex;align-items:center;gap:4px}.kuis-diamond i{color:var(--accent)}
+.kuis-q-text{font-size:15px;line-height:1.7;font-weight:500;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:2px}
+.kuis-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.kuis-opt{background:#FFF8E7;border:2px solid #eee;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;transition:all .15s;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px;min-height:42px}
+.kuis-opt:hover{border-color:var(--primary)}.kuis-opt.selected{background:var(--primary);color:white;border-color:var(--primary)}
+.kuis-actions{display:flex;gap:8px;margin-top:10px}
+.kuis-result{margin-top:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;display:none;line-height:1.5}
+.kuis-result.show{display:block;animation:fadeIn .3s}
+.kuis-result.correct{background:#D4F0E0;color:var(--secondary-dark);border:1px solid var(--secondary)}.kuis-result.wrong{background:#FFE0E0;color:#C0392B;border:1px solid #E74C3C}.kuis-result.explain{background:#FFF4D6;color:#7D5C00;border:1px solid var(--accent)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:20px 0}
+.result-card{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:24px;padding:30px;text-align:center;border:3px solid;position:relative;overflow:hidden}
+.result-card.s1{border-color:var(--primary)}.result-card.s2{border-color:var(--secondary)}
+.result-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:42px;color:white}
+.result-card.s1 .result-avatar{background:var(--primary)}.result-card.s2 .result-avatar{background:var(--secondary)}
+.result-name{font-family:'Baloo 2';font-size:22px;font-weight:800;margin-bottom:6px}
+.result-stats{display:flex;justify-content:center;gap:20px;margin:14px 0}
+.result-stat small{font-size:12px;color:#888;display:block}.result-stat strong{font-family:'Baloo 2';font-size:24px}
+.result-card.s1 .result-stat strong{color:var(--primary)}.result-card.s2 .result-stat strong{color:var(--secondary)}
+.diamond-show{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:white;border-radius:18px;padding:14px;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Baloo 2';font-weight:800;font-size:28px;box-shadow:0 6px 16px rgba(255,198,11,.4)}
+.diamond-show i{font-size:32px;animation:shimmer 2s ease-in-out infinite}
+.winner-banner{text-align:center;background:linear-gradient(135deg,var(--accent),var(--primary));color:white;padding:20px;border-radius:18px;margin-top:20px;font-family:'Baloo 2';font-weight:800;font-size:22px;box-shadow:0 8px 22px rgba(255,107,53,.3)}
+.soccer-board{background:linear-gradient(135deg,#1a8B3a 0%,#0d6B28 100%);border-radius:24px;padding:24px;color:white;position:relative;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.soccer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:12px}
+.soccer-score{background:rgba(255,255,255,.2);padding:10px 18px;border-radius:14px;backdrop-filter:blur(8px);display:flex;align-items:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:18px}
+.soccer-score i{color:var(--accent);font-size:20px;animation:shimmer 2s ease-in-out infinite}
+.soccer-turn{background:rgba(255,255,255,.2);padding:10px 18px;border-radius:14px;backdrop-filter:blur(8px);font-family:'Baloo 2';font-weight:700;font-size:16px}
+.soccer-field-area{background:linear-gradient(135deg,#2da44e 0%,#1a8B3a 100%);border-radius:18px;padding:20px;margin-bottom:14px;position:relative;min-height:220px;overflow:hidden}
+.soccer-field-area::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,transparent 0,transparent 40px,rgba(255,255,255,.05) 40px,rgba(255,255,255,.05) 80px)}
+.field-center-line{position:absolute;left:50%;top:0;bottom:0;width:3px;background:rgba(255,255,255,.4)}
+.field-center-circle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:3px solid rgba(255,255,255,.4);border-radius:50%}
+.field-goal{position:absolute;right:0;top:50%;transform:translateY(-50%);width:60px;height:120px;border:4px solid white;border-right:none;border-radius:4px 0 0 4px;background:rgba(255,255,255,.1)}
+.field-goal::after{content:'';position:absolute;inset:4px;background-image:linear-gradient(0deg,rgba(255,255,255,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.15) 1px,transparent 1px);background-size:10px 10px}
+.goalkeeper{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:50px;height:75px;z-index:4;transition:all .9s cubic-bezier(.4,0,.6,1);filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.goalkeeper svg{width:100%;height:100%}
+.goalkeeper.dive-left{transform:translateY(-30%) translateX(-30px) rotate(-35deg)}
+.goalkeeper.dive-right{transform:translateY(-30%) translateX(30px) rotate(35deg)}
+.goalkeeper.save{transform:translateY(-90%) scale(1.2);animation:keeperSave .5s ease}
+@keyframes keeperSave{0%,100%{transform:translateY(-90%) scale(1.2)}50%{transform:translateY(-90%) scale(1.3) rotate(10deg)}}
+.soccer-ball{position:absolute;left:30px;top:50%;transform:translateY(-50%);font-size:40px;transition:all 1.3s cubic-bezier(.5,.1,.5,1);z-index:5}
+.soccer-ball.gol{left:calc(100% - 75px);top:50%;transform:translateY(-50%) scale(.35);opacity:.3}
+.soccer-ball.miss{left:calc(100% - 110px);top:15%;transform:translateY(-50%) scale(.55) rotate(180deg);opacity:.4}
+.soccer-msg{position:absolute;left:50%;top:15%;transform:translateX(-50%);font-family:'Baloo 2';font-weight:800;font-size:36px;color:var(--accent);text-shadow:0 4px 12px rgba(0,0,0,.5);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:10}
+.soccer-msg.show{opacity:1;animation:popMsg .5s ease}
+@keyframes popMsg{0%{transform:translateX(-50%) scale(0)}60%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(1)}}
+.soccer-question{background:rgba(255,255,255,.15);border-radius:14px;padding:16px;margin-bottom:14px;backdrop-filter:blur(8px);min-height:80px}
+.soccer-question .sq-text{font-size:16px;line-height:1.6;font-weight:500;margin-bottom:10px}
+.soccer-question .sq-options{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.sq-opt{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.3);padding:8px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;text-align:center;display:flex;align-items:center;justify-content:center;min-height:42px}
+.sq-opt:hover{background:rgba(255,255,255,.35)}.sq-opt.selected{background:var(--accent);color:var(--dark);border-color:var(--accent)}
+.sq-actions{display:flex;gap:8px}
+.sq-btn{flex:1;padding:8px;border-radius:10px;border:none;font-family:'Fredoka';font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.sq-btn.check{background:var(--secondary);color:white}.sq-btn.explain{background:var(--accent);color:var(--dark)}
+.sq-feedback{margin-top:8px;padding:8px 12px;border-radius:10px;font-size:13px;font-weight:500;display:none;line-height:1.5}
+.sq-feedback.show{display:block;animation:fadeIn .3s}.sq-feedback.correct{background:rgba(6,167,125,.4)}.sq-feedback.wrong{background:rgba(255,90,90,.4)}.sq-feedback.explain{background:rgba(255,198,11,.3)}
+.card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.card-btn{aspect-ratio:1;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.3);border-radius:12px;cursor:pointer;font-family:'Baloo 2';font-weight:800;font-size:20px;color:white;display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative}
+.card-btn:hover:not(:disabled){background:rgba(255,255,255,.35);transform:translateY(-2px)}
+.card-btn:disabled{cursor:not-allowed}
+.card-btn.answered{background:rgba(6,167,125,.5);border-color:var(--secondary)}
+.card-btn.answered::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;top:-6px;right:-6px;background:var(--secondary);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px}
+.card-btn.current{background:var(--accent);color:var(--dark);border-color:var(--accent);box-shadow:0 0 12px rgba(255,198,11,.5)}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.sum-card{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:18px;padding:20px;border:2px solid var(--bg2)}
+.sum-card h4{font-family:'Baloo 2';font-size:18px;color:var(--primary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sum-card p{font-size:14px;line-height:1.6;color:#444;margin-bottom:8px}
+.sum-card .formula{background:linear-gradient(135deg,#FFF8E7,#FFE9C7);padding:10px;border-radius:10px;text-align:center;font-family:'Baloo 2';font-weight:700;font-size:16px;color:var(--primary);display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px;margin:8px 0}
+.reflect-list{display:grid;gap:14px;margin-top:8px}
+.reflect-item{background:linear-gradient(135deg,#fff 0%,#FFF8E7 100%);border-radius:14px;padding:16px 18px;border-left:5px solid var(--secondary);display:flex;gap:14px;align-items:flex-start}
+.reflect-item i{font-size:22px;color:var(--secondary);margin-top:2px}
+.reflect-item p{font-size:14px;line-height:1.6;color:var(--dark)}.reflect-item strong{color:var(--primary)}
+#slide-thanks{background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 70%,var(--accent) 100%);color:white;text-align:center;padding:60px 40px;border-radius:32px;position:relative;overflow:hidden}
+.thanks-icon{width:100px;height:100px;margin:0 auto 20px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:48px;animation:bounce 2s ease-in-out infinite;position:relative;z-index:2;backdrop-filter:blur(8px)}
+.thanks-title{font-family:'Baloo 2';font-weight:800;font-size:46px;margin-bottom:10px;text-shadow:0 4px 14px rgba(0,0,0,.25);position:relative;z-index:2}
+.thanks-sub{font-size:18px;margin-bottom:24px;opacity:.95;position:relative;z-index:2;font-weight:500}
+.thanks-names{display:flex;justify-content:center;gap:30px;margin:20px 0;position:relative;z-index:2;flex-wrap:wrap}
+.thanks-name{background:rgba(255,255,255,.15);padding:8px 18px;border-radius:14px;font-weight:600;backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.2)}
+.thanks-quote{font-style:italic;font-size:16px;margin-top:20px;opacity:.9;max-width:600px;margin-left:auto;margin-right:auto;position:relative;z-index:2;line-height:1.6}
+.confetti{position:fixed;width:10px;height:10px;pointer-events:none;z-index:9999;top:-10px;animation:confettiFall 3s linear forwards}
+@keyframes confettiFall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+@media(max-width:900px){.student-cols,.kuis-question-area,.result-grid,.kuis-pickers,.summary-grid{grid-template-columns:1fr}.cover-title{font-size:36px}.slide-title{font-size:22px}.slide{padding:24px 20px}.names-row{grid-template-columns:1fr}.q-options,.kuis-options{grid-template-columns:1fr}.card-grid{grid-template-columns:repeat(4,1fr)}.step-card{grid-template-columns:1fr}.step-num{margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="float-shape" style="width:80px;height:80px;background:var(--primary);left:5%;animation-delay:0s"></div>
+<div class="float-shape" style="width:50px;height:50px;background:var(--secondary);left:15%;animation-delay:-5s"></div>
+<div class="float-shape" style="width:70px;height:70px;background:var(--accent);right:10%;animation-delay:-10s"></div>
+<div class="app">
+<div class="topbar">
+<div class="brand"><div class="brand-icon"><i class="fas fa-futbol"></i></div><div class="brand-text">Soal Cerita Pecahan<small>Penyelesaian Masalah Operasi Hitung Pecahan</small></div></div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:7%"></div></div><div class="progress-info"><span id="slideCounter">1 / 14</span></div></div>
+<div class="nav-btns"><button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="Suara"><i class="fas fa-volume-up"></i></button><button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button><button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button></div>
+</div>
+<div class="slides">
+<div class="slide active" id="slide-cover">
+<div class="cover-pizza"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="#FFC60B" stroke="#fff" stroke-width="4"/><path d="M100 100 L100 10 A90 90 0 0 1 178.5 55 Z" fill="#FF6B35"/><path d="M100 100 L178.5 55 A90 90 0 0 1 178.5 145 Z" fill="#FF5A8A"/><path d="M100 100 L178.5 145 A90 90 0 0 1 100 190 Z" fill="#06A77D"/><path d="M100 100 L100 190 A90 90 0 0 1 21.5 145 Z" fill="#3DB4F4"/><path d="M100 100 L21.5 145 A90 90 0 0 1 21.5 55 Z" fill="#9B59B6"/><path d="M100 100 L21.5 55 A90 90 0 0 1 100 10 Z" fill="#FFC60B"/><circle cx="100" cy="100" r="6" fill="#fff"/></svg></div>
+<div class="cover-badge">Kelas 3 SD • Matematika</div>
+<h1 class="cover-title">Soal Cerita Pecahan!</h1>
+<p class="cover-sub">Yuk, belajar menyelesaikan masalah penjumlahan & pengurangan pecahan!</p>
+<div class="names-row">
+<div class="name-input-wrap"><label><i class="fas fa-user"></i> Nama Pemain 1</label><input type="text" id="inputName1" placeholder="Tulis namamu di sini..." maxlength="20"></div>
+<div class="name-input-wrap"><label><i class="fas fa-user"></i> Nama Pemain 2</label><input type="text" id="inputName2" placeholder="Tulis namamu di sini..." maxlength="20"></div>
+</div>
+<button class="start-btn" onclick="startAdventure()"><i class="fas fa-rocket"></i> Mulai Petualangan!</button>
+</div>
+
+<div class="slide" id="slide-pemanasan">
+<div class="slide-header"><div class="slide-num">2</div><div><div class="slide-title">Pemanasan</div><div class="slide-subtitle">Penjumlahan & Pengurangan Pecahan - 5 soal per siswa</div></div></div>
+<div class="section-header"><div><h3><i class="fas fa-fire"></i> Pemanasan</h3><p>Latihan singkat pecahan dengan penyebut sama dan berbeda!</p></div></div>
+<div class="student-cols">
+<div class="student-col s1"><h3><i class="fas fa-user"></i> <span id="pemName1">Siswa 1</span></h3><div id="pemList1"></div></div>
+<div class="student-col s2"><h3><i class="fas fa-user"></i> <span id="pemName2">Siswa 2</span></h3><div id="pemList2"></div></div>
+</div>
+</div>
+
+<div class="slide" id="slide-contoh1"><div class="slide-header"><div class="slide-num">3</div><div><div class="slide-title">Contoh 1: Sangat Mudah</div><div class="slide-subtitle">Penjumlahan pecahan penyebut sama</div></div></div><div class="example-box"><div class="example-problem"><span class="badge">Sangat Mudah</span> Ibu memotong sebuah kue menjadi 4 bagian. Budi memakan <span class="frac"><span class="num">1</span><span class="den">4</span></span> bagian dan Wati memakan <span class="frac"><span class="num">2</span><span class="den">4</span></span> bagian. Berapa bagian kue yang sudah dimakan oleh mereka berdua?</div><div class="example-steps" id="ex1-steps"></div><div class="example-answer" id="ex1-answer" style="display:none"><i class="fas fa-check-circle"></i> Jawaban: <span class="frac big"><span class="num">3</span><span class="den">4</span></span> bagian</div><div class="ex-btn-wrap" id="ex1-btn"></div></div></div>
+
+<div class="slide" id="slide-contoh2"><div class="slide-header"><div class="slide-num">4</div><div><div class="slide-title">Contoh 2: Mudah</div><div class="slide-subtitle">Pengurangan pecahan penyebut sama</div></div></div><div class="example-box"><div class="example-problem"><span class="badge">Mudah</span> Di dalam botol minum terdapat air sebanyak <span class="frac"><span class="num">7</span><span class="den">10</span></span> liter. Setelah berolahraga, ayah meminumnya sebanyak <span class="frac"><span class="num">3</span><span class="den">10</span></span> liter. Berapa liter sisa air di dalam botol ayah?</div><div class="example-steps" id="ex2-steps"></div><div class="example-answer" id="ex2-answer" style="display:none"><i class="fas fa-check-circle"></i> Jawaban: <span class="frac big"><span class="num">4</span><span class="den">10</span></span> liter</div><div class="ex-btn-wrap" id="ex2-btn"></div></div></div>
+
+<div class="slide" id="slide-contoh3"><div class="slide-header"><div class="slide-num">5</div><div><div class="slide-title">Contoh 3: Sedang</div><div class="slide-subtitle">Bagian utuh dikurangi beberapa pecahan</div></div></div><div class="example-box"><div class="example-problem"><span class="badge">Sedang</span> Sebuah roti tawar dipotong menjadi 8 bagian sama besar (<span class="frac"><span class="num">8</span><span class="den">8</span></span>). Edo memakan <span class="frac"><span class="num">3</span><span class="den">8</span></span> bagian dan Lani memakan <span class="frac"><span class="num">1</span><span class="den">8</span></span> bagian. Sisa roti yang belum dimakan adalah...</div><div class="example-steps" id="ex3-steps"></div><div class="example-answer" id="ex3-answer" style="display:none"><i class="fas fa-check-circle"></i> Jawaban: <span class="frac big"><span class="num">4</span><span class="den">8</span></span> bagian</div><div class="ex-btn-wrap" id="ex3-btn"></div></div></div>
+
+<div class="slide" id="slide-contoh4"><div class="slide-header"><div class="slide-num">6</div><div><div class="slide-title">Contoh 4: Sulit</div><div class="slide-subtitle">Soal cerita dua langkah penyelesaian</div></div></div><div class="example-box"><div class="example-problem"><span class="badge">Sulit</span> Sisa minyak goreng di dapur adalah <span class="frac"><span class="num">2</span><span class="den">6</span></span> liter. Ibu lalu membeli lagi <span class="frac"><span class="num">3</span><span class="den">6</span></span> liter. Setelah itu, ibu memakai <span class="frac"><span class="num">4</span><span class="den">6</span></span> liter minyak untuk menggoreng ayam. Sisa minyak goreng ibu sekarang adalah...</div><div class="example-steps" id="ex4-steps"></div><div class="example-answer" id="ex4-answer" style="display:none"><i class="fas fa-check-circle"></i> Jawaban: <span class="frac big"><span class="num">1</span><span class="den">6</span></span> liter</div><div class="ex-btn-wrap" id="ex4-btn"></div></div></div>
+
+<div class="slide" id="slide-contoh5"><div class="slide-header"><div class="slide-num">7</div><div><div class="slide-title">Contoh 5: Sangat Sulit</div><div class="slide-subtitle">Melibatkan lebih dari dua pecahan</div></div></div><div class="example-box"><div class="example-problem"><span class="badge">Sangat Sulit</span> Tali tambang kakek panjangnya utuh <span class="frac"><span class="num">10</span><span class="den">10</span></span> meter. Dipotong untuk tali jemuran <span class="frac"><span class="num">4</span><span class="den">10</span></span> meter, untuk mengikat kardus <span class="frac"><span class="num">2</span><span class="den">10</span></span> meter, dan untuk membuat ayunan <span class="frac"><span class="num">3</span><span class="den">10</span></span> meter. Sisa tali tambang kakek adalah...</div><div class="example-steps" id="ex5-steps"></div><div class="example-answer" id="ex5-answer" style="display:none"><i class="fas fa-check-circle"></i> Jawaban: <span class="frac big"><span class="num">1</span><span class="den">10</span></span> meter</div><div class="ex-btn-wrap" id="ex5-btn"></div></div></div>
+
+<div class="slide" id="slide-latihan"><div class="slide-header"><div class="slide-num">8</div><div><div class="slide-title">Latihan Soal Cerita</div><div class="slide-subtitle">10 soal untuk masing-masing siswa</div></div></div><div class="section-header"><div><h3><i class="fas fa-pencil-alt"></i> Latihan Mandiri</h3><p>Pilih jawaban, lalu klik "Cek Jawaban". Baca "Pembahasan" jika perlu!</p></div></div><div class="student-cols"><div class="student-col s1"><h3><i class="fas fa-user"></i> <span id="latName1">Siswa 1</span></h3><div id="latList1"></div></div><div class="student-col s2"><h3><i class="fas fa-user"></i> <span id="latName2">Siswa 2</span></h3><div id="latList2"></div></div></div></div>
+
+<div class="slide" id="slide-kuis"><div class="slide-header"><div class="slide-num">9</div><div><div class="slide-title">Kuis Petualangan Pecahan</div><div class="slide-subtitle">30 soal • Siapa cepat dia dapat!</div></div></div><div class="kuis-header"><div class="kuis-info"><i class="fas fa-bolt"></i> Siapa cepat dia dapat! Jawab sebanyak-banyaknya!</div><div class="diamond-scores"><div class="diamond-card s1"><i class="fas fa-gem"></i><div><small id="kuisName1">Siswa 1</small><span id="dScore1">0</span></div></div><div class="diamond-card s2"><i class="fas fa-gem"></i><div><small id="kuisName2">Siswa 2</small><span id="dScore2">0</span></div></div></div></div><div class="kuis-pickers"><div class="picker s1" id="picker1"><div class="picker-header"><h3><i class="fas fa-user"></i> <span id="pickerName1">Siswa 1</span></h3><div class="picker-status" id="status1">Siap memilih!</div></div><div class="number-grid compact" id="grid1"></div></div><div class="picker s2" id="picker2"><div class="picker-header"><h3><i class="fas fa-user"></i> <span id="pickerName2">Siswa 2</span></h3><div class="picker-status" id="status2">Siap memilih!</div></div><div class="number-grid compact" id="grid2"></div></div></div><div class="kuis-question-area"><div class="kuis-side s1" id="kuisSide1"><h3><i class="fas fa-user"></i> <span id="side1Name">Siswa 1</span> <span class="badge">KIRI</span></h3><div class="empty-state"><i class="fas fa-pizza-slice"></i><p>Pilih nomor soal di atas!</p></div></div><div class="kuis-side s2" id="kuisSide2"><h3><i class="fas fa-user"></i> <span id="side2Name">Siswa 2</span> <span class="badge">KANAN</span></h3><div class="empty-state"><i class="fas fa-pizza-slice"></i><p>Pilih nomor soal di atas!</p></div></div></div></div>
+
+<div class="slide" id="slide-hasil"><div class="slide-header"><div class="slide-num">10</div><div><div class="slide-title">Hasil Kuis & Perolehan Diamond</div><div class="slide-subtitle">Mari kita lihat siapa yang mendapat diamond terbanyak!</div></div></div><div class="result-grid"><div class="result-card s1"><div class="result-avatar"><i class="fas fa-user"></i></div><div class="result-name" id="resultName1">Siswa 1</div><div class="result-stats"><div class="result-stat"><small>Benar</small><strong id="correctCount1">0</strong></div><div class="result-stat"><small>Total Soal</small><strong id="totalCount1">0</strong></div><div class="result-stat"><small>Akurasi</small><strong id="accuracy1">0%</strong></div></div><div class="diamond-show"><i class="fas fa-gem"></i> <span id="finalDiamond1">0</span> Diamond</div></div><div class="result-card s2"><div class="result-avatar"><i class="fas fa-user"></i></div><div class="result-name" id="resultName2">Siswa 2</div><div class="result-stats"><div class="result-stat"><small>Benar</small><strong id="correctCount2">0</strong></div><div class="result-stat"><small>Total Soal</small><strong id="totalCount2">0</strong></div><div class="result-stat"><small>Akurasi</small><strong id="accuracy2">0%</strong></div></div><div class="diamond-show"><i class="fas fa-gem"></i> <span id="finalDiamond2">0</span> Diamond</div></div></div><div class="winner-banner" id="winnerBanner"><i class="fas fa-crown"></i> Selamat <span id="winnerName">...</span>! Kamu juara hari ini!</div></div>
+
+<div class="slide" id="slide-soccer"><div class="slide-header"><div class="slide-num">11</div><div><div class="slide-title">Game: Sepak Bola Pecahan!</div><div class="slide-subtitle">Bergantian pilih kartu, jawab soal, cetak gol!</div></div></div><div class="soccer-board"><div class="soccer-header"><div class="soccer-score s1"><i class="fas fa-gem"></i> <span id="socName1">Siswa 1</span>: <span id="socD1">0</span></div><div class="soccer-turn" id="soccerTurn"><i class="fas fa-futbol"></i> Giliran: <span id="socTurnName">Siswa 1</span></div><div class="soccer-score s2"><i class="fas fa-gem"></i> <span id="socName2">Siswa 2</span>: <span id="socD2">0</span></div></div><div class="soccer-field-area"><div class="field-center-line"></div><div class="field-center-circle"></div><div class="field-goal"></div><div class="goalkeeper" id="goalkeeper"><svg viewBox="0 0 50 75"><circle cx="25" cy="12" r="9" fill="#FFD4A3" stroke="#D4A76A" stroke-width="1"/><path d="M16 7 Q25 1 34 7 L34 11 Q25 5 16 11 Z" fill="#8B4513"/><circle cx="21" cy="12" r="1.8" fill="#2D1B17"/><circle cx="29" cy="12" r="1.8" fill="#2D1B17"/><path d="M21 16 L29 16" fill="none" stroke="#2D1B17" stroke-width="1.5" stroke-linecap="round"/><rect x="22" y="20" width="6" height="3" fill="#FFD4A3"/><path d="M13 23 L37 23 L40 53 L10 53 Z" fill="#FF6B35" stroke="#E55120" stroke-width="1.5"/><text x="25" y="43" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="14" fill="white">1</text><rect x="2" y="24" width="11" height="16" fill="#FFD4A3" rx="4" stroke="#D4A76A" stroke-width="1"/><rect x="37" y="24" width="11" height="16" fill="#FFD4A3" rx="4" stroke="#D4A76A" stroke-width="1"/><circle cx="7" cy="22" r="6" fill="#06A77D" stroke="#048565" stroke-width="1.5"/><circle cx="43" cy="22" r="6" fill="#06A77D" stroke="#048565" stroke-width="1.5"/><rect x="15" y="53" width="8" height="18" fill="#3DB4F4" rx="2"/><rect x="27" y="53" width="8" height="18" fill="#3DB4F4" rx="2"/><ellipse cx="19" cy="73" rx="6" ry="2.5" fill="#2D1B17"/><ellipse cx="31" cy="73" rx="6" ry="2.5" fill="#2D1B17"/></svg></div><div class="soccer-ball" id="soccerBall">⚽</div><div class="soccer-msg" id="soccerMsg"></div></div><div class="soccer-question" id="soccerQuestion"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.7)"><i class="fas fa-hand-pointer" style="font-size:32px"></i><p>Pilih nomor kartu di bawah untuk mulai!</p></div></div><div class="card-grid" id="cardGrid"></div></div></div>
+
+<div class="slide" id="slide-kesimpulan"><div class="slide-header"><div class="slide-num">12</div><div><div class="slide-title">Kesimpulan</div><div class="slide-subtitle">Hal-hal penting yang telah kita pelajari</div></div></div><div class="summary-grid"><div class="sum-card"><h4><i class="fas fa-plus-circle"></i> Penjumlahan Pecahan</h4><p><strong>Penyebut sama:</strong> jumlahkan pembilang, penyebut tetap.</p><div class="formula"><span class="frac"><span class="num">2</span><span class="den">5</span></span> + <span class="frac"><span class="num">1</span><span class="den">5</span></span> = <span class="frac"><span class="num">3</span><span class="den">5</span></span></div></div><div class="sum-card"><h4><i class="fas fa-minus-circle"></i> Pengurangan Pecahan</h4><p><strong>Penyebut sama:</strong> kurangi pembilang, penyebut tetap.</p><div class="formula"><span class="frac"><span class="num">7</span><span class="den">10</span></span> - <span class="frac"><span class="num">3</span><span class="den">10</span></span> = <span class="frac"><span class="num">4</span><span class="den">10</span></span></div></div><div class="sum-card"><h4><i class="fas fa-list-ol"></i> Langkah Soal Cerita</h4><p>1. Baca soal dengan teliti<br>2. Identifikasi operasi (+ atau -)<br>3. Tulis pecahan yang diketahui<br>4. Hitung dan tulis jawaban<br>5. Periksa kembali</p></div><div class="sum-card"><h4><i class="fas fa-lightbulb"></i> Tips Pintar</h4><p>✓ "Beli lagi/tambah" = penjumlahan<br>✓ "Dimakan/dipakai/sisa" = pengurangan<br>✓ "Utuh" = pecahan dengan pembilang = penyebut<br>✓ Untuk soal sulit, kerjakan bertahap!</p></div></div></div>
+
+<div class="slide" id="slide-refleksi"><div class="slide-header"><div class="slide-num">13</div><div><div class="slide-title">Refleksi Pembelajaran</div><div class="slide-subtitle">Mari berpikir tentang apa yang sudah kita pelajari</div></div></div><div class="reflect-list"><div class="reflect-item"><i class="fas fa-question"></i><p>Bagian mana dari pembelajaran hari ini yang paling <strong>menyenangkan</strong>? Kenapa?</p></div><div class="reflect-item"><i class="fas fa-question"></i><p>Apakah ada bagian yang masih <strong>membingungkan</strong>? Jika ada, bagian apa?</p></div><div class="reflect-item"><i class="fas fa-question"></i><p>Kapan kamu bisa <strong>memakai ilmu pecahan</strong> di kehidupan sehari-hari? Beri satu contoh!</p></div><div class="reflect-item"><i class="fas fa-question"></i><p>Apa <strong>langkah pertama</strong> yang kamu lakukan saat mengerjakan soal cerita pecahan?</p></div><div class="reflect-item"><i class="fas fa-question"></i><p>Bagaimana perasaanmu saat bermain game sepak bola pecahan? Apa yang kamu pelajari?</p></div></div></div>
+
+<div class="slide" id="slide-thanks"><div class="thanks-icon"><i class="fas fa-heart"></i></div><h1 class="thanks-title">Thank You for Today!</h1><p class="thanks-sub">Kalian luar biasa! Terima kasih sudah belajar dengan semangat.</p><div class="thanks-names"><div class="thanks-name"><i class="fas fa-star"></i> <span id="thanksName1">Siswa 1</span></div><div class="thanks-name"><i class="fas fa-star"></i> <span id="thanksName2">Siswa 2</span></div></div><p class="thanks-quote">"Belajar matematika seperti bermain sepak bola—kita butuh strategi, kerja sama, dan latihan terus-menerus. Setiap gol adalah bukti kita makin pintar! Teruslah berlatih dan jangan pernah menyerah!"</p><p style="margin-top:30px;font-size:14px;opacity:.8;position:relative;z-index:2"><i class="fas fa-futbol"></i> Sampai jumpa di petualangan matematika berikutnya! <i class="fas fa-futbol"></i></p></div>
+</div></div>
+
+<script>
+var audioCtx=null,soundOn=true;
+function ensureAudio(){if(audioCtx)return audioCtx;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}return audioCtx}
+document.addEventListener('click',function(){var ctx=ensureAudio();if(ctx&&ctx.state==='suspended')ctx.resume()});
+function playTone(f,d,t,v){if(!soundOn)return;var ctx=ensureAudio();if(!ctx)return;var o=ctx.createOscillator(),g=ctx.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||0.18;o.connect(g);g.connect(ctx.destination);o.start();g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+(d||0.15));o.stop(ctx.currentTime+(d||0.15))}
+function playClickSnd(){playTone(700,0.06,'square',0.1)}
+function playSelectSnd(){playTone(900,0.07,'sine',0.12);setTimeout(function(){playTone(1100,0.05,'sine',0.1)},50)}
+function playCorrectSnd(){playTone(523,0.1);setTimeout(function(){playTone(659,0.1)},100);setTimeout(function(){playTone(784,0.18)},200)}
+function playWrongSnd(){playTone(280,0.15,'sawtooth',0.12);setTimeout(function(){playTone(180,0.2,'sawtooth',0.12)},100)}
+function playGoalSnd(){var n=[523,659,784,1047];n.forEach(function(f,i){setTimeout(function(){playTone(f,0.15,'sine',0.2)},i*80)});setTimeout(function(){playTone(1047,0.3,'sine',0.2);playTone(1319,0.3,'sine',0.15)},400)}
+function playMissSnd(){playTone(200,0.3,'sawtooth',0.15);setTimeout(function(){playTone(150,0.4,'sawtooth',0.12)},100)}
+function playWinSnd(){var n=[523,587,659,698,784,880,988,1047];n.forEach(function(f,i){setTimeout(function(){playTone(f,0.18,'sine',0.2)},i*80)})}
+function playErrorSnd(){playTone(120,0.25,'sawtooth',0.15)}
+function playNavSnd(){playTone(440,0.05,'sine',0.08)}
+function playDiamondSnd(){playTone(1318,0.1,'sine',0.18);setTimeout(function(){playTone(1568,0.15,'sine',0.18)},80)}
+function toggleSound(){soundOn=!soundOn;var b=document.getElementById('soundBtn');if(soundOn){b.classList.remove('muted');b.innerHTML='<i class="fas fa-volume-up"></i>';playClickSnd()}else{b.classList.add('muted');b.innerHTML='<i class="fas fa-volume-mute"></i>'}}
+
+function F(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+function FB(n,d){return '<span class="frac big"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+function FP(t){return t.replace(/\[([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\]/g,function(m,n,d){return F(n,d)})}
+
+function makePizzaSVG(denom,filled,size,opts){
+  opts=opts||{};var r=80,cx=100,cy=100,paths='',sa=360/denom;
+  for(var i=0;i<denom;i++){
+    var a1=i*sa-90,a2=(i+1)*sa-90;
+    var r1=a1*Math.PI/180,r2=a2*Math.PI/180;
+    var x1=cx+r*Math.cos(r1),y1=cy+r*Math.sin(r1);
+    var x2=cx+r*Math.cos(r2),y2=cy+r*Math.sin(r2);
+    var f=i<filled?(opts.color||'#FF6B35'):'#FFFFFF';
+    paths+='<path d="M'+cx+' '+cy+' L'+x1+' '+y1+' A'+r+' '+r+' 0 0 1 '+x2+' '+y2+' Z" fill="'+f+'" stroke="#E0A800" stroke-width="2"/>';
+  }
+  paths+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#E0A800" stroke-width="3"/>';
+  return '<svg class="pizza-svg" viewBox="0 0 200 200" style="max-width:'+(size||200)+'px">'+paths+'</svg>';
+}
+
+var state={student1:'Siswa 1',student2:'Siswa 2',currentSlide:0,totalSlides:14,dScore1:0,dScore2:0,correct1:0,correct2:0,total1:0,total2:0,pickedQuestions:new Set(),student1Active:null,student2Active:null,soccer:null,exStep:{ex1:0,ex2:0,ex3:0,ex4:0,ex5:0}};
+var slideIds=['cover','pemanasan','contoh1','contoh2','contoh3','contoh4','contoh5','latihan','kuis','hasil','soccer','kesimpulan','refleksi','thanks'];
+
+var exData=[
+{steps:[
+{gq:'Pecahan berapa saja yang kamu ketahui dari soal di atas? Apakah penyebutnya sama?',title:'Sebutkan pecahannya',content:'Budi memakan [1/4] dan Wati memakan [2/4]. Karena penyebutnya sama (4), kita bisa langsung menjumlahkan!',visual:{d:4,f1:1,f2:2,op:'+'},formula:''},
+{gq:'Karena penyebutnya sama, bagian mana yang kita jumlahkan? Pembilang atau penyebut?',title:'Jumlahkan pembilangnya',content:'Karena penyebut sama, kita jumlahkan angka atasnya (pembilang): 1 + 2 = 3. Penyebut tetap 4.',visual:null,formula:'[1/4] + [2/4] = [3/4]'},
+{gq:'Jadi, berapa bagian kue yang sudah dimakan oleh Budi dan Wati?',title:'Hasilnya',content:'Bagian kue yang sudah dimakan adalah [3/4] bagian.',visual:{d:4,f1:3,f2:0,op:'result'},formula:''}
+]},
+{steps:[
+{gq:'Operasi apa yang harus dilakukan? Penjumlahan atau pengurangan? Apa petunjuknya?',title:'Identifikasi operasi',content:'Ada kata "diminum" dan kita cari "sisa", jadi ini PENGURANGAN: [7/10] - [3/10].',visual:{d:10,f1:7,f2:0,op:'single'},formula:''},
+{gq:'Karena penyebutnya sama, bagaimana cara mengurangkannya?',title:'Kurangi pembilangnya',content:'Kurangi pembilang: 7 - 3 = 4. Penyebut tetap 10.',visual:null,formula:'[7/10] - [3/10] = [4/10]'},
+{gq:'Jadi, berapa liter sisa air di dalam botol ayah?',title:'Hasilnya',content:'Sisa air di dalam botol ayah adalah [4/10] liter.',visual:{d:10,f1:4,f2:0,op:'result'},formula:''}
+]},
+{steps:[
+{gq:'Berapa bagian roti utuh yang ada? (Ingat: roti dipotong menjadi 8 bagian)',title:'Roti utuh = [8/8]',content:'Total roti ada [8/8] bagian (utuh). Kita perlu mencari sisa setelah Edo dan Lani memakan.',visual:{d:8,f1:8,f2:0,op:'single'},formula:''},
+{gq:'Berapa total bagian roti yang dimakan Edo dan Lani? Jumlahkan!',title:'Total yang dimakan',content:'Edo [3/8] + Lani [1/8] = [4/8] bagian. Jumlahkan pembilang: 3+1=4.',visual:null,formula:'[3/8] + [1/8] = [4/8]'},
+{gq:'Sekarang, kurangkan total yang dimakan dari roti utuh. Berapa sisanya?',title:'Sisa roti',content:'Roti utuh [8/8] - dimakan [4/8] = sisa [4/8] bagian.',visual:null,formula:'[8/8] - [4/8] = [4/8]'}
+]},
+{steps:[
+{gq:'Ada berapa kejadian dalam soal ini? Apa yang terjadi pertama kali?',title:'Langkah 1: Setelah beli',content:'Minyak awal [2/6] + beli lagi [3/6] = total [5/6] liter.',visual:null,formula:'[2/6] + [3/6] = [5/6]'},
+{gq:'Setelah punya [5/6] liter, ibu memakai [4/6] liter. Operasi apa yang dilakukan?',title:'Langkah 2: Setelah dipakai',content:'Total [5/6] - dipakai [4/6] = sisa [1/6] liter.',visual:null,formula:'[5/6] - [4/6] = [1/6]'},
+{gq:'Apa tips penting saat mengerjakan soal cerita seperti ini?',title:'Tips mengerjakan',content:'1. Baca soal dengan teliti. 2. Identifikasi operasi: "beli lagi" = +, "dipakai" = -. 3. Kerjakan bertahap!',visual:null,formula:''}
+]},
+{steps:[
+{gq:'Ada 3 potongan tali. Bagaimana cara menghitung total tali yang dipotong?',title:'Hitung total yang dipotong',content:'Tambahkan semua potongan: [4/10] + [2/10] + [3/10] = [9/10] meter.',visual:null,formula:'[4/10] + [2/10] + [3/10] = [9/10]'},
+{gq:'Tali utuhnya [10/10] meter. Total dipotong [9/10]. Operasi apa yang dilakukan?',title:'Hitung sisa tali',content:'Tali utuh [10/10] - total dipotong [9/10] = sisa [1/10] meter.',visual:null,formula:'[10/10] - [9/10] = [1/10]'},
+{gq:'Apa strategi untuk mengerjakan soal sulit seperti ini?',title:'Tips soal sulit',content:'1. Pecahkan soal jadi bagian kecil. 2. Untuk soal "sisa": hitung total dipakai, kurangkan dari utuh. 3. Periksa jawabanmu!',visual:null,formula:''}
+]}
+];
+
+function exNext(num){var max=exData[num-1].steps.length*2;if(state.exStep['ex'+num]<max){state.exStep['ex'+num]++;renderEx(num);playClickSnd()}}
+function exReset(num){state.exStep['ex'+num]=0;renderEx(num);playClickSnd()}
+function renderEx(num){
+  var step=state.exStep['ex'+num],data=exData[num-1];
+  var c=document.getElementById('ex'+num+'-steps'),b=document.getElementById('ex'+num+'-btn'),a=document.getElementById('ex'+num+'-answer');
+  if(!c||!b)return;
+  var html='',max=data.steps.length*2;
+  for(var i=0;i<step;i++){
+    var si=Math.floor(i/2),isQ=(i%2===0),s=data.steps[si];
+    if(isQ){html+='<div class="guide-q-card"><i class="fas fa-question-circle guide-icon"></i><div class="guide-text">'+FP(s.gq)+'</div></div>'}
+    else{
+      html+='<div class="step-card"><div class="step-num">'+(si+1)+'</div><div class="step-content"><h4>'+FP(s.title)+'</h4><p>'+FP(s.content)+'</p>';
+      if(s.visual){
+        if(s.visual.op==='result'){html+='<div class="step-visual">'+makePizzaSVG(s.visual.d,s.visual.f1,150,{color:'#FFC60B'})+'</div>'}
+        else if(s.visual.op==='single'){html+='<div class="step-visual">'+makePizzaSVG(s.visual.d,s.visual.f1,150,{color:'#3DB4F4'})+'</div>'}
+        else{html+='<div class="step-visual">'+makePizzaSVG(s.visual.d,s.visual.f1,130,{color:'#FF6B35'})+'<div class="op-symbol">'+s.visual.op+'</div>'+makePizzaSVG(s.visual.d,s.visual.f2,130,{color:'#06A77D'})+'</div>'}
+      }
+      if(s.formula)html+='<div class="step-formula">'+FP(s.formula)+'</div>';
+      html+='</div></div>';
+    }
+  }
+  c.innerHTML=html;
+  if(step===0){b.innerHTML='<button class="step-reveal-btn" onclick="exNext('+num+')"><i class="fas fa-play"></i> Mulai Penyelesaian</button>';if(a)a.style.display='none'}
+  else if(step<max){var isQ=(step%2===1);if(isQ)b.innerHTML='<button class="step-reveal-btn" onclick="exNext('+num+')"><i class="fas fa-eye"></i> Tunjukkan Langkah</button>';else b.innerHTML='<button class="step-reveal-btn" onclick="exNext('+num+')"><i class="fas fa-forward"></i> Langkah Selanjutnya</button>';if(a)a.style.display='none'}
+  else{b.innerHTML='<button class="step-reveal-btn" onclick="exReset('+num+')"><i class="fas fa-redo"></i> Ulangi Penyelesaian</button>';if(a)a.style.display='flex'}
+}
+
+function changeSlide(dir){
+  var ns=state.currentSlide+dir;if(ns<0||ns>=state.totalSlides)return;
+  document.getElementById('slide-'+slideIds[state.currentSlide]).classList.remove('active');
+  state.currentSlide=ns;document.getElementById('slide-'+slideIds[state.currentSlide]).classList.add('active');
+  updateProgress();playNavSnd();
+  if(slideIds[state.currentSlide]==='hasil')updateResults();
+  if(slideIds[state.currentSlide]==='kuis')updateKuisUI();
+}
+function updateProgress(){
+  var pct=((state.currentSlide+1)/state.totalSlides)*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('slideCounter').textContent=(state.currentSlide+1)+' / '+state.totalSlides;
+  document.getElementById('prevBtn').disabled=state.currentSlide===0;
+  document.getElementById('nextBtn').disabled=state.currentSlide===state.totalSlides-1;
+}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')changeSlide(1);if(e.key==='ArrowLeft')changeSlide(-1)});
+
+function startAdventure(){
+  var n1=document.getElementById('inputName1').value.trim();
+  var n2=document.getElementById('inputName2').value.trim();
+  state.student1=n1||'Pemain 1';state.student2=n2||'Pemain 2';
+  updateAllNames();buildPemanasan();buildLatihan();buildKuis();initSoccer();
+  changeSlide(1);playWinSnd();
+}
+function updateAllNames(){
+  var s1=state.student1,s2=state.student2;
+  var ids1=['pemName1','latName1','kuisName1','pickerName1','side1Name','resultName1','thanksName1','socName1'];
+  var ids2=['pemName2','latName2','kuisName2','pickerName2','side2Name','resultName2','thanksName2','socName2'];
+  ids1.forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=s1});
+  ids2.forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=s2});
+  updateKuisUI();renderSoccer();
+}
+
+function buildQuestions(listId,data,siswa,prefix){
+  var list=document.getElementById(listId);if(!list)return;list.innerHTML='';
+  data.forEach(function(item,idx){list.appendChild(makeQItem(item,idx,siswa,prefix))});
+}
+function makeQItem(item,idx,siswa,prefix){
+  var div=document.createElement('div');div.className='q-item';div.id=prefix+'-'+siswa+'-'+idx;
+  var optsHTML=item.opts.map(function(o,i){return '<div class="q-opt" data-idx="'+i+'" onclick="selectQ(\''+prefix+'\','+siswa+','+idx+','+i+')">'+FP(o)+'</div>'}).join('');
+  div.innerHTML='<div><span class="q-num">'+(idx+1)+'</span><span class="q-text">'+FP(item.q)+'</span></div><div class="q-options">'+optsHTML+'</div><div class="q-actions"><button class="q-btn btn-check" onclick="checkQ(\''+prefix+'\','+siswa+','+idx+')"><i class="fas fa-check"></i> Cek Jawaban</button><button class="q-btn btn-explain" onclick="explainQ(\''+prefix+'\','+siswa+','+idx+')"><i class="fas fa-info"></i> Pembahasan</button></div><div class="q-feedback" id="fb-'+prefix+'-'+siswa+'-'+idx+'"></div>';
+  return div;
+}
+function selectQ(prefix,siswa,idx,optIdx){
+  var div=document.getElementById(prefix+'-'+siswa+'-'+idx);if(!div)return;
+  div.querySelectorAll('.q-opt').forEach(function(o,i){o.classList.toggle('selected',i===optIdx)});
+  div.dataset.selected=optIdx;playSelectSnd();
+}
+function getData(prefix,siswa){
+  if(prefix==='pem')return siswa===1?pemSiswa1:pemSiswa2;
+  if(prefix==='lat')return siswa===1?latSiswa1:latSiswa2;
+  return null;
+}
+function checkQ(prefix,siswa,idx){
+  var div=document.getElementById(prefix+'-'+siswa+'-'+idx);if(!div)return;
+  var sel=div.dataset.selected;var fb=document.getElementById('fb-'+prefix+'-'+siswa+'-'+idx);
+  if(sel===undefined){fb.className='q-feedback wrong show';fb.innerHTML='<i class="fas fa-exclamation-triangle"></i> Pilih jawaban dulu!';playErrorSnd();return}
+  var data=getData(prefix,siswa);var item=data[idx];var si=parseInt(sel);
+  if(si===item.correct){div.classList.remove('answered-wrong');div.classList.add('answered-correct');fb.className='q-feedback correct show';fb.innerHTML='<i class="fas fa-star"></i> Benar! Pintar sekali!';playCorrectSnd();launchConfetti()}
+  else{div.classList.remove('answered-correct');div.classList.add('answered-wrong');fb.className='q-feedback wrong show';fb.innerHTML='<i class="fas fa-times"></i> Belum tepat. Baca pembahasan ya!';playWrongSnd()}
+}
+function explainQ(prefix,siswa,idx){
+  var data=getData(prefix,siswa);var item=data[idx];var fb=document.getElementById('fb-'+prefix+'-'+siswa+'-'+idx);if(!fb)return;
+  fb.className='q-feedback explain show';fb.innerHTML='<i class="fas fa-lightbulb"></i> <strong>Pembahasan:</strong> '+FP(item.exp);playClickSnd();
+}
+
+var pemSiswa1=[
+{q:'[1/4] + [2/4] = ? (penyebut sama)',opts:['[1/4]','[2/4]','[3/4]','[4/4]'],correct:2,exp:'Penyebut sama, jumlahkan pembilang: 1+2=3. Hasil [3/4].'},
+{q:'[5/8] - [2/8] = ? (penyebut sama)',opts:['[2/8]','[3/8]','[7/8]','[4/8]'],correct:1,exp:'Kurangi pembilang: 5-2=3. Hasil [3/8].'},
+{q:'[1/2] + [1/4] = ? (penyebut berbeda)',opts:['[2/6]','[3/6]','[3/4]','[2/4]'],correct:2,exp:'KPK(2,4)=4. [1/2]=[2/4]. [2/4]+[1/4]=[3/4].'},
+{q:'[3/4] - [1/2] = ? (penyebut berbeda)',opts:['[2/4]','[1/4]','[1/2]','[2/2]'],correct:1,exp:'KPK(4,2)=4. [1/2]=[2/4]. [3/4]-[2/4]=[1/4].'},
+{q:'Ibu punya pita [2/6] m, beli lagi [3/6] m. Total?',opts:['[1/6] m','[5/6] m','[6/6] m','[4/6] m'],correct:1,exp:'[2/6]+[3/6]=[5/6] m.'}
+];
+var pemSiswa2=[
+{q:'[3/5] + [1/5] = ? (penyebut sama)',opts:['[4/5]','[4/10]','[3/5]','[5/5]'],correct:0,exp:'3+1=4, penyebut tetap 5. Hasil [4/5].'},
+{q:'[7/10] - [4/10] = ? (penyebut sama)',opts:['[3/10]','[11/10]','[4/10]','[2/10]'],correct:0,exp:'7-4=3. Hasil [3/10].'},
+{q:'[1/3] + [1/6] = ? (penyebut berbeda)',opts:['[2/9]','[3/6]','[2/6]','[1/6]'],correct:1,exp:'KPK(3,6)=6. [1/3]=[2/6]. [2/6]+[1/6]=[3/6].'},
+{q:'[5/6] - [1/3] = ? (penyebut berbeda)',opts:['[4/3]','[3/6]','[4/6]','[2/3]'],correct:1,exp:'KPK(6,3)=6. [1/3]=[2/6]. [5/6]-[2/6]=[3/6].'},
+{q:'Ayah cat pagar [3/9] bagian, hari kedua [4/9]. Total?',opts:['[7/9]','[7/18]','[6/9]','[8/9]'],correct:0,exp:'[3/9]+[4/9]=[7/9].'}
+];
+var latSiswa1=[
+{q:'Ibu potong kue 6 bagian. Ayah makan [2/6], Ibu makan [1/6]. Berapa dimakan?',opts:['[1/6]','[2/6]','[3/6]','[4/6]'],correct:2,exp:'[2/6]+[1/6]=[3/6]. 2+1=3.'},
+{q:'Botol [8/10] L air. Diminum [3/10] L. Sisa?',opts:['[3/10] L','[5/10] L','[11/10] L','[4/10] L'],correct:1,exp:'[8/10]-[3/10]=[5/10]. 8-3=5.'},
+{q:'Pita [4/8] m. Diberi lagi [3/8] m. Total?',opts:['[7/8] m','[1/8] m','[6/8] m','[12/8] m'],correct:0,exp:'[4/8]+[3/8]=[7/8]. 4+3=7.'},
+{q:'Roti [5/5]. Dimakan [2/5]. Sisa?',opts:['[2/5]','[3/5]','[7/5]','[4/5]'],correct:1,exp:'[5/5]-[2/5]=[3/5]. 5-2=3.'},
+{q:'Air [6/6]. Mandi [2/6], cuci [1/6]. Sisa?',opts:['[1/6]','[2/6]','[3/6]','[4/6]'],correct:2,exp:'[6/6]-[2/6]-[1/6]=[3/6]. 6-2-1=3.'},
+{q:'Tali [9/9] m. Dipotong [4/9] m. Sisa?',opts:['[4/9] m','[5/9] m','[13/9] m','[3/9] m'],correct:1,exp:'[9/9]-[4/9]=[5/9]. 9-4=5.'},
+{q:'Paman tanam [2/5] jagung + [1/5] kedelai. Total?',opts:['[3/5]','[2/5]','[3/10]','[1/5]'],correct:0,exp:'[2/5]+[1/5]=[3/5]. 2+1=3.'},
+{q:'Pizza [12/12]. Dimakan [3/12]+[2/12]+[4/12]. Sisa?',opts:['[2/12]','[3/12]','[4/12]','[5/12]'],correct:1,exp:'Total [9/12]. Sisa [12/12]-[9/12]=[3/12].'},
+{q:'[1/2] + [1/4] = ? (penyebut berbeda)',opts:['[2/6]','[3/6]','[3/4]','[2/4]'],correct:2,exp:'KPK(2,4)=4. [1/2]=[2/4]. [2/4]+[1/4]=[3/4].'},
+{q:'[3/4] - [1/2] = ? (penyebut berbeda)',opts:['[2/4]','[1/4]','[1/2]','[2/2]'],correct:1,exp:'KPK(4,2)=4. [1/2]=[2/4]. [3/4]-[2/4]=[1/4].'}
+];
+var latSiswa2=[
+{q:'Apel 8 bagian. Dimakan [3/8]+[2/8]. Total?',opts:['[5/8]','[1/8]','[6/8]','[4/8]'],correct:0,exp:'[3/8]+[2/8]=[5/8]. 3+2=5.'},
+{q:'Air [7/10] L. Diminum [4/10] L. Sisa?',opts:['[3/10] L','[11/10] L','[4/10] L','[2/10] L'],correct:0,exp:'[7/10]-[4/10]=[3/10]. 7-4=3.'},
+{q:'Kain [7/7] m. Dipakai [3/7]. Sisa?',opts:['[3/7] m','[4/7] m','[10/7] m','[2/7] m'],correct:1,exp:'[7/7]-[3/7]=[4/7]. 7-3=4.'},
+{q:'Cokelat [8/8]. Dimakan [3/8]+[1/8]. Sisa?',opts:['[3/8]','[4/8]','[5/8]','[2/8]'],correct:1,exp:'Total [4/8]. Sisa [8/8]-[4/8]=[4/8].'},
+{q:'Pita [2/8] m. Diberi lagi [5/8] m. Total?',opts:['[7/8] m','[3/8] m','[10/8] m','[6/8] m'],correct:0,exp:'[2/8]+[5/8]=[7/8]. 2+5=7.'},
+{q:'Mangga [12/12]. Jual [5/12], simpan [3/12]. Sisa?',opts:['[4/12]','[3/12]','[5/12]','[2/12]'],correct:0,exp:'Total [8/12]. Sisa [12/12]-[8/12]=[4/12].'},
+{q:'[10/10] - [4/10] - [2/10] = ?',opts:['[2/10]','[3/10]','[4/10]','[5/10]'],correct:2,exp:'10-4-2=4. Hasil [4/10].'},
+{q:'[3/10] + [4/10] + [2/10] = ?',opts:['[8/10]','[9/10]','[7/10]','[10/10]'],correct:1,exp:'3+4+2=9. Hasil [9/10].'},
+{q:'[1/3] + [1/6] = ? (penyebut berbeda)',opts:['[2/9]','[3/6]','[2/6]','[1/6]'],correct:1,exp:'KPK(3,6)=6. [1/3]=[2/6]. [2/6]+[1/6]=[3/6].'},
+{q:'[5/6] - [1/3] = ? (penyebut berbeda)',opts:['[4/3]','[3/6]','[4/6]','[2/3]'],correct:1,exp:'KPK(6,3)=6. [1/3]=[2/6]. [5/6]-[2/6]=[3/6].'}
+];
+
+var kuisData=[
+{n:1,level:'mudah',q:'Ibu memotong sebuah kue menjadi 4 bagian. Budi memakan [1/4] bagian dan Wati memakan [2/4] bagian. Berapa bagian kue yang sudah dimakan oleh mereka berdua?',opts:['[1/4]','[2/4]','[3/4]','[4/4]'],correct:2,exp:'[1/4] + [2/4] = (1+2)/4 = [3/4]. Jumlahkan pembilang karena penyebut sama.'},
+{n:2,level:'mudah',q:'Sebuah apel dipotong menjadi 6 bagian. Jika di piring tersisa [5/6] bagian dan dimakan oleh adik [2/6] bagian, berapa bagian sisa apel adik sekarang?',opts:['[1/6]','[2/6]','[3/6]','[4/6]'],correct:2,exp:'[5/6] - [2/6] = (5-2)/6 = [3/6]. Kurangi pembilang karena penyebut sama.'},
+{n:3,level:'mudah',q:'Dini memiliki pita sepanjang [3/8] meter. Ia membeli lagi pita sepanjang [4/8] meter di toko. Berapa panjang pita Dini seluruhnya sekarang?',opts:['[5/8] meter','[6/8] meter','[7/8] meter','[8/8] meter'],correct:2,exp:'[3/8] + [4/8] = (3+4)/8 = [7/8] meter.'},
+{n:4,level:'mudah',q:'Di dalam botol minum terdapat air sebanyak [7/10] liter. Setelah berolahraga, ayah meminumnya sebanyak [3/10] liter. Berapa liter sisa air di dalam botol ayah?',opts:['[2/10] liter','[3/10] liter','[4/10] liter','[5/10] liter'],correct:2,exp:'[7/10] - [3/10] = (7-3)/10 = [4/10] liter.'},
+{n:5,level:'mudah',q:'Paman menanam bibit jagung di [2/5] bagian kebunnya, dan bibit kedelai di [1/5] bagian kebunnya. Berapa bagian kebun paman yang sudah ditanami?',opts:['[1/5]','[2/5]','[3/5]','[4/5]'],correct:2,exp:'[2/5] + [1/5] = (2+1)/5 = [3/5].'},
+{n:6,level:'mudah',q:'Rara memiliki sebatang cokelat yang dibagi 8. Ia memakan [3/8] bagian, lalu temannya memakan [2/8] bagian. Berapa jumlah bagian cokelat yang telah dimakan Rara dan temannya?',opts:['[3/8]','[4/8]','[5/8]','[6/8]'],correct:2,exp:'[3/8] + [2/8] = (3+2)/8 = [5/8].'},
+{n:7,level:'mudah',q:'Sepotong tali sepanjang [9/12] meter dipotong untuk mengikat tumpukan kardus sepanjang [4/12] meter. Sisa tali tersebut adalah...',opts:['[4/12] meter','[5/12] meter','[6/12] meter','[7/12] meter'],correct:1,exp:'[9/12] - [4/12] = (9-4)/12 = [5/12] meter.'},
+{n:8,level:'mudah',q:'Siti memiliki pita merah sepanjang [4/7] meter dan pita biru sepanjang [2/7] meter. Jika kedua pita tersebut disambung, panjangnya akan menjadi...',opts:['[5/7] meter','[6/7] meter','[7/7] meter','[8/7] meter'],correct:1,exp:'[4/7] + [2/7] = (4+2)/7 = [6/7] meter.'},
+{n:9,level:'mudah',q:'Sisa kue bolu di atas meja adalah [5/8] bagian. Kakak yang baru pulang sekolah memakan [1/8] bagian. Berapa sisa kue bolu di meja sekarang?',opts:['[2/8]','[3/8]','[4/8]','[5/8]'],correct:2,exp:'[5/8] - [1/8] = (5-1)/8 = [4/8].'},
+{n:10,level:'mudah',q:'Ayah mencampur [3/9] liter cat warna merah muda dengan [5/9] liter cat warna putih. Berapa liter campuran cat ayah seluruhnya?',opts:['[6/9] liter','[7/9] liter','[8/9] liter','[9/9] liter'],correct:2,exp:'[3/9] + [5/9] = (3+5)/9 = [8/9] liter.'},
+{n:11,level:'sedang',q:'Ibu membeli sebuah melon utuh. Melon itu dibagi menjadi 5 bagian sama besar ([5/5]). Jika adik memakan [2/5] bagian, berapa bagian sisa melon tersebut?',opts:['[1/5]','[2/5]','[3/5]','[4/5]'],correct:2,exp:'[5/5] - [2/5] = (5-2)/5 = [3/5].'},
+{n:12,level:'sedang',q:'Sebuah roti tawar dipotong menjadi 8 bagian sama besar ([8/8]). Edo memakan [3/8] bagian dan Lani memakan [1/8] bagian. Sisa roti yang belum dimakan adalah...',opts:['[4/8]','[5/8]','[6/8]','[7/8]'],correct:0,exp:'[8/8] - [3/8] - [1/8] = [4/8]. Total dimakan [4/8], sisa [4/8].'},
+{n:13,level:'sedang',q:'Seorang petani memanen tomat utuh dari kebunnya ([10/10]). Sebanyak [4/10] bagian dijual ke pasar, dan sisanya dibawa pulang untuk keluarga. Berapa bagian tomat yang dibawa pulang?',opts:['[3/10]','[4/10]','[5/10]','[6/10]'],correct:3,exp:'[10/10] - [4/10] = [6/10]. 10-4=6.'},
+{n:14,level:'sedang',q:'Bibi memiliki selembar kain sepanjang 1 meter utuh ([7/7] bagian). Kain tersebut kemudian dibuat baju sebanyak [4/7] bagian. Sisa kain Bibi adalah...',opts:['[1/7]','[2/7]','[3/7]','[4/7]'],correct:2,exp:'[7/7] - [4/7] = [3/7]. 7-4=3.'},
+{n:15,level:'sedang',q:'Sisa minyak goreng di dapur adalah [2/6] liter. Ibu lalu membeli lagi [3/6] liter. Setelah itu, ibu memakai [4/6] liter minyak untuk menggoreng ayam. Sisa minyak goreng ibu sekarang adalah...',opts:['[1/6] liter','[2/6] liter','[3/6] liter','[4/6] liter'],correct:0,exp:'[2/6] + [3/6] - [4/6] = [1/6]. 2+3-4=1.'},
+{n:16,level:'sedang',q:'Sebuah teko berisi air sirup penuh ([10/10] bagian). Andi meminum [3/10] bagian dan Budi meminum [4/10] bagian. Sisa air sirup di dalam teko adalah...',opts:['[2/10]','[3/10]','[4/10]','[5/10]'],correct:1,exp:'[10/10] - [3/10] - [4/10] = [3/10]. 10-3-4=3.'},
+{n:17,level:'sedang',q:'Jarak dari rumah Beni ke taman kota adalah [8/9] km. Beni sudah bersepeda dan menempuh jarak sejauh [3/9] km. Berapa km lagi jarak yang harus ditempuh Beni agar sampai ke taman?',opts:['[3/9] km','[4/9] km','[5/9] km','[6/9] km'],correct:2,exp:'[8/9] - [3/9] = [5/9]. 8-3=5.'},
+{n:18,level:'sedang',q:'Kakek memanen sekotak penuh mangga ([12/12] bagian). Sebanyak [5/12] bagian dijual, [3/12] bagian disimpan di kulkas, dan sisanya dibagikan ke tetangga. Berapa bagian mangga yang dibagikan ke tetangga?',opts:['[2/12]','[3/12]','[4/12]','[5/12]'],correct:2,exp:'[12/12] - [5/12] - [3/12] = [4/12]. 12-5-3=4.'},
+{n:19,level:'sedang',q:'Sisa kertas lipat milik Beni di laci adalah [3/8] bagian. Ayah memberinya lagi tumpukan kertas lipat yang sama sebanyak [2/8] bagian. Berapa bagian total kertas lipat Beni yang tersedia sekarang?',opts:['[4/8]','[5/8]','[6/8]','[7/8]'],correct:1,exp:'[3/8] + [2/8] = [5/8]. 3+2=5.'},
+{n:20,level:'sedang',q:'Bak air di kamar mandi Ali berisi air penuh ([6/6] bagian). Ali menggunakan [2/6] bagian untuk mandi dan [1/6] bagian untuk mencuci baju. Sisa air di dalam bak adalah...',opts:['[1/6]','[2/6]','[3/6]','[4/6]'],correct:2,exp:'[6/6] - [2/6] - [1/6] = [3/6]. 6-2-1=3.'},
+{n:21,level:'sulit',q:'Ibu berbelanja ke pasar dan membeli gula merah [3/10] kg, tepung terigu [4/10] kg, serta mentega [2/10] kg. Berapa total berat belanjaan Ibu seluruhnya?',opts:['[7/10] kg','[8/10] kg','[9/10] kg','[10/10] kg'],correct:2,exp:'[3/10] + [4/10] + [2/10] = [9/10]. 3+4+2=9.'},
+{n:22,level:'sulit',q:'Dita memiliki pita kado sepanjang [8/12] meter. Pita itu digunakan untuk membungkus kado [3/12] meter, membuat hiasan pita [2/12] meter, dan untuk tugas sekolah [1/12] meter. Sisa pita Dita adalah...',opts:['[1/12] meter','[2/12] meter','[3/12] meter','[4/12] meter'],correct:1,exp:'[8/12] - [3/12] - [2/12] - [1/12] = [2/12]. 8-3-2-1=2.'},
+{n:23,level:'sulit',q:'Paman sedang mengecat pagar rumah. Hari pertama ia menyelesaikan [2/15] bagian, hari kedua [4/15] bagian, dan hari ketiga [5/15] bagian. Total bagian pagar yang sudah dicat paman adalah...',opts:['[9/15]','[10/15]','[11/15]','[12/15]'],correct:2,exp:'[2/15] + [4/15] + [5/15] = [11/15]. 2+4+5=11.'},
+{n:24,level:'sulit',q:'Kakak sedang membuat es buah. Kakak mencampurkan [3/8] liter sari apel, [2/8] liter air sirup manis, dan [1/8] liter air putih. Berapa liter total campuran es buah buatan kakak?',opts:['[4/8] liter','[5/8] liter','[6/8] liter','[7/8] liter'],correct:2,exp:'[3/8] + [2/8] + [1/8] = [6/8]. 3+2+1=6.'},
+{n:25,level:'sulit',q:'Tali tambang kakek panjangnya utuh [10/10] meter. Dipotong untuk tali jemuran [4/10] meter, untuk mengikat kardus [2/10] meter, dan untuk membuat ayunan [3/10] meter. Sisa tali tambang kakek adalah...',opts:['[1/10] meter','[2/10] meter','[3/10] meter','[4/10] meter'],correct:0,exp:'[10/10] - [4/10] - [2/10] - [3/10] = [1/10]. 10-4-2-3=1.'},
+{n:26,level:'sulit',q:'Di meja makan terdapat piza utuh yang telah dipotong menjadi 12 bagian sama besar ([12/12]). Ayah memakan [3/12] bagian, ibu memakan [2/12] bagian, dan adik memakan [4/12] bagian. Berapa bagian sisa piza di meja?',opts:['[2/12]','[3/12]','[4/12]','[5/12]'],correct:1,exp:'[12/12] - [3/12] - [2/12] - [4/12] = [3/12]. 12-3-2-4=3.'},
+{n:27,level:'sulit',q:'Ayah membawa oleh-oleh martabak manis utuh ([9/9]). Ia membagikan [2/9] bagian kepada tetangga sebelah, [3/9] bagian kepada saudaranya, dan [1/9] bagian untuk petugas keamanan. Sisa martabak untuk dimakan keluarga di rumah adalah...',opts:['[1/9]','[2/9]','[3/9]','[4/9]'],correct:2,exp:'[9/9] - [2/9] - [3/9] - [1/9] = [3/9]. 9-2-3-1=3.'},
+{n:28,level:'sulit',q:'Jarak total lari maraton anak-anak adalah [15/15] km. Budi berlari sejauh [6/15] km, lalu berjalan cepat sejauh [5/15] km, dan sisanya ia berjalan santai hingga garis akhir. Berapa jarak Budi berjalan santai?',opts:['[3/15] km','[4/15] km','[5/15] km','[6/15] km'],correct:1,exp:'[15/15] - [6/15] - [5/15] = [4/15]. 15-6-5=4.'},
+{n:29,level:'sulit',q:'Pak Tani panen kubis sebanyak [12/15] kuintal. Ia menjual [5/15] kuintal ke pasar induk, [3/15] kuintal ke warung sayur terdekat, dan [2/15] kuintal dibeli tetangganya. Sisa kubis Pak Tani adalah...',opts:['[2/15] kuintal','[3/15] kuintal','[4/15] kuintal','[5/15] kuintal'],correct:0,exp:'[12/15] - [5/15] - [3/15] - [2/15] = [2/15]. 12-5-3-2=2.'},
+{n:30,level:'sulit',q:'Sebuah kue ulang tahun dipotong menjadi 16 potongan ([16/16]). Dibagikan kepada teman-teman [5/16] bagian, kepada anggota keluarga [4/16] bagian, dan kepada guru-guru [2/16] bagian. Sisa kue ulang tahun tersebut adalah...',opts:['[3/16]','[4/16]','[5/16]','[6/16]'],correct:2,exp:'[16/16] - [5/16] - [4/16] - [2/16] = [5/16]. 16-5-4-2=5.'}
+];
+
+var soccerCards=[
+{n:1,q:'[1/4] + [2/4] = ?',opts:['[1/4]','[2/4]','[3/4]','[4/4]'],correct:2,exp:'1+2=3. Hasil [3/4].',visual:{d:4,f1:1,f2:2,op:'+'}},
+{n:2,q:'[5/6] - [2/6] = ?',opts:['[2/6]','[3/6]','[4/6]','[5/6]'],correct:1,exp:'5-2=3. Hasil [3/6].',visual:null},
+{n:3,q:'[3/8] + [4/8] = ?',opts:['[5/8]','[6/8]','[7/8]','[8/8]'],correct:2,exp:'3+4=7. Hasil [7/8].',visual:{d:8,f1:3,f2:4,op:'+'}},
+{n:4,q:'[7/10] - [3/10] = ?',opts:['[3/10]','[4/10]','[5/10]','[6/10]'],correct:1,exp:'7-3=4. Hasil [4/10].',visual:null},
+{n:5,q:'[2/5] + [1/5] = ?',opts:['[1/5]','[2/5]','[3/5]','[4/5]'],correct:2,exp:'2+1=3. Hasil [3/5].',visual:null},
+{n:6,q:'[3/8] + [2/8] = ?',opts:['[3/8]','[4/8]','[5/8]','[6/8]'],correct:2,exp:'3+2=5. Hasil [5/8].',visual:{d:8,f1:3,f2:2,op:'+'}},
+{n:7,q:'[9/12] - [4/12] = ?',opts:['[4/12]','[5/12]','[6/12]','[7/12]'],correct:1,exp:'9-4=5. Hasil [5/12].',visual:null},
+{n:8,q:'[4/7] + [2/7] = ?',opts:['[5/7]','[6/7]','[7/7]','[8/7]'],correct:1,exp:'4+2=6. Hasil [6/7].',visual:null},
+{n:9,q:'[5/8] - [1/8] = ?',opts:['[3/8]','[4/8]','[5/8]','[6/8]'],correct:1,exp:'5-1=4. Hasil [4/8].',visual:{d:8,f1:5,f2:1,op:'-'}},
+{n:10,q:'[3/9] + [5/9] = ?',opts:['[6/9]','[7/9]','[8/9]','[9/9]'],correct:2,exp:'3+5=8. Hasil [8/9].',visual:null},
+{n:11,q:'[5/5] - [2/5] = ?',opts:['[2/5]','[3/5]','[4/5]','[5/5]'],correct:1,exp:'5-2=3. Hasil [3/5].',visual:null},
+{n:12,q:'[8/8] - [3/8] - [1/8] = ?',opts:['[3/8]','[4/8]','[5/8]','[6/8]'],correct:1,exp:'8-3-1=4. Hasil [4/8].',visual:null},
+{n:13,q:'[10/10] - [4/10] = ?',opts:['[4/10]','[5/10]','[6/10]','[7/10]'],correct:2,exp:'10-4=6. Hasil [6/10].',visual:null},
+{n:14,q:'[2/6] + [3/6] - [4/6] = ?',opts:['[1/6]','[2/6]','[3/6]','[4/6]'],correct:0,exp:'2+3-4=1. Hasil [1/6].',visual:null},
+{n:15,q:'[3/10] + [4/10] + [2/10] = ?',opts:['[8/10]','[9/10]','[7/10]','[10/10]'],correct:1,exp:'3+4+2=9. Hasil [9/10].',visual:null},
+{n:16,q:'[10/10] - [4/10] - [2/10] - [3/10] = ?',opts:['[1/10]','[2/10]','[3/10]','[4/10]'],correct:0,exp:'10-4-2-3=1. Hasil [1/10].',visual:null},
+{n:17,q:'[12/12] - [3/12] - [2/12] - [4/12] = ?',opts:['[2/12]','[3/12]','[4/12]','[5/12]'],correct:1,exp:'12-3-2-4=3. Hasil [3/12].',visual:null},
+{n:18,q:'[1/2] + [1/4] = ? (penyebut berbeda)',opts:['[2/6]','[3/6]','[3/4]','[2/4]'],correct:2,exp:'KPK(2,4)=4. [1/2]=[2/4]. [2/4]+[1/4]=[3/4].',visual:null},
+{n:19,q:'[3/4] - [1/2] = ? (penyebut berbeda)',opts:['[2/4]','[1/4]','[1/2]','[2/2]'],correct:1,exp:'KPK(4,2)=4. [1/2]=[2/4]. [3/4]-[2/4]=[1/4].',visual:null},
+{n:20,q:'[1/3] + [1/6] = ? (penyebut berbeda)',opts:['[2/9]','[3/6]','[2/6]','[1/6]'],correct:1,exp:'KPK(3,6)=6. [1/3]=[2/6]. [2/6]+[1/6]=[3/6].',visual:null}
+];
+
+function buildPemanasan(){buildQuestions('pemList1',pemSiswa1,1,'pem');buildQuestions('pemList2',pemSiswa2,2,'pem')}
+function buildLatihan(){buildQuestions('latList1',latSiswa1,1,'lat');buildQuestions('latList2',latSiswa2,2,'lat')}
+
+function buildKuis(){
+  [1,2].forEach(function(s){
+    var grid=document.getElementById('grid'+s);if(!grid)return;grid.innerHTML='';
+    kuisData.forEach(function(q){
+      var btn=document.createElement('button');btn.className='num-btn '+q.level;btn.dataset.no=q.n;
+      var lbl=q.level==='mudah'?'Mudah':q.level==='sedang'?'Sedang':'Sulit';
+      btn.innerHTML=q.n+'<small>'+lbl+'</small>';btn.onclick=function(){pickQuestion(s,q.n)};grid.appendChild(btn);
+    });
+  });
+}
+function updateKuisUI(){
+  var d1=document.getElementById('dScore1'),d2=document.getElementById('dScore2');
+  if(d1)d1.textContent=state.dScore1;if(d2)d2.textContent=state.dScore2;
+  [1,2].forEach(function(s){
+    var picker=document.getElementById('picker'+s),status=document.getElementById('status'+s);
+    var ak='student'+s+'Active',aq=state[ak];if(!picker||!status)return;
+    if(aq!==null){picker.classList.add('locked');status.textContent='Sedang menjawab Soal '+aq;status.classList.add('busy')}
+    else{picker.classList.remove('locked');var ta=s===1?state.total1:state.total2;status.textContent=ta>0?'Siap pilih lagi!':'Siap memilih!';status.classList.remove('busy')}
+    var grid=document.getElementById('grid'+s);
+    if(grid){grid.querySelectorAll('.num-btn').forEach(function(btn){var no=parseInt(btn.dataset.no);var q=kuisData.find(function(x){return x.n===no});if(state.pickedQuestions.has(no)){btn.disabled=true;btn.classList.add('used-'+q.level)}})}
+  });
+}
+function pickQuestion(student,no){
+  if(state.pickedQuestions.has(no)){playErrorSnd();return}
+  var ak='student'+student+'Active';
+  if(state[ak]!==null){playErrorSnd();return}
+  state.pickedQuestions.add(no);state[ak]=no;renderStudentQuestion(student,no);updateKuisUI();playSelectSnd();
+}
+function renderStudentQuestion(student,no){
+  var se=document.getElementById('kuisSide'+student);if(!se)return;var q=kuisData.find(function(x){return x.n===no});if(!q)return;
+  var ll=q.level==='mudah'?'Mudah':q.level==='sedang'?'Sedang':'Sulit';var dia=q.level==='mudah'?2:q.level==='sedang'?5:7;
+  var optsHTML=q.opts.map(function(o,i){return '<div class="kuis-opt" data-idx="'+i+'" onclick="selectKuis('+student+','+no+','+i+')"><b>'+String.fromCharCode(65+i)+'.</b> '+FP(o)+'</div>'}).join('');
+  se.innerHTML='<h3><i class="fas fa-user"></i> '+(student===1?state.student1:state.student2)+' <span class="badge">'+(student===1?'KIRI':'KANAN')+'</span></h3><div class="kuis-question" id="kq-'+student+'-'+no+'"><div class="kuis-q-meta"><span class="kuis-level '+q.level+'">'+ll+'</span><span class="kuis-diamond"><i class="fas fa-gem"></i> '+dia+' Diamond</span></div><div class="kuis-q-text"><b>Soal '+no+'.</b> '+FP(q.q)+'</div><div class="kuis-options">'+optsHTML+'</div><div class="kuis-actions"><button class="q-btn btn-check" onclick="checkKuis('+student+','+no+')"><i class="fas fa-check"></i> Cek Jawaban</button><button class="q-btn btn-explain" onclick="explainKuis('+student+','+no+')"><i class="fas fa-info"></i> Pembahasan</button></div><div class="kuis-result" id="kr-'+student+'-'+no+'"></div></div>';
+}
+function selectKuis(student,no,optIdx){
+  var qe=document.getElementById('kq-'+student+'-'+no);if(!qe)return;
+  qe.querySelectorAll('.kuis-opt').forEach(function(o,i){o.classList.toggle('selected',i===optIdx)});
+  qe.dataset.selected=optIdx;playSelectSnd();
+}
+function checkKuis(student,no){
+  var qe=document.getElementById('kq-'+student+'-'+no);if(!qe)return;var sel=qe.dataset.selected;var fb=document.getElementById('kr-'+student+'-'+no);
+  if(sel===undefined){fb.className='kuis-result wrong show';fb.innerHTML='<i class="fas fa-exclamation-triangle"></i> Pilih jawaban dulu!';playErrorSnd();return}
+  var q=kuisData.find(function(x){return x.n===no});var si=parseInt(sel);var dia=q.level==='mudah'?2:q.level==='sedang'?5:7;
+  if(student===1)state.total1++;else state.total2++;
+  if(si===q.correct){if(student===1){state.dScore1+=dia;state.correct1++}else{state.dScore2+=dia;state.correct2++}fb.className='kuis-result correct show';fb.innerHTML='<i class="fas fa-star"></i> <b>Benar!</b> +<b>'+dia+' diamond</b>! Pilih soal lain!';playCorrectSnd();setTimeout(playDiamondSnd,300);launchConfetti()}
+  else{fb.className='kuis-result wrong show';fb.innerHTML='<i class="fas fa-times"></i> <b>Belum tepat.</b> Jawaban: <b>'+String.fromCharCode(65+q.correct)+'. '+q.opts[q.correct]+'</b>. Pilih soal lain!';playWrongSnd()}
+  state['student'+student+'Active']=null;updateKuisUI();
+}
+function explainKuis(student,no){var q=kuisData.find(function(x){return x.n===no});var fb=document.getElementById('kr-'+student+'-'+no);if(!fb)return;fb.className='kuis-result explain show';fb.innerHTML='<i class="fas fa-lightbulb"></i> <b>Pembahasan:</b> '+FP(q.exp);playClickSnd()}
+
+function updateResults(){
+  document.getElementById('correctCount1').textContent=state.correct1;document.getElementById('totalCount1').textContent=state.total1;
+  document.getElementById('correctCount2').textContent=state.correct2;document.getElementById('totalCount2').textContent=state.total2;
+  var a1=state.total1>0?Math.round(state.correct1/state.total1*100):0,a2=state.total2>0?Math.round(state.correct2/state.total2*100):0;
+  document.getElementById('accuracy1').textContent=a1+'%';document.getElementById('accuracy2').textContent=a2+'%';
+  document.getElementById('finalDiamond1').textContent=state.dScore1;document.getElementById('finalDiamond2').textContent=state.dScore2;
+  var w=state.dScore1>state.dScore2?state.student1:state.dScore2>state.dScore1?state.student2:'Kalian berdua';
+  document.getElementById('winnerName').textContent=w;
+  if(state.dScore1===0&&state.dScore2===0)document.getElementById('winnerBanner').style.display='none';
+  else{document.getElementById('winnerBanner').style.display='block';playWinSnd()}
+}
+
+function initSoccer(){state.soccer={turn:1,d1:0,d2:0,answered:new Set(),currentCard:null,locked:false,selected:null};renderSoccer()}
+function renderSoccer(){
+  var g=state.soccer;if(!g)return;
+  document.getElementById('socD1').textContent=g.d1;document.getElementById('socD2').textContent=g.d2;
+  document.getElementById('socTurnName').textContent=g.turn===1?state.student1:state.student2;
+  var ball=document.getElementById('soccerBall');if(ball)ball.className='soccer-ball';
+  var keeper=document.getElementById('goalkeeper');if(keeper)keeper.className='goalkeeper';
+  var grid=document.getElementById('cardGrid');if(!grid)return;
+  grid.innerHTML=soccerCards.map(function(c){var ans=g.answered.has(c.n),cur=g.currentCard===c.n;return '<button class="card-btn '+(ans?'answered':'')+' '+(cur?'current':'')+'" '+(ans||g.locked||g.currentCard!==null?'disabled':'')+' onclick="pickCard('+c.n+')">'+c.n+'</button>'}).join('');
+}
+function pickCard(n){var g=state.soccer;if(!g||g.locked)return;if(g.currentCard!==null){playErrorSnd();return}if(g.answered.has(n)){playErrorSnd();return}g.currentCard=n;g.selected=null;renderSoccer();renderSoccerQuestion(n);playSelectSnd()}
+function renderSoccerQuestion(n){
+  var c=soccerCards.find(function(x){return x.n===n});if(!c)return;var se=document.getElementById('soccerQuestion');if(!se)return;
+  var visHTML='';if(c.visual){visHTML='<div style="display:flex;justify-content:center;gap:8px;align-items:center;margin-bottom:8px">'+makePizzaSVG(c.visual.d,c.visual.f1,100,{color:'#FF6B35'})+'<span style="font-size:24px;font-weight:bold">'+c.visual.op+'</span>'+makePizzaSVG(c.visual.d,c.visual.f2,100,{color:'#06A77D'})+'</div>'}
+  var optsHTML=c.opts.map(function(o,i){return '<div class="sq-opt" data-idx="'+i+'" onclick="selectSoccer('+i+')">'+FP(o)+'</div>'}).join('');
+  se.innerHTML=visHTML+'<div class="sq-text"><b>Kartu '+n+'.</b> '+FP(c.q)+'</div><div class="sq-options">'+optsHTML+'</div><div class="sq-actions"><button class="sq-btn check" onclick="checkSoccer()"><i class="fas fa-futbol"></i> Tendang!</button><button class="sq-btn explain" onclick="explainSoccer()"><i class="fas fa-info"></i> Pembahasan</button></div><div class="sq-feedback" id="sqFeedback"></div>';
+}
+function selectSoccer(idx){state.soccer.selected=idx;document.querySelectorAll('.sq-opt').forEach(function(o,i){o.classList.toggle('selected',i===idx)});playSelectSnd()}
+function checkSoccer(){
+  var g=state.soccer;if(!g||g.locked||g.currentCard===null)return;
+  if(g.selected===null){var fb=document.getElementById('sqFeedback');if(fb){fb.className='sq-feedback wrong show';fb.innerHTML='<i class="fas fa-exclamation-triangle"></i> Pilih jawaban dulu!'}playErrorSnd();return}
+  var c=soccerCards.find(function(x){return x.n===g.currentCard});var si=parseInt(g.selected);var fb=document.getElementById('sqFeedback');
+  g.locked=true;var ball=document.getElementById('soccerBall'),msg=document.getElementById('soccerMsg'),keeper=document.getElementById('goalkeeper');
+  if(si===c.correct){
+    if(g.turn===1)g.d1+=2;else g.d2+=2;
+    if(ball)ball.className='soccer-ball gol';
+    if(keeper){keeper.className='goalkeeper';keeper.offsetHeight;keeper.className='goalkeeper dive-left'}
+    if(msg){msg.textContent='GOOOL! +2 \uD83D\uDC8E';msg.className='soccer-msg show'}
+    playGoalSnd();launchConfetti();
+    setTimeout(function(){g.answered.add(g.currentCard);g.currentCard=null;g.selected=null;g.locked=false;g.turn=g.turn===1?2:1;if(msg)msg.className='soccer-msg';renderSoccer();var se=document.getElementById('soccerQuestion');if(se)se.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.7)"><i class="fas fa-check-circle" style="font-size:32px"></i><p>Bagus! Giliran '+(g.turn===1?state.student1:state.student2)+'!</p></div>';checkGameEnd()},2500);
+  }else{
+    if(g.turn===1)g.d1-=1;else g.d2-=1;
+    if(ball)ball.className='soccer-ball miss';
+    if(keeper){keeper.className='goalkeeper';keeper.offsetHeight;keeper.className='goalkeeper save'}
+    if(msg){msg.textContent='TANGKAPAN! -1 \uD83D\uDC8E';msg.className='soccer-msg show'}
+    playMissSnd();
+    if(fb){fb.className='sq-feedback wrong show';fb.innerHTML='<i class="fas fa-times"></i> Belum tepat! Jawaban: <b>'+c.opts[c.correct]+'</b>. Coba lagi nanti!'}
+    setTimeout(function(){g.currentCard=null;g.selected=null;g.locked=false;g.turn=g.turn===1?2:1;if(msg)msg.className='soccer-msg';renderSoccer();var se=document.getElementById('soccerQuestion');if(se)se.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.7)"><i class="fas fa-futbol" style="font-size:32px"></i><p>Giliran '+(g.turn===1?state.student1:state.student2)+'!</p></div>'},2500);
+  }
+}
+function explainSoccer(){var g=state.soccer;if(!g||g.currentCard===null)return;var c=soccerCards.find(function(x){return x.n===g.currentCard});var fb=document.getElementById('sqFeedback');if(!fb)return;fb.className='sq-feedback explain show';fb.innerHTML='<i class="fas fa-lightbulb"></i> <b>Pembahasan:</b> '+FP(c.exp);playClickSnd()}
+function checkGameEnd(){var g=state.soccer;if(!g)return;if(g.answered.size===soccerCards.length){var se=document.getElementById('soccerQuestion');if(se)se.innerHTML='<div style="text-align:center;padding:30px"><i class="fas fa-trophy" style="font-size:48px;color:var(--accent)"></i><h3 style="font-family:Baloo 2;font-size:24px;margin-top:10px">GAME SELESAI!</h3><p>'+state.student1+': '+g.d1+' \uD83D\uDC8E | '+state.student2+': '+g.d2+' \uD83D\uDC8E</p></div>';playWinSnd();launchConfetti()}}
+
+function launchConfetti(){
+  var colors=['#FF6B35','#FFC60B','#06A77D','#FF5A8A','#3DB4F4','#9B59B6'];
+  for(var i=0;i<60;i++){
+    var c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.borderRadius=Math.random()>0.5?'50%':'0';c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';c.style.animationDelay=Math.random()*0.5+'s';
+    document.body.appendChild(c);setTimeout(function(){c.remove()},4000);
+  }
+}
+
+window.addEventListener('load',function(){
+  buildPemanasan();buildLatihan();buildKuis();initSoccer();
+  [1,2,3,4,5].forEach(function(n){renderEx(n)});
+  updateProgress();updateAllNames();
+});
+</script>
+</body>
+</html>
