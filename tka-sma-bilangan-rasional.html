@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bilangan Rasional — Persiapan TKA SMA | Slide Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#4f46e5;--primary-2:#7c3aed;--primary-soft:#eef2ff;--primary-line:#c7d2fe;
+  --accent:#f59e0b;--accent-soft:#fffbeb;
+  --ink:#101828;--muted:#5b6472;--line:#e4e7ec;
+  --ok:#059669;--ok-bg:#ecfdf5;--bad:#dc2626;--bad-bg:#fef2f2;--warn:#b45309;
+  --card:#fff;--radius:18px;
+  --shadow:0 12px 32px rgba(79,70,229,.10),0 2px 8px rgba(16,24,40,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Poppins',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#f4f6fb;color:var(--ink);overflow:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(680px 420px at 8% -6%,rgba(79,70,229,.14),transparent 60%),
+ radial-gradient(620px 420px at 100% 0%,rgba(245,158,11,.13),transparent 55%),
+ radial-gradient(720px 520px at 50% 115%,rgba(124,58,237,.10),transparent 60%)}
+button{font-family:inherit;color:inherit}
+h1,h2,h3,h4{line-height:1.25}
+
+/* ---------- TOP BAR ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;gap:16px;padding:0 18px;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;white-space:nowrap}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;display:grid;place-items:center;font-size:.9rem;font-weight:800;box-shadow:0 4px 10px rgba(79,70,229,.3)}
+.brand small{display:block;color:var(--muted);font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+.progress{flex:1;height:6px;background:#e6e9f2;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary-2),var(--accent));border-radius:99px;transition:width .45s ease}
+.topchip{background:var(--primary-soft);border:1px solid var(--primary-line);color:var(--primary);font-weight:700;font-size:.76rem;padding:6px 14px;border-radius:99px;white-space:nowrap}
+
+/* ---------- BOTTOM BAR ---------- */
+.bottombar{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 18px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.bb-left,.bb-right{display:flex;align-items:center;gap:10px}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1.4px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;transition:.18s}
+.iconbtn:hover{border-color:var(--primary);color:var(--primary)}
+.navbtn{width:44px;height:44px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;cursor:pointer;display:grid;place-items:center;transition:.2s;box-shadow:0 6px 14px rgba(79,70,229,.25)}
+.navbtn:hover{transform:translateY(-1px)}
+.navbtn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.counter{font-weight:700;color:var(--muted);font-size:.88rem;min-width:62px;text-align:center}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dot{width:9px;height:9px;border-radius:50%;background:#c4cbdb;border:none;cursor:pointer;transition:.2s;padding:0}
+.dot.on{background:var(--primary);transform:scale(1.3)}
+.dot:hover{background:var(--primary-2)}
+
+/* ---------- SLIDES ---------- */
+.deck{position:fixed;inset:0}
+.slide{position:absolute;inset:56px 0 64px;opacity:0;visibility:hidden;transform:translateY(26px);transition:opacity .45s ease,transform .45s ease,visibility .45s;overflow:hidden}
+.slide.active{opacity:1;visibility:visible;transform:none}
+.slide-inner{width:min(1120px,94%);margin:0 auto;height:100%;display:flex;flex-direction:column;min-height:0}
+.slide-body{flex:1;min-height:0;overflow-y:auto;padding:14px 6px 42px}
+.slide-body::-webkit-scrollbar{width:10px}
+.slide-body::-webkit-scrollbar-thumb{background:#c9d0e0;border-radius:99px;border:3px solid transparent;background-clip:content-box}
+.titlebar{padding:6px 0 10px}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;padding:6px 14px;border-radius:99px;border:1px solid var(--primary-line)}
+.slide-title{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:800;letter-spacing:-.01em;margin-top:10px}
+.slide-sub{color:var(--muted);margin-top:6px;font-size:.95rem;line-height:1.65;max-width:76ch}
+
+/* ---------- COVER ---------- */
+.slide.cover .slide-body{display:flex;align-items:center;justify-content:center}
+.cover-box{position:relative;z-index:2;text-align:center;max-width:860px;margin:0 auto;padding:20px 0}
+.cover-title{font-size:clamp(2.5rem,6vw,4.3rem);font-weight:800;line-height:1.06;letter-spacing:-.02em;margin-top:16px}
+.cover-title .grad{background:linear-gradient(90deg,var(--primary),var(--primary-2) 55%,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover-sub{color:var(--muted);font-size:1.02rem;line-height:1.75;margin:18px auto 0;max-width:62ch}
+.cover-chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:24px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-weight:600;font-size:.84rem;box-shadow:0 2px 6px rgba(16,24,40,.05)}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cover-actions{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cover-foot{margin-top:24px;color:var(--muted);font-size:.8rem}
+.float-sym{position:absolute;font-weight:800;color:rgba(79,70,229,.11);font-size:2.2rem;animation:floaty 7s ease-in-out infinite;user-select:none;pointer-events:none;z-index:1}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-20px) rotate(7deg)}}
+
+/* ---------- BUTTONS ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-weight:700;font-size:.92rem;padding:12px 22px;border-radius:14px;transition:.2s;border:1.6px solid transparent}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.28)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(79,70,229,.34)}
+.btn-ghost{background:#fff;color:var(--primary);border-color:var(--primary-line)}
+.btn-ghost:hover{background:var(--primary-soft)}
+.btn-check{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border:none;border-radius:12px;padding:10px 20px;font-weight:700;font-size:.88rem;cursor:pointer;transition:.2s;box-shadow:0 6px 16px rgba(79,70,229,.25)}
+.btn-check:hover{transform:translateY(-1px)}
+.btn-check:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+.stepbtn{background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary-line);border-radius:10px;padding:8px 14px;font-weight:700;font-size:.84rem;cursor:pointer;margin-top:10px;transition:.18s}
+.stepbtn:hover{background:#e2e8ff}
+
+/* ---------- CARDS & CONTENT ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px}
+.card h3{font-size:1.05rem;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.h3dot{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--primary),var(--accent));display:inline-block;flex:none}
+.card p{font-size:.93rem;line-height:1.68;color:#2a3242}
+.formula{background:linear-gradient(135deg,#eef2ff,#fdf4ff);border:1.4px dashed var(--primary-line);border-radius:14px;padding:14px 18px;font-size:1rem;line-height:1.9}
+.formula b{color:var(--primary)}
+.note{background:var(--accent-soft);border:1px solid #fde68a;border-radius:14px;padding:14px 17px;font-size:.92rem;line-height:1.68;margin-top:16px}
+.note b{color:var(--warn)}
+.mathline{font-size:1.06rem;font-weight:600;line-height:2.1;margin:4px 0}
+.steps{display:none;margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.steps.show{display:block}
+.steps li{margin:7px 0 7px 18px;font-size:.93rem;line-height:1.6}
+.stepflow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.stepchip{background:#fff;border:1.6px solid var(--primary-line);color:var(--primary);font-weight:700;border-radius:12px;padding:10px 16px;font-size:.88rem;box-shadow:0 2px 8px rgba(79,70,229,.08)}
+.arrow{color:var(--muted);font-weight:800}
+.alignbox{white-space:pre;font-family:'Consolas','Courier New',monospace;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 18px;display:inline-block;line-height:1.6;font-size:1rem;font-weight:600;margin-top:6px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.6em;line-height:1.18;margin:0 3px;font-weight:700}
+.frac>span{display:block;padding:0 6px;font-size:.9em}
+.frac>span:last-child{border-top:1.7px solid currentColor}
+.instruksi{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#eef2ff,#faf5ff);border:1px solid var(--primary-line);border-radius:14px;padding:14px 17px;font-size:.9rem;line-height:1.6;margin-top:16px;flex-wrap:wrap}
+.topic-chip{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);border:1px solid #fde68a;color:var(--warn);border-radius:99px;padding:7px 15px;font-weight:700;font-size:.84rem;white-space:nowrap}
+
+/* ---------- PETA MATERI ---------- */
+.peta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:16px}
+.peta-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.2s;box-shadow:0 2px 8px rgba(16,24,40,.05);display:flex;gap:12px;align-items:flex-start}
+.peta-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--primary-line)}
+.peta-num{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.peta-card h4{font-size:.97rem}
+.peta-card p{font-size:.8rem;color:var(--muted);margin-top:4px;line-height:1.55}
+
+/* ---------- KUIS KILAT ---------- */
+.kilat{margin-top:24px;padding-top:18px;border-top:2px dashed var(--primary-line)}
+.kilat-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kilat-badge{background:var(--accent-soft);color:var(--warn);border:1px solid #fde68a;border-radius:99px;padding:4px 12px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.kilat-note{color:var(--muted);font-size:.84rem;margin-top:6px;margin-bottom:4px}
+
+/* ---------- SOAL ---------- */
+.qlist{display:grid;gap:16px;margin-top:16px}
+.qcard{background:#fff;border:1px solid var(--line);border-left:5px solid var(--primary);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;transition:border-color .3s}
+.qcard.ok{border-left-color:var(--ok)}
+.qcard.bad{border-left-color:var(--bad)}
+.qmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.qnum{font-weight:800;color:var(--primary);font-size:.83rem;letter-spacing:.05em;text-transform:uppercase}
+.qtype{border-radius:99px;padding:3px 12px;font-size:.73rem;font-weight:700}
+.t-pg{background:#e0f2fe;color:#0369a1}
+.t-bs{background:#fce7f3;color:#be185d}
+.t-pgk{background:#f3e8ff;color:#7e22ce}
+.qhint{font-size:.72rem;color:var(--muted);background:#f1f5f9;border-radius:99px;padding:3px 10px;font-weight:600}
+.qtext{font-size:.99rem;line-height:1.7;margin-bottom:4px}
+.opts{display:grid;gap:10px;margin:14px 0 4px}
+.opts.locked{pointer-events:none}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.8px solid var(--line);border-radius:13px;cursor:pointer;transition:.16s;background:#fff;font-size:.96rem;line-height:1.55}
+.opt:hover{border-color:#a5b4fc;background:#fafbff}
+.opt.sel{border-color:var(--primary);background:var(--primary-soft)}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt input{accent-color:var(--primary);width:17px;height:17px;flex:none}
+.okey{min-width:26px;height:26px;border-radius:8px;background:var(--primary-soft);color:var(--primary);font-weight:800;display:grid;place-items:center;font-size:.76rem;border:1px solid var(--primary-line)}
+.opt.correct .okey{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong .okey{background:var(--bad);border-color:var(--bad);color:#fff}
+.opts.bs .opt{justify-content:center;font-weight:700;padding:13px}
+.qactions{margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fb{display:none;margin-top:12px;padding:11px 15px;border-radius:12px;font-weight:700;font-size:.92rem}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #a7f3d0}
+.fb.bad{background:var(--bad-bg);color:var(--bad);border:1px solid #fecaca}
+.fb.warn{background:var(--accent-soft);color:var(--warn);border:1px solid #fde68a}
+.pembahasan{display:none;margin-top:12px;background:#f8fafc;border:1.4px dashed #cbd5e1;border-radius:13px;padding:14px 16px;font-size:.93rem;line-height:1.75}
+.pembahasan.show{display:block;animation:fadeUp .35s ease}
+.exp-title{font-weight:800;color:var(--primary);font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- HASIL ---------- */
+.rwrap{display:grid;grid-template-columns:290px 1fr;gap:18px;margin-top:16px}
+.scorecard{text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.score-label{font-size:.76rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.score-big{font-size:3.4rem;font-weight:800;line-height:1.15;background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.score-sub{color:var(--muted);font-size:.88rem;margin-top:8px}
+.rbtns{display:flex;flex-direction:column;gap:10px;margin-top:18px;width:100%}
+.namebox{display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.namebox input{flex:1;min-width:200px;padding:11px 14px;border:1.6px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;outline:none;transition:.2s}
+.namebox input:focus{border-color:var(--primary)}
+.rtable-wrap{overflow-x:auto;border-radius:var(--radius)}
+.rtable{width:100%;border-collapse:collapse;background:#fff;box-shadow:var(--shadow);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:560px}
+.rtable th{background:var(--primary-soft);color:var(--primary);text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;padding:12px 14px}
+.rtable td{padding:12px 14px;border-top:1px solid var(--line);font-size:.93rem;vertical-align:middle;line-height:1.5}
+.badge{padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:700;white-space:nowrap;display:inline-block}
+.badge.done{background:var(--ok-bg);color:var(--ok)}
+.badge.part{background:var(--accent-soft);color:var(--warn)}
+.badge.none{background:#f1f5f9;color:var(--muted)}
+.badge.focus{background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary-line);font-size:.68rem;margin-top:4px}
+.rbar{height:10px;background:#eef0f4;border-radius:99px;min-width:110px;overflow:hidden;display:inline-block;vertical-align:middle}
+.rbar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-2));border-radius:99px;transition:width .7s ease}
+.rpct{font-size:.8rem;color:var(--muted);font-weight:700;margin-left:8px}
+.rnote{color:var(--muted);font-size:.84rem;line-height:1.6;margin-top:12px}
+.confetti{position:fixed;top:-16px;width:9px;height:14px;z-index:300;pointer-events:none;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(680deg);opacity:.85}}
+
+/* ---------- KESIMPULAN ---------- */
+.closing{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border:none}
+.closing h3{color:#fff}
+.closing p{color:#e0e7ff}
+.closing .btn-ghost{background:#fff}
+
+/* ---------- MENU & TOAST ---------- */
+.menu{position:fixed;inset:0;z-index:120;background:rgba(16,24,40,.5);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px}
+.menu.open{display:flex}
+.menu-panel{background:#fff;border-radius:22px;box-shadow:0 30px 80px rgba(16,24,40,.35);width:min(600px,94vw);max-height:82vh;overflow:auto;padding:22px 20px}
+.menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 6px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:600;font-size:.93rem}
+.menu-item:hover{background:var(--primary-soft);color:var(--primary)}
+.mi-num{width:34px;height:34px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-size:.78rem;font-weight:800;flex:none;border:1px solid var(--primary-line)}
+.menu-item.cur .mi-num{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-color:transparent}
+.menu-item.cur{color:var(--primary)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,20px);background:#111827;color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;font-size:.88rem;opacity:0;pointer-events:none;transition:.35s;z-index:200;box-shadow:0 12px 30px rgba(0,0,0,.25);max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:1000px){.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}.rwrap{grid-template-columns:1fr}}
+@media(max-width:720px){
+  .dots{display:none}
+  .topchip{display:none}
+  .grid4{grid-template-columns:1fr}
+  .card{padding:16px}
+  .slide{inset:52px 0 60px}
+  .topbar{height:52px;padding:0 12px;gap:10px}
+  .bottombar{padding:0 10px;height:60px}
+  .brand small{display:none}
+  .cover-sub{font-size:.94rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">Q</span>
+    <span>TKA SMA<small>Matematika &middot; Bilangan Rasional</small></span>
+  </div>
+  <div class="progress"><div id="progress"></div></div>
+  <span class="topchip">Materi Interaktif</span>
+</header>
+
+<!-- ===== BOTTOM BAR ===== -->
+<footer class="bottombar">
+  <div class="bb-left">
+    <button class="iconbtn" data-menu aria-label="Daftar slide">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <button class="navbtn" id="btnPrev" data-nav="prev" aria-label="Slide sebelumnya">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <span class="counter" id="counter">1 / 15</span>
+    <button class="navbtn" id="btnNext" data-nav="next" aria-label="Slide berikutnya">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="bb-right">
+    <button class="iconbtn" data-fullscreen aria-label="Layar penuh">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+    </button>
+  </div>
+</footer>
+
+<!-- ===== MENU OVERLAY ===== -->
+<div class="menu" id="menu">
+  <div class="menu-panel">
+    <div class="menu-head">
+      <b>Daftar Slide</b>
+      <button class="iconbtn" data-menu-close aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="menuList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<main class="deck">
+<!-- ============ SLIDE 1: COVER ============ -->
+<section class="slide cover active" data-title="Cover">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <span class="float-sym" style="top:10%;left:5%;animation-delay:0s">÷</span>
+      <span class="float-sym" style="top:20%;right:7%;animation-delay:1.2s;font-size:3.1rem">×</span>
+      <span class="float-sym" style="bottom:16%;left:11%;animation-delay:2.1s;font-size:2.7rem">%</span>
+      <span class="float-sym" style="bottom:24%;right:9%;animation-delay:.7s">π</span>
+      <span class="float-sym" style="top:46%;left:3%;animation-delay:1.8s;font-size:1.9rem">√</span>
+      <span class="float-sym" style="top:58%;right:4%;animation-delay:2.6s;font-size:2.1rem">+</span>
+      <span class="float-sym" style="top:6%;left:45%;animation-delay:3s;font-size:1.7rem">=</span>
+      <span class="float-sym" style="bottom:6%;left:47%;animation-delay:1.5s;font-size:1.8rem">−</span>
+      <div class="cover-box">
+        <span class="kicker">Persiapan TKA SMA &middot; Matematika</span>
+        <h1 class="cover-title">Bilangan <span class="grad">Rasional</span></h1>
+        <p class="cover-sub">Kuasai pecahan, desimal, dan persen &mdash; lalu terapkan dalam aritmetika sosial: menghitung diskon, membedah bruto dan tara pada kaleng susu, hingga menghitung total penumpang kincir ria. Setiap materi dilengkapi soal interaktif dengan tombol cek jawaban dan pembahasan otomatis.</p>
+        <div class="cover-chips">
+          <span class="chip">15 Slide Materi</span>
+          <span class="chip">29 Soal Interaktif</span>
+          <span class="chip">Pembahasan Lengkap</span>
+          <span class="chip">Skor Otomatis</span>
+        </div>
+        <div class="cover-actions">
+          <button class="btn btn-primary" data-goto="1">Mulai Belajar
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="btn btn-ghost" data-menu>Lihat Daftar Slide</button>
+        </div>
+        <p class="cover-foot">Gunakan tombol panah kiri&ndash;kanan pada keyboard, atau geser layar pada perangkat sentuh, untuk berpindah slide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: PETA MATERI ============ -->
+<section class="slide" data-title="Peta Materi">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Peta Materi</span>
+        <h2 class="slide-title">Apa saja yang akan kita pelajari?</h2>
+        <p class="slide-sub">Klik salah satu kartu untuk melompat langsung ke materi. Pelajari secara berurutan agar pemahamanmu menyeluruh &mdash; setiap materi penerapan ditutup dengan 5 soal latihan interaktif.</p>
+      </div>
+      <div class="peta-grid">
+        <div class="peta-card" data-goto="2"><span class="peta-num">01</span><div><h4>Definisi Bilangan Rasional</h4><p>Bentuk a/b dengan b tidak nol, contoh bilangan rasional dan irasional.</p></div></div>
+        <div class="peta-card" data-goto="3"><span class="peta-num">02</span><div><h4>Latihan Konversi Bentuk</h4><p>Ubah pecahan, desimal, persen, dan desimal berulang satu sama lain.</p></div></div>
+        <div class="peta-card" data-goto="4"><span class="peta-num">03</span><div><h4>Operasi Hitung Pecahan</h4><p>Penjumlahan, pengurangan, perkalian, dan pembagian pecahan.</p></div></div>
+        <div class="peta-card" data-goto="5"><span class="peta-num">04</span><div><h4>Operasi Hitung Desimal</h4><p>Teknik luruskan koma, perkalian, dan pembagian bilangan desimal.</p></div></div>
+        <div class="peta-card" data-goto="6"><span class="peta-num">05</span><div><h4>Operasi Hitung Campuran</h4><p>Urutan operasi untuk pecahan, desimal, dan persen dalam satu soal.</p></div></div>
+        <div class="peta-card" data-goto="7"><span class="peta-num">06</span><div><h4>Diskon dan Persentase</h4><p>Aritmetika sosial: hitung potongan dan harga bayar dari persentase diskon.</p></div></div>
+        <div class="peta-card" data-goto="9"><span class="peta-num">07</span><div><h4>Bruto dan Tara Kaleng Susu</h4><p>Aritmetika sosial: bedah bruto, netto, dan tara pada kemasan kaleng susu.</p></div></div>
+        <div class="peta-card" data-goto="11"><span class="peta-num">08</span><div><h4>Total Penumpang Kincir Ria</h4><p>Aritmetika sosial: rumus kabin &times; kapasitas &times; banyak putaran.</p></div></div>
+      </div>
+      <div class="note"><b>Cara pengerjaan:</b> setiap slide penerapan diakhiri 5 soal latihan berbentuk pilihan ganda, benar/salah, dan pilihan ganda kompleks. Klik <b>Cek Jawaban</b> pada tiap soal untuk melihat status benar/salah beserta pembahasannya. Semua skor terkumpul otomatis di slide <b>Hasil Pengerjaan Siswa</b> di akhir presentasi.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: DEFINISI ============ -->
+<section class="slide" data-title="Definisi Bilangan Rasional">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Materi 1 &middot; Konsep Dasar</span>
+        <h2 class="slide-title">Apa itu Bilangan Rasional?</h2>
+        <p class="slide-sub">Sebelum berlatih operasi hitung, pahami dulu ciri khas bilangan rasional dan pembedanya dengan bilangan irasional.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="h3dot"></span>Definisi</h3>
+          <div class="formula">Bilangan <b>rasional</b> adalah bilangan yang dapat dinyatakan dalam bentuk <span class="frac"><span>a</span><span>b</span></span>, dengan <b>a</b> dan <b>b</b> bilangan bulat serta <b>b &ne; 0</b>. Himpunannya dinotasikan dengan huruf <b>Q</b> (<i>quotient</i>).</div>
+          <div class="chiprow">
+            <span class="chip"><span class="frac"><span>1</span><span>2</span></span></span>
+            <span class="chip">&minus;<span class="frac"><span>3</span><span>4</span></span></span>
+            <span class="chip">0,75</span>
+            <span class="chip">0,333&hellip;</span>
+            <span class="chip">5</span>
+            <span class="chip">0</span>
+          </div>
+          <p style="margin-top:12px">Semua contoh di atas adalah bilangan rasional karena dapat ditulis sebagai a/b: 0,75 = 3/4, 0,333&hellip; = 1/3, 5 = 5/1, dan 0 = 0/1.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Bilangan Irasional</h3>
+          <p><b>Bilangan irasional</b> adalah kebalikannya: tidak dapat dinyatakan dalam bentuk a/b. Desimalnya <b>tidak berhenti</b> dan <b>tidak berulang</b> secara teratur. Contoh yang sering muncul di soal:</p>
+          <div class="mathline">&radic;2 &asymp; 1,41421356&hellip;</div>
+          <div class="mathline">&pi; &asymp; 3,14159265&hellip;</div>
+          <div class="mathline">e &asymp; 2,71828182&hellip;</div>
+          <div class="note" style="margin-top:12px"><b>Hati-hati:</b> 0,333&hellip; (berulang) = 1/3 sehingga <b>rasional</b>. Sedangkan &radic;2 (tak berhenti dan tak berulang) termasuk <b>irasional</b>.</div>
+        </div>
+      </div>
+      <div class="note"><b>Ingat:</b> setiap bilangan bulat adalah bilangan rasional, karena n = n/1 (contoh: 5 = 5/1). Jadi himpunan bilangan bulat merupakan bagian dari himpunan bilangan rasional Q, dan desimal berulang pun selalu rasional.</div>
+      <div class="kilat">
+        <div class="kilat-head"><span class="kilat-badge">Kuis Kilat</span><b>Cek pemahamanmu</b></div>
+        <p class="kilat-note">Pilih jawaban, klik Cek Jawaban, lalu baca pembahasannya. Hasilmu otomatis tercatat di slide Hasil Pengerjaan Siswa.</p>
+        <div class="qlist" id="q-kilat-def"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: KONVERSI ============ -->
+<section class="slide" data-title="Latihan Konversi Bentuk">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Materi 2 &middot; Latihan</span>
+        <h2 class="slide-title">Konversi Bentuk Bilangan Rasional</h2>
+        <p class="slide-sub">Satu bilangan rasional bisa tampil dalam tiga wajah: pecahan, desimal, dan persen. Kuasai empat teknik konversi berikut, lalu kerjakan latihannya.</p>
+      </div>
+      <div class="grid4">
+        <div class="card">
+          <h3><span class="h3dot"></span>Pecahan &rarr; Desimal</h3>
+          <p>Bagi pembilang dengan penyebutnya.</p>
+          <div class="mathline"><span class="frac"><span>3</span><span>4</span></span> = 3 &divide; 4 = 0,75</div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Desimal &rarr; Persen</h3>
+          <p>Kalikan dengan 100 (geser koma dua tempat ke kanan).</p>
+          <div class="mathline">0,45 = 0,45 &times; 100% = 45%</div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Persen &rarr; Pecahan</h3>
+          <p>Tulis di atas 100, lalu sederhanakan.</p>
+          <div class="mathline">25% = <span class="frac"><span>25</span><span>100</span></span> = <span class="frac"><span>1</span><span>4</span></span></div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Desimal Berulang &rarr; Pecahan</h3>
+          <p>Tulis blok berulangnya di atas angka 99 (atau 9, 999, sesuai panjang blok).</p>
+          <div class="mathline">0,3636&hellip; = <span class="frac"><span>36</span><span>99</span></span> = <span class="frac"><span>4</span><span>11</span></span></div>
+        </div>
+      </div>
+      <div class="instruksi">
+        <div style="flex:1;min-width:220px"><b>Cara mengerjakan:</b> pilih jawaban, lalu klik <b>Cek Jawaban</b> untuk melihat status benar/salah beserta pembahasan. Skormu tercatat di slide Hasil Pengerjaan Siswa.</div>
+        <span class="topic-chip" data-topic="konversi">0/6 terjawab</span>
+      </div>
+      <div class="qlist" id="q-konversi"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: OPERASI PECAHAN ============ -->
+<section class="slide" data-title="Operasi Hitung Pecahan">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Materi 3 &middot; Operasi Hitung</span>
+        <h2 class="slide-title">Operasi Hitung pada Pecahan</h2>
+        <p class="slide-sub">Empat operasi dasar pada pecahan masing-masing punya aturan yang berbeda. Perhatikan contoh terurai berikut dengan teliti.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <h3><span class="h3dot"></span>Penjumlahan &amp; Pengurangan</h3>
+          <p>Samakan penyebut dengan KPK terlebih dahulu, baru jumlahkan atau kurangkan pembilangnya.</p>
+          <div class="mathline"><span class="frac"><span>2</span><span>3</span></span> + <span class="frac"><span>1</span><span>4</span></span> = <span class="frac"><span>8</span><span>12</span></span> + <span class="frac"><span>3</span><span>12</span></span> = <span class="frac"><span>11</span><span>12</span></span></div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Perkalian</h3>
+          <p>Kalikan langsung: pembilang &times; pembilang, penyebut &times; penyebut, lalu sederhanakan.</p>
+          <div class="mathline"><span class="frac"><span>3</span><span>4</span></span> &times; <span class="frac"><span>2</span><span>5</span></span> = <span class="frac"><span>6</span><span>20</span></span> = <span class="frac"><span>3</span><span>10</span></span></div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Pembagian</h3>
+          <p>Balik pecahan kedua menjadi kebalikannya, lalu kalikan (<i>kali dengan kebalikan</i>).</p>
+          <div class="mathline"><span class="frac"><span>3</span><span>4</span></span> &divide; <span class="frac"><span>2</span><span>5</span></span> = <span class="frac"><span>3</span><span>4</span></span> &times; <span class="frac"><span>5</span><span>2</span></span> = <span class="frac"><span>15</span><span>8</span></span></div>
+        </div>
+      </div>
+      <div class="note"><b>Tips pecahan campuran:</b> sebelum dihitung, ubah dulu ke pecahan biasa &mdash; 2<span class="frac"><span>1</span><span>2</span></span> = (2 &times; 2 + 1)/2 = <span class="frac"><span>5</span><span>2</span></span>. Dan selalu sederhanakan hasil akhir hingga pembilang dan penyebutnya tidak punya faktor persekutuan lagi.</div>
+      <div class="kilat">
+        <div class="kilat-head"><span class="kilat-badge">Kuis Kilat</span><b>Cek pemahamanmu</b></div>
+        <p class="kilat-note">Dua soal singkat. Pilih jawaban, klik Cek Jawaban, lalu baca pembahasannya.</p>
+        <div class="qlist" id="q-kilat-pec"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: OPERASI DESIMAL ============ -->
+<section class="slide" data-title="Operasi Hitung Desimal">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Materi 4 &middot; Operasi Hitung</span>
+        <h2 class="slide-title">Operasi Hitung pada Desimal</h2>
+        <p class="slide-sub">Kunci utama operasi desimal adalah posisi tanda koma. Ketiga teknik berikut membuatnya selalu benar.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <h3><span class="h3dot"></span>Penjumlahan &amp; Pengurangan</h3>
+          <p><b>Luruskan komanya</b> terlebih dahulu, lalu jumlahkan seperti biasa. Boleh menambah angka nol di belakang agar digitnya sama banyak.</p>
+          <div class="alignbox">  12,50
++  3,75
+———————
+  16,25</div>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Perkalian</h3>
+          <p>Abaikan koma dulu, kalikan seperti bilangan bulat. Setelah itu, kembalikan koma dengan total banyaknya angka di belakang koma kedua bilangan.</p>
+          <div class="mathline">0,3 &times; 0,2 = 0,06</div>
+          <p>Karena 3 &times; 2 = 6 dan ada 2 angka di belakang koma, hasilnya 0,06 (bukan 0,6).</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Pembagian</h3>
+          <p>Geser koma pembagi dan bilangan yang dibagi sejumlah tempat yang sama sampai pembaginya bulat, lalu bagi seperti biasa.</p>
+          <div class="mathline">4,8 &divide; 0,6 = 48 &divide; 6 = 8</div>
+          <p>Koma digeser satu tempat ke kanan pada keduanya.</p>
+        </div>
+      </div>
+      <div class="note"><b>Jembatan kecil yang sering dipakai:</b> 0,1 = 10%, 0,25 = 25%, 0,5 = 50%, dan 0,75 = 75%. Mengubah desimal ke bentuk lain sering membuat soal campuran jauh lebih mudah.</div>
+      <div class="kilat">
+        <div class="kilat-head"><span class="kilat-badge">Kuis Kilat</span><b>Cek pemahamanmu</b></div>
+        <p class="kilat-note">Pilih jawaban, klik Cek Jawaban, lalu baca pembahasannya.</p>
+        <div class="qlist" id="q-kilat-des"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: OPERASI CAMPURAN ============ -->
+<section class="slide" data-title="Operasi Hitung Campuran">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Materi 5 &middot; Operasi Hitung</span>
+        <h2 class="slide-title">Operasi Hitung Campuran: Pecahan, Desimal &amp; Persen</h2>
+        <p class="slide-sub">Satu soal bisa memuat pecahan, desimal, dan persen sekaligus. Ada dua aturan emas: urutan operasi dan menyamakan bentuk.</p>
+      </div>
+      <div class="card">
+        <h3><span class="h3dot"></span>Urutan Operasi (Prioritas Hitung)</h3>
+        <p>Kerjakan operasi sesuai tingkatannya, dari kiri ke kanan bila setara:</p>
+        <div class="stepflow">
+          <span class="stepchip">1 &middot; Tanda Kurung ( )</span>
+          <span class="arrow">&rarr;</span>
+          <span class="stepchip">2 &middot; Kali &amp; Bagi (&times; &divide;)</span>
+          <span class="arrow">&rarr;</span>
+          <span class="stepchip">3 &middot; Tambah &amp; Kurang (+ &minus;)</span>
+        </div>
+      </div>
+      <div class="note" style="margin-top:16px"><b>Strategi menyamakan bentuk:</b> ubah semua bilangan ke satu bentuk yang sama &mdash; biasanya desimal paling praktis. Persen diubah dengan membagi 100: 25% = 0,25. Pecahan juga mudah diubah ke desimal dengan membagi pembilangnya.</div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="card">
+          <h3><span class="h3dot"></span>Contoh 1</h3>
+          <div class="mathline">0,5 + 25% &times; 2 = ?</div>
+          <button class="stepbtn" data-steps="st1">Tampilkan Langkah</button>
+          <ol class="steps" id="st1">
+            <li>Ubah persen ke desimal: 25% = 25 &divide; 100 = 0,25.</li>
+            <li>Kerjakan perkalian lebih dulu: 0,25 &times; 2 = 0,5.</li>
+            <li>Kerjakan penjumlahan: 0,5 + 0,5 = <b>1</b>.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Contoh 2</h3>
+          <div class="mathline">40% &times; <span class="frac"><span>1</span><span>2</span></span> + 0,15 = ?</div>
+          <button class="stepbtn" data-steps="st2">Tampilkan Langkah</button>
+          <ol class="steps" id="st2">
+            <li>Samakan bentuk: 40% = 0,4 dan 1/2 = 0,5.</li>
+            <li>Kerjakan perkalian: 0,4 &times; 0,5 = 0,2.</li>
+            <li>Kerjakan penjumlahan: 0,2 + 0,15 = <b>0,35</b>.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="kilat">
+        <div class="kilat-head"><span class="kilat-badge">Kuis Kilat</span><b>Cek pemahamanmu</b></div>
+        <p class="kilat-note">Dua soal terakhir sebelum masuk ke penerapan aritmetika sosial.</p>
+        <div class="qlist" id="q-kilat-camp"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ SLIDE 8: PENERAPAN 1 - DISKON ============ -->
+<section class="slide" data-title="Penerapan: Diskon dan Persentase">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Penerapan 1 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">Diskon dan Persentase</h2>
+        <p class="slide-sub">Diskon adalah potongan harga yang diberikan penjual, biasanya dinyatakan dalam persen dari harga normal. Konsep ini muncul di hampir setiap paket soal TKA bagian aritmetika sosial.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="h3dot"></span>Rumus Utama</h3>
+          <div class="formula">
+            Potongan = <b>Persentase diskon &times; Harga normal</b><br>
+            Harga bayar = <b>Harga normal &minus; Potongan</b><br>
+            Cara cepat: Harga bayar = <b>(100% &minus; diskon) &times; Harga normal</b>
+          </div>
+          <p style="margin-top:12px">Ketiga bentuk ini setara. Pilih yang paling cepat menurutmu: jika potongannya ditanya, gunakan rumus pertama; jika harga bayarnya ditanya, cara cepat dengan persentase sisa biasanya lebih efisien.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Contoh: Sepatu Diskon 25%</h3>
+          <p>Harga normal sebuah sepatu Rp320.000 dengan diskon 25%.</p>
+          <div class="mathline">Potongan = 25% &times; 320.000 = Rp80.000</div>
+          <div class="mathline">Harga bayar = 320.000 &minus; 80.000 = <b>Rp240.000</b></div>
+          <div class="note" style="margin-top:12px"><b>Cara cepat:</b> bayar = 75% &times; 320.000 = Rp240.000. Hasilnya sama, hanya butuh satu langkah.</div>
+        </div>
+      </div>
+      <div class="note"><b>Jebakan diskon bertingkat:</b> diskon 30% lalu 10% <b>tidak boleh</b> dijumlahkan menjadi 40%! Diskon bertingkat berarti kamu membayar 90% &times; 70% = 63% dari harga awal, sehingga total potongan efektifnya hanya 37%. Ini jebakan favorit pembuat soal TKA &mdash; kerjakan bertahap, satu diskon per langkah.</div>
+      <div class="cta" style="margin-top:18px">
+        <button class="btn btn-primary" data-goto="8">Kerjakan 5 Soal Latihan
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9: LATIHAN 1 - DISKON ============ -->
+<section class="slide" data-title="Latihan: Diskon dan Persentase">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Latihan 1 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">5 Soal: Diskon dan Persentase</h2>
+        <p class="slide-sub">Kerjakan 5 soal berikut. Tersedia soal pilihan ganda, benar/salah, dan pilihan ganda kompleks &mdash; ikuti petunjuk pada tiap soal.</p>
+      </div>
+      <div class="instruksi">
+        <div style="flex:1;min-width:220px"><b>Petunjuk:</b> pilih jawabanmu, lalu klik <b>Cek Jawaban</b>. Status benar/salah langsung muncul bersama pembahasan lengkap. Soal yang sudah dicek akan terkunci dan tercatat di slide Hasil.</div>
+        <span class="topic-chip" data-topic="diskon">0/5 terjawab</span>
+      </div>
+      <div class="qlist" id="q-diskon"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10: PENERAPAN 2 - BRUTO & TARA ============ -->
+<section class="slide" data-title="Penerapan: Bruto, Netto dan Tara">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Penerapan 2 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">Bruto, Netto, dan Tara: Studi Kaleng Susu</h2>
+        <p class="slide-sub">Saat kaleng susu ditimbang bersama kemasannya, timbangan menunjukkan bruto. Untuk mengetahui berat susu yang sebenarnya, kita perlu membedah tiga besaran berikut.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <h3><span class="h3dot"></span>Bruto</h3>
+          <p><b>Berat kotor</b>: berat isi ditambah kemasannya. Inilah yang terbaca di timbangan ketika kaleng susu ditimbang utuh.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Netto</h3>
+          <p><b>Berat bersih</b>: berat isi saja, tanpa kemasan. Pada kaleng susu, netto adalah berat susu yang benar-benar ada di dalamnya.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Tara</h3>
+          <p><b>Berat kemasan</b>: kaleng, dus, atau bungkusnya. Sering juga disebut pit atau piringan dalam soal-soal lama.</p>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="card">
+          <h3><span class="h3dot"></span>Rumus</h3>
+          <div class="formula">
+            Tara = <b>Bruto &minus; Netto</b><br>
+            Netto = <b>Bruto &minus; Tara</b><br>
+            Persentase tara = <b>(Tara &divide; Bruto) &times; 100%</b>
+          </div>
+          <p style="margin-top:12px">Perhatikan: <b>persentase tara dihitung terhadap bruto</b>, bukan terhadap netto. Begitu pula persentase netto dihitung terhadap bruto, dan keduanya selalu berjumlah 100%.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Contoh: Kaleng Susu</h3>
+          <p>Sebuah kaleng susu memiliki bruto 250 g dan tara 10 g.</p>
+          <div class="mathline">Netto = 250 &minus; 10 = 240 g</div>
+          <div class="mathline">%tara = (10 &divide; 250) &times; 100% = <b>4%</b></div>
+          <p>Jadi berat susu bersihnya 240 gram, dan berat kemasan menyumbang 4% dari berat kotor.</p>
+        </div>
+      </div>
+      <div class="cta" style="margin-top:18px">
+        <button class="btn btn-primary" data-goto="10">Kerjakan 5 Soal Latihan
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11: LATIHAN 2 - BRUTO & TARA ============ -->
+<section class="slide" data-title="Latihan: Bruto dan Tara">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Latihan 2 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">5 Soal: Bruto dan Tara pada Kaleng Susu</h2>
+        <p class="slide-sub">Terapkan rumus bruto, netto, dan tara pada 5 soal berikut. Baca ulang rumus di slide sebelumnya bila perlu.</p>
+      </div>
+      <div class="instruksi">
+        <div style="flex:1;min-width:220px"><b>Petunjuk:</b> untuk soal <b>pilihan ganda kompleks</b>, centang semua pernyataan yang benar lalu klik Cek Jawaban &mdash; jawaban dianggap benar hanya jika semua pilihanmu tepat.</div>
+        <span class="topic-chip" data-topic="tara">0/5 terjawab</span>
+      </div>
+      <div class="qlist" id="q-tara"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12: PENERAPAN 3 - KINCIR RIA ============ -->
+<section class="slide" data-title="Penerapan: Penumpang Kincir Ria">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Penerapan 3 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">Menghitung Total Penumpang Kincir Ria</h2>
+        <p class="slide-sub">Kincir ria mengangkut penumpang melalui kabin-kabin yang tergantung di tepinya. Jika semua kabin terisi penuh, total penumpang dihitung dengan perkalian bertingkat.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="h3dot"></span>Rumus</h3>
+          <div class="formula">
+            Penumpang 1 putaran = <b>Jumlah kabin &times; Kapasitas 1 kabin</b><br>
+            Total penumpang = <b>Penumpang 1 putaran &times; Banyak putaran</b>
+          </div>
+          <p style="margin-top:12px">Kedua rumus ini berantai: hitung dulu kapasitas satu putaran penuh, lalu kalikan dengan seberapa sering kincir berputar dalam periode yang ditanyakan (sehari, per jam, dan sebagainya).</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>Contoh: Kincir Ria Pelangi</h3>
+          <p>Kincir ria memiliki 12 kabin berkapasitas 5 orang dan berputar 6 kali dalam sehari dengan selalu penuh.</p>
+          <div class="mathline">Penumpang 1 putaran = 12 &times; 5 = 60 orang</div>
+          <div class="mathline">Total per hari = 60 &times; 6 = <b>360 orang</b></div>
+        </div>
+      </div>
+      <div class="note"><b>Perhatikan kata kunci soal:</b> &ldquo;per putaran&rdquo;, &ldquo;per hari&rdquo;, atau &ldquo;kapasitas penuh&rdquo;. Jika ada kabin yang tidak terisi, kalikan hanya kursi yang terisi. Jika ditanya per jam, kalikan banyaknya putaran per jam. Salah membaca kata kunci adalah penyebab kesalahan terbanyak pada soal model ini.</div>
+      <div class="cta" style="margin-top:18px">
+        <button class="btn btn-primary" data-goto="12">Kerjakan 5 Soal Latihan
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13: LATIHAN 3 - KINCIR RIA ============ -->
+<section class="slide" data-title="Latihan: Penumpang Kincir Ria">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Latihan 3 &middot; Aritmetika Sosial</span>
+        <h2 class="slide-title">5 Soal: Total Penumpang Kincir Ria</h2>
+        <p class="slide-sub">Latihan terakhir sebelum evaluasi. Pastikan kamu sudah memahami rumus kabin &times; kapasitas &times; banyak putaran.</p>
+      </div>
+      <div class="instruksi">
+        <div style="flex:1;min-width:220px"><b>Petunjuk:</b> pada soal <b>benar/salah</b>, nilai dulu pernyataannya dengan menghitung sendiri sebelum memilih. Klik Cek Jawaban untuk melihat perhitungan lengkapnya.</div>
+        <span class="topic-chip" data-topic="kincir">0/5 terjawab</span>
+      </div>
+      <div class="qlist" id="q-kincir"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14: HASIL PENGERJAAN SISWA ============ -->
+<section class="slide" data-title="Hasil Pengerjaan Siswa" data-key="hasil">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Evaluasi</span>
+        <h2 class="slide-title">Hasil Pengerjaan Siswa</h2>
+        <p class="slide-sub">Rekap jawabanmu dari 29 soal: latihan konversi, kuis kilat materi, dan tiga materi aritmetika sosial. Skor dihitung ulang otomatis setiap kali slide ini dibuka.</p>
+      </div>
+      <div class="rwrap">
+        <div class="card scorecard">
+          <div class="score-label">Skor Total</div>
+          <div class="score-big" id="scorePct">&mdash;</div>
+          <div><span class="badge none" id="predikat">Belum ada jawaban</span></div>
+          <p class="score-sub" id="scoreSub">0 dari 29 soal benar</p>
+          <div class="rbtns">
+            <button class="btn btn-ghost" data-act="refresh">Perbarui Hasil</button>
+            <button class="btn btn-primary" data-act="reset">Ulangi Semua Latihan</button>
+          </div>
+        </div>
+        <div>
+          <div class="card namebox">
+            <label for="studentName"><b>Nama siswa</b></label>
+            <input id="studentName" type="text" maxlength="40" placeholder="Tulis namamu di sini..." />
+          </div>
+          <div class="rtable-wrap">
+            <table class="rtable">
+              <thead><tr><th>Materi</th><th>Benar</th><th>Skor</th><th>Status</th></tr></thead>
+              <tbody id="rtbody"></tbody>
+            </table>
+          </div>
+          <p class="rnote">Nama dan skor tersimpan otomatis di peramban ini, sehingga jawabanmu tidak hilang saat halaman ditutup. Klik <b>Ulangi Semua Latihan</b> untuk menghapus seluruh jawaban dan mencoba dari awal. Predikat: &ge;85 Sangat Baik, 70&ndash;84 Baik, 55&ndash;69 Cukup, &lt;55 Perlu Latihan Lagi.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15: KESIMPULAN ============ -->
+<section class="slide" data-title="Kesimpulan">
+  <div class="slide-inner">
+    <div class="slide-body">
+      <div class="titlebar">
+        <span class="kicker">Penutup</span>
+        <h2 class="slide-title">Kesimpulan</h2>
+        <p class="slide-sub">Lima hal penting yang harus kamu bawa pulang dari materi bilangan rasional hari ini.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="h3dot"></span>1 &middot; Definisi</h3>
+          <p>Bilangan rasional adalah bilangan yang dapat ditulis sebagai a/b dengan a, b bilangan bulat dan b &ne; 0. Semua bilangan bulat, pecahan, desimal berhenti, dan desimal berulang termasuk bilangan rasional; &radic;2 dan &pi; adalah contoh bilangan irasional.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>2 &middot; Konversi Bentuk</h3>
+          <p>Pecahan, desimal, dan persen adalah tiga wajah dari bilangan yang sama. Bagi pembilang dengan penyebut untuk pecahan &rarr; desimal, kalikan 100 untuk desimal &rarr; persen, dan tuliskan blok berulang di atas 99 untuk desimal berulang &rarr; pecahan.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>3 &middot; Operasi Hitung</h3>
+          <p>Menjumlah/mengurangi pecahan wajib menyamakan penyebut; perkalian kalikan langsung; pembagian = kali kebalikan. Pada operasi campuran, ikuti urutan tanda kurung &rarr; kali/bagi &rarr; tambah/kurang, dan samakan dulu bentuk bilangannya.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>4 &middot; Aritmetika Sosial</h3>
+          <p>Potongan diskon = persentase &times; harga normal. Bruto = netto + tara, dengan persentase tara dihitung terhadap bruto. Total penumpang kincir ria = jumlah kabin &times; kapasitas &times; banyak putaran. Selalu perhatikan kata kunci pada soal.</p>
+        </div>
+        <div class="card">
+          <h3><span class="h3dot"></span>5 &middot; Strategi TKA</h3>
+          <p>Baca soal sampai selesai, tulis informasi penting, pilih rumus yang tepat, lalu periksa kembali satuan dan format jawaban (rupiah, gram, orang, persen). Kerjakan soal yang mudah terlebih dahulu agar waktu terpakai efisien.</p>
+        </div>
+        <div class="card closing">
+          <h3>Terus Berlatih!</h3>
+          <p>Ketelitian dan kecepatan adalah kunci skor TKA terbaik. Ulangi latihan di deck ini sampai skormu konsisten tinggi &mdash; pembahasan lengkap selalu menantimu di setiap soal. Selamat belajar dan sukses untuk TKA-mu!</p>
+          <div class="cta">
+            <button class="btn btn-primary" data-goto="0">Kembali ke Cover</button>
+            <button class="btn btn-ghost" data-act="reset">Ulangi Latihan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+(function(){
+"use strict";
+
+/* ================= DATA SOAL ================= */
+var TYPE_LABEL = {pg:'Pilihan Ganda', bs:'Benar / Salah', pgk:'PG Kompleks'};
+var LETTERS = ['A','B','C','D','E'];
+
+var QUESTIONS = [
+/* ---- KUIS KILAT: DEFINISI ---- */
+{id:'d1', topic:'kilat', box:'q-kilat-def', type:'pg', no:1,
+ text:'Manakah bilangan yang <b>BUKAN</b> bilangan rasional?',
+ opts:['0,5','&minus;3/4','&radic;2','7'], ans:[2],
+ exp:'&radic;2 = 1,41421356&hellip; desimalnya tidak berhenti dan tidak berulang, sehingga tidak dapat ditulis sebagai a/b &rarr; <b>irasional</b>. Tiga bilangan lainnya rasional: 0,5 = 1/2, &minus;3/4 sudah berbentuk pecahan, dan 7 = 7/1.'},
+{id:'d2', topic:'kilat', box:'q-kilat-def', type:'pg', no:2,
+ text:'Pecahan yang senilai dengan 0,121212&hellip; adalah &hellip;',
+ opts:['<span class="frac"><span>12</span><span>100</span></span>','<span class="frac"><span>4</span><span>33</span></span>','<span class="frac"><span>121</span><span>999</span></span>','<span class="frac"><span>12</span><span>90</span></span>'], ans:[1],
+ exp:'Blok yang berulang adalah "12" (dua digit), tulis di atas 99: 0,121212&hellip; = 12/99. Sederhanakan dengan membagi 3 &rarr; <b>4/33</b>.'},
+
+/* ---- LATIHAN KONVERSI ---- */
+{id:'c1', topic:'konversi', box:'q-konversi', type:'pg', no:1,
+ text:'Bentuk desimal dari <span class="frac"><span>3</span><span>8</span></span> adalah &hellip;',
+ opts:['0,385','0,375','0,357','3,8'], ans:[1],
+ exp:'Ubah menjadi pembagian: 3 &divide; 8 = <b>0,375</b>. Jadi 3/8 = 0,375.'},
+{id:'c2', topic:'konversi', box:'q-konversi', type:'pg', no:2,
+ text:'Bentuk pecahan <b>paling sederhana</b> dari 0,6 adalah &hellip;',
+ opts:['<span class="frac"><span>6</span><span>10</span></span>','<span class="frac"><span>2</span><span>3</span></span>','<span class="frac"><span>3</span><span>5</span></span>','<span class="frac"><span>1</span><span>6</span></span>'], ans:[2],
+ exp:'0,6 = 6/10. Karena diminta paling sederhana, bagi pembilang dan penyebut dengan FPB-nya yaitu 2: 6/10 = <b>3/5</b>. (6/10 nilainya sama tetapi belum paling sederhana.)'},
+{id:'c3', topic:'konversi', box:'q-konversi', type:'pg', no:3,
+ text:'Bentuk desimal dari 45% adalah &hellip;',
+ opts:['4,5','0,045','45','0,45'], ans:[3],
+ exp:'Ubah persen ke desimal dengan membagi 100: 45 &divide; 100 = <b>0,45</b>.'},
+{id:'c4', topic:'konversi', box:'q-konversi', type:'pg', no:4,
+ text:'Bentuk persen dari <span class="frac"><span>7</span><span>20</span></span> adalah &hellip;',
+ opts:['35%','3,5%','70%','20%'], ans:[0],
+ exp:'7/20 &times; 100% = 700/20 % = <b>35%</b>. Atau ubah dulu ke desimal: 7 &divide; 20 = 0,35 = 35%.'},
+{id:'c5', topic:'konversi', box:'q-konversi', type:'pg', no:5,
+ text:'Pecahan yang senilai dengan 0,272727&hellip; adalah &hellip;',
+ opts:['<span class="frac"><span>27</span><span>100</span></span>','<span class="frac"><span>3</span><span>11</span></span>','<span class="frac"><span>1</span><span>27</span></span>','<span class="frac"><span>27</span><span>11</span></span>'], ans:[1],
+ exp:'Blok yang berulang adalah "27" (dua digit), tulis di atas 99: 0,2727&hellip; = 27/99. Bagi 9 &rarr; <b>3/11</b>. (27/100 salah karena desimal berulang bukan berhenti.)'},
+{id:'c6', topic:'konversi', box:'q-konversi', type:'pg', no:6,
+ text:'Pecahan biasa yang senilai dengan 1,25 adalah &hellip;',
+ opts:['<span class="frac"><span>12</span><span>5</span></span>','<span class="frac"><span>4</span><span>5</span></span>','<span class="frac"><span>125</span><span>10</span></span>','<span class="frac"><span>5</span><span>4</span></span>'], ans:[3],
+ exp:'1,25 = 125/100. Bagi pembilang dan penyebut dengan 25 &rarr; <b>5/4</b>.'},
+
+/* ---- KUIS KILAT: PECAHAN ---- */
+{id:'p1', topic:'kilat', box:'q-kilat-pec', type:'pg', no:1,
+ text:'Hasil dari <span class="frac"><span>2</span><span>3</span></span> + <span class="frac"><span>1</span><span>6</span></span> adalah &hellip;',
+ opts:['<span class="frac"><span>3</span><span>9</span></span>','<span class="frac"><span>1</span><span>2</span></span>','<span class="frac"><span>2</span><span>6</span></span>','<span class="frac"><span>5</span><span>6</span></span>'], ans:[3],
+ exp:'Samakan penyebut dengan KPK(3,6) = 6: 2/3 = 4/6. Maka 4/6 + 1/6 = <b>5/6</b>.'},
+{id:'p2', topic:'kilat', box:'q-kilat-pec', type:'pg', no:2,
+ text:'Hasil dari <span class="frac"><span>3</span><span>4</span></span> &divide; <span class="frac"><span>1</span><span>2</span></span> adalah &hellip;',
+ opts:['<span class="frac"><span>3</span><span>8</span></span>','<span class="frac"><span>3</span><span>2</span></span>','<span class="frac"><span>2</span><span>3</span></span>','<span class="frac"><span>1</span><span>4</span></span>'], ans:[1],
+ exp:'Pembagian = kali kebalikan: 3/4 &times; 2/1 = 6/4. Sederhanakan dengan 2 &rarr; <b>3/2</b>.'},
+
+/* ---- KUIS KILAT: DESIMAL ---- */
+{id:'s1', topic:'kilat', box:'q-kilat-des', type:'pg', no:1,
+ text:'Hasil dari 0,25 + 1,5 adalah &hellip;',
+ opts:['1,30','2,75','1,75','0,40'], ans:[2],
+ exp:'Luruskan komanya: 0,25 + 1,50 = <b>1,75</b>. Ingat, 1,5 boleh ditulis 1,50 agar digitnya sama banyak.'},
+{id:'s2', topic:'kilat', box:'q-kilat-des', type:'pg', no:2,
+ text:'Hasil dari 0,4 &times; 0,2 adalah &hellip;',
+ opts:['0,8','8,0','0,04','0,08'], ans:[3],
+ exp:'Abaikan koma dulu: 4 &times; 2 = 8. Kedua bilangan punya total 2 angka di belakang koma, sehingga hasilnya <b>0,08</b>.'},
+
+/* ---- KUIS KILAT: CAMPURAN ---- */
+{id:'m1', topic:'kilat', box:'q-kilat-camp', type:'pg', no:1,
+ text:'Hasil dari 50% + <span class="frac"><span>1</span><span>4</span></span> dalam bentuk desimal adalah &hellip;',
+ opts:['0,54','0,75','0,70','0,80'], ans:[1],
+ exp:'Samakan bentuk ke desimal: 50% = 0,5 dan 1/4 = 0,25. Maka 0,5 + 0,25 = <b>0,75</b>.'},
+{id:'m2', topic:'kilat', box:'q-kilat-camp', type:'pg', no:2,
+ text:'Hasil dari 0,2 &times; 30% adalah &hellip;',
+ opts:['6','0,6','0,06','0,006'], ans:[2],
+ exp:'Ubah persen ke desimal: 30% = 0,3. Lalu 0,2 &times; 0,3 = <b>0,06</b> (total 2 angka di belakang koma).'},
+
+/* ---- LATIHAN 1: DISKON & PERSENTASE ---- */
+{id:'k1', topic:'diskon', box:'q-diskon', type:'pg', no:1,
+ text:'Sebuah jaket harganya Rp240.000. Toko memberikan diskon 25%. Harga yang harus dibayar Andi adalah &hellip;',
+ opts:['Rp190.000','Rp180.000','Rp200.000','Rp215.000'], ans:[1],
+ exp:'Potongan = 25% &times; Rp240.000 = Rp60.000.<br>Harga bayar = Rp240.000 &minus; Rp60.000 = <b>Rp180.000</b>. Cara cepat: bayar = 75% &times; 240.000 = 180.000.'},
+{id:'k2', topic:'diskon', box:'q-diskon', type:'bs', no:2,
+ text:'Diskon 30% untuk barang seharga Rp150.000 berarti pembeli menghemat Rp45.000.',
+ opts:['Benar','Salah'], ans:[0],
+ exp:'Hemat (potongan) = 30% &times; Rp150.000 = 30/100 &times; 150.000 = <b>Rp45.000</b>. Jadi pernyataan tersebut <b>benar</b>.'},
+{id:'k3', topic:'diskon', box:'q-diskon', type:'pg', no:3,
+ text:'Setelah diskon 20%, harga sebuah buku menjadi Rp16.000. Harga buku sebelum diskon adalah &hellip;',
+ opts:['Rp18.000','Rp19.200','Rp21.000','Rp20.000'], ans:[3],
+ exp:'Harga akhir = 80% &times; harga awal, karena yang dibayar adalah sisa 80%.<br>Maka harga awal = Rp16.000 &divide; 0,8 = <b>Rp20.000</b>. (Jawaban B adalah jebakan: 16.000 + 20% &times; 16.000 salah karena persennya dihitung dari harga awal, bukan harga akhir.)'},
+{id:'k4', topic:'diskon', box:'q-diskon', type:'pgk', no:4,
+ text:'Sepatu seharga Rp400.000 mengalami <b>diskon ganda</b>: 20% lalu 10%. Pilih <b>SEMUA</b> pernyataan yang benar!',
+ opts:['Setelah diskon pertama, harga sepatu menjadi Rp320.000.','Diskon ganda 20% + 10% sama besarnya dengan diskon langsung 30%.','Harga akhir sepatu setelah kedua diskon adalah Rp288.000.','Total potongan efektifnya 28%.'], ans:[0,2,3],
+ exp:'Diskon 1: 20% &times; 400.000 = 80.000 &rarr; harga 320.000 (pernyataan pertama benar).<br>Diskon 2: 10% &times; 320.000 = 32.000 &rarr; harga akhir <b>Rp288.000</b> (pernyataan ketiga benar).<br>Bayar = 90% &times; 80% = 72% dari harga awal, jadi potongan efektif = 100% &minus; 72% = <b>28%</b> (pernyataan keempat benar). Pernyataan kedua salah karena diskon bertingkat tidak boleh dijumlahkan.'},
+{id:'k5', topic:'diskon', box:'q-diskon', type:'bs', no:5,
+ text:'Toko P memberi diskon langsung 40%, sedangkan Toko Q memberi diskon 25% lalu 25% lagi. Untuk tas yang sama seharga Rp200.000, harga akhir di kedua toko adalah sama.',
+ opts:['Benar','Salah'], ans:[1],
+ exp:'Toko P: bayar = 60% &times; 200.000 = <b>Rp120.000</b>.<br>Toko Q: bayar = 75% &times; 75% &times; 200.000 = 56,25% &times; 200.000 = <b>Rp112.500</b>.<br>Harga akhirnya <b>berbeda</b>, jadi pernyataan tersebut <b>salah</b>.'},
+
+/* ---- LATIHAN 2: BRUTO & TARA ---- */
+{id:'t1', topic:'tara', box:'q-tara', type:'pg', no:1,
+ text:'Sebuah kaleng susu memiliki bruto 360 gram dan tara 15 gram. Netto (berat bersih susu) di dalam kaleng adalah &hellip;',
+ opts:['350 g','345 g','375 g','355 g'], ans:[1],
+ exp:'Netto = Bruto &minus; Tara = 360 &minus; 15 = <b>345 gram</b>.'},
+{id:'t2', topic:'tara', box:'q-tara', type:'bs', no:2,
+ text:'Kaleng susu dengan bruto 250 g dan tara 10 g memiliki persentase tara 4%.',
+ opts:['Benar','Salah'], ans:[0],
+ exp:'%tara = (tara &divide; bruto) &times; 100% = (10 &divide; 250) &times; 100% = <b>4%</b>. Jadi pernyataan tersebut <b>benar</b>.'},
+{id:'t3', topic:'tara', box:'q-tara', type:'pg', no:3,
+ text:'Berat bersih susu dalam sebuah kaleng 198 gram dan berat kalengnya (tara) 12 gram. Bruto kaleng susu tersebut adalah &hellip;',
+ opts:['186 g','200 g','210 g','216 g'], ans:[2],
+ exp:'Bruto = Netto + Tara = 198 + 12 = <b>210 gram</b>.'},
+{id:'t4', topic:'tara', box:'q-tara', type:'pgk', no:4,
+ text:'Sebuah kaleng susu memiliki bruto 500 g dengan persentase tara 8%. Pilih <b>SEMUA</b> pernyataan yang benar!',
+ opts:['Tara kaleng = 40 g.','Netto kaleng = 460 g.','Netto kaleng = 46 g.','Persentase netto terhadap bruto adalah 92%.'], ans:[0,1,3],
+ exp:'Tara = 8% &times; 500 = <b>40 g</b> (pernyataan pertama benar).<br>Netto = 500 &minus; 40 = <b>460 g</b> (pernyataan kedua benar, ketiga salah).<br>%netto = 100% &minus; 8% = <b>92%</b> (pernyataan keempat benar).'},
+{id:'t5', topic:'tara', box:'q-tara', type:'bs', no:5,
+ text:'Persentase tara sebuah kaleng dihitung dengan rumus (netto &divide; bruto) &times; 100%.',
+ opts:['Benar','Salah'], ans:[1],
+ exp:'Persentase tara dihitung dari perbandingan <b>tara terhadap bruto</b>: %tara = (tara &divide; bruto) &times; 100% &mdash; bukan netto dibagi bruto. Jadi pernyataan tersebut <b>salah</b>. Yang benar: %netto = (netto &divide; bruto) &times; 100%.'},
+
+/* ---- LATIHAN 3: KINCIR RIA ---- */
+{id:'r1', topic:'kincir', box:'q-kincir', type:'pg', no:1,
+ text:'Sebuah kincir ria memiliki 18 kabin dan setiap kabin menampung 4 penumpang. Jika semua kabin terisi, banyak penumpang dalam satu putaran penuh adalah &hellip;',
+ opts:['54 orang','22 orang','76 orang','72 orang'], ans:[3],
+ exp:'Penumpang satu putaran = jumlah kabin &times; kapasitas = 18 &times; 4 = <b>72 orang</b>.'},
+{id:'r2', topic:'kincir', box:'q-kincir', type:'bs', no:2,
+ text:'Kincir ria dengan 25 kabin berkapasitas 8 orang mampu membawa 200 penumpang dalam satu putaran penuh.',
+ opts:['Benar','Salah'], ans:[0],
+ exp:'25 &times; 8 = <b>200 orang</b>. Jadi pernyataan tersebut <b>benar</b>.'},
+{id:'r3', topic:'kincir', box:'q-kincir', type:'pg', no:3,
+ text:'Kincir ria memiliki 14 kabin berkapasitas 6 orang. Dalam satu hari kincir berputar 10 kali dan setiap putaran selalu penuh. Total penumpang yang terlayani dalam sehari adalah &hellip;',
+ opts:['600 orang','840 orang','84 orang','60 orang'], ans:[1],
+ exp:'Penumpang satu putaran = 14 &times; 6 = 84 orang.<br>Total sehari = 84 &times; 10 = <b>840 orang</b>. (84 dan 60 adalah jebakan setengah jalan: baru satu langkah dari perhitungan.)'},
+{id:'r4', topic:'kincir', box:'q-kincir', type:'pgk', no:4,
+ text:'Kincir ria memiliki 20 kabin berkapasitas 5 orang dan beroperasi 9 putaran setiap hari. Pilih <b>SEMUA</b> pernyataan yang benar!',
+ opts:['Dalam satu putaran, kincir membawa 100 penumpang.','Dalam satu hari, kincir mengangkut 900 penumpang.','Dalam satu hari, kincir mengangkut 1.000 penumpang.','Jika kapasitas tiap kabin dinaikkan menjadi 6 orang, satu putaran membawa 120 penumpang.'], ans:[0,1,3],
+ exp:'Satu putaran: 20 &times; 5 = <b>100 orang</b> (pernyataan pertama benar).<br>Sehari: 100 &times; 9 = <b>900 orang</b> (pernyataan kedua benar, ketiga salah).<br>Kapasitas baru: 20 &times; 6 = <b>120 orang</b> per putaran (pernyataan keempat benar).'},
+{id:'r5', topic:'kincir', box:'q-kincir', type:'bs', no:5,
+ text:'Kincir P: 16 kabin &times; 4 orang &times; 6 putaran. Kincir Q: 12 kabin &times; 8 orang &times; 4 putaran. Total penumpang Kincir P lebih banyak daripada Kincir Q.',
+ opts:['Benar','Salah'], ans:[1],
+ exp:'Kincir P = 16 &times; 4 &times; 6 = <b>384 orang</b>.<br>Kincir Q = 12 &times; 8 &times; 4 = <b>384 orang</b>.<br>Keduanya <b>sama banyak</b>, jadi pernyataan bahwa P lebih banyak adalah <b>salah</b>.'}
+];
+
+/* ================= TOPIK & STATE ================= */
+var TOPICS = [
+  {id:'konversi', label:'Latihan Konversi Bentuk', tag:'Latihan Materi'},
+  {id:'kilat',    label:'Kuis Kilat (Materi)',     tag:'Kuis Materi'},
+  {id:'diskon',   label:'Diskon &amp; Persentase', tag:'Fokus TKA'},
+  {id:'tara',     label:'Bruto &amp; Tara Kaleng Susu', tag:'Fokus TKA'},
+  {id:'kincir',   label:'Total Penumpang Kincir Ria',   tag:'Fokus TKA'}
+];
+
+var QMAP = {};
+QUESTIONS.forEach(function(q){ QMAP[q.id] = q; });
+
+var KEY = 'tkaBilanganRasional_v1';
+var state = { name:'', answers:{} };
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(raw){
+      var d = JSON.parse(raw);
+      if(d && typeof d === 'object'){
+        state.name = (typeof d.name === 'string') ? d.name : '';
+        state.answers = (d.answers && typeof d.answers === 'object') ? d.answers : {};
+      }
+    }
+  }catch(e){}
+}
+function sameSet(sel, ans){
+  if(sel.length !== ans.length) return false;
+  return ans.every(function(a){ return sel.indexOf(a) !== -1; });
+}
+function $(s){ return document.querySelector(s); }
+function $all(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); }
+
+/* ================= RENDER SOAL ================= */
+function renderQ(q){
+  var art = document.createElement('article');
+  art.className = 'qcard';
+  art.id = 'qc-' + q.id;
+
+  var meta = '<div class="qmeta"><span class="qnum">Soal ' + q.no + '</span>' +
+    '<span class="qtype t-' + q.type + '">' + TYPE_LABEL[q.type] + '</span>' +
+    (q.type === 'pgk' ? '<span class="qhint">centang semua yang benar</span>' : '') +
+    '</div>';
+
+  var input = (q.type === 'pgk') ? 'checkbox' : 'radio';
+  var optsHtml = '<div class="opts' + (q.type === 'bs' ? ' bs' : '') + '" data-role="opts">';
+  q.opts.forEach(function(o, i){
+    var key = (q.type === 'bs') ? '' : '<span class="okey">' + LETTERS[i] + '</span>';
+    optsHtml += '<label class="opt"><input type="' + input + '" name="' + q.id + '" value="' + i + '">' + key + '<span>' + o + '</span></label>';
+  });
+  optsHtml += '</div>';
+
+  art.innerHTML = meta +
+    '<div class="qtext">' + q.text + '</div>' + optsHtml +
+    '<div class="qactions"><button class="btn-check" data-check="' + q.id + '">Cek Jawaban</button></div>' +
+    '<div class="fb" data-role="fb"></div>' +
+    '<div class="pembahasan" data-role="exp"><div class="exp-title">Pembahasan</div>' + q.exp + '</div>';
+  return art;
+}
+
+function buildAll(){
+  QUESTIONS.forEach(function(q){
+    var box = document.getElementById(q.box);
+    if(box) box.appendChild(renderQ(q));
+  });
+}
+
+/* ================= CEK JAWABAN ================= */
+function paintResult(card, q, correct, sel){
+  card.classList.add(correct ? 'ok' : 'bad');
+  card.querySelectorAll('.opt').forEach(function(el, i){
+    var isC = q.ans.indexOf(i) !== -1;
+    var isSel = sel.indexOf(i) !== -1;
+    el.classList.remove('sel');
+    el.classList.toggle('correct', isC);
+    el.classList.toggle('wrong', isSel && !isC);
+    var inp = el.querySelector('input');
+    if(inp) inp.disabled = true;
+  });
+  var optsBox = card.querySelector('[data-role="opts"]');
+  if(optsBox) optsBox.classList.add('locked');
+  var fb = card.querySelector('[data-role="fb"]');
+  fb.className = 'fb show ' + (correct ? 'ok' : 'bad');
+  fb.textContent = correct ? 'Tepat sekali! Jawabanmu benar.' : 'Belum tepat. Jawaban yang benar ditandai warna hijau.';
+  card.querySelector('[data-role="exp"]').classList.add('show');
+  var b = card.querySelector('.btn-check');
+  if(b) b.disabled = true;
+}
+
+function check(qid){
+  var q = QMAP[qid];
+  var card = document.getElementById('qc-' + qid);
+  if(!q || !card || state.answers[qid] && state.answers[qid].done) return;
+  var fb = card.querySelector('[data-role="fb"]');
+  var sel = $all('#qc-' + qid + ' input:checked').map(function(i){ return +i.value; });
+  if(sel.length === 0){
+    fb.className = 'fb show warn';
+    fb.textContent = 'Pilih jawaban terlebih dahulu, lalu klik Cek Jawaban.';
+    return;
+  }
+  var correct = sameSet(sel, q.ans);
+  paintResult(card, q, correct, sel);
+  state.answers[qid] = { sel: sel, done: true, correct: correct };
+  save();
+  updateChips();
+  if(Object.keys(state.answers).length === QUESTIONS.length){
+    toast('Semua 29 soal selesai! Buka slide "Hasil Pengerjaan Siswa" untuk melihat skormu.');
+  }
+}
+
+function restore(){
+  Object.keys(state.answers).forEach(function(qid){
+    var a = state.answers[qid];
+    var q = QMAP[qid];
+    if(!q || !a || !a.done) return;
+    var card = document.getElementById('qc-' + qid);
+    if(!card) return;
+    a.sel.forEach(function(v){
+      var inp = card.querySelector('input[name="' + qid + '"][value="' + v + '"]');
+      if(inp) inp.checked = true;
+    });
+    paintResult(card, q, !!a.correct, a.sel);
+  });
+}
+
+function resetAll(){
+  if(!confirm('Hapus semua jawaban dan ulangi latihan dari awal?')) return;
+  state.answers = {};
+  save();
+  QUESTIONS.forEach(function(q){
+    var card = document.getElementById('qc-' + q.id);
+    if(!card) return;
+    card.classList.remove('ok','bad');
+    card.querySelectorAll('input').forEach(function(i){ i.checked = false; i.disabled = false; });
+    card.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('correct','wrong','sel'); });
+    var ob = card.querySelector('[data-role="opts"]');
+    if(ob) ob.classList.remove('locked');
+    var fb = card.querySelector('[data-role="fb"]');
+    fb.className = 'fb'; fb.textContent = '';
+    card.querySelector('[data-role="exp"]').classList.remove('show');
+    var b = card.querySelector('.btn-check');
+    if(b) b.disabled = false;
+  });
+  updateChips();
+  renderResults();
+  toast('Semua latihan direset. Selamat mencoba lagi!');
+}
+
+/* ================= CHIP PROGRES & HASIL ================= */
+function updateChips(){
+  $all('[data-topic]').forEach(function(ch){
+    var t = ch.getAttribute('data-topic');
+    var qs = QUESTIONS.filter(function(q){ return q.topic === t; });
+    var done = qs.filter(function(q){
+      return state.answers[q.id] && state.answers[q.id].done;
+    }).length;
+    ch.textContent = done + '/' + qs.length + ' terjawab';
+  });
+}
+
+function renderResults(){
+  var nameEl = $('#studentName');
+  if(nameEl) nameEl.value = state.name;
+  var tbody = $('#rtbody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  var allCorrect = 0;
+
+  TOPICS.forEach(function(t){
+    var qs = QUESTIONS.filter(function(q){ return q.topic === t.id; });
+    var done = qs.filter(function(q){ return state.answers[q.id] && state.answers[q.id].done; }).length;
+    var correct = qs.filter(function(q){ return state.answers[q.id] && state.answers[q.id].correct; }).length;
+    allCorrect += correct;
+    var pct = Math.round(correct / qs.length * 100);
+    var badge;
+    if(done === 0) badge = '<span class="badge none">Belum dikerjakan</span>';
+    else if(done < qs.length) badge = '<span class="badge part">' + (qs.length - done) + ' soal belum</span>';
+    else badge = '<span class="badge done">Selesai</span>';
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><b>' + t.label + '</b><br><span class="badge focus">' + t.tag + '</span></td>' +
+      '<td>' + correct + ' / ' + qs.length + '</td>' +
+      '<td><span class="rbar"><i style="width:' + pct + '%"></i></span><span class="rpct">' + pct + '%</span></td>' +
+      '<td>' + badge + '</td>';
+    tbody.appendChild(tr);
+  });
+
+  var answered = Object.keys(state.answers).filter(function(k){
+    return state.answers[k] && state.answers[k].done;
+  }).length;
+  var pctAll = Math.round(allCorrect / QUESTIONS.length * 100);
+  var scorePct = $('#scorePct'), predEl = $('#predikat'), subEl = $('#scoreSub');
+
+  if(answered === 0){
+    scorePct.textContent = '—';
+    predEl.className = 'badge none';
+    predEl.textContent = 'Belum ada jawaban';
+    subEl.textContent = '0 dari ' + QUESTIONS.length + ' soal benar';
+    return;
+  }
+  scorePct.textContent = pctAll + '%';
+  subEl.textContent = allCorrect + ' dari ' + QUESTIONS.length + ' soal benar' +
+    (answered < QUESTIONS.length ? ' (' + (QUESTIONS.length - answered) + ' belum dijawab)' : '');
+  var pred;
+  if(pctAll >= 85) pred = ['Sangat Baik', 'done'];
+  else if(pctAll >= 70) pred = ['Baik', 'done'];
+  else if(pctAll >= 55) pred = ['Cukup', 'part'];
+  else pred = ['Perlu Latihan Lagi', 'part'];
+  predEl.className = 'badge ' + pred[1];
+  predEl.textContent = 'Predikat: ' + pred[0];
+  if(answered === QUESTIONS.length && pctAll >= 70) confetti();
+}
+
+function confetti(){
+  var colors = ['#4f46e5','#7c3aed','#f59e0b','#10b981','#ef4444','#0ea5e9'];
+  for(var i = 0; i < 70; i++){
+    var d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.left = Math.random() * 100 + 'vw';
+    d.style.background = colors[i % colors.length];
+    d.style.animationDelay = (Math.random() * 1.2) + 's';
+    d.style.animationDuration = (2.6 + Math.random() * 1.8) + 's';
+    document.body.appendChild(d);
+    (function(el){ setTimeout(function(){ el.remove(); }, 5400); })(d);
+  }
+}
+
+/* ================= NAVIGASI SLIDE ================= */
+var slides = $all('.slide');
+var cur = 0;
+
+function updateChrome(){
+  $('#progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+  $('#counter').textContent = (cur + 1) + ' / ' + slides.length;
+  $all('.dot').forEach(function(d, i){ d.classList.toggle('on', i === cur); });
+  $all('#menuList .menu-item').forEach(function(m, i){ m.classList.toggle('cur', i === cur); });
+  var p = $('#btnPrev'), n = $('#btnNext');
+  if(p) p.disabled = (cur === 0);
+  if(n) n.disabled = (cur === slides.length - 1);
+}
+
+function goTo(i){
+  i = Math.max(0, Math.min(slides.length - 1, i));
+  if(i === cur){ updateChrome(); return; }
+  slides[cur].classList.remove('active');
+  cur = i;
+  slides[cur].classList.add('active');
+  var body = slides[cur].querySelector('.slide-body');
+  if(body) body.scrollTop = 0;
+  updateChrome();
+  if(slides[cur].getAttribute('data-key') === 'hasil') renderResults();
+}
+
+function buildDots(){
+  var wrap = $('#dots');
+  slides.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.className = 'dot';
+    b.setAttribute('data-i', i);
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    wrap.appendChild(b);
+  });
+}
+
+function buildMenu(){
+  var ml = $('#menuList');
+  slides.forEach(function(s, i){
+    var d = document.createElement('div');
+    d.className = 'menu-item';
+    d.setAttribute('data-goto', i);
+    d.innerHTML = '<span class="mi-num">' + String(i + 1).padStart(2, '0') + '</span><span>' +
+      (s.getAttribute('data-title') || 'Slide ' + (i + 1)) + '</span>';
+    ml.appendChild(d);
+  });
+}
+
+/* ================= MENU, TOAST, LAINNYA ================= */
+var menuEl = document.getElementById('menu');
+function openMenu(){ menuEl.classList.add('open'); }
+function closeMenu(){ menuEl.classList.remove('open'); }
+
+var toastTimer = null;
+function toast(msg){
+  var t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3400);
+}
+
+function toggleFS(){
+  if(document.fullscreenElement){
+    if(document.exitFullscreen) document.exitFullscreen();
+  } else if(document.documentElement.requestFullscreen){
+    document.documentElement.requestFullscreen();
+  }
+}
+
+/* ================= EVENT DELEGASI ================= */
+document.addEventListener('click', function(e){
+  var el = e.target;
+
+  var chk = el.closest('[data-check]');
+  if(chk){ check(chk.getAttribute('data-check')); return; }
+
+  var act = el.closest('[data-act]');
+  if(act){
+    var a = act.getAttribute('data-act');
+    if(a === 'reset') resetAll();
+    else if(a === 'refresh') renderResults();
+    return;
+  }
+
+  var go = el.closest('[data-goto]');
+  if(go){ closeMenu(); goTo(+go.getAttribute('data-goto')); return; }
+
+  if(el.closest('[data-menu]')){ openMenu(); return; }
+  if(el.closest('[data-menu-close]')){ closeMenu(); return; }
+  if(el.classList.contains('menu')){ closeMenu(); return; }
+
+  if(el.closest('[data-fullscreen]')){ toggleFS(); return; }
+
+  var st = el.closest('[data-steps]');
+  if(st){
+    var panel = document.getElementById(st.getAttribute('data-steps'));
+    if(panel){
+      panel.classList.toggle('show');
+      st.textContent = panel.classList.contains('show') ? 'Sembunyikan Langkah' : 'Tampilkan Langkah';
+    }
+    return;
+  }
+
+  var nav = el.closest('[data-nav]');
+  if(nav){
+    if(nav.getAttribute('data-nav') === 'next') goTo(cur + 1);
+    else goTo(cur - 1);
+    return;
+  }
+
+  var dot = el.closest('.dot');
+  if(dot){ goTo(+dot.getAttribute('data-i')); return; }
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ closeMenu(); return; }
+  var tag = document.activeElement ? document.activeElement.tagName : '';
+  if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if(e.key === 'ArrowRight' || e.key === 'PageDown') goTo(cur + 1);
+  else if(e.key === 'ArrowLeft' || e.key === 'PageUp') goTo(cur - 1);
+  else if(e.key === 'Home') goTo(0);
+  else if(e.key === 'End') goTo(slides.length - 1);
+});
+
+var tx = 0, ty = 0;
+document.addEventListener('touchstart', function(e){
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+}, {passive:true});
+document.addEventListener('touchend', function(e){
+  var dx = e.changedTouches[0].clientX - tx;
+  var dy = e.changedTouches[0].clientY - ty;
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4){
+    if(dx < 0) goTo(cur + 1); else goTo(cur - 1);
+  }
+}, {passive:true});
+
+/* ================= INISIALISASI ================= */
+function init(){
+  load();
+  buildAll();
+  restore();
+  buildDots();
+  buildMenu();
+  updateChips();
+  updateChrome();
+  var nameEl = $('#studentName');
+  if(nameEl) nameEl.addEventListener('input', function(e){
+    state.name = e.target.value;
+    save();
+  });
+}
+init();
+})();
+</script>
+</body>
+</html>
