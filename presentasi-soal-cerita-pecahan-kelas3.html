@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soal Cerita Pecahan · Penjumlahan, Pengurangan, Perkalian · Kelas 3 SD</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+ --bg:#FFF6EA;--card:#FFFFFF;--ink:#41332A;--muted:#8B7B6C;--line:#F0E0CC;
+ --or:#FF8A3D;--or2:#FFB25E;--orbg:#FFF1E2;
+ --teal:#1FB5A0;--teal2:#7ED8CB;--tealbg:#E4F8F4;
+ --pink:#EE6FA8;--pink2:#FFD9EA;--pinkbg:#FDF0F6;
+ --purple:#8E7CF0;--purple2:#E4DFFB;
+ --gold:#FFC53D;--red:#F26D6D;--green:#3FB966;
+ --redbg:#FFE9E9;--greenbg:#E6F7EC;
+ --sh:0 10px 24px rgba(140,90,30,.10);--sh2:0 4px 12px rgba(140,90,30,.08);
+ --r:22px;
+}
+html,body{height:100%}
+body{font-family:'Nunito','Segoe UI',system-ui,-apple-system,'Trebuchet MS',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background:
+ radial-gradient(420px 420px at 8% 12%,#FFE7C7 0%,transparent 60%),
+ radial-gradient(380px 380px at 92% 8%,#DFF6F1 0%,transparent 60%),
+ radial-gradient(420px 420px at 85% 90%,#FFE1EE 0%,transparent 60%),
+ radial-gradient(360px 360px at 10% 88%,#EAE4FF 0%,transparent 60%);
+ pointer-events:none;z-index:0}
+/* ====== deck ====== */
+.slide{position:fixed;inset:0;display:flex;overflow-y:auto;overflow-x:hidden;padding:62px 24px 96px;opacity:0;pointer-events:none;transform:translateY(16px);transition:opacity .4s,transform .4s;z-index:1}
+.slide.active{opacity:1;pointer-events:auto;transform:none;z-index:2}
+.wrap{width:min(1180px,100%);margin:auto;display:flex;flex-direction:column;gap:13px;align-items:center;text-align:center}
+.left{text-align:left}
+/* ====== topbar & navbar ====== */
+.topbar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;z-index:40;pointer-events:none}
+.brand{font-weight:900;background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 14px;box-shadow:var(--sh2);font-size:13.5px}
+.hud{display:flex;gap:8px;pointer-events:auto}
+.hchip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:5px 11px;box-shadow:var(--sh2);font-size:13.5px;font-weight:800}
+.dv{background:#FFF4D6;border-radius:999px;padding:2px 9px;font-weight:900;font-size:12.5px;white-space:nowrap}
+.navbar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 12px;z-index:40;background:linear-gradient(180deg,transparent,rgba(255,246,234,.94) 42%)}
+.navb{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:20px;font-weight:900;color:var(--ink);cursor:pointer;box-shadow:var(--sh2);flex:0 0 auto}
+.navb:hover{background:var(--orbg);border-color:var(--or)}
+.qnav .navb{width:32px;height:32px;font-size:16px}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:56vw}
+.dot{width:11px;height:11px;border-radius:50%;border:2px solid #D9C6AC;background:#fff;cursor:pointer;padding:0}
+.dot.on{background:var(--or);border-color:var(--or);transform:scale(1.18)}
+.pgn{font-weight:800;font-size:12.5px;color:var(--muted);min-width:46px;text-align:left}
+/* ====== umum ====== */
+.kicker{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:900;font-size:13px;color:var(--or);box-shadow:var(--sh2);letter-spacing:.4px;text-transform:uppercase}
+.title{font-size:30px;font-weight:900;line-height:1.22}
+.lead{font-size:16px;color:var(--muted);font-weight:700;max-width:860px}
+.tiny{font-size:13.5px;color:var(--muted);font-weight:800}
+.dim{color:var(--muted);font-weight:700}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:16px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:16px;padding:11px 20px;font-family:inherit;font-size:16px;font-weight:900;cursor:pointer;transition:.2s;box-shadow:var(--sh2)}
+.btn:active{transform:scale(.96)}
+.btn-or{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#4ED0BC);color:#fff}
+.btn-ghost{background:#fff;border:2px solid var(--line);color:var(--ink)}
+.btn.done{background:var(--green);color:#fff}
+.btn-big{font-size:19px;padding:14px 30px;border-radius:20px}
+/* ====== pecahan ====== */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;line-height:1.05;margin:0 3px;font-weight:900;font-size:.9em}
+.fr b{padding:0 6px;border-bottom:2.5px solid currentColor}
+.fr span{padding:0 6px}
+s{text-decoration:line-through;text-decoration-thickness:2.5px;text-decoration-color:var(--red)}
+.strike{color:#B0987F}
+/* ====== cover ====== */
+.cover{gap:15px}
+.cover h1{font-size:44px;font-weight:900;line-height:1.12}
+.hl{color:var(--or)}
+.sub{font-size:18.5px;font-weight:800;color:var(--muted)}
+.opchips{display:flex;gap:10px}
+.op{width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:900;color:#fff;box-shadow:var(--sh2);animation:float 3s ease-in-out infinite}
+.op.o1{background:var(--teal)}.op.o2{background:var(--pink)}.op.o3{background:var(--or)}
+.op:nth-child(2){animation-delay:.4s}.op:nth-child(3){animation-delay:.8s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.names{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;justify-content:center}
+.ncard{background:#fff;border:2px solid var(--line);border-radius:20px;padding:14px 16px;width:250px;display:flex;flex-direction:column;gap:8px;align-items:center;box-shadow:var(--sh)}
+.ncard label{font-weight:900;font-size:14px;color:var(--muted)}
+.nin{width:100%;font-size:17px;font-weight:800;padding:10px 12px;border-radius:14px;border:2px solid var(--line);outline:none;font-family:inherit;text-align:center;color:var(--ink)}
+.nin:focus{border-color:var(--or);background:var(--orbg)}
+.vs{align-self:center;font-weight:900;color:var(--muted);font-size:17px;background:#fff;border:2px dashed var(--line);border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center}
+.hint{font-size:14px;color:var(--muted);font-weight:800}
+/* ====== avatar ====== */
+.av{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--orbg);font-size:16px;border:2px solid var(--line);flex:0 0 auto}
+.av.a2{background:var(--tealbg)}
+.av.mini{width:22px;height:22px;font-size:12px}
+.av.big{width:44px;height:44px;font-size:22px}
+/* ====== apersepsi ====== */
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%}
+.fcard{perspective:1000px;height:205px;cursor:pointer}
+.fcard .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s}
+.fcard.flip .inner{transform:rotateY(180deg)}
+.ff,.fback{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:15px;text-align:center;border:2px solid var(--line);box-shadow:var(--sh2)}
+.ff{background:#fff}
+.ff .fi{font-size:40px}
+.ff b{font-size:16px}
+.ff small{color:var(--muted);font-weight:700;font-size:12px}
+.fback{background:linear-gradient(150deg,var(--teal),#54D2BE);color:#fff;transform:rotateY(180deg);font-size:13.8px;font-weight:700;line-height:1.55}
+.pm-box{width:100%;display:flex;flex-direction:column;gap:10px;align-items:flex-start;text-align:left}
+.pm-box h3{font-size:17.5px}
+#pmList{list-style:none;display:flex;flex-direction:column;gap:8px;width:100%}
+#pmList li{display:none;background:var(--orbg);border:2px dashed var(--or2);border-radius:14px;padding:10px 14px;font-weight:700;font-size:15px;line-height:1.55}
+#pmList li.show{display:block;animation:pop .4s}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+/* ====== tujuan ====== */
+.objs{display:flex;flex-direction:column;gap:10px;width:min(880px,100%)}
+.obj{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:18px;padding:13px 16px;cursor:pointer;transition:.25s;box-shadow:var(--sh2);text-align:left}
+.obj:hover{border-color:var(--or2)}
+.ochk{flex:0 0 30px;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:900;background:#fff;color:transparent;transition:.25s}
+.obj.done{background:var(--greenbg);border-color:#BFE5CC}
+.obj.done .ochk{background:var(--green);border-color:var(--green);color:#fff}
+.obj p{font-size:16px;font-weight:700;line-height:1.5}
+.onum{font-weight:900;color:var(--or);margin-right:6px}
+#objP{font-weight:900;color:var(--teal);font-size:15px}
+/* ====== panel ganda / materi ====== */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;text-align:left;align-items:start}
+.ph{display:flex;align-items:center;gap:8px;font-size:17.5px;font-weight:900;margin-bottom:5px}
+.ph.p1{color:var(--teal)}.ph.p2{color:var(--pink)}.ph.p3{color:var(--or)}
+.rule{font-size:14.5px;font-weight:700;color:var(--muted);margin-bottom:9px;line-height:1.55}
+.demo{background:var(--orbg);border:2px dashed var(--or2);border-radius:16px;padding:12px;margin-top:10px}
+.demo.alt{background:var(--tealbg);border-color:var(--teal2)}
+.demo.alt2{background:var(--pinkbg);border-color:var(--pink2)}
+.eq{font-size:21px;font-weight:900;display:flex;align-items:center;gap:4px;flex-wrap:wrap;min-height:40px}
+.fbar{display:flex;gap:4px;height:38px;margin:8px 0}
+.fbar.small{height:30px}
+.fbar i{font-style:normal}
+.seg{flex:1;background:#fff;border:2px solid var(--line);border-radius:8px;transition:.35s}
+.seg.f1{background:var(--or);border-color:var(--or)}
+.seg.f2{background:var(--teal);border-color:var(--teal)}
+.seg.f3{background:var(--pink);border-color:var(--pink)}
+.seg.rem{background:var(--redbg);border-color:#F2A9A9}
+.dbtns{display:flex;gap:8px;flex-wrap:wrap}
+.dbtns .btn{padding:8px 13px;font-size:14px;border-radius:12px}
+.steps{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.st{display:none;gap:10px;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 13px;font-weight:700;font-size:15px;line-height:1.55}
+.st.show{display:flex;animation:pop .4s}
+.stn{flex:0 0 auto;background:var(--purple2);color:#5B49C7;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:900}
+.stt{flex:1}
+.plates{display:flex;gap:12px;align-items:center;margin:8px 0;min-height:66px}
+.plate{width:58px;height:58px;border-radius:50%;border:3px solid var(--line);background:conic-gradient(var(--or) 0 90deg,#fff 90deg 360deg);opacity:.2;transform:scale(.8);transition:.4s;flex:0 0 auto}
+.plate.on{opacity:1;transform:scale(1)}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;height:102px;margin:8px 0}
+.ac{background:#fff;border:2px solid var(--line);border-radius:12px;transition:.3s}
+.ac.v{background:var(--teal2);border-color:var(--teal)}
+.ac.h{background:var(--pink2);border-color:var(--pink)}
+.ac.both{background:var(--purple);border-color:var(--purple)}
+/* ====== tab & cerita ====== */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:10px 20px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;color:var(--muted);transition:.2s;box-shadow:var(--sh2)}
+.tab.on{background:linear-gradient(135deg,var(--or),var(--or2));border-color:var(--or);color:#fff}
+.tab.t2.on{background:linear-gradient(135deg,var(--teal),#4ED0BC);border-color:var(--teal)}
+.story{width:min(1000px,100%);text-align:left;display:flex;flex-direction:column;gap:10px}
+.storyt{font-size:17.5px;font-weight:800;line-height:1.65;background:var(--orbg);border-radius:14px;padding:12px 14px;border:2px dashed var(--or2)}
+.exsel{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.etn{align-self:flex-start;background:var(--purple2);color:#5B49C7;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:900;width:max-content}
+.act{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.act .btn{padding:9px 18px;font-size:15px}
+/* ====== panel latihan & kuis ====== */
+.qpanel{background:#fff;border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;display:flex;flex-direction:column;gap:9px;text-align:left}
+.shead{display:flex;align-items:center;gap:9px;font-size:16px}
+.shead b{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dchip{background:#FFF4D6;border:2px solid #F5DFA0;border-radius:999px;padding:3px 10px;font-weight:900;font-size:13px;white-space:nowrap}
+.badge{border-radius:999px;padding:3px 10px;font-weight:900;font-size:12.5px;background:#F4EBDD;color:var(--muted);white-space:nowrap}
+.badge.tm{background:var(--greenbg);color:#22833F}
+.badge.ts{background:#FFF1D6;color:#9A6A00}
+.badge.th{background:var(--redbg);color:#B23B3B}
+.qdots{display:flex;gap:4px;flex-wrap:wrap}
+.ld{width:14px;height:14px;border-radius:50%;border:2px solid #DECBAF;background:#fff;cursor:pointer;padding:0;transition:.2s}
+.ld.cur{border-color:var(--or);transform:scale(1.25)}
+.ld.ok{background:var(--green);border-color:var(--green)}
+.ld.no{background:var(--red);border-color:var(--red)}
+.qnav{display:flex;align-items:center;gap:10px}
+.qnav span{font-weight:900;color:var(--muted);font-size:13.5px}
+.qq{font-size:17px;font-weight:800;line-height:1.6;min-height:56px}
+.quiz .qq{min-height:48px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opt{border:2px solid var(--line);background:#FFFDF9;border-radius:14px;padding:10px 12px;font-family:inherit;font-size:16px;font-weight:800;color:var(--ink);cursor:pointer;transition:.2s;text-align:center}
+.opt:hover:not(:disabled){border-color:var(--or2);background:var(--orbg)}
+.opt.sel{border-color:var(--or);background:var(--orbg);box-shadow:0 0 0 3px #FFDDBB}
+.opt.ok{border-color:var(--green);background:var(--greenbg)}
+.opt.bad{border-color:var(--red);background:var(--redbg)}
+.opt:disabled{cursor:default;opacity:.92}
+.opt.sm{padding:7px 10px;font-size:14.5px}
+.fb{display:none;border-radius:12px;padding:8px 12px;font-weight:900;font-size:14.5px}
+.fb.ok{display:block;background:var(--greenbg);color:#22833F;border:2px solid #BFE5CC}
+.fb.no{display:block;background:var(--redbg);color:#B23B3B;border:2px solid #F2C4C4}
+.fb.warn{display:block;background:#FFF4D6;color:#9A6A00;border:2px solid #F5DFA0}
+.pemb{display:none;background:var(--tealbg);border:2px dashed var(--teal2);border-radius:12px;padding:9px 12px;font-size:14px;font-weight:700;line-height:1.6}
+/* ====== pickbar & papan kuis ====== */
+.pickbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 14px;box-shadow:var(--sh2)}
+.plabel{font-weight:900;font-size:13.5px;color:var(--muted)}
+.pickbtn{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;transition:.2s;color:var(--ink)}
+.pickbtn.on{background:linear-gradient(135deg,var(--purple),#A99AF5);border-color:var(--purple);color:#fff;transform:scale(1.05)}
+.pturn{font-size:13.5px;font-weight:800;color:var(--muted)}
+.qboard{display:grid;grid-template-columns:repeat(15,1fr);gap:6px;width:min(1080px,100%)}
+.tile{position:relative;border:2px solid var(--line);background:#fff;border-radius:11px;padding:5px 2px 4px;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:.2s;box-shadow:var(--sh2)}
+.tile:hover{transform:translateY(-2px)}
+.tile .tn{font-size:15px;font-weight:900}
+.tile .tv{font-size:9.5px;font-weight:900;color:var(--muted);white-space:nowrap}
+.tile.tm{border-color:#BFE5CC;background:var(--greenbg)}
+.tile.ts{border-color:#F0D9A0;background:#FFF6E0}
+.tile.th{border-color:#F2C4C4;background:var(--redbg)}
+.tile.cur{outline:3px solid var(--purple);outline-offset:1px}
+.tile.done{background:var(--green);border-color:var(--green)}
+.tile.miss{background:#E9E2D8;border-color:#D9C6AC}
+.tile.done .tn,.tile.miss .tn{color:#fff}
+.tile.done::after{content:'✓';position:absolute;top:-7px;right:-5px;background:#fff;border:2px solid var(--green);color:var(--green);width:18px;height:18px;border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.tile.miss::after{content:'✕';position:absolute;top:-7px;right:-5px;background:#fff;border:2px solid #D9C6AC;color:#B0987F;width:18px;height:18px;border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.wig{animation:wig .4s}
+@keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+/* ====== game pendinginan ====== */
+.gcard{width:min(760px,100%);display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+.gnum{font-weight:900;color:var(--muted);font-size:13px;letter-spacing:.5px}
+.gstory{font-size:18.5px;font-weight:800;line-height:1.65;min-height:62px;display:flex;align-items:center;justify-content:center}
+.gops{display:flex;gap:14px}
+.opbtn{width:74px;height:74px;border-radius:22px;border:none;font-size:33px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;box-shadow:var(--sh);transition:.2s}
+.opbtn:nth-child(1){background:var(--teal)}
+.opbtn:nth-child(2){background:var(--pink)}
+.opbtn:nth-child(3){background:var(--or)}
+.opbtn:hover:not(:disabled){transform:translateY(-3px) scale(1.03)}
+.opbtn.ok{outline:4px solid var(--green);animation:pop .35s}
+.opbtn.bad{outline:4px solid var(--red);opacity:.85}
+.opbtn:disabled{cursor:default}
+.gfb{min-height:26px;font-weight:900;font-size:16px}
+.gfb.ok{color:#22833F}.gfb.no{color:#B23B3B}
+.gmeta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.chip{background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:900;font-size:14px;box-shadow:var(--sh2)}
+.gdots{display:flex;gap:5px}
+.gd{width:11px;height:11px;border-radius:50%;border:2px solid #DECBAF;background:#fff}
+.gd.did{background:var(--teal);border-color:var(--teal)}
+.gd.cur{background:var(--gold);border-color:var(--gold)}
+.gend{width:min(560px,100%);display:none;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.gemo{font-size:52px;animation:float 2.4s ease-in-out infinite}
+/* ====== exit ticket ====== */
+.etcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;text-align:left}
+.etc{display:flex;flex-direction:column;gap:9px}
+.etq{font-size:15.5px;font-weight:800;line-height:1.55}
+.eto{display:flex;flex-direction:column;gap:7px}
+.etf{font-weight:800;font-size:13.5px;line-height:1.5}
+.etf.ok{color:#22833F}.etf.no{color:#B23B3B}
+.etf2{display:flex;flex-direction:column;gap:12px;align-items:center;width:min(780px,100%)}
+.rrow{display:flex;flex-direction:column;gap:8px;align-items:center}
+.rq{font-size:14.5px;font-weight:900;color:var(--muted)}
+.emos{display:flex;gap:10px}
+.emo{font-size:23px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:7px 12px;cursor:pointer;transition:.2s;font-family:inherit}
+.emo.sel{border-color:var(--or);background:var(--orbg);transform:scale(1.12)}
+.stars{display:flex;gap:4px}
+.star{font-size:24px;background:none;border:none;cursor:pointer;filter:grayscale(1);opacity:.4;transition:.2s;padding:2px}
+.star.on{filter:none;opacity:1;transform:scale(1.18)}
+.etBanner{display:none;background:var(--greenbg);border:2px solid #BFE5CC;color:#22833F;border-radius:14px;padding:10px 16px;font-weight:900;font-size:15px}
+/* ====== kesimpulan & refleksi ====== */
+.congrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(1020px,100%);text-align:left}
+.con{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:var(--sh2)}
+.ci{flex:0 0 46px;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;color:#fff}
+.ci.c1{background:var(--teal)}.ci.c2{background:var(--pink)}.ci.c3{background:var(--or)}.ci.c4{background:var(--purple)}
+.con b{display:block;font-size:16px;margin-bottom:3px}
+.con p{font-size:14px;font-weight:700;color:var(--muted);line-height:1.55}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.fch{background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:900;font-size:13.5px;box-shadow:var(--sh2)}
+.far{color:var(--or);font-weight:900;font-size:17px}
+.refl{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;text-align:left}
+.rcard{display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chipb{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer;transition:.2s;color:var(--ink)}
+.chipb.sel{background:var(--teal);border-color:var(--teal);color:#fff}
+.tin{width:100%;font-family:inherit;font-size:14.5px;font-weight:700;padding:9px 12px;border-radius:12px;border:2px solid var(--line);outline:none;color:var(--ink)}
+.tin:focus{border-color:var(--teal);background:var(--tealbg)}
+/* ====== penutup ====== */
+.ty{gap:16px}
+.ty h1{font-size:42px;font-weight:900}
+.tynames{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:18px;font-weight:900}
+.nc2{display:inline-flex;align-items:center;gap:9px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:8px 18px;box-shadow:var(--sh2)}
+.amp{color:var(--muted);font-size:22px}
+.tyscore{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:15.5px;font-weight:800;padding:14px 22px}
+.tyscore b{color:var(--or);font-size:20px}
+/* ====== responsive ====== */
+@media(max-width:1020px){
+ .duo,.refl,.congrid{grid-template-columns:1fr}
+ .fgrid{grid-template-columns:1fr 1fr}
+ .etcards{grid-template-columns:1fr}
+ .title{font-size:25px}.cover h1{font-size:34px}.ty h1{font-size:32px}
+ .qboard{grid-template-columns:repeat(8,1fr)}
+ .qq{font-size:16px}
+ .slide{padding:58px 13px 92px}
+}
+@media(max-width:620px){
+ .fgrid{grid-template-columns:1fr}
+ .opts{grid-template-columns:1fr}
+ .qboard{grid-template-columns:repeat(5,1fr)}
+ .brand{display:none}
+ .title{font-size:22px}
+ .opbtn{width:60px;height:60px;font-size:26px}
+ .dots{max-width:44vw}
+ .cover h1{font-size:29px}
+ .eq{font-size:19px}
+}
+</style>
+</head>
+<body>
+<!-- ============ SLIDE 1: COVER ============ -->
+<section class="slide" data-t="Cover" id="s1">
+ <div class="wrap cover">
+  <div class="kicker">Matematika · Kelas 3 SD</div>
+  <h1>Soal Cerita <span class="hl">Pecahan</span></h1>
+  <p class="sub">Penjumlahan ＋ · Pengurangan － · Perkalian ✕</p>
+  <div class="opchips"><span class="op o1">＋</span><span class="op o2">－</span><span class="op o3">✕</span></div>
+  <div class="names">
+   <div class="ncard"><span class="av big a1">🦊</span><label>Siswa 1</label><input id="n1" class="nin" placeholder="Tulis namamu…" maxlength="18"></div>
+   <div class="vs">VS</div>
+   <div class="ncard"><span class="av big a2">🐼</span><label>Siswa 2</label><input id="n2" class="nin" placeholder="Tulis namamu…" maxlength="18"></div>
+  </div>
+  <button class="btn btn-or btn-big" id="btnStart">Mulai Belajar →</button>
+  <p class="hint">💎 Kumpulkan diamond dari latihan dan kuis. Semangat!</p>
+ </div>
+</section>
+
+<!-- ============ SLIDE 2: APERSEPSI ============ -->
+<section class="slide" data-t="Apersepsi" id="s2">
+ <div class="wrap">
+  <div class="kicker">Apersepsi</div>
+  <h2 class="title">Pecahan Ada di Sekitar Kita! 🌍</h2>
+  <p class="lead">Kenapa kita perlu belajar pecahan? Karena setiap hari kita membagi, memotong, dan menuang sesuatu! Klik kartu di bawah untuk membukanya (klik lagi untuk menutup).</p>
+  <div class="fgrid">
+   <div class="fcard"><div class="inner">
+    <div class="ff"><span class="fi">🍰</span><b>Kue Ulang Tahun</b><small>Ketuk untuk membuka ➜</small></div>
+    <div class="fback">Kue dipotong 8 bagian sama besar. Satu potong ＝ 1/8 bagian kue. Dengan pecahan, kita bisa membagi kue dengan adil!</div>
+   </div></div>
+   <div class="fcard"><div class="inner">
+    <div class="ff"><span class="fi">🧃</span><b>Gelas Jus</b><small>Ketuk untuk membuka ➜</small></div>
+    <div class="fback">Ibu menuang 1/2 gelas untuk Kakak dan 1/2 gelas untuk Adik. Seluruhnya 1/2 ＋ 1/2 ＝ 1 gelas jus!</div>
+   </div></div>
+   <div class="fcard"><div class="inner">
+    <div class="ff"><span class="fi">🎀</span><b>Pita Hadiah</b><small>Ketuk untuk membuka ➜</small></div>
+    <div class="fback">Pita sepanjang 1 meter dipotong 1/4 meter untuk simpul hadiah. Dengan pengurangan pecahan, kita tahu sisa pitanya!</div>
+   </div></div>
+   <div class="fcard"><div class="inner">
+    <div class="ff"><span class="fi">⏰</span><b>Waktu Belajar</b><small>Ketuk untuk membuka ➜</small></div>
+    <div class="fback">Ani belajar 1/2 jam sebelum makan siang dan 1/4 jam setelahnya. Penjumlahan pecahan menjawab lama belajarnya!</div>
+   </div></div>
+  </div>
+  <div class="card pm-box">
+   <h3>🔥 Pertanyaan Pemantik</h3>
+   <button class="btn btn-teal" id="btnPm" style="align-self:flex-start">Tampilkan Pertanyaan 🔥</button>
+   <ul id="pmList">
+    <li>1. Pernahkah kamu membagi kue atau pizza dengan teman? Bagaimana cara membaginya agar adil?</li>
+    <li>2. Jika kamu punya 1/2 bagian kue lalu diberi tambahan 1/4 bagian, berapa bagian kah kamu sekarang?</li>
+    <li>3. Operasi hitung apa yang tepat untuk mengetahuinya: menambah (＋), mengurang (－), atau mengali (✕)?</li>
+   </ul>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 3: TUJUAN ============ -->
+<section class="slide" data-t="Tujuan Pembelajaran" id="s3">
+ <div class="wrap">
+  <div class="kicker">Tujuan Pembelajaran</div>
+  <h2 class="title">Misi Kita Hari Ini 🚀</h2>
+  <p class="lead">Klik setiap misi untuk menandainya siap!</p>
+  <div class="objs">
+   <div class="obj"><span class="ochk">✓</span><p><span class="onum">1.</span> Memahami maksud soal cerita yang melibatkan pecahan — menemukan apa yang diketahui dan ditanya.</p></div>
+   <div class="obj"><span class="ochk">✓</span><p><span class="onum">2.</span> Menentukan operasi hitung yang tepat (＋, －, atau ✕) dari sebuah soal cerita.</p></div>
+   <div class="obj"><span class="ochk">✓</span><p><span class="onum">3.</span> Menyelesaikan soal cerita penjumlahan, pengurangan, dan perkalian pecahan langkah demi langkah.</p></div>
+   <div class="obj"><span class="ochk">✓</span><p><span class="onum">4.</span> Menyelesaikan soal cerita yang membutuhkan lebih dari satu operasi hitung.</p></div>
+  </div>
+  <div id="objP">0 dari 4 tujuan siap…</div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 4: INGAT 1 - JUMLAH & KURANG ============ -->
+<section class="slide" data-t="Ingat: ＋ dan －" id="s4">
+ <div class="wrap">
+  <div class="kicker">Ingat Kembali · 1</div>
+  <h2 class="title">Menjumlah & Mengurang Pecahan ➕➖</h2>
+  <div class="duo">
+   <div class="card">
+    <div class="ph p1">🟢 Penyebut SAMA</div>
+    <p class="rule">Langsung jumlahkan atau kurangkan pembilangnya, penyebut tetap. Coba tombolnya!</p>
+    <div class="demo">
+     <div class="eq" id="eqAdd">2/6 ＋ 3/6 ＝ ?</div>
+     <div class="fbar" id="barAdd"></div>
+     <div class="dbtns"><button class="btn btn-teal" id="bA1">Lihat 2/6</button><button class="btn btn-or" id="bA2">Lihat 3/6</button><button class="btn btn-ghost" id="bAr">Ulangi ↺</button></div>
+    </div>
+    <div class="demo alt">
+     <div class="eq" id="eqSub">5/8 － 2/8 ＝ ?</div>
+     <div class="fbar" id="barSub"></div>
+     <div class="dbtns"><button class="btn btn-or" id="bS1">Ambil 2/8</button><button class="btn btn-ghost" id="bSr">Ulangi ↺</button></div>
+    </div>
+   </div>
+   <div class="card">
+    <div class="ph p2">🩷 Penyebut BERBEDA</div>
+    <p class="rule">Samakan penyebutnya dulu (pakai KPK), baru dijumlah atau dikurang.</p>
+    <div class="demo alt2">
+     <div class="eq">1/2 ＋ 1/4 ＝ ?</div>
+     <div class="fbar small" id="barC"></div>
+     <div class="steps">
+      <div class="st" id="stC1"><span class="stn">1</span><span class="stt">Samakan penyebut: KPK dari 2 dan 4 adalah 4. Maka 1/2 ＝ 2/4.</span></div>
+      <div class="st" id="stC2"><span class="stn">2</span><span class="stt">2/4 ＋ 1/4 ＝ 3/4 ✅</span></div>
+     </div>
+     <div class="dbtns" style="margin-top:8px"><button class="btn btn-teal" id="bC1">1️⃣ Samakan</button><button class="btn btn-or" id="bC2">2️⃣ Jumlahkan</button><button class="btn btn-ghost" id="bCr">Ulangi ↺</button></div>
+    </div>
+    <div class="demo">
+     <div class="eq">3/4 － 1/2 ＝ ?</div>
+     <div class="fbar small" id="barD"></div>
+     <div class="steps">
+      <div class="st" id="stD1"><span class="stn">1</span><span class="stt">Samakan: 1/2 ＝ 2/4.</span></div>
+      <div class="st" id="stD2"><span class="stn">2</span><span class="stt">3/4 － 2/4 ＝ 1/4 ✅</span></div>
+     </div>
+     <div class="dbtns" style="margin-top:8px"><button class="btn btn-teal" id="bD1">1️⃣ Samakan</button><button class="btn btn-or" id="bD2">2️⃣ Kurangkan</button><button class="btn btn-ghost" id="bDr">Ulangi ↺</button></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 5: INGAT 2 - PERKALIAN ============ -->
+<section class="slide" data-t="Ingat: Perkalian" id="s5">
+ <div class="wrap">
+  <div class="kicker">Ingat Kembali · 2</div>
+  <h2 class="title">Mengalikan Pecahan ✕</h2>
+  <div class="duo">
+   <div class="card">
+    <div class="ph p1">🟢 Pecahan × Bilangan Bulat</div>
+    <p class="rule">Kalikan pembilang dengan bilangan bulat, penyebut tetap. Artinya: penjumlahan berulang! Klik tombol untuk menambah piring kue.</p>
+    <div class="eq" id="eqPl">3 × 1/4 ＝ ?</div>
+    <div class="plates" id="plates"><div class="plate"></div><div class="plate"></div><div class="plate"></div></div>
+    <div class="dbtns"><button class="btn btn-or" id="bPl">Tambahkan piring ＋</button></div>
+    <div class="demo alt" style="margin-top:10px">
+     <p class="rule" style="margin:0">Pikirkan: 1/4 ＋ 1/4 ＋ 1/4 ＝ 3/4 🍰 — sama seperti 3 × 1/4!</p>
+    </div>
+   </div>
+   <div class="card">
+    <div class="ph p2">🩷 Pecahan × Pecahan</div>
+    <p class="rule">Pembilang × pembilang, penyebut × penyebut. Tekan kedua tombol untuk melihat irisan!</p>
+    <div class="eq" id="eqGr">1/2 × 1/3 ＝ ?</div>
+    <div class="agrid" id="agrid"></div>
+    <div class="dbtns"><button class="btn btn-teal" id="gV">Ambil 1/3 ↕</button><button class="btn btn-or" id="gH">Ambil 1/2 ↔</button><button class="btn btn-ghost" id="gR">Ulangi ↺</button></div>
+    <div class="demo" style="margin-top:10px">
+     <div class="eq" style="font-size:18px">✨ Trik MENCORET: 2/3 × 3/4 ＝ ?</div>
+     <div class="steps" id="stepsMc">
+      <div class="st"><span class="stn">1</span><span class="stt">Cari pasangan diagonal: 2 dengan 4 (sama-sama bisa dibagi 2), dan 3 dengan 3 (bisa dibagi 3).</span></div>
+      <div class="st"><span class="stn">2</span><span class="stt nofr"><span class="fr"><b><s>2</s></b><span><s>3</s></span></span> × <span class="fr"><b><s>3</s></b><span><s>4</s></span></span> &nbsp; 2:2＝1, 3:3＝1, 4:2＝2.</span></div>
+      <div class="st"><span class="stn">3</span><span class="stt nofr">Sisanya: <span class="fr"><b>1</b><span>1</span></span> × <span class="fr"><b>1</b><span>2</span></span> ＝ <span class="fr"><b>1</b><span>2</span></span> ✅ Hasilnya langsung paling sederhana!</span></div>
+     </div>
+     <div class="dbtns" style="margin-top:8px"><button class="btn btn-teal" id="bMc">Coba Mencoret →</button></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- ============ SLIDE 6: CONTOH SOAL CERITA PER OPERASI ============ -->
+<section class="slide" data-t="Contoh Soal Cerita" id="s6">
+ <div class="wrap">
+  <div class="kicker">Contoh Soal Cerita</div>
+  <h2 class="title">Soal Cerita & Operasinya 📖</h2>
+  <p class="lead">Pilih tab operasi, baca ceritanya, lalu buka pembahasan langkah demi langkah!</p>
+  <div class="tabs">
+   <button class="tab on">➕ Penjumlahan</button>
+   <button class="tab">➖ Pengurangan</button>
+   <button class="tab">✕ Perkalian</button>
+  </div>
+  <div class="card story">
+   <div class="storyt" id="storyT"></div>
+   <div class="steps" id="storySteps"></div>
+   <div class="act"><button class="btn btn-teal" id="btnStory">Mulai Pembahasan →</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 7: SOAL CERITA MULTI-OPERASI ============ -->
+<section class="slide" data-t="Soal Multi-Operasi" id="s7">
+ <div class="wrap">
+  <div class="kicker">Pemecahan Masalah</div>
+  <h2 class="title">Soal Cerita Dua Operasi 🚀</h2>
+  <p class="lead">Ada soal yang butuh lebih dari satu operasi hitung! Pilih contoh, lalu buka langkahnya satu per satu.</p>
+  <div class="exsel">
+   <button class="tab t2 on">Contoh 1</button>
+   <button class="tab t2">Contoh 2</button>
+   <button class="tab t2">Contoh 3</button>
+  </div>
+  <div class="card story">
+   <div class="etn" id="exTag"></div>
+   <div class="storyt" id="exT"></div>
+   <div class="steps" id="exSteps"></div>
+   <div class="act"><button class="btn btn-teal" id="btnEx">Mulai Langkah →</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 8: LATIHAN ============ -->
+<section class="slide" data-t="Latihan 15 Soal" id="s8">
+ <div class="wrap">
+  <div class="kicker">Latihan</div>
+  <h2 class="title">Latihan Berdua 💪 <span class="tiny">Benar ＋1 💎 · Salah －1</span></h2>
+  <div class="duo lat">
+   <div class="qpanel">
+    <div class="shead"><span class="av a1">🦊</span><b class="nm1">Siswa 1</b><span class="dchip" id="ld0">💎 0</span></div>
+    <div class="qdots" id="ldots0"></div>
+    <div class="qnav"><button class="navb" id="lpr0">‹</button><span id="lcnt0">Soal 1 / 15</span><button class="navb" id="lne0">›</button></div>
+    <div class="qq" id="lq0"></div>
+    <div class="opts" id="lo0"></div>
+    <div class="act"><button class="btn btn-or" id="lchk0">✅ Cek Jawaban</button></div>
+    <div class="fb" id="lfb0"></div>
+    <div class="pemb" id="lpm0"></div>
+   </div>
+   <div class="qpanel">
+    <div class="shead"><span class="av a2">🐼</span><b class="nm2">Siswa 2</b><span class="dchip" id="ld1">💎 0</span></div>
+    <div class="qdots" id="ldots1"></div>
+    <div class="qnav"><button class="navb" id="lpr1">‹</button><span id="lcnt1">Soal 1 / 15</span><button class="navb" id="lne1">›</button></div>
+    <div class="qq" id="lq1"></div>
+    <div class="opts" id="lo1"></div>
+    <div class="act"><button class="btn btn-or" id="lchk1">✅ Cek Jawaban</button></div>
+    <div class="fb" id="lfb1"></div>
+    <div class="pemb" id="lpm1"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 9: KUIS ============ -->
+<section class="slide" data-t="Kuis Diamond" id="s9">
+ <div class="wrap">
+  <div class="kicker">Kuis</div>
+  <h2 class="title">Kuis Mengumpulkan Diamond 💎</h2>
+  <p class="tiny">🟩 Mudah ＋1 · 🟨 Sedang ＋3 · 🟥 Sulit ＋5 — diamond diakumulasi dengan latihan!</p>
+  <div class="pickbar">
+   <span class="plabel">Pemilih soal:</span>
+   <button class="pickbtn" id="pb0"><span class="av mini a1">🦊</span><b class="nm1">Siswa 1</b></button>
+   <button class="pickbtn" id="pb1"><span class="av mini a2">🐼</span><b class="nm2">Siswa 2</b></button>
+   <span class="pturn" id="pturn">Pilih nama dulu, lalu nomor soal!</span>
+  </div>
+  <div class="qboard" id="qboard"></div>
+  <div class="duo quiz">
+   <div class="qpanel">
+    <div class="shead"><span class="av a1">🦊</span><b class="nm1">Siswa 1</b><span class="badge" id="qb0">⏳ Menunggu</span><span class="dchip" id="qd0">💎 0</span></div>
+    <div class="qq" id="qq0"><span class="dim">Belum ada soal. Tekan namamu di atas, lalu pilih nomor soal!</span></div>
+    <div class="opts" id="qo0"></div>
+    <div class="act"><button class="btn btn-or" id="qchk0">✅ Cek Jawaban</button></div>
+    <div class="fb" id="qfb0"></div>
+    <div class="pemb" id="qpm0"></div>
+   </div>
+   <div class="qpanel">
+    <div class="shead"><span class="av a2">🐼</span><b class="nm2">Siswa 2</b><span class="badge" id="qb1">⏳ Menunggu</span><span class="dchip" id="qd1">💎 0</span></div>
+    <div class="qq" id="qq1"><span class="dim">Belum ada soal. Tekan namamu di atas, lalu pilih nomor soal!</span></div>
+    <div class="opts" id="qo1"></div>
+    <div class="act"><button class="btn btn-or" id="qchk1">✅ Cek Jawaban</button></div>
+    <div class="fb" id="qfb1"></div>
+    <div class="pemb" id="qpm1"></div>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- ============ SLIDE 10: GAME PENDINGINAN ============ -->
+<section class="slide" data-t="Game Pendinginan" id="s10">
+ <div class="wrap">
+  <div class="kicker">Game Pendinginan</div>
+  <h2 class="title">Pilih Operasinya! 🎯</h2>
+  <p class="lead">Baca cerita singkat, lalu tekan tombol operasi hitung yang tepat. Santai saja, tidak ada diamond yang berkurang! 😄</p>
+  <div class="card gcard" id="gcard">
+   <div class="gnum" id="gnum"></div>
+   <div class="gstory" id="gstory"></div>
+   <div class="gops">
+    <button class="opbtn" data-op="+" title="Penjumlahan">＋</button>
+    <button class="opbtn" data-op="-" title="Pengurangan">－</button>
+    <button class="opbtn" data-op="×" title="Perkalian">✕</button>
+   </div>
+   <div class="gfb" id="gfb"></div>
+   <button class="btn btn-teal" id="gnext" style="display:none"></button>
+  </div>
+  <div class="gmeta" id="gmeta">
+   <span class="chip" id="gscore">Skor: 0</span>
+   <div class="gdots" id="gdots"></div>
+  </div>
+  <div class="card gend" id="gend"></div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 11: EXIT TICKET ============ -->
+<section class="slide" data-t="Exit Ticket" id="s11">
+ <div class="wrap">
+  <div class="kicker">Exit Ticket</div>
+  <h2 class="title">Sebelum Pulang… 🎟️</h2>
+  <div class="etcards">
+   <div class="card etc" id="et0"><span class="etn">TES 1</span><div class="etq"></div><div class="eto"></div><div class="etf"></div></div>
+   <div class="card etc" id="et1"><span class="etn">TES 2</span><div class="etq"></div><div class="eto"></div><div class="etf"></div></div>
+   <div class="card etc" id="et2"><span class="etn">TES 3</span><div class="etq"></div><div class="eto"></div><div class="etf"></div></div>
+  </div>
+  <div class="card etf2">
+   <div class="rrow"><span class="rq">Bagaimana perasaanmu hari ini?</span>
+    <div class="emos"><button class="emo">😃</button><button class="emo">🙂</button><button class="emo">😐</button><button class="emo">😵</button></div>
+   </div>
+   <div class="rrow"><span class="rq">Seberapa paham kamu dengan materi hari ini?</span>
+    <div class="stars"><button class="star">⭐</button><button class="star">⭐</button><button class="star">⭐</button><button class="star">⭐</button><button class="star">⭐</button></div>
+   </div>
+   <button class="btn btn-or" id="etSend">Kirim Exit Ticket 📮</button>
+   <div class="etBanner" id="etBanner"></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 12: KESIMPULAN ============ -->
+<section class="slide" data-t="Kesimpulan" id="s12">
+ <div class="wrap">
+  <div class="kicker">Kesimpulan</div>
+  <h2 class="title">4 Langkah Emas Menyelesaikan Soal Cerita ✨</h2>
+  <div class="congrid">
+   <div class="con"><div class="ci c1">📖</div><div><b>1. Pahami Ceritanya</b><p>Baca soal dua kali. Temukan apa yang diketahui dan apa yang ditanya. Boleh gambar atau tulis datanya!</p></div></div>
+   <div class="con"><div class="ci c2">🧭</div><div><b>2. Tentukan Operasinya</b><p>“Seluruh, total, bertambah” → ＋ · “Sisa, dipakai, berkurang” → － · “Bagian dari, setiap… sebanyak…” → ✕</p></div></div>
+   <div class="con"><div class="ci c3">✏️</div><div><b>3. Hitung dengan Benar</b><p>Penyebut sama: langsung hitung pembilangnya. Penyebut beda: samakan dulu dengan KPK. Perkalian: pembilang × pembilang, penyebut × penyebut.</p></div></div>
+   <div class="con"><div class="ci c4">🎯</div><div><b>4. Sederhanakan Jawaban</b><p>Buat pecahan paling sederhana dengan mencoret bilangan yang bisa dibagi. Contoh: 4/8 ＝ 1/2.</p></div></div>
+  </div>
+  <div class="flow">
+   <span class="fch">📖 Pahami</span><span class="far">→</span>
+   <span class="fch">🧭 Pilih operasi</span><span class="far">→</span>
+   <span class="fch">✏️ Hitung</span><span class="far">→</span>
+   <span class="fch">🎯 Sederhanakan</span><span class="far">→</span>
+   <span class="fch">✅ Jawab</span>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 13: REFLEKSI ============ -->
+<section class="slide" data-t="Refleksi" id="s13">
+ <div class="wrap">
+  <div class="kicker">Refleksi</div>
+  <h2 class="title">Ceritakan Pengalamanmu 💭</h2>
+  <div class="refl">
+   <div class="card rcard">
+    <div class="shead"><span class="av a1">🦊</span><b class="nm1">Siswa 1</b></div>
+    <span class="rq">1. Bagian mana yang paling menyenangkan?</span>
+    <div class="chips"><button class="chipb">Materi</button><button class="chipb">Latihan diamond</button><button class="chipb">Kuis</button><button class="chipb">Game</button></div>
+    <span class="rq">2. Operasi yang masih terasa sulit?</span>
+    <div class="chips"><button class="chipb">＋ Penjumlahan</button><button class="chipb">－ Pengurangan</button><button class="chipb">✕ Perkalian</button><button class="chipb">Semua mudah</button></div>
+    <span class="rq">3. Hal apa yang ingin kamu pelajari lagi?</span>
+    <input class="tin" placeholder="Tulis di sini…">
+   </div>
+   <div class="card rcard">
+    <div class="shead"><span class="av a2">🐼</span><b class="nm2">Siswa 2</b></div>
+    <span class="rq">1. Bagian mana yang paling menyenangkan?</span>
+    <div class="chips"><button class="chipb">Materi</button><button class="chipb">Latihan diamond</button><button class="chipb">Kuis</button><button class="chipb">Game</button></div>
+    <span class="rq">2. Operasi yang masih terasa sulit?</span>
+    <div class="chips"><button class="chipb">＋ Penjumlahan</button><button class="chipb">－ Pengurangan</button><button class="chipb">✕ Perkalian</button><button class="chipb">Semua mudah</button></div>
+    <span class="rq">3. Hal apa yang ingin kamu pelajari lagi?</span>
+    <input class="tin" placeholder="Tulis di sini…">
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ SLIDE 14: TERIMA KASIH ============ -->
+<section class="slide" data-t="Terima Kasih" id="s14">
+ <div class="wrap ty">
+  <div class="kicker">Penutup</div>
+  <h1>Thank You for Today! 🎉</h1>
+  <p class="lead">Kalian hebat sekali hari ini! Soal cerita pecahan bukan lagi hal yang sulit, kan?</p>
+  <div class="tynames">
+   <span class="nc2"><span class="av a1">🦊</span> <b class="nm1">Siswa 1</b></span>
+   <span class="amp">&</span>
+   <span class="nc2"><span class="av a2">🐼</span> <b class="nm2">Siswa 2</b></span>
+  </div>
+  <div class="card tyscore">
+   <span>💎 Latihan: <b id="tyL">0</b></span>
+   <span>💎 Kuis: <b id="tyK">0</b></span>
+   <span>Total: <b id="tyT">0</b> 💎</span>
+  </div>
+  <div class="opchips"><span class="op o1">＋</span><span class="op o2">－</span><span class="op o3">✕</span></div>
+  <button class="btn btn-ghost" id="btnRestart">↺ Mulai Lagi dari Awal</button>
+ </div>
+</section>
+
+<!-- ============ TOPBAR & NAVBAR ============ -->
+<div class="topbar">
+ <div class="brand">🧮 Soal Cerita Pecahan · Kelas 3</div>
+ <div class="hud">
+  <span class="hchip"><span class="av mini a1">🦊</span><b id="h1n">Siswa 1</b><span class="dv" id="h1d">💎 0</span></span>
+  <span class="hchip"><span class="av mini a2">🐼</span><b id="h2n">Siswa 2</b><span class="dv" id="h2d">💎 0</span></span>
+ </div>
+</div>
+<div class="navbar">
+ <button class="navb" id="prev">‹</button>
+ <div class="dots" id="dots"></div>
+ <button class="navb" id="next">›</button>
+ <span class="pgn" id="pgn">1 / 14</span>
+</div>
+<script>
+"use strict";
+/* ================= DATA ================= */
+/* Contoh soal cerita per operasi (slide 6) */
+var STORY=[
+ {t:"Ibu membeli 1/4 kg gula pasir. Kakak membeli lagi 2/4 kg gula pasir. Berapa kg seluruh gula pasir mereka?",
+  s:["Diketahui: gula Ibu ＝ 1/4 kg, gula Kakak ＝ 2/4 kg. Ditanya: seluruh gula.",
+     "Kata kunci “seluruh” → digabungkan → penjumlahan ＋.",
+     "Hitung: 1/4 ＋ 2/4 ＝ 3/4 (penyebut sama, jumlahkan pembilangnya).",
+     "Jawab: seluruh gula pasir mereka 3/4 kg. ✅"]},
+ {t:"Ada 5/6 kg sagu di dalam toples. Dipakai 2/6 kg untuk membuat kue. Berapa kg sisa sagu?",
+  s:["Diketahui: sagu ＝ 5/6 kg, dipakai ＝ 2/6 kg. Ditanya: sisa sagu.",
+     "Kata kunci “sisa” → dikurangi －.",
+     "Hitung: 5/6 － 2/6 ＝ 3/6 ＝ 1/2.",
+     "Jawab: sisa sagu 3/6 kg atau 1/2 kg. ✅"]},
+ {t:"Setiap gelas berisi 1/4 liter jus mangga. Ibu menuang 3 gelas jus. Berapa liter jus yang dituang Ibu?",
+  s:["Diketahui: 1 gelas ＝ 1/4 liter, banyak gelas ＝ 3. Ditanya: seluruh jus.",
+     "3 gelas artinya 3 × 1/4 → perkalian ✕.",
+     "Hitung: 3 × 1/4 ＝ 3/4 (pembilang dikali, penyebut tetap).",
+     "Jawab: Ibu menuang 3/4 liter jus mangga. ✅"]}
+];
+/* Soal cerita multi-operasi (slide 7) */
+var MULTI=[
+ {tag:"－ lalu ＋",t:"Ibu memiliki 3/4 kg tepung terigu. Dipakai 1/4 kg untuk membuat kue bolu. Lalu Ibu membeli lagi 1/2 kg tepung. Berapa kg tepung Ibu sekarang?",
+  s:["Diketahui: tepung mula-mula 3/4 kg, dipakai 1/4 kg, lalu dibeli 1/2 kg. Ditanya: tepung sekarang.",
+     "Langkah 1 — dipakai berarti berkurang: 3/4 － 1/4 ＝ 2/4.",
+     "Langkah 2 — beli lagi berarti bertambah. Penyebutnya beda, samakan dulu: 1/2 ＝ 2/4. Maka 2/4 ＋ 2/4 ＝ 4/4 ＝ 1.",
+     "Jawab: tepung Ibu sekarang 1 kg. ✅ Soal ini memakai dua operasi: － lalu ＋."]},
+ {tag:"＋ lalu －",t:"Sebuah semangka dipotong 8 bagian sama besar. Kakak makan 2 potong dan Adik makan 3 potong. Sisa potongan diberikan kepada Ayah. Berapa bagian semangka yang diterima Ayah?",
+  s:["Diketahui: semangka 8 potong (8/8), Kakak 2 potong, Adik 3 potong. Ditanya: bagian Ayah.",
+     "Langkah 1 — jumlah potongan yang dimakan: 2/8 ＋ 3/8 ＝ 5/8.",
+     "Langkah 2 — sisa untuk Ayah: 8/8 － 5/8 ＝ 3/8.",
+     "Jawab: Ayah menerima 3/8 bagian semangka. ✅ Soal ini memakai dua operasi: ＋ lalu －."]},
+ {tag:"✕ lalu －",t:"Sebuah pizza dibagi 6 potong sama besar. Kakak memakan 1/2 bagian pizza. Berapa bagian pizza yang tersisa?",
+  s:["Diketahui: pizza 6 potong (6/6), dimakan 1/2 bagian. Ditanya: sisa pizza.",
+     "Langkah 1 — hitung potongan yang dimakan: 1/2 × 6 ＝ 6/2 ＝ 3 potong.",
+     "Langkah 2 — sisa potongan: 6 － 3 ＝ 3 potong ＝ 3/6 bagian.",
+     "Jawab: sisa pizza 3/6 ＝ 1/2 bagian. ✅ Soal ini memakai dua operasi: ✕ lalu －."]}
+];
+/* Latihan: 15 soal per siswa (5 penjumlahan, 5 pengurangan, 5 perkalian) */
+var LAT=[
+[
+ {q:"Ibu membeli 2/8 kg gula pasir dan 3/8 kg gula merah. Berapa kg seluruh gula yang dibeli Ibu?",
+  o:["5/16 kg","5/8 kg","6/8 kg","1/8 kg"],a:1,
+  p:"Seluruh → dijumlah.\nPenyebut sama: 2 ＋ 3 ＝ 5.\nJadi 2/8 ＋ 3/8 ＝ 5/8 kg."},
+ {q:"Pagi hari Andi minum 1/4 gelas jus, siang hari minum 2/4 gelas lagi. Berapa gelas jus yang diminum Andi?",
+  o:["2/4 gelas","3/8 gelas","3/4 gelas","1/8 gelas"],a:2,
+  p:"1/4 ＋ 2/4 ＝ 3/4.\nPenyebut tetap 4, pembilang dijumlah: 1 ＋ 2 ＝ 3."},
+ {q:"Ibu punya 5/6 kg tepung. Dipakai 2/6 kg untuk membuat kue. Berapa kg sisa tepung Ibu?",
+  o:["7/6 kg","3/6 kg","3/12 kg","2/6 kg"],a:1,
+  p:"Sisa → dikurang.\n5/6 － 2/6 ＝ 3/6 kg (boleh disederhanakan menjadi 1/2 kg)."},
+ {q:"Setiap botol berisi 1/4 liter minuman. Ibu membeli 3 botol. Berapa liter seluruh minuman Ibu?",
+  o:["3/12 liter","4/3 liter","3/4 liter","1/12 liter"],a:2,
+  p:"3 × 1/4 ＝ 3/4 liter.\nPembilang dikali: 3 × 1 ＝ 3, penyebut tetap 4."},
+ {q:"Sebotol sirup berisi 4/5 bagian. Tono meminum 1/5 bagian. Berapa bagian sirup yang tersisa di botol?",
+  o:["3/5 bagian","5/5 bagian","3/10 bagian","4/5 bagian"],a:0,
+  p:"Sisa → dikurang.\n4/5 － 1/5 ＝ 3/5 bagian."},
+ {q:"Sebatang cokelat dipotong sama besar. Kakak makan 1/2 bagian dan Adik makan 1/4 bagian. Berapa bagian cokelat yang dimakan keduanya?",
+  o:["3/4 bagian","2/6 bagian","3/8 bagian","2/4 bagian"],a:0,
+  p:"Penyebut beda → samakan dulu: 1/2 ＝ 2/4.\n2/4 ＋ 1/4 ＝ 3/4 bagian."},
+ {q:"Nina berlatih menyanyi 4 kali seminggu. Setiap latihan 1/4 jam. Berapa jam Nina berlatih selama satu minggu?",
+  o:["1 jam","4 jam","1/8 jam","1/4 jam"],a:0,
+  p:"4 × 1/4 ＝ 4/4 ＝ 1 jam."},
+ {q:"Ibu memiliki 3/4 liter susu. Dipakai 1/2 liter untuk membuat puding. Berapa liter sisa susu Ibu?",
+  o:["2/4 liter","1/8 liter","5/4 liter","1/4 liter"],a:3,
+  p:"Penyebut beda → samakan: 1/2 ＝ 2/4.\n3/4 － 2/4 ＝ 1/4 liter."},
+ {q:"Di gelas sudah ada 4/10 bagian air. Ayah menuang 3/10 bagian lagi. Berapa bagian air di gelas sekarang?",
+  o:["7/20 bagian","12/10 bagian","7/10 bagian","1/10 bagian"],a:2,
+  p:"4/10 ＋ 3/10 ＝ 7/10 bagian.\nPenyebutnya tetap 10."},
+ {q:"Pizza dibagi 6 potong sama besar. Di setiap piring disiapkan 1 potong pizza. Ada 5 piring. Berapa bagian pizza yang disiapkan?",
+  o:["5/36 bagian","6/5 bagian","1/6 bagian","5/6 bagian"],a:3,
+  p:"5 × 1/6 ＝ 5/6 bagian pizza."},
+ {q:"Kue tar dipotong 8 bagian sama besar. Bayu makan 3 potong, lalu memberi 1 potong pada adiknya. Berapa bagian kue yang tersisa?",
+  o:["5/8 bagian","4/8 bagian","3/8 bagian","2/8 bagian"],a:1,
+  p:"Dimakan seluruhnya: 3 ＋ 1 ＝ 4 potong ＝ 4/8.\nSisa: 8/8 － 4/8 ＝ 4/8 bagian."},
+ {q:"Ibu menyiapkan 1/2 kg tepung. Hanya 1/3 bagian yang dipakai untuk membuat kue. Berapa kg tepung yang dipakai?",
+  o:["2/3 kg","1/6 kg","1/5 kg","1/2 kg"],a:1,
+  p:"1/3 bagian dari 1/2 kg ＝ 1/2 × 1/3.\nPembilang: 1 × 1 ＝ 1, penyebut: 2 × 3 ＝ 6 → 1/6 kg."},
+ {q:"Rina memakai 1/3 meter pita merah dan 1/3 meter pita biru untuk membuat gelang. Berapa meter pita yang dipakai Rina?",
+  o:["2/6 meter","1/6 meter","3/3 meter","2/3 meter"],a:3,
+  p:"1/3 ＋ 1/3 ＝ 2/3 meter.\nPembilang: 1 ＋ 1 ＝ 2, penyebut tetap 3."},
+ {q:"Papan cokelat dibagi sama besar. Kakak makan 1/2 bagian papan. Dari porsinya, 1/2 bagian diberikan kepada Dodi. Berapa bagian papan cokelat yang diterima Dodi?",
+  o:["1/8 bagian","1/2 bagian","3/4 bagian","1/4 bagian"],a:3,
+  p:"1/2 dari 1/2 ＝ 1/2 × 1/2 ＝ 1/4 bagian."},
+ {q:"Gelas Dinda berisi 6/8 bagian air. Setelah diminum, air tersisa 2/8 bagian. Berapa bagian air yang diminum Dinda?",
+  o:["8/8 bagian","4/8 bagian","3/8 bagian","2/8 bagian"],a:1,
+  p:"6/8 － 2/8 ＝ 4/8 bagian air yang diminum (＝ 1/2 bagian)."}
+],
+[
+ {q:"Ayah membeli 1/5 kg jeruk dan 2/5 kg apel. Berapa kg seluruh buah yang dibeli Ayah?",
+  o:["3/10 kg","3/5 kg","2/5 kg","1/5 kg"],a:1,
+  p:"Seluruh → dijumlah.\n1/5 ＋ 2/5 ＝ 3/5 kg."},
+ {q:"Sari menanam bunga. Pagi menanam 2/6 bagian lahan, sore menanam 3/6 bagian. Berapa bagian lahan yang sudah ditanami?",
+  o:["5/12 bagian","1/6 bagian","5/6 bagian","6/6 bagian"],a:2,
+  p:"2/6 ＋ 3/6 ＝ 5/6 bagian lahan."},
+ {q:"Teko berisi 7/8 liter es teh. Diminum 3/8 liter. Berapa liter sisa es teh di teko?",
+  o:["4/8 liter","5/8 liter","4/16 liter","3/8 liter"],a:0,
+  p:"7/8 － 3/8 ＝ 4/8 liter ＝ 1/2 liter."},
+ {q:"Satu cangkir teh berisi 1/3 liter. Ayah menyiapkan 3 cangkir teh. Berapa liter seluruh teh Ayah?",
+  o:["3 liter","1 liter","1/6 liter","1/3 liter"],a:1,
+  p:"3 × 1/3 ＝ 3/3 ＝ 1 liter."},
+ {q:"Sekantong tepung berisi 4/5 kg. Dipakai 1/5 kg untuk membuat donat. Berapa kg sisa tepung?",
+  o:["5/5 kg","3/10 kg","3/5 kg","4/5 kg"],a:2,
+  p:"Sisa → dikurang.\n4/5 － 1/5 ＝ 3/5 kg."},
+ {q:"Gelas berisi 1/2 gelas sirup lalu ditambah 1/4 gelas air. Berapa bagian gelas berisi minuman sekarang?",
+  o:["3/8 bagian","2/6 bagian","3/4 bagian","2/4 bagian"],a:2,
+  p:"Penyebut beda → samakan: 1/2 ＝ 2/4.\n2/4 ＋ 1/4 ＝ 3/4 bagian."},
+ {q:"Lala menabung 1/5 bagian uang jajannya setiap hari. Berapa bagian yang ditabung setelah 5 hari?",
+  o:["1/25 bagian","2/5 bagian","1/5 bagian","1 bagian (5/5)"],a:3,
+  p:"5 × 1/5 ＝ 5/5 ＝ 1 bagian.\nSeluruh uang jajannya tertabung!"},
+ {q:"Kotak berisi 5/6 liter madu. Dipakai 1/3 liter untuk membuat minuman. Berapa liter sisa madu?",
+  o:["4/6 liter","3/6 liter","2/6 liter","1/6 liter"],a:1,
+  p:"Samakan: 1/3 ＝ 2/6.\n5/6 － 2/6 ＝ 3/6 liter ＝ 1/2 liter."},
+ {q:"Toples berisi 5/10 kg kacang. Ditambah 4/10 kg lagi. Berapa kg kacang di toples sekarang?",
+  o:["9/20 kg","9/10 kg","1/10 kg","5/10 kg"],a:1,
+  p:"5/10 ＋ 4/10 ＝ 9/10 kg."},
+ {q:"Loyang kue dibagi 8 potong sama besar. Setiap wadah berisi 1 potong. Ada 6 wadah. Berapa bagian loyang yang sudah dibungkus?",
+  o:["6/64 bagian","8/6 bagian","6/8 bagian","1/8 bagian"],a:2,
+  p:"6 × 1/8 ＝ 6/8 bagian ＝ 3/4 bagian."},
+ {q:"Seutas pita panjangnya 1 meter (8/8 meter). Dipotong 3/8 meter untuk simpul hadiah. Berapa meter sisa pita?",
+  o:["3/8 meter","8/8 meter","2/8 meter","5/8 meter"],a:3,
+  p:"8/8 － 3/8 ＝ 5/8 meter."},
+ {q:"Nenek menyiapkan 1/2 kg kacang. Dipakai 1/4 bagian untuk membuat bubur kacang. Berapa kg kacang yang dipakai?",
+  o:["1/8 kg","1/6 kg","1/4 kg","2/4 kg"],a:0,
+  p:"1/4 bagian dari 1/2 kg ＝ 1/2 × 1/4 ＝ 1/8 kg."},
+ {q:"Untuk membuat layang-layang, Bima memotong kertas 1/6 lembar dan 2/6 lembar. Berapa lembar kertas yang dipotong Bima?",
+  o:["3/12 lembar","2/6 lembar","4/6 lembar","3/6 lembar"],a:3,
+  p:"1/6 ＋ 2/6 ＝ 3/6 lembar ＝ 1/2 lembar."},
+ {q:"Dita memakan 1/3 bagian cokelat. Ia memberi 1/2 bagian dari porsinya kepada adiknya. Berapa bagian cokelat yang diterima adiknya?",
+  o:["1/9 bagian","2/3 bagian","1/3 bagian","1/6 bagian"],a:3,
+  p:"1/2 dari 1/3 ＝ 1/3 × 1/2 ＝ 1/6 bagian."},
+ {q:"Tangki berisi 9/10 bagian air. Dipakai 4/10 bagian untuk menyiram bunga. Berapa bagian air yang tersisa?",
+  o:["13/10 bagian","4/10 bagian","1/10 bagian","5/10 bagian"],a:3,
+  p:"9/10 － 4/10 ＝ 5/10 bagian ＝ 1/2 bagian."}
+]
+];
+/* Kuis: 15 soal (0-4 mudah +1, 5-9 sedang +3, 10-14 sulit +5) */
+var QUIZ=[
+ {d:0,q:"Ibu membeli 1/4 kg gula dan 2/4 kg terigu. Berapa kg seluruh belanjaan Ibu?",
+  o:["2/4 kg","3/8 kg","3/4 kg","1/8 kg"],a:2,
+  p:"Seluruh ＝ 1/4 ＋ 2/4 ＝ 3/4 kg."},
+ {d:0,q:"Gelas berisi 4/5 liter jus. Diminum 2/5 liter. Berapa liter sisa jus?",
+  o:["2/5 liter","6/5 liter","2/10 liter","3/5 liter"],a:0,
+  p:"4/5 － 2/5 ＝ 2/5 liter."},
+ {d:0,q:"Satu kotak berisi 6 donat. 1/3 bagian donat adalah donat cokelat. Berapa banyak donat cokelat?",
+  o:["3 donat","2 donat","4 donat","6 donat"],a:1,
+  p:"1/3 × 6 ＝ 6/3 ＝ 2 donat cokelat."},
+ {d:0,q:"Rudi makan 2/8 bagian semangka dan 3/8 bagian lagi. Berapa bagian semangka yang dimakan Rudi?",
+  o:["5/8 bagian","5/16 bagian","6/8 bagian","1/8 bagian"],a:0,
+  p:"2/8 ＋ 3/8 ＝ 5/8 bagian."},
+ {d:0,q:"Ibu punya 5/6 kg gula. Dipakai 1/6 kg untuk memasak sayur. Berapa kg sisa gula Ibu?",
+  o:["6/6 kg","4/6 kg","4/12 kg","5/6 kg"],a:1,
+  p:"5/6 － 1/6 ＝ 4/6 kg ＝ 2/3 kg."},
+ {d:1,q:"Kakak minum 1/2 gelas susu dan Adik minum 1/4 gelas. Berapa gelas susu yang diminum keduanya?",
+  o:["2/6 gelas","3/8 gelas","3/4 gelas","1/6 gelas"],a:2,
+  p:"Samakan: 1/2 ＝ 2/4.\n2/4 ＋ 1/4 ＝ 3/4 gelas."},
+ {d:1,q:"Tersedia 3/4 liter santan. Dipakai 1/2 liter untuk membuat rendang. Berapa liter sisa santan?",
+  o:["1/4 liter","2/4 liter","1/8 liter","5/4 liter"],a:0,
+  p:"Samakan: 1/2 ＝ 2/4.\n3/4 － 2/4 ＝ 1/4 liter."},
+ {d:1,q:"Setiap toples berisi 1/2 kg kacang. Ada 4 toples penuh. Berapa kg seluruh kacang?",
+  o:["1/2 kg","2 kg","4 kg","1 kg"],a:1,
+  p:"4 × 1/2 ＝ 4/2 ＝ 2 kg."},
+ {d:1,q:"Ibu menyiapkan 1/3 kg mentega. Dipakai 1/2 bagian untuk membuat kue. Berapa kg mentega yang dipakai?",
+  o:["1/5 kg","2/3 kg","1/6 kg","1/2 kg"],a:2,
+  p:"1/2 bagian dari 1/3 kg ＝ 1/3 × 1/2 ＝ 1/6 kg."},
+ {d:1,q:"Kue dipotong 8 bagian sama besar. Kakak makan 2 potong dan Adik makan 1 potong. Berapa bagian kue yang tersisa?",
+  o:["3/8 bagian","4/8 bagian","6/8 bagian","5/8 bagian"],a:3,
+  p:"Dimakan: 2/8 ＋ 1/8 ＝ 3/8.\nSisa: 8/8 － 3/8 ＝ 5/8 bagian."},
+ {d:2,q:"Ayah memiliki 3/4 kg daging. Dipakai 1/4 kg untuk bakso dan 1/4 kg untuk sop. Berapa kg sisa daging Ayah?",
+  o:["2/4 kg","1/4 kg","1/8 kg","3/4 kg"],a:1,
+  p:"Dipakai: 1/4 ＋ 1/4 ＝ 2/4.\nSisa: 3/4 － 2/4 ＝ 1/4 kg."},
+ {d:2,q:"Pizza dibagi 8 potong sama besar. Dimakan 1/2 bagian pizza. Berapa potong pizza yang tersisa?",
+  o:["2 potong","3 potong","6 potong","4 potong"],a:3,
+  p:"Dimakan: 1/2 × 8 ＝ 8/2 ＝ 4 potong.\nSisa: 8 － 4 ＝ 4 potong."},
+ {d:2,q:"Setiap loyang kue memakai 1/4 kg mentega. Ibu membuat 3 loyang kue. Mentega yang tersedia 1 kg. Berapa kg mentega yang tersisa?",
+  o:["3/4 kg","2/4 kg","1/4 kg","1 kg"],a:2,
+  p:"Dipakai: 3 × 1/4 ＝ 3/4 kg.\nSisa: 4/4 － 3/4 ＝ 1/4 kg."},
+ {d:2,q:"Pita sepanjang 1 meter dipotong 1/4 meter untuk simpul dan 1/2 meter untuk bunga. Berapa meter sisa pita?",
+  o:["1/4 meter","2/4 meter","3/4 meter","1 meter"],a:0,
+  p:"Samakan: 1/2 ＝ 2/4. Dipakai: 1/4 ＋ 2/4 ＝ 3/4 meter.\nSisa: 4/4 － 3/4 ＝ 1/4 meter."},
+ {d:2,q:"Toples A berisi 1/2 kg kacang dan toples B berisi 1/4 kg. Kacang digabung, lalu dipakai 1/8 kg untuk membuat onde. Berapa kg sisa kacang?",
+  o:["3/8 kg","5/8 kg","7/8 kg","1/8 kg"],a:1,
+  p:"Gabung: 1/2 ＋ 1/4 ＝ 2/4 ＋ 1/4 ＝ 3/4 ＝ 6/8.\nSisa: 6/8 － 1/8 ＝ 5/8 kg."}
+];
+/* Game pendinginan: pilih operasi */
+var GAME=[
+ {s:"Ibu membeli 1/4 kg gula dan 2/4 kg terigu. Berapa kg seluruhnya?",a:"+"},
+ {s:"Dari 5/6 bagian roti, dimakan 2/6 bagian. Berapa bagian sisa roti?",a:"-"},
+ {s:"Setiap cangkir berisi 1/2 liter teh. Ada 4 cangkir. Berapa liter teh seluruhnya?",a:"×"},
+ {s:"Di piring ada 3/8 bagian kue. Diberikan 1/8 bagian kepada Teteh. Berapa sisa kue di piring?",a:"-"},
+ {s:"Andi menanam 2/6 bagian kebun pagi hari dan 3/6 bagian sore hari. Berapa bagian kebun yang sudah ditanami?",a:"+"},
+ {s:"Dipakai 1/3 bagian dari 1/2 kg terigu. Berapa kg terigu yang dipakai?",a:"×"},
+ {s:"Air dalam gelas 6/8 bagian. Diminum 1/8 bagian. Berapa sisa air dalam gelas?",a:"-"},
+ {s:"Setiap kantong berisi 1/4 kg kacang. Ada 3 kantong. Berapa kg seluruh kacang?",a:"×"}
+];
+/* Exit ticket */
+var ET=[
+ {q:"Hitung cepat: 1/6 ＋ 2/6 ＝ …",o:["3/6","5/12","2/6","4/6"],a:0,
+  p:"Penyebut sama, jumlahkan pembilang: 1 ＋ 2 ＝ 3 → 3/6 (＝ 1/2)."},
+ {q:"Hitung cepat: 1/2 × 4 ＝ …",o:["2","4","1/2","1/4"],a:0,
+  p:"1/2 × 4 ＝ 4/2 ＝ 2."},
+ {q:"Bagaimana cara mengalikan dua pecahan?",o:["Pembilang × pembilang, penyebut × penyebut","Jumlahkan pembilang dan penyebutnya","Samakan penyebutnya dulu","Kurangkan pembilangnya"],a:0,
+  p:"Mengalikan pecahan: pembilang × pembilang, penyebut × penyebut.\nContoh: 1/2 × 1/3 ＝ 1/6."}
+];
+/* ================= UTIL ================= */
+var $=function(id){return document.getElementById(id);};
+function NAMES(){return [($("n1").value.trim()||"Siswa 1"),($("n2").value.trim()||"Siswa 2")];}
+var dia=[0,0],latD=[0,0],qzD=[0,0];
+function fr(s){return String(s).replace(/(\d+)\s*\/\s*(\d+)/g,function(m,a,b){return '<span class="fr"><b>'+a+'</b><span>'+b+'</span></span>';});}
+function nl(s){return fr(s).replace(/\n/g,'<br>');}
+function frAll(sel){document.querySelectorAll(sel).forEach(function(e){e.innerHTML=fr(e.textContent);});}
+function applyNames(){
+ var n=NAMES();
+ document.querySelectorAll('.nm1').forEach(function(e){e.textContent=n[0];});
+ document.querySelectorAll('.nm2').forEach(function(e){e.textContent=n[1];});
+ $("h1n").textContent=n[0];$("h2n").textContent=n[1];
+}
+$("n1").addEventListener('input',applyNames);
+$("n2").addEventListener('input',applyNames);
+function updHUD(){
+ $("h1d").textContent='💎 '+dia[0];$("h2d").textContent='💎 '+dia[1];
+ $("ld0").textContent='💎 '+dia[0];$("ld1").textContent='💎 '+dia[1];
+ $("qd0").textContent='💎 '+dia[0];$("qd1").textContent='💎 '+dia[1];
+ $("tyL").textContent=String(latD[0]+latD[1]);
+ $("tyK").textContent=String(qzD[0]+qzD[1]);
+ $("tyT").textContent=String(dia[0]+dia[1]);
+}
+function flash(el,msg){
+ el.className='fb warn';el.innerHTML=msg;el.style.display='block';
+ clearTimeout(el._t);
+ el._t=setTimeout(function(){if(el.className==='fb warn')el.style.display='none';},1500);
+}
+/* ================= NAVIGASI ================= */
+var SL=[].slice.call(document.querySelectorAll('.slide')),cur=0;
+function renderDots(){
+ var d=$("dots");d.innerHTML='';
+ SL.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.className='dot'+(i===cur?' on':'');
+  b.title=s.getAttribute('data-t')||('Slide '+(i+1));
+  b.onclick=function(){goTo(i);};
+  d.appendChild(b);
+ });
+}
+function goTo(i){
+ cur=Math.max(0,Math.min(SL.length-1,i));
+ SL.forEach(function(s,k){s.classList.toggle('active',k===cur);});
+ renderDots();
+ $("pgn").textContent=(cur+1)+' / '+SL.length;
+}
+$("prev").onclick=function(){goTo(cur-1);};
+$("next").onclick=function(){goTo(cur+1);};
+$("btnStart").onclick=function(){goTo(1);};
+$("btnRestart").onclick=function(){location.reload();};
+document.addEventListener('keydown',function(e){
+ if(e.target&&e.target.tagName==='INPUT')return;
+ if(e.key==='ArrowRight')goTo(cur+1);
+ if(e.key==='ArrowLeft')goTo(cur-1);
+});
+var tx=null;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',function(e){
+ if(tx===null)return;
+ var dx=e.changedTouches[0].clientX-tx;
+ if(dx<-60)goTo(cur+1);else if(dx>60)goTo(cur-1);
+ tx=null;
+},{passive:true});
+/* ================= APERSEPSI & TUJUAN ================= */
+document.querySelectorAll('.fcard').forEach(function(c){c.onclick=function(){c.classList.toggle('flip');};});
+var pmOn=false;
+$("btnPm").onclick=function(){
+ pmOn=!pmOn;
+ document.querySelectorAll('#pmList li').forEach(function(li,i){
+  setTimeout(function(){li.classList.toggle('show',pmOn);},pmOn?i*260:0);
+ });
+ $("btnPm").textContent=pmOn?'Sembunyikan Pertanyaan':'Tampilkan Pertanyaan 🔥';
+};
+var objDone=0;
+document.querySelectorAll('.obj').forEach(function(o){
+ o.onclick=function(){
+  if(o.classList.contains('done'))return;
+  o.classList.add('done');objDone++;
+  $("objP").textContent=objDone+' dari 4 tujuan siap'+(objDone===4?' — Hebat, ayo lanjut! 🚀':'…');
+ };
+});
+/* ================= SLIDE 4: BAR PENJUMLAH/PENGURANGAN ================= */
+function makeSegs(id,n){var b=$(id);b.innerHTML='';for(var i=0;i<n;i++){var s=document.createElement('i');s.className='seg';b.appendChild(s);}}
+function makeCells(id,n,cls){var b=$(id);b.innerHTML='';for(var i=0;i<n;i++){var s=document.createElement('i');s.className=cls;b.appendChild(s);}}
+var a1=false,a2=false;
+function barAddRender(){
+ var s=$('barAdd').children;
+ for(var i=0;i<6;i++){var c='';if(i<2&&a1)c='f1';else if(i>=2&&i<5&&a2)c='f2';s[i].className='seg '+c;}
+ $('eqAdd').innerHTML=(a1&&a2)?nl('2/6 ＋ 3/6 ＝ 5/6 ✅'):nl('2/6 ＋ 3/6 ＝ ?');
+}
+$("bA1").onclick=function(){a1=true;barAddRender();};
+$("bA2").onclick=function(){a2=true;barAddRender();};
+$("bAr").onclick=function(){a1=false;a2=false;barAddRender();};
+var s1=false;
+function barSubRender(){
+ var s=$('barSub').children;
+ for(var i=0;i<8;i++){var c='';if(i<3)c='f1';else if(i<5)c=s1?'rem':'f1';s[i].className='seg '+c;}
+ $('eqSub').innerHTML=s1?nl('5/8 － 2/8 ＝ 3/8 ✅'):nl('5/8 － 2/8 ＝ ?');
+}
+$("bS1").onclick=function(){s1=true;barSubRender();};
+$("bSr").onclick=function(){s1=false;barSubRender();};
+var c1=false,c2=false;
+function barCRender(){
+ var s=$('barC').children;
+ for(var i=0;i<4;i++){var c='';if(i<2)c=c1?'f3':'';else if(i<3&&c2)c='f2';s[i].className='seg '+c;}
+}
+$("bC1").onclick=function(){c1=true;$('stC1').classList.add('show');barCRender();};
+$("bC2").onclick=function(){c2=true;$('stC2').classList.add('show');barCRender();};
+$("bCr").onclick=function(){c1=false;c2=false;$('stC1').classList.remove('show');$('stC2').classList.remove('show');barCRender();};
+var d1=false,d2=false;
+function barDRender(){
+ var s=$('barD').children;
+ for(var i=0;i<4;i++){var c=i<3?'f1':'';if(d2&&(i===1||i===2))c='rem';s[i].className='seg '+c;}
+}
+$("bD1").onclick=function(){d1=true;$('stD1').classList.add('show');};
+$("bD2").onclick=function(){d2=true;$('stD2').classList.add('show');barDRender();};
+$("bDr").onclick=function(){d1=false;d2=false;$('stD1').classList.remove('show');$('stD2').classList.remove('show');barDRender();};
+/* ================= SLIDE 5: PERKALIAN ================= */
+var plates=0;
+function platesRender(){
+ var ps=$('plates').children;
+ for(var i=0;i<3;i++){ps[i].classList.toggle('on',i<plates);}
+ if(plates===0){$('eqPl').innerHTML=nl('3 × 1/4 ＝ ?');}
+ else if(plates<3){$('eqPl').innerHTML=nl(plates+' piring terisi ＝ '+plates+'/4');}
+ else{$('eqPl').innerHTML=nl('3 × 1/4 ＝ 1/4 ＋ 1/4 ＋ 1/4 ＝ 3/4 ✅');}
+ $('bPl').textContent=plates>=3?'Ulangi ↺':'Tambahkan piring ＋';
+}
+$("bPl").onclick=function(){plates=(plates+1)%4;platesRender();};
+var gv=false,gh=false;
+function gridRender(){
+ var cells=$('agrid').children;
+ for(var r=0;r<2;r++)for(var c=0;c<3;c++){
+  var el=cells[r*3+c],cls='ac';
+  if(gv&&c===0)cls+=' v';
+  if(gh&&r===0)cls+=' h';
+  if(gv&&gh&&c===0&&r===0)cls+=' both';
+  el.className=cls;
+ }
+ $('eqGr').innerHTML=(gv&&gh)?nl('1/2 × 1/3 ＝ 1/6 ✅ (1 dari 6 bagian beririsan)'):nl('1/2 × 1/3 ＝ ?');
+}
+$("gV").onclick=function(){gv=!gv;gridRender();};
+$("gH").onclick=function(){gh=!gh;gridRender();};
+$("gR").onclick=function(){gv=false;gh=false;gridRender();};
+function bindSteps(btnId,boxId){
+ var btn=$(btnId),box=$(boxId);
+ btn.onclick=function(){
+  var h=box.querySelectorAll('.st:not(.show)');
+  if(h.length){
+   h[0].classList.add('show');
+   if(box.querySelectorAll('.st:not(.show)').length===0){btn.textContent='↺ Ulangi dari awal';btn.classList.add('done');}
+   else{btn.textContent='Langkah Berikutnya →';}
+  }else{
+   box.querySelectorAll('.st').forEach(function(s){s.classList.remove('show');});
+   btn.textContent='Langkah Berikutnya →';btn.classList.remove('done');
+  }
+ };
+}
+/* ================= SLIDE 6: TAB CERITA ================= */
+function showTab(t){
+ document.querySelectorAll('.tab:not(.t2)').forEach(function(b,i){b.classList.toggle('on',i===t);});
+ $("storyT").innerHTML=fr(STORY[t].t);
+ var box=$("storySteps");
+ box.innerHTML=STORY[t].s.map(function(x,i){return '<div class="st"><span class="stn">Langkah '+(i+1)+'</span><span class="stt">'+nl(x)+'</span></div>';}).join('');
+ $("btnStory").textContent='Mulai Pembahasan →';
+ $("btnStory").classList.remove('done');
+}
+document.querySelectorAll('.tab:not(.t2)').forEach(function(b,i){b.onclick=function(){showTab(i);};});
+/* ================= SLIDE 7: MULTI-OPERASI ================= */
+function showEx(e){
+ document.querySelectorAll('.tab.t2').forEach(function(b,i){b.classList.toggle('on',i===e);});
+ $("exT").innerHTML=fr(MULTI[e].t);
+ $("exTag").textContent='2 operasi: '+MULTI[e].tag;
+ var box=$("exSteps");
+ box.innerHTML=MULTI[e].s.map(function(x,i){return '<div class="st"><span class="stn">Langkah '+(i+1)+'</span><span class="stt">'+nl(x)+'</span></div>';}).join('');
+ $("btnEx").textContent='Mulai Langkah →';
+ $("btnEx").classList.remove('done');
+}
+document.querySelectorAll('.tab.t2').forEach(function(b,i){b.onclick=function(){showEx(i);};});
+/* ================= LATIHAN ================= */
+var lst=[{cur:0,sel:null,ans:null},{cur:0,sel:null,ans:null}];
+lst[0].sel=Array(15).fill(null);lst[0].ans=Array(15).fill(null);
+lst[1].sel=Array(15).fill(null);lst[1].ans=Array(15).fill(null);
+function buildLDots(si){
+ var d=$('ldots'+si);d.innerHTML='';
+ for(var i=0;i<15;i++)(function(i){
+  var s=document.createElement('button');
+  s.className='ld';s.id='ld'+si+'_'+i;
+  s.onclick=function(){lst[si].cur=i;renderLat(si);};
+  d.appendChild(s);
+ })(i);
+}
+function renderLat(si){
+ var st=lst[si],q=LAT[si][st.cur],locked=st.ans[st.cur]!==null;
+ $('lcnt'+si).textContent='Soal '+(st.cur+1)+' / 15';
+ $('lq'+si).innerHTML=fr(q.q);
+ var box=$('lo'+si);box.innerHTML='';
+ q.o.forEach(function(o,i){
+  var b=document.createElement('button'),cls='opt';
+  if(locked){if(i===q.a)cls+=' ok';else if(st.sel[st.cur]===i)cls+=' bad';}
+  else if(st.sel[st.cur]===i)cls+=' sel';
+  b.className=cls;b.disabled=locked;b.innerHTML=fr(o);
+  b.onclick=function(){if(locked)return;st.sel[st.cur]=i;renderLat(si);};
+  box.appendChild(b);
+ });
+ var fb=$('lfb'+si),pm=$('lpm'+si),chk=$('lchk'+si);
+ clearTimeout(fb._t);
+ if(locked){
+  chk.style.display='none';
+  var ok=st.ans[st.cur];
+  fb.className='fb '+(ok?'ok':'no');
+  fb.innerHTML=ok?'Benar! ＋1 💎 🎉':'Belum tepat. －1 💎 😢';
+  fb.style.display='block';
+  pm.style.display='block';
+  pm.innerHTML='<b>Pembahasan:</b><br>'+nl(q.p);
+ }else{
+  chk.style.display='inline-flex';
+  fb.style.display='none';pm.style.display='none';
+ }
+ for(var i2=0;i2<15;i2++){
+  var e=$('ld'+si+'_'+i2);
+  e.className='ld'+(i2===st.cur?' cur':'')+(st.ans[i2]===true?' ok':(st.ans[i2]===false?' no':''));
+ }
+}
+function latNav(si,d){lst[si].cur=(lst[si].cur+d+15)%15;renderLat(si);}
+function latCheck(si){
+ var st=lst[si];
+ if(st.sel[st.cur]===null){flash($('lfb'+si),'Pilih dulu jawabanmu! 😉');return;}
+ var q=LAT[si][st.cur],ok=st.sel[st.cur]===q.a;
+ st.ans[st.cur]=ok;
+ dia[si]+=ok?1:-1;latD[si]+=ok?1:-1;
+ updHUD();renderLat(si);
+}
+$("lchk0").onclick=function(){latCheck(0);};
+$("lchk1").onclick=function(){latCheck(1);};
+$("lpr0").onclick=function(){latNav(0,-1);};
+$("lne0").onclick=function(){latNav(0,1);};
+$("lpr1").onclick=function(){latNav(1,-1);};
+$("lne1").onclick=function(){latNav(1,1);};
+/* ================= KUIS ================= */
+var TIER=[{n:'Mudah',v:1,cls:'tm'},{n:'Sedang',v:3,cls:'ts'},{n:'Sulit',v:5,cls:'th'}];
+var qz={ans:Array(15).fill(null),cur:[null,null],sel:[null,null],cho:null};
+function buildBoard(){
+ var b=$("qboard");b.innerHTML='';
+ QUIZ.forEach(function(q,k){
+  var t=TIER[q.d];
+  var el=document.createElement('button');
+  el.className='tile '+t.cls;el.id='tile'+k;
+  el.innerHTML='<span class="tn">'+(k+1)+'</span><span class="tv">+'+t.v+'</span>';
+  el.onclick=function(){pickTile(k);};
+  b.appendChild(el);
+ });
+}
+function setChooser(i){
+ qz.cho=(qz.cho===i?null:i);
+ $("pb0").classList.toggle('on',qz.cho===0);
+ $("pb1").classList.toggle('on',qz.cho===1);
+ $("pturn").innerHTML=qz.cho===null?'Pilih nama dulu, lalu nomor soal!':'Giliran <b>'+NAMES()[qz.cho]+'</b> — pilih nomor soal!';
+}
+$("pb0").onclick=function(){setChooser(0);};
+$("pb1").onclick=function(){setChooser(1);};
+function pickTile(k){
+ if(qz.ans[k]!==null){
+  var el=$('tile'+k);el.classList.remove('wig');void el.offsetWidth;el.classList.add('wig');
+  $('pturn').textContent='Nomor '+(k+1)+' sudah dijawab. Pilih nomor lain ya!';
+  return;
+ }
+ if(qz.cho===null){$('pturn').textContent='Pilih nama dulu di atas, lalu nomor soalnya!';return;}
+ var si=qz.cho;
+ qz.cur[si]=k;qz.sel[si]=null;
+ document.querySelectorAll('.tile.cur').forEach(function(t){t.classList.remove('cur');});
+ $('tile'+k).classList.add('cur');
+ renderQuiz(si);
+ $('pturn').innerHTML='<b>'+NAMES()[si]+'</b> mengerjakan nomor '+(k+1)+'. Setelah selesai, boleh langsung pilih nomor baru tanpa menunggu! 🚀';
+}
+function renderQuiz(si){
+ var k=qz.cur[si],badge=$('qb'+si),qq=$('qq'+si),box=$('qo'+si),chk=$('qchk'+si),fb=$('qfb'+si),pm=$('qpm'+si);
+ clearTimeout(fb._t);
+ if(k===null){
+  badge.className='badge';badge.textContent='⏳ Menunggu';
+  qq.innerHTML='<span class="dim">Belum ada soal. Tekan namamu di atas, lalu pilih nomor soal!</span>';
+  box.innerHTML='';chk.style.display='none';fb.style.display='none';pm.style.display='none';
+  return;
+ }
+ var q=QUIZ[k],t=TIER[q.d],locked=qz.ans[k]!==null;
+ badge.className='badge '+t.cls;badge.textContent=t.n+' · +'+t.v+' 💎';
+ qq.innerHTML=fr(q.q);
+ box.innerHTML='';
+ q.o.forEach(function(o,i){
+  var b=document.createElement('button'),cls='opt';
+  if(locked){if(i===q.a)cls+=' ok';else if(qz.sel[si]===i)cls+=' bad';}
+  else if(qz.sel[si]===i)cls+=' sel';
+  b.className=cls;b.disabled=locked;b.innerHTML=fr(o);
+  b.onclick=function(){if(locked)return;qz.sel[si]=i;renderQuiz(si);};
+  box.appendChild(b);
+ });
+ if(locked){
+  chk.style.display='none';
+  var ok=qz.ans[k];
+  fb.className='fb '+(ok?'ok':'no');
+  fb.innerHTML=ok?('Benar! ＋'+t.v+' 💎 🎉'):'Belum tepat 😢 (diamond tidak berkurang)';
+  fb.style.display='block';
+  pm.style.display='block';
+  pm.innerHTML='<b>Pembahasan:</b><br>'+nl(q.p);
+ }else{
+  chk.style.display='inline-flex';
+  fb.style.display='none';pm.style.display='none';
+ }
+}
+function quizCheck(si){
+ var k=qz.cur[si];
+ if(k===null)return;
+ if(qz.sel[si]===null){flash($('qfb'+si),'Pilih dulu jawabanmu! 😉');return;}
+ var q=QUIZ[k],t=TIER[q.d],ok=qz.sel[si]===q.a;
+ qz.ans[k]=ok;
+ if(ok){dia[si]+=t.v;qzD[si]+=t.v;}
+ updHUD();
+ var tl=$('tile'+k);tl.classList.remove('cur');tl.classList.add(ok?'done':'miss');
+ renderQuiz(si);
+ qz.cho=null;
+ $("pb0").classList.remove('on');$("pb1").classList.remove('on');
+ $('pturn').innerHTML=(ok?'Hebat! ':'')+'<b>'+NAMES()[si]+'</b> selesai nomor '+(k+1)+' — boleh langsung pilih soal berikutnya tanpa menunggu! 💎';
+}
+$("qchk0").onclick=function(){quizCheck(0);};
+$("qchk1").onclick=function(){quizCheck(1);};
+/* ================= GAME PENDINGINAN ================= */
+var gi=0,gs=0,gL=false;
+var OPN={'+':'＋ (tambah)','-':'－ (kurang)','×':'✕ (kali)'};
+function buildGDots(){
+ var d=$('gdots');d.innerHTML='';
+ for(var i=0;i<GAME.length;i++){var s=document.createElement('span');s.className='gd';s.id='gd'+i;d.appendChild(s);}
+}
+function gShow(){
+ $('gnum').textContent='Cerita '+(gi+1)+' / '+GAME.length;
+ $('gstory').innerHTML=fr(GAME[gi].s);
+ var fb=$('gfb');fb.className='gfb';fb.textContent='';
+ $('gnext').style.display='none';gL=false;
+ document.querySelectorAll('.opbtn').forEach(function(b){b.disabled=false;b.classList.remove('ok','bad');});
+ for(var i=0;i<GAME.length;i++){$('gd'+i).className='gd'+(i<gi?' did':'')+(i===gi?' cur':'');}
+}
+function gPick(op){
+ if(gL)return;gL=true;
+ var ok=op===GAME[gi].a;
+ if(ok)gs++;
+ $('gscore').textContent='Skor: '+gs;
+ document.querySelectorAll('.opbtn').forEach(function(b){
+  b.disabled=true;
+  if(b.getAttribute('data-op')===GAME[gi].a)b.classList.add('ok');
+  else if(b.getAttribute('data-op')===op)b.classList.add('bad');
+ });
+ var fb=$('gfb');
+ fb.className='gfb '+(ok?'ok':'no');
+ fb.innerHTML=ok?('Benar! Operasinya '+OPN[GAME[gi].a]+' 🎉'):('Hampir! Operasi yang tepat: '+OPN[GAME[gi].a]);
+ $('gnext').style.display='inline-flex';
+ $('gnext').textContent=(gi===GAME.length-1)?'Lihat Hasil 🏁':'Cerita Berikutnya →';
+}
+document.querySelectorAll('.opbtn').forEach(function(b){b.onclick=function(){gPick(b.getAttribute('data-op'));};});
+$("gnext").onclick=function(){
+ if(gi===GAME.length-1){
+  var msg=gs>=6?'Luar biasa! Operasi hitung pecahan sudah kamu kuasai! 🌟':(gs>=4?'Bagus sekali! Sedikit lagi sempurna. 👍':'Tidak apa-apa, yang penting sudah belajar sambil bermain! 😊');
+  var emo=gs>=6?'🏆':(gs>=4?'🎉':'💪');
+  $('gend').innerHTML='<div class="gemo">'+emo+'</div><h3>Skor akhir: '+gs+' / '+GAME.length+'</h3><p class="lead">'+msg+'</p><button class="btn btn-teal" id="gres2">Main Lagi ↺</button>';
+  $('gcard').style.display='none';
+  $('gmeta').style.display='none';
+  $('gend').style.display='flex';
+  $('gres2').onclick=gReset;
+ }else{gi++;gShow();}
+};
+function gReset(){
+ gi=0;gs=0;
+ $('gscore').textContent='Skor: 0';
+ $('gcard').style.display='flex';
+ $('gmeta').style.display='flex';
+ $('gend').style.display='none';
+ gShow();
+}
+/* ================= EXIT TICKET ================= */
+ET.forEach(function(q,i){
+ var box=$('et'+i);
+ box.querySelector('.etq').innerHTML=fr(q.q);
+ var ob=box.querySelector('.eto');ob.innerHTML='';
+ var done=false;
+ q.o.forEach(function(o,j){
+  var b=document.createElement('button');
+  b.className='opt sm';b.innerHTML=fr(o);
+  b.onclick=function(){
+   if(done)return;done=true;
+   var f=box.querySelector('.etf');
+   if(j===q.a){b.classList.add('ok');f.className='etf ok';f.innerHTML='✅ Benar! '+nl(q.p);}
+   else{b.classList.add('bad');f.className='etf no';f.innerHTML='❌ Belum tepat. '+nl(q.p);}
+   [].slice.call(ob.children).forEach(function(x){x.disabled=true;});
+  };
+  ob.appendChild(b);
+ });
+});
+var etStars=0;
+document.querySelectorAll('.emo').forEach(function(b){
+ b.onclick=function(){document.querySelectorAll('.emo').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');};
+});
+document.querySelectorAll('.star').forEach(function(b,i){
+ b.onclick=function(){
+  etStars=i+1;
+  document.querySelectorAll('.star').forEach(function(x,j){x.classList.toggle('on',j<etStars);});
+ };
+});
+$("etSend").onclick=function(){
+ var bn=$('etBanner');
+ bn.style.display='block';
+ bn.innerHTML='🎟️ Terima kasih sudah mengisi exit ticket! '+'⭐'.repeat(etStars);
+};
+/* ================= REFLEKSI ================= */
+document.querySelectorAll('.chips').forEach(function(row){
+ row.querySelectorAll('.chipb').forEach(function(b){
+  b.onclick=function(){row.querySelectorAll('.chipb').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');};
+ });
+});
+/* ================= INIT ================= */
+frAll('.eq');
+frAll('.stt:not(.nofr)');
+frAll('#pmList li');
+frAll('.con p');
+makeSegs('barAdd',6);makeSegs('barSub',8);makeSegs('barC',4);makeSegs('barD',4);
+makeCells('agrid',6,'ac');
+barAddRender();barSubRender();barCRender();barDRender();
+platesRender();gridRender();
+buildLDots(0);buildLDots(1);renderLat(0);renderLat(1);
+buildBoard();renderQuiz(0);renderQuiz(1);
+buildGDots();gShow();
+showTab(0);showEx(0);
+bindSteps('btnStory','storySteps');
+bindSteps('btnEx','exSteps');
+bindSteps('bMc','stepsMc');
+applyNames();updHUD();
+renderDots();goTo(0);
+</script>
+</body>
+</html>
