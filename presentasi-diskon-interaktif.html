@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Diskon — Presentasi Interaktif Matematika Persen</title>
+<style>
+:root{
+  --ink:#1e293b; --body:#334155; --muted:#64748b; --line:#e2e8f0;
+  --blue:#2563eb; --blue-deep:#1e40af; --blue-soft:#dbeafe;
+  --green:#059669; --green-deep:#065f46; --green-soft:#d1fae5;
+  --amber:#d97706; --amber-deep:#92400e; --amber-soft:#fef3c7;
+  --violet:#7c3aed; --violet-deep:#5b21b6; --violet-soft:#ede9fe;
+  --accent:#2563eb; --accent-deep:#1e40af; --accent-soft:#dbeafe;
+  --ok:#16a34a; --no:#dc2626;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  font-family:'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color:var(--ink); min-height:100vh;
+  background:
+    radial-gradient(1000px 500px at 85% -10%, #ede9fe 0%, transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, #e0f2fe 0%, transparent 55%),
+    linear-gradient(160deg, #eef2ff, #fdf4ff);
+}
+.deck{max-width:1060px; margin:0 auto; padding:26px 20px 116px}
+.slide{display:none; background:#fff; border-radius:24px; box-shadow:0 20px 60px rgba(51,65,85,.14);
+  padding:42px 48px; min-height:min(660px, calc(100vh - 160px)); flex-direction:column; gap:18px;
+  position:relative; overflow:hidden}
+.slide.active{display:flex; animation:slideIn .45s ease both}
+@keyframes slideIn{from{opacity:0; transform:translateX(26px)} to{opacity:1; transform:none}}
+.slide::before{content:''; position:absolute; width:190px; height:190px; border-radius:50%;
+  background:var(--accent-soft); opacity:.5; top:-80px; right:-70px; pointer-events:none}
+.slide>*{position:relative; z-index:1}
+.hidden{display:none !important}
+h1{font-size:33px; line-height:1.3}
+h2{font-size:25px; line-height:1.35}
+h3{font-size:18.5px}
+p, li{font-size:16px; line-height:1.7; color:var(--body)}
+b{color:inherit}
+.lead{color:var(--muted); font-size:16.5px}
+.muted{color:var(--muted)}
+.kicker{font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:12.5px; color:var(--accent)}
+.badge{display:inline-flex; align-items:center; gap:6px; background:var(--accent-soft); color:var(--accent-deep);
+  padding:6px 14px; border-radius:999px; font-weight:800; font-size:13px; width:max-content}
+.theme-cover{--accent:#4f46e5; --accent-deep:#3730a3; --accent-soft:#e0e7ff}
+.theme-t1{--accent:#2563eb; --accent-deep:#1e40af; --accent-soft:#dbeafe}
+.theme-t2{--accent:#059669; --accent-deep:#065f46; --accent-soft:#d1fae5}
+.theme-t3{--accent:#d97706; --accent-deep:#92400e; --accent-soft:#fef3c7}
+.theme-t4{--accent:#7c3aed; --accent-deep:#5b21b6; --accent-soft:#ede9fe}
+
+/* Tombol */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--accent); color:#fff;
+  border:none; padding:11px 22px; border-radius:12px; font-size:15.5px; font-weight:700; cursor:pointer;
+  transition:.18s; font-family:inherit}
+.btn:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(30,41,59,.18); filter:brightness(1.06)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.55; cursor:default; transform:none; box-shadow:none}
+.btn.ghost{background:transparent; color:var(--accent-deep); border:2px solid var(--accent)}
+.btn.ghost:hover{background:var(--accent-soft)}
+.btn.soft{background:var(--accent-soft); color:var(--accent-deep)}
+.btn.soft:hover{filter:none; background:var(--accent-soft); box-shadow:0 6px 14px rgba(30,41,59,.12)}
+.btn.small{padding:8px 15px; font-size:14px; border-radius:10px}
+.btn.light{background:#fff; color:#4338ca}
+.btn.light:hover{box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
+/* Komponen materi */
+.concept{background:#f8fafc; border-left:5px solid var(--accent); border-radius:12px; padding:15px 20px}
+.concept p{margin:0}
+.formula-card{background:linear-gradient(135deg, var(--accent-soft), #fff); border:2px dashed var(--accent);
+  border-radius:16px; padding:16px 22px; text-align:center; display:flex; flex-direction:column; gap:6px}
+.formula{font-size:20px; font-weight:800; color:var(--accent-deep)}
+.formula-note{font-size:14px; color:var(--muted)}
+.steps{list-style:none; display:flex; flex-direction:column; gap:9px; counter-reset:langkah}
+.steps li{counter-increment:langkah; display:flex; gap:12px; align-items:flex-start; background:#f8fafc;
+  padding:11px 16px; border-radius:12px; line-height:1.6}
+.steps li::before{content:counter(langkah); flex:0 0 28px; height:28px; border-radius:50%; background:var(--accent);
+  color:#fff; font-weight:800; display:grid; place-items:center; font-size:14px; margin-top:3px}
+.tip, .warn{border-radius:12px; padding:13px 18px; display:flex; gap:10px; font-size:15.5px; line-height:1.6; align-items:flex-start}
+.tip{background:#fffbeb; border:1.5px solid #fcd34d}
+.tip span, .warn span{color:var(--body)}
+.warn{background:#fef2f2; border:1.5px solid #fca5a5}
+.tip b, .warn b{color:var(--ink)}
+.grid2{display:grid; grid-template-columns:1.1fr 1fr; gap:16px; align-items:start}
+table.tbl{border-collapse:collapse; width:100%; font-size:15px}
+.tbl th{background:var(--accent-soft); color:var(--accent-deep)}
+.tbl th, .tbl td{border:1px solid var(--line); padding:7px 10px; text-align:center}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+
+/* Contoh soal */
+.ex-card{background:#f8fafc; border:1.5px solid var(--line); border-radius:16px; padding:18px 22px;
+  display:flex; flex-direction:column; gap:12px}
+.ex-card>h3{color:var(--accent-deep)}
+.ex-q{font-size:16.5px; background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px 16px}
+.guided{display:flex; flex-direction:column; gap:10px}
+.gstep{background:#eef2f7; border-radius:14px; padding:12px 18px; animation:fadeUp .4s ease both; line-height:1.65}
+.gstep .glabel{font-size:12px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px}
+.gstep .calc{font-size:18px; font-weight:800; color:var(--ink); background:#fff; border-radius:10px;
+  padding:8px 14px; display:inline-block; margin-top:4px}
+.gstep.result{background:linear-gradient(135deg, var(--accent-soft), #fff); border:2px solid var(--accent)}
+@keyframes fadeUp{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+
+/* Pemeriksa jawaban */
+.ans-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.ans-row input{flex:0 0 210px; padding:11px 14px; border:2px solid var(--line); border-radius:12px;
+  font-size:17px; font-weight:700; outline:none; transition:.15s; font-family:inherit; color:var(--ink)}
+.ans-row input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.ans-row input:disabled{background:#f1f5f9; color:var(--accent-deep)}
+.unit{font-weight:800; font-size:17px; color:var(--muted)}
+.feedback{display:none; padding:12px 16px; border-radius:12px; font-weight:700; margin-top:12px; line-height:1.55}
+.feedback.show{display:block; animation:fadeUp .3s both}
+.feedback.ok{background:#dcfce7; color:#166534; border:1.5px solid #86efac}
+.feedback.no{background:#fee2e2; color:#991b1b; border:1.5px solid #fca5a5}
+.feedback.no.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}}
+.pembahasan{background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:14px; padding:15px 20px; margin-top:14px;
+  animation:fadeUp .35s both}
+.pembahasan h4{color:#1d4ed8; margin-bottom:8px; font-size:16px}
+.pembahasan ol{margin-left:22px; display:flex; flex-direction:column; gap:7px}
+.pembahasan .final{margin-top:10px; background:#dcfce7; color:#166534; font-weight:800; padding:9px 14px;
+  border-radius:10px; display:inline-block}
+
+/* Latihan soal */
+.latihan-mount{display:flex; flex-direction:column; gap:14px; flex:1}
+.lat-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap}
+.lat-head .lead{font-size:15px}
+.skor-chip{background:var(--accent-soft); color:var(--accent-deep); font-weight:800; padding:9px 18px;
+  border-radius:999px; white-space:nowrap; font-size:15px}
+.dots{display:flex; gap:8px; flex-wrap:wrap}
+.dot{width:36px; height:36px; border-radius:50%; border:2px solid var(--line); background:#fff; font-weight:800;
+  font-size:14px; cursor:pointer; transition:.15s; color:var(--muted); font-family:inherit}
+.dot:hover{transform:scale(1.12)}
+.dot.cur{border-color:var(--accent); color:var(--accent-deep); box-shadow:0 0 0 3px var(--accent-soft)}
+.dot.done{background:#22c55e; border-color:#22c55e; color:#fff}
+.dot.seen{background:#f59e0b; border-color:#f59e0b; color:#fff}
+.lat-card{background:#f8fafc; border:1.5px solid var(--line); border-radius:16px; padding:18px 24px;
+  display:flex; flex-direction:column; gap:13px}
+.soal-tag{font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--accent)}
+.lat-nav{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+
+/* Sampul */
+.slide.cover{background:linear-gradient(135deg, #4338ca 0%, #7c3aed 55%, #db2777 110%); color:#fff;
+  align-items:center; justify-content:center; text-align:center; gap:18px}
+.slide.cover::before{width:240px; height:240px; background:rgba(255,255,255,.08); top:-70px; right:-70px}
+.slide.cover::after{content:''; position:absolute; width:170px; height:170px; border-radius:50%;
+  background:rgba(255,255,255,.07); bottom:-60px; left:-50px; pointer-events:none}
+.cover .big{font-size:62px; line-height:1}
+.cover .kicker{color:#c7d2fe}
+.cover h1{color:#fff; font-size:40px}
+.cover>p{color:#e0e7ff; font-size:17.5px; max-width:640px}
+.cover .stats{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
+.cover .stat{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.32); padding:9px 18px;
+  border-radius:999px; font-weight:700; font-size:14px; color:#fff}
+.cover .hint{font-size:13px; color:#c7d2fe}
+
+/* Menu */
+.menu-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:16px}
+.menu-card{border:2px solid var(--line); border-radius:16px; padding:18px 20px; cursor:pointer; transition:.18s;
+  display:flex; flex-direction:column; gap:7px; background:#fff; text-align:left; font-family:inherit}
+.menu-card:hover{transform:translateY(-4px); box-shadow:0 12px 26px rgba(15,23,42,.14); border-color:var(--mc)}
+.menu-card .ic{font-size:30px}
+.menu-card h3{color:var(--mc); font-size:17px}
+.menu-card p{font-size:14px; color:var(--muted); line-height:1.55}
+.menu-card .go{font-weight:800; color:var(--mc); font-size:14px; margin-top:auto}
+
+/* Rangkuman */
+.sum-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:14px}
+.sum-card{border:2px solid var(--line); border-radius:16px; padding:15px 18px; display:flex; flex-direction:column; gap:9px}
+.sum-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.sum-top h3{font-size:15.5px}
+.sum-top .n{font-weight:800; font-size:17px; color:var(--mc); white-space:nowrap}
+.sum-card .frm{font-size:13.5px; color:var(--muted); line-height:1.55}
+.bar{height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden}
+.bar>i{display:block; height:100%; width:0%; background:var(--mc); border-radius:99px; transition:width .5s}
+.sum-msg{background:linear-gradient(135deg, #eef2ff, #fdf4ff); border:1.5px solid #c7d2fe; border-radius:14px;
+  padding:16px 20px; font-size:16px; line-height:1.6}
+
+/* Navigasi bawah + progress */
+.navbar{position:fixed; left:50%; transform:translateX(-50%); bottom:14px; z-index:50;
+  background:rgba(255,255,255,.94); backdrop-filter:blur(8px); border:1px solid var(--line);
+  border-radius:999px; box-shadow:0 10px 30px rgba(15,23,42,.25); display:flex; align-items:center;
+  gap:6px; padding:8px 12px}
+.navbtn{width:42px; height:42px; border-radius:50%; border:none; background:#4f46e5; color:#fff; font-size:16px;
+  cursor:pointer; transition:.15s; font-weight:800; font-family:inherit}
+.navbtn:hover{transform:scale(1.1)}
+.navbtn:disabled{opacity:.35; cursor:default; transform:none}
+.navbtn.menu{background:#475569}
+#slideCount{min-width:66px; text-align:center; font-weight:800; font-size:14px; color:#475569}
+.progress{position:fixed; top:0; left:0; right:0; height:6px; background:rgba(255,255,255,.65); z-index:60}
+#progressFill{height:100%; width:0%; background:linear-gradient(90deg, #4f46e5, #a855f7, #ec4899); transition:width .35s}
+
+/* Overlay daftar slide */
+.overlay{position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:70; display:none;
+  align-items:center; justify-content:center; padding:20px}
+.overlay.open{display:flex}
+.overlay-panel{background:#fff; border-radius:20px; max-width:540px; width:100%; max-height:82vh; overflow:auto;
+  padding:22px 26px}
+.overlay-panel h3{margin-bottom:12px; font-size:19px}
+.ol-item{display:flex; gap:10px; align-items:center; width:100%; text-align:left; background:#f8fafc;
+  border:1.5px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:8px; cursor:pointer;
+  font-family:inherit; font-size:14.5px; font-weight:600; color:var(--body); transition:.15s}
+.ol-item:hover{border-color:#4f46e5; background:#eef2ff}
+.ol-item.cur{border-color:#4f46e5; background:#e0e7ff; color:#3730a3}
+.ol-item .n{flex:0 0 26px; height:26px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center;
+  font-size:12.5px; font-weight:800; color:#475569}
+.ol-item.cur .n{background:#4f46e5; color:#fff}
+
+@media(max-width:760px){
+  .slide{padding:26px 20px}
+  h1{font-size:27px} .cover h1{font-size:30px} h2{font-size:22px}
+  .menu-grid, .sum-grid, .grid2{grid-template-columns:1fr}
+  .ans-row input{flex-basis:150px}
+  .formula{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="progress"><div id="progressFill"></div></div>
+<main class="deck">
+<!-- ============ SLIDE 0: SAMPUL ============ -->
+<section class="slide cover theme-cover" data-label="🏠 Sampul">
+  <div class="big">💰</div>
+  <p class="kicker">Media Belajar Interaktif · Matematika Persen</p>
+  <h1>Petualangan Diskon: Jago Hitung Belanja!</h1>
+  <p>Empat keterampilan wajib soal diskon: menghitung <b>potongan harga</b>, mencari <b>harga asli</b>, menentukan <b>persentase diskon</b>, dan memecahkan <b>diskon berganda</b> — lengkap dengan contoh soal interaktif, latihan, dan pembahasan.</p>
+  <div class="stats">
+    <span class="stat">📚 4 Materi</span>
+    <span class="stat">🧩 8 Contoh Soal Interaktif</span>
+    <span class="stat">✏️ 40 Latihan Soal</span>
+    <span class="stat">✅ Cek Jawaban + Pembahasan</span>
+  </div>
+  <button class="btn light" data-go="1">Mulai Belajar ▶</button>
+  <p class="hint">Tips: gunakan tombol ◀ ▶ pada keyboard atau di bagian bawah layar untuk berpindah slide.</p>
+</section>
+
+<!-- ============ SLIDE 1: DAFTAR MATERI ============ -->
+<section class="slide" data-label="📚 Daftar Materi">
+  <span class="badge">🗺️ Peta Petualangan</span>
+  <h2>Apa Saja yang Akan Kita Pelajari?</h2>
+  <p class="lead">Empat materi di bawah ini adalah keterampilan dasar untuk menguasai soal diskon di kemudian hari. Urutan terbaiknya: pelajari materi → ikuti contoh soal interaktif → kerjakan 10 latihan soal sambil mengecek jawabanmu. Skor latihanmu akan tercatat otomatis di slide terakhir!</p>
+  <div class="menu-grid">
+    <button class="menu-card" style="--mc:#2563eb" data-go="2">
+      <span class="ic">🏷️</span>
+      <h3>Materi 1 · Menentukan Potongan Harga (Diskon)</h3>
+      <p>Diketahui harga asli dan persen diskon → hitung besar potongan dalam rupiah.</p>
+      <span class="go">Mulai materi ▶</span>
+    </button>
+    <button class="menu-card" style="--mc:#059669" data-go="5">
+      <span class="ic">🔍</span>
+      <h3>Materi 2 · Menentukan Harga Asli Berdasarkan Diskon</h3>
+      <p>Diketahui harga bayar setelah diskon → telusuri balik harga asli barang.</p>
+      <span class="go">Mulai materi ▶</span>
+    </button>
+    <button class="menu-card" style="--mc:#d97706" data-go="8">
+      <span class="ic">📊</span>
+      <h3>Materi 3 · Menentukan Persentase Diskon</h3>
+      <p>Diketahui harga asli dan besar potongan → hitung berapa persen diskonnya.</p>
+      <span class="go">Mulai materi ▶</span>
+    </button>
+    <button class="menu-card" style="--mc:#7c3aed" data-go="11">
+      <span class="ic">🧮</span>
+      <h3>Materi 4 · Harga Barang dari Diskon Berganda</h3>
+      <p>Diskon berlapis seperti 20% + 10% → hitung harga akhirnya dengan benar.</p>
+      <span class="go">Mulai materi ▶</span>
+    </button>
+  </div>
+  <div class="tip">💡 <span><b>Aturan main latihan:</b> ketik jawabanmu pada kotak isian, tekan tombol <b>Cek Jawaban</b>. Jika belum tepat, perbaiki hitunganmu; jika masih bingung, buka <b>Lihat Pembahasan</b> untuk melihat langkah penyelesaian lengkapnya.</span></div>
+</section>
+
+<!-- ============ SLIDE 2: MATERI 1 - PENJELASAN ============ -->
+<section class="slide theme-t1" data-label="M1 · Materi: Potongan Harga">
+  <span class="badge">🏷️ Materi 1</span>
+  <h2>Menentukan Potongan Harga (Diskon)</h2>
+  <div class="concept">
+    <p><b>Apa itu diskon?</b> Diskon (potongan harga) adalah pengurangan harga yang diberikan toko dari harga normal sebuah barang. Besar diskon biasanya ditulis dalam <b>persen</b> — tulisan <i>"DISKON 20%"</i> artinya harga dipotong 20 dari setiap 100 bagian harga asli, sehingga kamu hanya perlu membayar 80% dari harga tersebut.</p>
+  </div>
+  <div class="formula-card">
+    <div class="formula">Potongan = Persentase Diskon × Harga Asli</div>
+    <div class="formula">Harga Bayar = Harga Asli − Potongan</div>
+    <div class="formula-note">Contoh cepat: diskon 20% dari Rp100.000 → potongan = 20% × 100.000 = Rp20.000, harga bayar = Rp80.000</div>
+  </div>
+  <h3>🔧 Langkah Mudah Menghitung Potongan</h3>
+  <ol class="steps">
+    <li><span><b>Ubah persen menjadi desimal</b> dengan cara membaginya dengan 100. Contoh: 25% = 25 ÷ 100 = 0,25.</span></li>
+    <li><span><b>Kalikan harga asli dengan desimal tersebut.</b> Hasilnya adalah besar potongan dalam rupiah.</span></li>
+    <li><span><b>Kurangi harga asli dengan potongan</b> apabila soal juga menanyakan harga yang harus dibayar.</span></li>
+  </ol>
+  <div class="grid2">
+    <table class="tbl">
+      <tr><th>Persen</th><th>Desimal</th><th>Persen</th><th>Desimal</th></tr>
+      <tr><td>10%</td><td>0,1</td><td>40%</td><td>0,4</td></tr>
+      <tr><td>15%</td><td>0,15</td><td>50%</td><td>0,5</td></tr>
+      <tr><td>20%</td><td>0,2</td><td>75%</td><td>0,75</td></tr>
+    </table>
+    <div class="tip">💡 <span><b>Ingat!</b> Diskon 50% = setengah harga, dan diskon 100% = gratis (bayar Rp0). Cara lain berpikir: diskon 20% artinya kamu <b>membayar 80%</b> (100% − 20%) dari harga asli.</span></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: MATERI 1 - CONTOH SOAL ============ -->
+<section class="slide theme-t1" data-label="M1 · Contoh Soal Interaktif">
+  <span class="badge">🧩 Contoh Soal · Materi 1</span>
+  <h2>Ayo Berlatih Bersama!</h2>
+  <p class="lead">Ikuti contoh pertama langkah demi langkah (klik tombolnya), lalu kerjakan contoh kedua dengan jawabanmu sendiri.</p>
+  <div class="ex-card">
+    <h3>Contoh 1 — Ikuti langkahnya bertahap 🐢</h3>
+    <p class="ex-q">Sebuah tas dijual seharga <b>Rp120.000</b>. Toko memberikan diskon <b>25%</b>. Berapa rupiah besar potongan harganya?</p>
+    <div class="guided" data-guided>
+      <div class="gstep" data-step>
+        <div class="glabel">Langkah 1 · Tulis yang diketahui</div>
+        Harga asli = <b>Rp120.000</b> dan diskon = <b>25%</b>.
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 2 · Ubah persen menjadi desimal</div>
+        25% = 25 ÷ 100 = <b>0,25</b>
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 3 · Hitung potongan</div>
+        <span class="calc">Potongan = 0,25 × 120.000 = 30.000</span>
+      </div>
+      <div class="gstep hidden result" data-step>
+        <div class="glabel">Kesimpulan ✨</div>
+        Besar potongan harga tas adalah <b>Rp30.000</b>. Harga yang harus dibayar = 120.000 − 30.000 = <b>Rp90.000</b>.
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-next-step>Mulai: Tampilkan Langkah 1 ▶</button>
+        <button class="btn ghost" data-show-all>Tampilkan semua</button>
+      </div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h3>Contoh 2 — Sekarang giliranmu! 💪</h3>
+    <div data-contoh="t1"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: MATERI 1 - LATIHAN ============ -->
+<section class="slide theme-t1" data-label="M1 · 10 Latihan Soal">
+  <div class="latihan-mount" data-latihan="t1"></div>
+</section>
+<!-- ============ SLIDE 5: MATERI 2 - PENJELASAN ============ -->
+<section class="slide theme-t2" data-label="M2 · Materi: Harga Asli">
+  <span class="badge">🔍 Materi 2</span>
+  <h2>Menentukan Harga Asli Berdasarkan Diskon</h2>
+  <div class="concept">
+    <p>Pernah melihat keterangan <i>"harga setelah diskon 20%: Rp96.000"</i> lalu bertanya-tanya berapa harga barang sebelum dipotong? Materi ini mengajarkan kita <b>berhitung mundur</b>: dari harga bayar dan besar diskon, kita menelusuri kembali harga asli barang seperti detektif yang membaca petunjuk!</p>
+  </div>
+  <div class="formula-card">
+    <div class="formula">Harga Asli = Harga Bayar ÷ Persen yang Dibayar</div>
+    <div class="formula-note">Persen yang dibayar = 100% − diskon, ditulis dalam desimal. Diskon 20% → kamu membayar 80% = 0,8, sehingga harga asli = harga bayar ÷ 0,8</div>
+  </div>
+  <div class="concept">
+    <p><b>Mengapa dibagi?</b> Karena harga bayar adalah <i>hasil perkalian</i>: Harga Bayar = Persen Bayar × Harga Asli. Perkalian dan pembagian saling membalik — jika 0,8 × harga asli menghasilkan harga bayar, maka untuk "membuka" harga asli kita membagi harga bayar dengan 0,8.</p>
+  </div>
+  <h3>🔧 Langkah Mudah Mencari Harga Asli</h3>
+  <ol class="steps">
+    <li><span><b>Hitung persen yang dibayar:</b> 100% − diskon. Contoh: diskon 25% → yang dibayar 75%.</span></li>
+    <li><span><b>Ubah ke bentuk desimal:</b> 75% = 75 ÷ 100 = 0,75.</span></li>
+    <li><span><b>Bagi harga bayar dengan desimal tersebut</b> → diperoleh harga asli barang.</span></li>
+    <li><span><b>Periksa kembali:</b> harga asli × persen bayar harus menghasilkan harga bayar semula. ✔</span></li>
+  </ol>
+  <div class="tip">💡 <span><b>Ingat!</b> Harga asli <u>selalu lebih besar</u> dari harga bayar (untuk diskon biasa). Jika hasil hitunganmu justru lebih kecil dari harga bayar, hampir pasti ada langkah yang terbalik — periksa lagi!</span></div>
+</section>
+
+<!-- ============ SLIDE 6: MATERI 2 - CONTOH SOAL ============ -->
+<section class="slide theme-t2" data-label="M2 · Contoh Soal Interaktif">
+  <span class="badge">🧩 Contoh Soal · Materi 2</span>
+  <h2>Ayo Berlatih Bersama!</h2>
+  <p class="lead">Klik tombol untuk membuka langkah penyelesaian contoh pertama, lalu uji kemampuanmu pada contoh kedua.</p>
+  <div class="ex-card">
+    <h3>Contoh 1 — Ikuti langkahnya bertahap 🐢</h3>
+    <p class="ex-q">Setelah diskon <b>25%</b>, Rina membayar <b>Rp150.000</b> untuk sebuah dompet. Berapa harga asli dompet sebelum diskon?</p>
+    <div class="guided" data-guided>
+      <div class="gstep" data-step>
+        <div class="glabel">Langkah 1 · Tulis yang diketahui</div>
+        Harga bayar = <b>Rp150.000</b>, diskon = <b>25%</b>. Persen yang dibayar = 100% − 25% = <b>75%</b>.
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 2 · Ubah ke desimal</div>
+        75% = 75 ÷ 100 = <b>0,75</b>
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 3 · Bagi harga bayar dengan 0,75</div>
+        <span class="calc">Harga asli = 150.000 ÷ 0,75 = 200.000</span>
+      </div>
+      <div class="gstep hidden result" data-step>
+        <div class="glabel">Kesimpulan ✨</div>
+        Harga asli dompet adalah <b>Rp200.000</b>. Periksa: 25% × 200.000 = 50.000, lalu 200.000 − 50.000 = 150.000 ✔ (sesuai harga bayar!)
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-next-step>Mulai: Tampilkan Langkah 1 ▶</button>
+        <button class="btn ghost" data-show-all>Tampilkan semua</button>
+      </div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h3>Contoh 2 — Sekarang giliranmu! 💪</h3>
+    <div data-contoh="t2"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: MATERI 2 - LATIHAN ============ -->
+<section class="slide theme-t2" data-label="M2 · 10 Latihan Soal">
+  <div class="latihan-mount" data-latihan="t2"></div>
+</section>
+
+<!-- ============ SLIDE 8: MATERI 3 - PENJELASAN ============ -->
+<section class="slide theme-t3" data-label="M3 · Materi: Persentase Diskon">
+  <span class="badge">📊 Materi 3</span>
+  <h2>Menentukan Persentase Diskon</h2>
+  <div class="concept">
+    <p>Sekarang kita mengerjakan kebalikan Materi 1: harga asli dan besar potongan <u>sudah diketahui</u>, tetapi tokonya lupa menempel tulisan diskon! Tugas kita menghitung <b>berapa persen</b> diskon tersebut. Persentase diskon adalah perbandingan antara besar potongan dan harga asli, dinyatakan dalam bentuk persen.</p>
+  </div>
+  <div class="formula-card">
+    <div class="formula">Persen Diskon = (Potongan ÷ Harga Asli) × 100%</div>
+    <div class="formula-note">Jika potongan belum diketahui, cari dulu: Potongan = Harga Asli − Harga Bayar</div>
+  </div>
+  <h3>🔧 Langkah Mudah Mencari Persen Diskon</h3>
+  <ol class="steps">
+    <li><span><b>Cari besar potongan</b> apabila belum diketahui: harga asli − harga bayar.</span></li>
+    <li><span><b>Bagi potongan dengan harga asli</b> → hasilnya berupa desimal, misalnya 0,25.</span></li>
+    <li><span><b>Kalikan 100 dan beri tanda %</b> → 0,25 × 100% = 25%. Itulah persentase diskonnya.</span></li>
+  </ol>
+  <div class="concept">
+    <p><b>Perhatikan polanya:</b> di Materi 1 kita <i>mengalikan</i> harga asli dengan persen untuk mendapat potongan; di sini kita <i>membagi</i> potongan dengan harga asli untuk mendapat persen. Dua operasi ini saling membalik, sama seperti perkalian dan pembagian.</p>
+  </div>
+  <div class="tip">💡 <span><b>Ingat!</b> Persen diskon barang yang sedang promosi selalu berada di antara 0% sampai 100%. Kalau hasil perhitunganmu lebih dari 100% atau negatif, pasti ada hitungan yang keliru!</span></div>
+</section>
+
+<!-- ============ SLIDE 9: MATERI 3 - CONTOH SOAL ============ -->
+<section class="slide theme-t3" data-label="M3 · Contoh Soal Interaktif">
+  <span class="badge">🧩 Contoh Soal · Materi 3</span>
+  <h2>Ayo Berlatih Bersama!</h2>
+  <p class="lead">Buka langkah penyelesaian contoh pertama satu per satu, lalu jawab contoh kedua dengan perhitunganmu sendiri.</p>
+  <div class="ex-card">
+    <h3>Contoh 1 — Ikuti langkahnya bertahap 🐢</h3>
+    <p class="ex-q">Harga asli sebuah buku <b>Rp80.000</b>. Saat promo, harganya dipotong <b>Rp20.000</b>. Berapa persen diskon yang diberikan?</p>
+    <div class="guided" data-guided>
+      <div class="gstep" data-step>
+        <div class="glabel">Langkah 1 · Tulis yang diketahui</div>
+        Harga asli = <b>Rp80.000</b>, besar potongan = <b>Rp20.000</b>.
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 2 · Bagi potongan dengan harga asli</div>
+        <span class="calc">20.000 ÷ 80.000 = 0,25</span>
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 3 · Ubah desimal menjadi persen</div>
+        0,25 × 100% = <b>25%</b>
+      </div>
+      <div class="gstep hidden result" data-step>
+        <div class="glabel">Kesimpulan ✨</div>
+        Diskon yang diberikan toko adalah <b>25%</b>. Periksa: 25% × 80.000 = 20.000 ✔ (sesuai besar potongan!)
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-next-step>Mulai: Tampilkan Langkah 1 ▶</button>
+        <button class="btn ghost" data-show-all>Tampilkan semua</button>
+      </div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h3>Contoh 2 — Sekarang giliranmu! 💪</h3>
+    <div data-contoh="t3"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10: MATERI 3 - LATIHAN ============ -->
+<section class="slide theme-t3" data-label="M3 · 10 Latihan Soal">
+  <div class="latihan-mount" data-latihan="t3"></div>
+</section>
+<!-- ============ SLIDE 11: MATERI 4 - PENJELASAN ============ -->
+<section class="slide theme-t4" data-label="M4 · Materi: Diskon Berganda">
+  <span class="badge">🧮 Materi 4</span>
+  <h2>Harga Barang dari Diskon Berganda</h2>
+  <div class="concept">
+    <p>Toko sering menggandakan promonya: <i>"DISKON 20% + 10%!"</i> Ini disebut <b>diskon berganda</b> — dua atau lebih diskon yang bekerja <b>berurutan</b> pada satu barang. Diskon pertama memotong harga asli, kemudian diskon kedua memotong <u>harga baru</u> yang sudah lebih murah hasil diskon pertama, dan seterusnya.</p>
+  </div>
+  <div class="warn">⚠️ <span><b>Awas jebakan!</b> Diskon 20% + 10% <b>BUKAN</b> diskon 30%. Karena diskon kedua dihitung dari harga yang sudah lebih kecil, diskon 20% + 10% ternyata hanya setara dengan diskon tunggal <b>28%</b>. Kita akan membuktikannya di contoh soal!</span></div>
+  <div class="formula-card">
+    <div class="formula">Harga Akhir = Harga Asli × (1 − d₁) × (1 − d₂) × …</div>
+    <div class="formula-note">d₁, d₂, … = diskon pertama, kedua, dst. dalam desimal. Contoh: diskon 20% + 10% → harga akhir = harga asli × 0,8 × 0,9</div>
+  </div>
+  <h3>🔧 Langkah Mudah Menghitung Diskon Berganda</h3>
+  <ol class="steps">
+    <li><span><b>Terapkan diskon pertama</b> pada harga asli → diperoleh harga pertama (setelah diskon 1).</span></li>
+    <li><span><b>Terapkan diskon kedua pada harga pertama</b> — bukan pada harga asli! → diperoleh harga kedua.</span></li>
+    <li><span><b>Lanjutkan langkah yang sama</b> jika masih ada diskon berikutnya. Hasil terakhir itulah harga akhir.</span></li>
+  </ol>
+  <div class="tip">💡 <span><b>Cara kilat:</b> kalikan langsung semua faktornya. Diskon 20% + 10% pada Rp200.000 → 200.000 × 0,8 × 0,9 = 144.000. Total potongan Rp56.000, setara diskon tunggal 28% — bukan 30%!</span></div>
+</section>
+
+<!-- ============ SLIDE 12: MATERI 4 - CONTOH SOAL ============ -->
+<section class="slide theme-t4" data-label="M4 · Contoh Soal Interaktif">
+  <span class="badge">🧩 Contoh Soal · Materi 4</span>
+  <h2>Ayo Berlatih Bersama!</h2>
+  <p class="lead">Ikuti contoh pertama untuk membuktikan bahwa 20% + 10% bukan 30%, lalu kerjakan contoh kedua sendiri.</p>
+  <div class="ex-card">
+    <h3>Contoh 1 — Ikuti langkahnya bertahap 🐢</h3>
+    <p class="ex-q">Harga sebuah sepeda <b>Rp200.000</b>. Toko mengadakan promo diskon ganda <b>20% + 10%</b>. Berapa harga akhir sepeda tersebut?</p>
+    <div class="guided" data-guided>
+      <div class="gstep" data-step>
+        <div class="glabel">Langkah 1 · Terapkan diskon pertama (20%)</div>
+        <span class="calc">20% × 200.000 = 40.000 → harga menjadi 200.000 − 40.000 = 160.000</span>
+      </div>
+      <div class="gstep hidden" data-step>
+        <div class="glabel">Langkah 2 · Terapkan diskon kedua (10%) dari harga 160.000</div>
+        <span class="calc">10% × 160.000 = 16.000 → harga menjadi 160.000 − 16.000 = 144.000</span>
+      </div>
+      <div class="gstep hidden result" data-step>
+        <div class="glabel">Kesimpulan ✨</div>
+        Harga akhir sepeda adalah <b>Rp144.000</b>. Total potongan = 200.000 − 144.000 = Rp56.000, setara diskon tunggal <b>28%</b> — bukan 30%! Kalau dihitung dengan 30%, hasilnya Rp140.000 (salah!). Cara kilat: 200.000 × 0,8 × 0,9 = 144.000 ✔
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-next-step>Mulai: Tampilkan Langkah 1 ▶</button>
+        <button class="btn ghost" data-show-all>Tampilkan semua</button>
+      </div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h3>Contoh 2 — Sekarang giliranmu! 💪</h3>
+    <div data-contoh="t4"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13: MATERI 4 - LATIHAN ============ -->
+<section class="slide theme-t4" data-label="M4 · 10 Latihan Soal">
+  <div class="latihan-mount" data-latihan="t4"></div>
+</section>
+
+<!-- ============ SLIDE 14: RANGKUMAN & SKOR ============ -->
+<section class="slide" data-label="🏆 Rangkuman & Skor">
+  <span class="badge">🏆 Finish!</span>
+  <h2>Rangkuman & Skor Latihanmu</h2>
+  <p class="lead">Empat rumus kunci yang baru saja kamu pelajari. Skor di bawah diperbarui otomatis dari tombol <b>Cek Jawaban</b> pada setiap latihan soal — kerjakan lagi soal yang belum hijau untuk mencetak skor sempurna!</p>
+  <div class="sum-grid">
+    <div class="sum-card" style="--mc:#2563eb" data-sum="t1">
+      <div class="sum-top"><h3>🏷️ M1 · Potongan Harga</h3><span class="n"><span data-n>0</span>/10</span></div>
+      <p class="frm">Potongan = persen diskon × harga asli</p>
+      <div class="bar"><i data-bar></i></div>
+      <div class="btn-row"><button class="btn small soft" data-reset="t1">🔄 Ulangi latihan ini</button></div>
+    </div>
+    <div class="sum-card" style="--mc:#059669" data-sum="t2">
+      <div class="sum-top"><h3>🔍 M2 · Harga Asli</h3><span class="n"><span data-n>0</span>/10</span></div>
+      <p class="frm">Harga asli = harga bayar ÷ persen yang dibayar</p>
+      <div class="bar"><i data-bar></i></div>
+      <div class="btn-row"><button class="btn small soft" data-reset="t2">🔄 Ulangi latihan ini</button></div>
+    </div>
+    <div class="sum-card" style="--mc:#d97706" data-sum="t3">
+      <div class="sum-top"><h3>📊 M3 · Persentase Diskon</h3><span class="n"><span data-n>0</span>/10</span></div>
+      <p class="frm">Persen diskon = (potongan ÷ harga asli) × 100%</p>
+      <div class="bar"><i data-bar></i></div>
+      <div class="btn-row"><button class="btn small soft" data-reset="t3">🔄 Ulangi latihan ini</button></div>
+    </div>
+    <div class="sum-card" style="--mc:#7c3aed" data-sum="t4">
+      <div class="sum-top"><h3>🧮 M4 · Diskon Berganda</h3><span class="n"><span data-n>0</span>/10</span></div>
+      <p class="frm">Harga akhir = harga asli × (1−d₁) × (1−d₂) × …</p>
+      <div class="bar"><i data-bar></i></div>
+      <div class="btn-row"><button class="btn small soft" data-reset="t4">🔄 Ulangi latihan ini</button></div>
+    </div>
+  </div>
+  <div class="sum-msg" id="sumMsg"></div>
+  <div class="btn-row">
+    <button class="btn" data-reset-all>🔄 Ulangi Semua Latihan</button>
+    <button class="btn ghost" data-go="1">📚 Kembali ke Daftar Materi</button>
+  </div>
+</section>
+</main>
+<nav class="navbar">
+  <button class="navbtn" id="prevBtn" title="Slide sebelumnya (←)">◀</button>
+  <span id="slideCount">1 / 15</span>
+  <button class="navbtn" id="nextBtn" title="Slide berikutnya (→)">▶</button>
+  <button class="navbtn menu" id="menuBtn" title="Daftar slide">☰</button>
+</nav>
+<div class="overlay" id="menuOverlay">
+  <div class="overlay-panel">
+    <h3>📚 Daftar Slide</h3>
+    <div id="olList"></div>
+    <div class="btn-row" style="justify-content:center; margin-top:6px">
+      <button class="btn small" id="closeOverlay">Tutup ✕</button>
+    </div>
+  </div>
+</div>
+<script>
+/* ==================== DATA CONTOH SOAL (giliran siswa) ==================== */
+const CONTOH = {
+  t1: {
+    q: 'Sepatu olahraga dijual seharga <b>Rp320.000</b> dengan diskon <b>35%</b>. Berapa rupiah besar potongan harganya?',
+    answer: 112000, unit: 'rupiah',
+    st: [
+      'Diketahui: harga asli = <b>Rp320.000</b>, diskon = <b>35%</b>.',
+      'Ubah persen ke desimal: 35% = 35 ÷ 100 = <b>0,35</b>.',
+      'Hitung potongan: 0,35 × 320.000 = <b>112.000</b>.',
+      'Jadi, besar potongan harganya <b>Rp112.000</b> (harga bayar = 320.000 − 112.000 = Rp208.000).'
+    ],
+    f: 'Potongan harga = Rp112.000'
+  },
+  t2: {
+    q: 'Setelah diskon <b>30%</b>, Andi membayar <b>Rp210.000</b> untuk sebuah kursi. Berapa harga asli kursi sebelum diskon?',
+    answer: 300000, unit: 'rupiah',
+    st: [
+      'Diketahui: harga bayar = <b>Rp210.000</b>, diskon = <b>30%</b>.',
+      'Persen yang dibayar: 100% − 30% = 70% = <b>0,7</b>.',
+      'Harga asli = harga bayar ÷ persen bayar = 210.000 ÷ 0,7 = <b>300.000</b>.',
+      'Periksa: 30% × 300.000 = 90.000, dan 300.000 − 90.000 = 210.000 ✔ (sesuai!)'
+    ],
+    f: 'Harga asli kursi = Rp300.000'
+  },
+  t3: {
+    q: 'Sebuah sofa berharga normal <b>Rp500.000</b>. Saat promo, Rani hanya membayar <b>Rp400.000</b>. Berapa persen diskon yang diberikan toko?',
+    answer: 20, unit: 'persen',
+    st: [
+      'Diketahui: harga asli = <b>Rp500.000</b>, harga bayar = <b>Rp400.000</b>.',
+      'Besar potongan = 500.000 − 400.000 = <b>100.000</b>.',
+      'Persen diskon = (100.000 ÷ 500.000) × 100% = 0,2 × 100% = <b>20%</b>.',
+      'Periksa: 20% × 500.000 = 100.000 ✔ (harga bayar menjadi 400.000, benar!)'
+    ],
+    f: 'Persen diskon = 20%'
+  },
+  t4: {
+    q: 'Harga sebuah tas <b>Rp120.000</b> mendapat promo diskon ganda <b>50% + 20%</b>. Berapa harga akhir tas tersebut?',
+    answer: 48000, unit: 'rupiah',
+    st: [
+      'Diskon pertama: 50% × 120.000 = 60.000 → harga menjadi 120.000 − 60.000 = <b>Rp60.000</b>.',
+      'Diskon kedua dihitung dari Rp60.000: 20% × 60.000 = 12.000 → harga menjadi 60.000 − 12.000 = <b>Rp48.000</b>.',
+      'Cara kilat: 120.000 × 0,5 × 0,8 = <b>48.000</b> ✔',
+      'Awas jebakan: 50% + 20% bukan 70%! Total diskonnya hanya setara <b>60%</b> (potongan Rp72.000).'
+    ],
+    f: 'Harga akhir tas = Rp48.000'
+  }
+};
+
+/* ==================== DATA 40 LATIHAN SOAL ==================== */
+const LATIHAN = {
+t1: { title: 'Menentukan Potongan Harga (Diskon)', soal: [
+  { q: 'Harga sebuah tas di toko <b>Rp120.000</b>. Toko memberikan diskon <b>25%</b>. Berapa rupiah besar potongan harganya?', answer: 30000,
+    st: ['Diketahui: harga asli = Rp120.000, diskon = 25%.', 'Ubah ke desimal: 25% = 0,25.', 'Potongan = 0,25 × 120.000 = <b>30.000</b>.'],
+    f: 'Potongan harga = Rp30.000' },
+  { q: 'Sebuah buku cerita berharga <b>Rp45.000</b> didiskon <b>20%</b>. Berapa besar potongan harganya?', answer: 9000,
+    st: ['20% = 0,2.', 'Potongan = 0,2 × 45.000 = <b>9.000</b>.'],
+    f: 'Potongan harga = Rp9.000' },
+  { q: 'Harga sepasang sepatu <b>Rp250.000</b>. Saat promo, diberikan diskon <b>40%</b>. Berapa rupiah potongan harganya?', answer: 100000,
+    st: ['40% = 0,4.', 'Potongan = 0,4 × 250.000 = <b>100.000</b>.', 'Harga bayar = 250.000 − 100.000 = Rp150.000.'],
+    f: 'Potongan harga = Rp100.000' },
+  { q: 'Sebuah topi berharga <b>Rp60.000</b> mendapat diskon <b>15%</b>. Berapa besar potongan harganya?', answer: 9000,
+    st: ['15% = 0,15.', 'Potongan = 0,15 × 60.000 = <b>9.000</b>.'],
+    f: 'Potongan harga = Rp9.000' },
+  { q: 'Harga sebuah celana <b>Rp180.000</b> dengan diskon <b>35%</b>. Berapa rupiah potongan harganya?', answer: 63000,
+    st: ['35% = 0,35.', 'Potongan = 0,35 × 180.000 = <b>63.000</b>.'],
+    f: 'Potongan harga = Rp63.000' },
+  { q: 'Sebuah televisi dijual <b>Rp2.500.000</b> dengan diskon <b>30%</b>. Berapa besar potongan harganya?', answer: 750000,
+    st: ['30% = 0,3.', 'Potongan = 0,3 × 2.500.000 = <b>750.000</b>.'],
+    f: 'Potongan harga = Rp750.000' },
+  { q: 'Harga sebuah jam tangan <b>Rp450.000</b> didiskon <b>12%</b>. Berapa rupiah potongan harganya?', answer: 54000,
+    st: ['12% = 0,12.', 'Potongan = 0,12 × 450.000 = <b>54.000</b>.'],
+    f: 'Potongan harga = Rp54.000' },
+  { q: 'Sepeda berharga <b>Rp1.200.000</b> mendapat diskon <b>45%</b>. Berapa besar potongan harganya?', answer: 540000,
+    st: ['45% = 0,45.', 'Potongan = 0,45 × 1.200.000 = <b>540.000</b>.'],
+    f: 'Potongan harga = Rp540.000' },
+  { q: 'Harga sebuah kaos <b>Rp80.000</b> dengan diskon <b>50%</b>. Berapa rupiah potongan harganya?', answer: 40000,
+    st: ['50% = 0,5 (setengah harga).', 'Potongan = 0,5 × 80.000 = <b>40.000</b>.'],
+    f: 'Potongan harga = Rp40.000' },
+  { q: 'Harga sebuah tablet <b>Rp3.000.000</b> didiskon <b>18%</b>. Berapa besar potongan harganya?', answer: 540000,
+    st: ['18% = 0,18.', 'Potongan = 0,18 × 3.000.000 = <b>540.000</b>.'],
+    f: 'Potongan harga = Rp540.000' }
+]},
+t2: { title: 'Menentukan Harga Asli Berdasarkan Diskon', soal: [
+  { q: 'Setelah diskon <b>20%</b>, Dina membayar <b>Rp96.000</b> untuk sebuah tas. Berapa harga asli tas sebelum diskon?', answer: 120000,
+    st: ['Persen bayar = 100% − 20% = 80% = 0,8.', 'Harga asli = 96.000 ÷ 0,8 = <b>120.000</b>.', 'Periksa: 20% × 120.000 = 24.000; 120.000 − 24.000 = 96.000 ✔'],
+    f: 'Harga asli tas = Rp120.000' },
+  { q: 'Setelah diskon <b>25%</b>, harga bayar sebuah dompet <b>Rp150.000</b>. Berapa harga aslinya?', answer: 200000,
+    st: ['Persen bayar = 100% − 25% = 75% = 0,75.', 'Harga asli = 150.000 ÷ 0,75 = <b>200.000</b>.'],
+    f: 'Harga asli dompet = Rp200.000' },
+  { q: 'Setelah diskon <b>20%</b>, sepasang sepatu dibayar <b>Rp320.000</b>. Berapa harga asli sepatu tersebut?', answer: 400000,
+    st: ['Persen bayar = 80% = 0,8.', 'Harga asli = 320.000 ÷ 0,8 = <b>400.000</b>.'],
+    f: 'Harga asli sepatu = Rp400.000' },
+  { q: 'Setelah diskon <b>15%</b>, seorang pembeli membayar <b>Rp425.000</b> untuk sebuah jaket. Berapa harga asli jaket?', answer: 500000,
+    st: ['Persen bayar = 85% = 0,85.', 'Harga asli = 425.000 ÷ 0,85 = <b>500.000</b>.'],
+    f: 'Harga asli jaket = Rp500.000' },
+  { q: 'Setelah diskon <b>40%</b>, harga bayar sebuah helm <b>Rp360.000</b>. Berapa harga asli helm tersebut?', answer: 600000,
+    st: ['Persen bayar = 60% = 0,6.', 'Harga asli = 360.000 ÷ 0,6 = <b>600.000</b>.'],
+    f: 'Harga asli helm = Rp600.000' },
+  { q: 'Setelah diskon <b>30%</b>, Adri membayar <b>Rp420.000</b> untuk sepeda lipat. Berapa harga asli sepeda tersebut?', answer: 600000,
+    st: ['Persen bayar = 70% = 0,7.', 'Harga asli = 420.000 ÷ 0,7 = <b>600.000</b>.'],
+    f: 'Harga asli sepeda = Rp600.000' },
+  { q: 'Setelah diskon <b>12%</b>, harga bayar sebuah printer <b>Rp264.000</b>. Berapa harga asli printer?', answer: 300000,
+    st: ['Persen bayar = 88% = 0,88.', 'Harga asli = 264.000 ÷ 0,88 = <b>300.000</b>.'],
+    f: 'Harga asli printer = Rp300.000' },
+  { q: 'Setelah diskon <b>10%</b>, Vino membayar <b>Rp270.000</b> untuk sebuah skateboard. Berapa harga asli skateboard?', answer: 300000,
+    st: ['Persen bayar = 90% = 0,9.', 'Harga asli = 270.000 ÷ 0,9 = <b>300.000</b>.'],
+    f: 'Harga asli skateboard = Rp300.000' },
+  { q: 'Setelah diskon <b>44%</b>, harga bayar sebuah lemari <b>Rp560.000</b>. Berapa harga asli lemari?', answer: 1000000,
+    st: ['Persen bayar = 56% = 0,56.', 'Harga asli = 560.000 ÷ 0,56 = <b>1.000.000</b>.'],
+    f: 'Harga asli lemari = Rp1.000.000' },
+  { q: 'Setelah diskon <b>25%</b>, harga bayar sebuah mesin jahit <b>Rp690.000</b>. Berapa harga aslinya?', answer: 920000,
+    st: ['Persen bayar = 75% = 0,75.', 'Harga asli = 690.000 ÷ 0,75 = <b>920.000</b>.'],
+    f: 'Harga asli mesin jahit = Rp920.000' }
+]},
+t3: { title: 'Menentukan Persentase Diskon', soal: [
+  { q: 'Harga asli sebuah tas <b>Rp150.000</b>. Toko memotong harganya sebesar <b>Rp30.000</b>. Berapa persen diskonnya?', answer: 20,
+    st: ['Persen diskon = (30.000 ÷ 150.000) × 100%.', '30.000 ÷ 150.000 = 0,2 → 0,2 × 100% = <b>20%</b>.'],
+    f: 'Diskon = 20%' },
+  { q: 'Harga asli sebuah buku <b>Rp80.000</b> dipotong <b>Rp20.000</b>. Berapa persen diskonnya?', answer: 25,
+    st: ['20.000 ÷ 80.000 = 0,25.', '0,25 × 100% = <b>25%</b>.'],
+    f: 'Diskon = 25%' },
+  { q: 'Harga asli sebuah helm <b>Rp500.000</b> dipotong <b>Rp150.000</b>. Berapa persen diskonnya?', answer: 30,
+    st: ['150.000 ÷ 500.000 = 0,3.', '0,3 × 100% = <b>30%</b>.'],
+    f: 'Diskon = 30%' },
+  { q: 'Kamera harga asli <b>Rp250.000</b>, potongan <b>Rp100.000</b>. Berapa persen diskonnya?', answer: 40,
+    st: ['100.000 ÷ 250.000 = 0,4.', '0,4 × 100% = <b>40%</b>.'],
+    f: 'Diskon = 40%' },
+  { q: 'Harga asli sebuah topi <b>Rp60.000</b>, potongan <b>Rp9.000</b>. Berapa persen diskonnya?', answer: 15,
+    st: ['9.000 ÷ 60.000 = 0,15.', '0,15 × 100% = <b>15%</b>.'],
+    f: 'Diskon = 15%' },
+  { q: 'Harga asli sebuah lemari <b>Rp400.000</b>, potongan <b>Rp180.000</b>. Berapa persen diskonnya?', answer: 45,
+    st: ['180.000 ÷ 400.000 = 0,45.', '0,45 × 100% = <b>45%</b>.'],
+    f: 'Diskon = 45%' },
+  { q: 'Harga asli tas ransel <b>Rp300.000</b>, dipotong <b>Rp36.000</b>. Berapa persen diskonnya?', answer: 12,
+    st: ['36.000 ÷ 300.000 = 0,12.', '0,12 × 100% = <b>12%</b>.'],
+    f: 'Diskon = 12%' },
+  { q: 'Harga asli sebuah HP <b>Rp1.500.000</b>, potongan <b>Rp270.000</b>. Berapa persen diskonnya?', answer: 18,
+    st: ['270.000 ÷ 1.500.000 = 0,18.', '0,18 × 100% = <b>18%</b>.'],
+    f: 'Diskon = 18%' },
+  { q: 'Harga asli sebuah kaos <b>Rp120.000</b>, potongan <b>Rp60.000</b>. Berapa persen diskonnya?', answer: 50,
+    st: ['60.000 ÷ 120.000 = 0,5.', '0,5 × 100% = <b>50%</b>.'],
+    f: 'Diskon = 50%' },
+  { q: 'Harga asli sepasang sepatu <b>Rp90.000</b>, potongan <b>Rp13.500</b>. Berapa persen diskonnya?', answer: 15,
+    st: ['13.500 ÷ 90.000 = 0,15.', '0,15 × 100% = <b>15%</b>.'],
+    f: 'Diskon = 15%' }
+]},
+t4: { title: 'Harga Barang dari Diskon Berganda', soal: [
+  { q: 'Harga sebuah buku <b>Rp100.000</b> dengan promo diskon ganda <b>20% + 10%</b>. Berapa harga akhir buku?', answer: 72000,
+    st: ['Diskon 1: 20% × 100.000 = 20.000 → harga menjadi 80.000.', 'Diskon 2: 10% × 80.000 = 8.000 → harga menjadi <b>72.000</b>.', 'Cara kilat: 100.000 × 0,8 × 0,9 = 72.000 ✔'],
+    f: 'Harga akhir = Rp72.000' },
+  { q: 'Harga sebuah tas <b>Rp200.000</b>, diskon ganda <b>25% + 20%</b>. Berapa harga akhir tas?', answer: 120000,
+    st: ['Diskon 1: 25% × 200.000 = 50.000 → harga menjadi 150.000.', 'Diskon 2: 20% × 150.000 = 30.000 → harga menjadi <b>120.000</b>.'],
+    f: 'Harga akhir = Rp120.000' },
+  { q: 'Harga sebuah topi <b>Rp150.000</b>, diskon ganda <b>10% + 10%</b>. Berapa harga akhir topi?', answer: 121500,
+    st: ['Diskon 1: 10% × 150.000 = 15.000 → harga menjadi 135.000.', 'Diskon 2: 10% × 135.000 = 13.500 → harga menjadi <b>121.500</b>.', 'Awas jebakan: 10% + 10% bukan 20%! Hasilnya 121.500, bukan 120.000.'],
+    f: 'Harga akhir = Rp121.500' },
+  { q: 'Harga sebuah sepeda <b>Rp500.000</b>, diskon ganda <b>30% + 20%</b>. Berapa harga akhir sepeda?', answer: 280000,
+    st: ['Diskon 1: 30% × 500.000 = 150.000 → harga menjadi 350.000.', 'Diskon 2: 20% × 350.000 = 70.000 → harga menjadi <b>280.000</b>.'],
+    f: 'Harga akhir = Rp280.000' },
+  { q: 'Harga sebuah celana <b>Rp80.000</b>, diskon ganda <b>50% + 10%</b>. Berapa harga akhir celana?', answer: 36000,
+    st: ['Diskon 1: 50% × 80.000 = 40.000 → harga menjadi 40.000.', 'Diskon 2: 10% × 40.000 = 4.000 → harga menjadi <b>36.000</b>.'],
+    f: 'Harga akhir = Rp36.000' },
+  { q: 'Harga sebuah jam tangan <b>Rp300.000</b>, diskon ganda <b>40% + 25%</b>. Berapa harga akhir jam?', answer: 135000,
+    st: ['Diskon 1: 40% × 300.000 = 120.000 → harga menjadi 180.000.', 'Diskon 2: 25% × 180.000 = 45.000 → harga menjadi <b>135.000</b>.', 'Cara kilat: 300.000 × 0,6 × 0,75 = 135.000 ✔'],
+    f: 'Harga akhir = Rp135.000' },
+  { q: 'Harga sebuah jaket <b>Rp250.000</b>, diskon ganda <b>20% + 15%</b>. Berapa harga akhir jaket?', answer: 170000,
+    st: ['Diskon 1: 20% × 250.000 = 50.000 → harga menjadi 200.000.', 'Diskon 2: 15% × 200.000 = 30.000 → harga menjadi <b>170.000</b>.'],
+    f: 'Harga akhir = Rp170.000' },
+  { q: 'Harga sebuah HP <b>Rp1.000.000</b>, diskon ganda <b>35% + 10%</b>. Berapa harga akhir HP?', answer: 585000,
+    st: ['Diskon 1: 35% × 1.000.000 = 350.000 → harga menjadi 650.000.', 'Diskon 2: 10% × 650.000 = 65.000 → harga menjadi <b>585.000</b>.'],
+    f: 'Harga akhir = Rp585.000' },
+  { q: 'Harga sepasang sepatu <b>Rp120.000</b>, diskon ganda <b>15% + 15%</b>. Berapa harga akhir sepatu?', answer: 86700,
+    st: ['Diskon 1: 15% × 120.000 = 18.000 → harga menjadi 102.000.', 'Diskon 2: 15% × 102.000 = 15.300 → harga menjadi <b>86.700</b>.', 'Cara kilat: 120.000 × 0,85 × 0,85 = 86.700 ✔'],
+    f: 'Harga akhir = Rp86.700' },
+  { q: 'Harga sebuah lemari <b>Rp400.000</b> mendapat promo besar: diskon <b>50% + 20% + 10%</b>. Berapa harga akhir lemari?', answer: 144000,
+    st: ['Diskon 1: 50% × 400.000 = 200.000 → harga menjadi 200.000.', 'Diskon 2: 20% × 200.000 = 40.000 → harga menjadi 160.000.', 'Diskon 3: 10% × 160.000 = 16.000 → harga menjadi <b>144.000</b>.', 'Cara kilat: 400.000 × 0,5 × 0,8 × 0,9 = 144.000 ✔'],
+    f: 'Harga akhir = Rp144.000' }
+]}
+};
+/* ==================== UTIL ==================== */
+const PRAISE = ['🎉 Benar! Kerja bagus!', '✅ Tepat sekali, jawabanmu benar!', '🌟 Mantap! Kamu berhasil!', '👍 Hebat, jawabanmu tepat!'];
+const WRONGS = [
+  '❌ Belum tepat. Periksa kembali perhitunganmu, lalu coba lagi ya!',
+  '❌ Masih belum tepat. Cek lagi langkah pengerjaannya — jangan lupa ubah persen menjadi desimal!',
+  '❌ Belum tepat juga. Sepertinya kamu perlu bantuan — klik tombol 💡 Lihat Pembahasan, ya!'
+];
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function fmtID(n){
+  const neg = n < 0 ? '-' : '';
+  return neg + String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+function parseNum(str){
+  if(str === null || str === undefined) return null;
+  let s = String(str).toLowerCase().replace(/rp/g, '').replace(/%/g, '').replace(/\s/g, '');
+  if(!s) return null;
+  s = s.replace(/\./g, '').replace(/,/g, '.');
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+function sameNum(a, b){ return a !== null && Math.abs(a - b) < 0.001; }
+
+/* ==================== STATE ==================== */
+const state = { cur: 0, topics: {} };
+['t1', 't2', 't3', 't4'].forEach(id => {
+  state.topics[id] = { correct: new Set(), opened: new Set(), ans: {}, attempts: {}, lastIdx: 0 };
+});
+
+/* ==================== KOMPONEN CEK JAWABAN + PEMBAHASAN ==================== */
+function buildChecker(mount, data, opts){
+  opts = opts || {};
+  const isPct = data.unit === 'persen';
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `
+    <p class="ex-q">${data.q}</p>
+    <div class="ans-row">
+      ${isPct ? '' : '<span class="unit">Rp</span>'}
+      <input type="text" inputmode="numeric" placeholder="${isPct ? 'contoh: 25' : 'contoh: 120000'}" aria-label="Ketik jawabanmu di sini">
+      ${isPct ? '<span class="unit">%</span>' : ''}
+      <button class="btn btn-check">✅ Cek Jawaban</button>
+    </div>
+    <div class="feedback" role="status"></div>
+    <div class="btn-row"><button class="btn soft small btn-bahas">💡 Lihat Pembahasan</button></div>
+    <div class="pembahasan hidden">
+      <h4>💡 Pembahasan</h4>
+      <ol>${data.st.map(s => `<li>${s}</li>`).join('')}</ol>
+      <span class="final">${data.f}</span>
+    </div>`;
+  mount.appendChild(wrap);
+  const input = wrap.querySelector('input');
+  const btnCheck = wrap.querySelector('.btn-check');
+  const fb = wrap.querySelector('.feedback');
+  const btnB = wrap.querySelector('.btn-bahas');
+  const bahas = wrap.querySelector('.pembahasan');
+  let solved = false, localAttempts = 0;
+  function markSolved(prefill){
+    solved = true;
+    fb.className = 'feedback show ok';
+    fb.textContent = prefill ? '🎉 Benar! Soal ini sudah pernah kamu selesaikan.' : PRAISE[Math.floor(Math.random() * PRAISE.length)];
+    input.disabled = true;
+    btnCheck.disabled = true;
+    btnCheck.textContent = '✔ Benar';
+  }
+  function doCheck(){
+    if(solved) return;
+    const val = parseNum(input.value);
+    if(val === null){
+      fb.className = 'feedback show no';
+      fb.textContent = '⚠️ Ketik dulu jawabanmu berupa angka, ya!';
+      return;
+    }
+    if(sameNum(val, data.answer)){
+      markSolved(false);
+      if(opts.onCorrect) opts.onCorrect(val);
+    } else {
+      const att = opts.attemptCount ? opts.attemptCount() : localAttempts;
+      fb.className = 'feedback show no shake';
+      fb.textContent = WRONGS[Math.min(att, WRONGS.length - 1)];
+      localAttempts++;
+      if(opts.onWrong) opts.onWrong(val);
+    }
+  }
+  btnCheck.addEventListener('click', doCheck);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); doCheck(); } });
+  btnB.addEventListener('click', () => {
+    const isOpen = !bahas.classList.toggle('hidden');
+    btnB.textContent = isOpen ? '🙈 Sembunyikan Pembahasan' : '💡 Lihat Pembahasan';
+    if(isOpen && opts.onOpenPembahasan) opts.onOpenPembahasan();
+  });
+  if(opts.saved && opts.saved.val !== undefined && opts.saved.val !== null){
+    input.value = fmtID(opts.saved.val);
+    if(opts.saved.ok) markSolved(true);
+  }
+}
+
+/* ==================== WIDGET LATIHAN SOAL (10 soal per materi) ==================== */
+function buildLatihan(mount, topicId){
+  const cfg = LATIHAN[topicId];
+  const st = state.topics[topicId];
+  mount.innerHTML = `
+    <div class="lat-head">
+      <div>
+        <span class="badge">✏️ Latihan Soal</span>
+        <h2 style="margin-top:8px">10 Latihan: ${cfg.title}</h2>
+        <p class="lead">Ketik jawabanmu pada kotak isian lalu tekan <b>Cek Jawaban</b>. Belum tepat? Perbaiki hitunganmu. Masih bingung? Buka pembahasan lengkapnya.</p>
+      </div>
+      <div class="skor-chip">🎯 Benar: <span data-skor>0</span>/10</div>
+    </div>
+    <div class="dots" data-dots></div>
+    <div class="lat-card" data-card></div>
+    <div class="lat-nav">
+      <button class="btn ghost small" data-prev-soal>◀ Soal sebelumnya</button>
+      <span class="muted" data-count></span>
+      <button class="btn ghost small" data-next-soal>Soal berikutnya ▶</button>
+    </div>`;
+  const dotsEl = mount.querySelector('[data-dots]');
+  cfg.soal.forEach((s, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot';
+    d.textContent = i + 1;
+    d.title = 'Lompat ke soal ' + (i + 1);
+    d.addEventListener('click', () => { st.lastIdx = i; render(); });
+    dotsEl.appendChild(d);
+  });
+  const cardEl = mount.querySelector('[data-card]');
+  function refreshDots(){
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('done', st.correct.has(i));
+      d.classList.toggle('seen', !st.correct.has(i) && st.opened.has(i));
+      d.classList.toggle('cur', i === st.lastIdx);
+    });
+    mount.querySelector('[data-skor]').textContent = st.correct.size;
+  }
+  function render(){
+    const i = st.lastIdx;
+    const soal = cfg.soal[i];
+    cardEl.innerHTML = '';
+    const tag = document.createElement('div');
+    tag.className = 'soal-tag';
+    tag.textContent = 'Soal ' + (i + 1) + ' dari ' + cfg.soal.length;
+    cardEl.appendChild(tag);
+    buildChecker(cardEl, soal, {
+      saved: st.ans[i],
+      attemptCount: () => st.attempts[i] || 0,
+      onCorrect: val => { st.ans[i] = { val: val, ok: true }; st.correct.add(i); refreshDots(); },
+      onWrong: val => { st.attempts[i] = (st.attempts[i] || 0) + 1; st.ans[i] = { val: val, ok: false }; },
+      onOpenPembahasan: () => { if(!st.correct.has(i)) st.opened.add(i); refreshDots(); }
+    });
+    mount.querySelector('[data-count]').textContent = 'Soal ' + (i + 1) + ' dari ' + cfg.soal.length;
+    refreshDots();
+  }
+  mount.querySelector('[data-prev-soal]').addEventListener('click', () => { st.lastIdx = (st.lastIdx + cfg.soal.length - 1) % cfg.soal.length; render(); });
+  mount.querySelector('[data-next-soal]').addEventListener('click', () => { st.lastIdx = (st.lastIdx + 1) % cfg.soal.length; render(); });
+  render();
+}
+
+/* ==================== LANGKAH TERPANDU (contoh 1 tiap materi) ==================== */
+$$('[data-guided]').forEach(g => {
+  const steps = Array.from(g.querySelectorAll('[data-step]'));
+  const btnNext = g.querySelector('[data-next-step]');
+  const btnAll = g.querySelector('[data-show-all]');
+  let shown = 1; /* langkah pertama langsung terlihat */
+  function refresh(){
+    steps.forEach((s, k) => s.classList.toggle('hidden', k >= shown));
+    if(btnNext){
+      if(shown >= steps.length){ btnNext.classList.add('hidden'); }
+      else { btnNext.classList.remove('hidden'); btnNext.textContent = 'Tampilkan Langkah ' + (shown + 1) + ' ▶'; }
+    }
+    if(btnAll) btnAll.classList.toggle('hidden', shown >= steps.length);
+  }
+  if(btnNext) btnNext.addEventListener('click', () => { shown++; refresh(); });
+  if(btnAll) btnAll.addEventListener('click', () => { shown = steps.length; refresh(); });
+  refresh();
+});
+
+/* ==================== RANGKUMAN & SKOR ==================== */
+function renderSummary(){
+  let total = 0;
+  ['t1', 't2', 't3', 't4'].forEach(id => {
+    const st = state.topics[id];
+    total += st.correct.size;
+    const card = document.querySelector('[data-sum="' + id + '"]');
+    card.querySelector('[data-n]').textContent = st.correct.size;
+    card.querySelector('[data-bar]').style.width = (st.correct.size * 10) + '%';
+  });
+  const msg = document.getElementById('sumMsg');
+  let icon, text;
+  if(total === 0){ icon = '🌱'; text = 'Belum ada soal yang diselesaikan. Yuk mulai dari Materi 1 dan kerjakan latihan pertamamu!'; }
+  else if(total >= 36){ icon = '🏆'; text = 'Luar biasa! Kamu menguasai materi diskon dengan sangat baik. Pertahankan!'; }
+  else if(total >= 28){ icon = '🌟'; text = 'Hebat! Pemahamanmu sudah kuat. Kerjakan lagi soal yang belum hijau untuk skor sempurna.'; }
+  else if(total >= 16){ icon = '💪'; text = 'Kerja bagus, terus berlatih! Buka kembali materi dan pembahasan pada soal yang masih sulit.'; }
+  else { icon = '🚀'; text = 'Jangan menyerah! Pelajari kembali materinya, ikuti contoh soal, lalu coba latihan lagi.'; }
+  msg.innerHTML = icon + ' <b>Skor total: ' + total + '/40 soal benar.</b> ' + text;
+}
+function resetTopic(id){
+  const st = state.topics[id];
+  st.correct.clear(); st.opened.clear(); st.ans = {}; st.attempts = {}; st.lastIdx = 0;
+  buildLatihan(document.querySelector('[data-latihan="' + id + '"]'), id);
+}
+$$('[data-reset]').forEach(b => b.addEventListener('click', () => { resetTopic(b.dataset.reset); renderSummary(); }));
+$$('[data-reset-all]').forEach(b => b.addEventListener('click', () => { ['t1', 't2', 't3', 't4'].forEach(resetTopic); renderSummary(); goTo(0); }));
+
+/* ==================== NAVIGASI SLIDE ==================== */
+const slides = $$('.slide');
+const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn');
+function goTo(i){
+  state.cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => s.classList.toggle('active', k === state.cur));
+  $('#progressFill').style.width = ((state.cur + 1) / slides.length * 100) + '%';
+  $('#slideCount').textContent = (state.cur + 1) + ' / ' + slides.length;
+  prevBtn.disabled = state.cur === 0;
+  nextBtn.disabled = state.cur === slides.length - 1;
+  closeOverlay();
+  window.scrollTo(0, 0);
+  const lbl = slides[state.cur].dataset.label || '';
+  if(lbl.indexOf('Rangkuman') >= 0) renderSummary();
+  $$('.ol-item').forEach((b, k) => b.classList.toggle('cur', k === state.cur));
+}
+prevBtn.addEventListener('click', () => goTo(state.cur - 1));
+nextBtn.addEventListener('click', () => goTo(state.cur + 1));
+$$('[data-go]').forEach(b => b.addEventListener('click', () => goTo(parseInt(b.dataset.go, 10))));
+
+/* Overlay daftar slide */
+const overlay = $('#menuOverlay'), olList = $('#olList');
+slides.forEach((s, k) => {
+  const b = document.createElement('button');
+  b.className = 'ol-item';
+  b.innerHTML = '<span class="n">' + (k + 1) + '</span>' + (s.dataset.label || 'Slide ' + (k + 1));
+  b.addEventListener('click', () => { goTo(k); });
+  olList.appendChild(b);
+});
+function openOverlay(){ overlay.classList.add('open'); $$('.ol-item').forEach((b, k) => b.classList.toggle('cur', k === state.cur)); }
+function closeOverlay(){ overlay.classList.remove('open'); }
+$('#menuBtn').addEventListener('click', () => overlay.classList.contains('open') ? closeOverlay() : openOverlay());
+$('#closeOverlay').addEventListener('click', closeOverlay);
+overlay.addEventListener('click', e => { if(e.target === overlay) closeOverlay(); });
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input, textarea')) return;
+  if(e.key === 'ArrowRight' || e.key === 'PageDown') goTo(state.cur + 1);
+  else if(e.key === 'ArrowLeft' || e.key === 'PageUp') goTo(state.cur - 1);
+  else if(e.key === 'Escape') closeOverlay();
+});
+
+/* ==================== INISIALISASI ==================== */
+$$('[data-contoh]').forEach(m => buildChecker(m, CONTOH[m.dataset.contoh], {}));
+['t1', 't2', 't3', 't4'].forEach(id => buildLatihan(document.querySelector('[data-latihan="' + id + '"]'), id));
+goTo(0);
+</script>
+</body>
+</html>
