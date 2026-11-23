@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penjumlahan &amp; Pengurangan Desimal — Matematika Kelas 5 SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF6E9; --navy:#23305A; --orange:#FF8A3D; --orange-d:#E46F1C;
+  --teal:#2BB3A3; --blue:#4A7DFF; --yellow:#FFC93C; --green:#35C25E;
+  --red:#F2555A; --pink:#FF6FA5; --cream:#FFF9EF; --paper:#F1E3CB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Nunito','Segoe UI',Arial,sans-serif;color:var(--navy);
+  background:var(--bg);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;
+}
+button{font-family:inherit}
+/* ---------- bilah atas ---------- */
+.topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:10px clamp(12px,3vw,28px);position:relative;z-index:6;background:var(--bg);
+}
+.brand{font-family:'Fredoka','Comic Sans MS','Trebuchet MS',sans-serif;font-weight:700;font-size:clamp(.95rem,2.4vw,1.15rem);white-space:nowrap}
+.brand span{color:var(--orange-d)}
+.progress-wrap{flex:1;height:16px;background:var(--paper);border:3px solid var(--navy);border-radius:999px;overflow:hidden}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow));transition:width .35s}
+.slide-count{font-weight:900;font-size:clamp(.8rem,2vw,1rem);background:#fff;border:3px solid var(--navy);border-radius:999px;padding:.25rem .7rem;white-space:nowrap}
+/* ---------- area slide ---------- */
+main{flex:1;position:relative;overflow:hidden;
+  background-image:radial-gradient(rgba(35,48,90,.07) 2.5px,transparent 2.5px);
+  background-size:26px 26px}
+.slide{position:absolute;inset:0;overflow-y:auto;display:none}
+.slide.active{display:flex}
+.slide-inner{margin:auto;width:min(1060px,100%);padding:clamp(16px,3vw,40px)}
+/* ---------- kartu & tipografi ---------- */
+.card{background:#fff;border:4px solid var(--navy);border-radius:22px;
+  box-shadow:8px 8px 0 rgba(35,48,90,.13);padding:clamp(14px,2.5vw,26px)}
+h1,h2,h3{font-family:'Fredoka','Comic Sans MS','Trebuchet MS',sans-serif;font-weight:700;line-height:1.15}
+h1{font-size:clamp(2rem,6.5vw,3.5rem)}
+h2{font-size:clamp(1.5rem,4.2vw,2.3rem);margin-bottom:.5rem}
+h3{font-size:clamp(1.1rem,3vw,1.4rem);margin-bottom:.4rem}
+.lead{font-size:clamp(1rem,2.6vw,1.2rem);font-weight:700;color:#4A5480}
+.chip{display:inline-flex;align-items:center;gap:.4rem;background:#fff;border:3px solid var(--navy);
+  border-radius:999px;padding:.3rem .95rem;font-weight:900;font-size:clamp(.82rem,2vw,1rem)}
+.chip-orange{background:var(--orange);color:#fff}
+.chip-blue{background:#E8F1FF}
+.chip-yellow{background:#FFF3D0}
+/* ---------- tombol ---------- */
+.btn{font-family:'Fredoka','Comic Sans MS',sans-serif;font-weight:600;
+  font-size:clamp(.95rem,2.4vw,1.1rem);padding:.6rem 1.25rem;border:3px solid var(--navy);
+  border-radius:999px;background:#fff;color:var(--navy);cursor:pointer;
+  box-shadow:0 4px 0 var(--navy);transition:transform .08s,box-shadow .08s}
+.btn:hover{filter:brightness(1.04)}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--navy)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:0 4px 0 var(--navy)}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-sm{padding:.35rem .8rem;font-size:.9rem;box-shadow:0 3px 0 var(--navy)}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.pulse{animation:pulse 1s ease-in-out infinite}
+/* ---------- grid ---------- */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.row-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.2rem;justify-content:center}
+/* ---------- cover ---------- */
+#s-cover .slide-inner{text-align:center;position:relative}
+.cover-title{color:var(--navy);margin:.8rem 0}
+.cover-title .hl{color:var(--orange-d)}
+.cover-calc{display:inline-block;background:#fff;border:4px solid var(--navy);border-radius:18px;
+  box-shadow:6px 6px 0 rgba(35,48,90,.13);padding:.7rem 1.4rem;margin:1rem 0;
+  font-family:'Fredoka','Comic Sans MS',sans-serif;font-size:clamp(1.3rem,4.5vw,2rem);font-weight:600}
+.cover-calc b{color:var(--orange-d)}
+.floats span{position:absolute;font-size:clamp(1.6rem,4vw,2.6rem);opacity:.85;animation:floaty 5s ease-in-out infinite;pointer-events:none}
+.floats span:nth-child(1){left:6%;top:12%;animation-delay:.2s}
+.floats span:nth-child(2){right:8%;top:16%;animation-delay:1.1s}
+.floats span:nth-child(3){left:12%;bottom:12%;animation-delay:2s}
+.floats span:nth-child(4){right:10%;bottom:18%;animation-delay:.6s}
+.floats span:nth-child(5){left:30%;top:0;animation-delay:1.6s}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+/* ---------- langkah / daftar ---------- */
+.steps{display:grid;gap:.65rem;margin-top:.6rem}
+.step{display:flex;gap:.7rem;align-items:flex-start}
+.step .n{flex:0 0 2rem;height:2rem;border-radius:50%;background:var(--orange);color:#fff;
+  font-family:'Fredoka',sans-serif;font-weight:700;display:flex;align-items:center;justify-content:center;
+  border:3px solid var(--navy);font-size:1.05rem}
+.step p{font-size:clamp(.98rem,2.4vw,1.12rem);font-weight:700}
+/* ---------- tabel nilai tempat ---------- */
+.table-wrap{overflow-x:auto;margin:.8rem 0}
+.nvtab{border-collapse:separate;border-spacing:0;margin:0 auto}
+.nvtab th,.nvtab td{border:3px solid var(--navy);padding:.5rem .9rem;text-align:center;
+  font-family:'Fredoka',sans-serif;font-size:clamp(1rem,2.8vw,1.35rem);font-weight:600;min-width:74px}
+.nvtab th{background:var(--yellow)}
+.nvtab td{background:#fff}
+.nvtab .koma{background:#FFE3CB;color:var(--orange-d);font-weight:700}
+.note{border:3px dashed var(--teal);background:#E9FAF7;border-radius:16px;padding:.8rem 1rem;
+  font-weight:700;margin-top:.8rem;font-size:clamp(.95rem,2.4vw,1.1rem)}
+.warnbox{border:3px dashed var(--red);background:#FFF0F0;border-radius:16px;padding:.8rem 1rem;
+  font-weight:700;margin-top:.8rem}
+/* ---------- perhitungan bersusun ---------- */
+.calc{display:inline-flex;flex-direction:column;align-items:flex-end;
+  font-family:'Fredoka',sans-serif;font-size:clamp(1.25rem,3.4vw,1.7rem);font-weight:600;
+  background:var(--cream);border:3px dashed rgba(35,48,90,.3);border-radius:16px;
+  padding:.6rem .9rem;margin:.7rem 0}
+.crow{display:flex}
+.cop{width:1.4em;text-align:left;color:var(--orange-d);font-weight:700}
+.cnum{min-width:4.2em;text-align:right;letter-spacing:.06em}
+.cline{border-top:4px solid var(--navy);width:100%;margin:.18rem 0}
+.cres .cnum{color:var(--orange-d)}
+/* ---------- pembatas ---------- */
+.divider{text-align:center}
+.divider .emoji{font-size:clamp(3rem,10vw,5.2rem);display:block;margin-bottom:.4rem}
+.divider h2{font-size:clamp(1.8rem,5.5vw,3rem)}
+.divider p{max-width:640px;margin:.6rem auto 0}
+/* ---------- slide soal ---------- */
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:.7rem;flex-wrap:wrap}
+.q-card{margin-top:.2rem}
+.q-text{font-size:clamp(1.15rem,3.2vw,1.5rem);font-weight:800;line-height:1.6}
+.q-text b{color:var(--orange-d)}
+.answer-row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-top:1rem}
+.ans-label{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.05rem}
+.answer-input{font-family:'Fredoka',sans-serif;font-size:1.25rem;font-weight:600;color:var(--navy);
+  padding:.55rem .9rem;border:3px solid var(--navy);border-radius:14px;width:180px;
+  max-width:100%;background:var(--cream);outline:none}
+.answer-input:focus{border-color:var(--orange)}
+.answer-input:disabled{background:#EDEAE2}
+.feedback{display:none;border:3px solid;border-radius:14px;padding:.7rem 1rem;font-weight:800;
+  margin-top:.9rem;font-size:clamp(.98rem,2.5vw,1.1rem);line-height:1.5}
+.feedback.show{display:block}
+.feedback.good{background:#E4F8EA;border-color:var(--green)}
+.feedback.good2{background:#FFF6DA;border-color:#E0A800}
+.feedback.bad{background:#FFE9E9;border-color:var(--red)}
+.feedback.warn{background:#FFF3D6;border-color:#E0A800}
+.pemb-row{margin-top:.9rem}
+.pembahasan{margin-top:1rem;background:#F3F8FF;border:3px solid var(--blue);border-radius:16px;
+  padding:1rem;font-size:clamp(.98rem,2.5vw,1.1rem);line-height:1.6}
+.pembahasan p{margin:.35rem 0}
+.pembahasan b{color:var(--orange-d)}
+.pembahasan strong{color:var(--navy)}
+.pembahasan .calc{display:flex;max-width:280px;margin:.8rem auto}
+.q-status{font-size:1.4rem;line-height:1}
+/* ---------- apersepsi ---------- */
+.mini-quiz{margin-top:1rem}
+.aper-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:.7rem}
+/* ---------- hasil ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:1rem 0}
+.stat{text-align:center;padding:clamp(12px,2vw,20px)}
+.stat-num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.1}
+.stat-green{background:#E4F8EA}.stat-yellow{background:#FFF6DA}
+.stat-red{background:#FFE9E9}.stat-blue{background:#E8F1FF}
+.bar-row{display:grid;grid-template-columns:minmax(120px,1.2fr) 3fr minmax(70px,auto);gap:10px;
+  align-items:center;margin-top:.6rem;font-weight:800;font-size:clamp(.9rem,2.2vw,1rem)}
+.bar-wrap{height:18px;background:var(--paper);border:3px solid var(--navy);border-radius:999px;overflow:hidden}
+.bar{height:100%;background:var(--green);width:0;transition:width .6s}
+.legend{font-size:.92rem;font-weight:700;color:#4A5480;margin:.3rem 0 .7rem}
+.chipgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px}
+.qchip{border:3px solid var(--navy);border-radius:12px;padding:.4rem 0;text-align:center;
+  font-family:'Fredoka',sans-serif;font-weight:700;background:#fff;cursor:pointer;font-size:clamp(.85rem,2vw,1rem)}
+.qchip.s1{background:#7DDE92}.qchip.s2{background:#FFD95C}.qchip.s3{background:#FF9B9B}
+/* ---------- refleksi ---------- */
+.refl-opt{display:flex;gap:10px;flex-wrap:wrap;margin-top:.7rem}
+.refl-opt .btn.sel{background:var(--yellow);transform:translateY(4px);box-shadow:0 0 0 var(--navy)}
+.refl textarea{width:100%;min-height:84px;margin-top:.7rem;border:3px solid var(--navy);
+  border-radius:14px;padding:.7rem;font-family:'Nunito',sans-serif;font-size:1rem;background:var(--cream);resize:vertical}
+#reflMsg{margin-top:1rem;display:none}
+#reflMsg.show{display:block}
+/* ---------- penutup ---------- */
+#s-thanks .slide-inner{text-align:center}
+.thanks-emoji{font-size:clamp(3.4rem,11vw,6rem);display:block;animation:floaty 4s ease-in-out infinite}
+/* ---------- menu daftar slide ---------- */
+.menu-overlay{position:fixed;inset:0;background:rgba(35,48,90,.5);display:flex;
+  align-items:center;justify-content:center;z-index:60;padding:16px}
+.menu-overlay[hidden]{display:none}
+.menu-card{background:var(--bg);border:4px solid var(--navy);border-radius:22px;
+  box-shadow:10px 10px 0 rgba(35,48,90,.2);max-width:660px;width:100%;max-height:82vh;
+  display:flex;flex-direction:column}
+.menu-head{display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;border-bottom:3px solid var(--navy);font-family:'Fredoka',sans-serif;font-size:1.2rem}
+.menu-body{overflow-y:auto;padding:14px 18px}
+.menu-group{margin-bottom:1rem}
+.menu-group h4{font-family:'Fredoka',sans-serif;color:var(--orange-d);margin-bottom:.4rem;font-size:1rem}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.menu-item{border:3px solid var(--navy);border-radius:12px;background:#fff;padding:.45rem .3rem;
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;color:var(--navy)}
+.menu-item:hover{background:#FFF3D0}
+.menu-item.cur{background:var(--orange);color:#fff}
+/* ---------- bilah bawah ---------- */
+.navbar{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:10px clamp(12px,3vw,28px);background:var(--bg);position:relative;z-index:6}
+.nav-mid{font-weight:900;font-size:clamp(.82rem,2.2vw,1rem);text-align:center;flex:1}
+@media (max-width:520px){
+  .brand span{display:none}
+  .slide-count{display:none}
+  .btn-nav{padding:.5rem .7rem;font-size:.85rem}
+}
+/* ---------- konfeti ---------- */
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:70}
+.cf{position:absolute;top:-24px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(680deg)}}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">📚 Matematika <span>• Kelas 5 SD</span></div>
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <div class="slide-count" id="slideCount">1 / 53</div>
+  <button class="btn btn-ghost btn-sm" id="menuBtn" aria-label="Daftar slide">☰ Daftar</button>
+</header>
+
+<main id="deck">
+
+<!-- ============ 1. COVER ============ -->
+<section class="slide active" id="s-cover" data-title="Cover">
+  <div class="slide-inner">
+    <div class="floats" aria-hidden="true"><span>➕</span><span>➖</span><span>🟠</span><span>🔵</span><span>⭐</span></div>
+    <span class="chip chip-orange">📚 Matematika • Kelas 5 SD</span>
+    <h1 class="cover-title">Penjumlahan &amp;<br>Pengurangan <span class="hl">Bilangan Desimal</span></h1>
+    <p class="lead">Koma sejajar, jawaban mantap! Ayo belajar menghitung bilangan desimal dengan cara yang mudah dan menyenangkan.</p>
+    <div class="cover-calc">2,5 + 1,75 = <b>4,25</b> ✨</div>
+    <div class="row-btns">
+      <button class="btn btn-primary" onclick="next()">Ayo Mulai! ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. APERSEPSI ============ -->
+<section class="slide" id="s-apersepsi" data-title="Apersepsi">
+  <div class="slide-inner">
+    <span class="chip">🔥 Pemanasan</span>
+    <h2>Apersepsi: Desimal Ada di Sekitar Kita!</h2>
+    <p class="lead">Sebelum belajar, perhatikan dulu — bilangan desimal sering banget kita temui setiap hari!</p>
+    <div class="grid4" style="margin-top:1rem">
+      <div class="card" style="text-align:center">
+        <div style="font-size:2.2rem">⚖️</div>
+        <h3>Berat</h3>
+        <p>Berat badan Rani <b>27,5 kg</b></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:2.2rem">📏</div>
+        <h3>Panjang</h3>
+        <p>Panjang meja <b>1,2 m</b></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:2.2rem">🥤</div>
+        <h3>Volume</h3>
+        <p>Air dalam gelas <b>0,25 L</b></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:2.2rem">⏱️</div>
+        <h3>Waktu</h3>
+        <p>Lari 100 m dalam <b>12,8 detik</b></p>
+      </div>
+    </div>
+    <div class="card mini-quiz">
+      <h3>🤔 Kuis Kilat: Mana yang lebih besar?</h3>
+      <div class="aper-btns">
+        <button class="btn btn-primary" id="aperA" onclick="aperPick(true)">0,5</button>
+        <button class="btn btn-teal" id="aperB" onclick="aperPick(false)">0,45</button>
+      </div>
+      <div class="feedback" id="aperFb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. TUJUAN ============ -->
+<section class="slide" id="s-tujuan" data-title="Tujuan Pembelajaran">
+  <div class="slide-inner">
+    <span class="chip">🎯 Target Belajar</span>
+    <h2>Tujuan Pembelajaran</h2>
+    <p class="lead">Setelah pembelajaran ini, kamu akan mampu:</p>
+    <div class="grid2" style="margin-top:1rem">
+      <div class="card"><h3>1️⃣ Mengenal Desimal</h3><p>Menentukan nilai tempat bilangan desimal: persepuluhan, perseratusan, dan perseribuhan.</p></div>
+      <div class="card"><h3>2️⃣ Menjumlahkan Desimal</h3><p>Menjumlahkan bilangan desimal dengan penyusunan ke bawah yang koma-komanya sejajar.</p></div>
+      <div class="card"><h3>3️⃣ Mengurangkan Desimal</h3><p>Mengurangkan bilangan desimal, termasuk mengisi tempat kosong dengan nol penolong.</p></div>
+      <div class="card"><h3>4️⃣ Memecahkan Masalah</h3><p>Menerapkan penjumlahan dan pengurangan desimal untuk memecahkan masalah sehari-hari.</p></div>
+    </div>
+    <div class="note">🔑 Kata kunci hari ini: <b>koma sejajar</b> • <b>nilai tempat</b> • <b>nol penolong</b> • <b>soal cerita</b></div>
+  </div>
+</section>
+
+<!-- ============ 4. MATERI 1 ============ -->
+<section class="slide" id="s-m1" data-title="Materi: Mengenal Desimal">
+  <div class="slide-inner">
+    <span class="chip chip-blue">📘 Materi 1</span>
+    <h2>Mengenal Bilangan Desimal</h2>
+    <p class="lead">Bilangan desimal adalah bilangan yang memakai <b>tanda koma</b>, berada di antara dua bilangan bulat. Contoh: <b>24,75</b>.</p>
+    <div class="card">
+      <h3>Tabel Nilai Tempat 24,75</h3>
+      <div class="table-wrap"><table class="nvtab">
+        <tr><th>Puluhan</th><th>Satuan</th><th class="koma">koma</th><th>Persepuluhan</th><th>Perseratusan</th></tr>
+        <tr><td>2</td><td>4</td><td class="koma">,</td><td>7</td><td>5</td></tr>
+      </table></div>
+      <p style="font-weight:700">Maka: 24,75 = 20 + 4 + 0,7 + 0,05 &nbsp;•&nbsp; 7 membaca <i>tujuh persepuluhan</i>, 5 membaca <i>lima perseratusan</i>.</p>
+    </div>
+    <div class="note">💡 <b>0,5 = 0,50 = 0,500</b> — menambahkan nol di belakang koma <u>tidak mengubah nilai</u>! Trik ini yang akan sering kita pakai.</div>
+  </div>
+</section>
+
+<!-- ============ 5. MATERI 2 ============ -->
+<section class="slide" id="s-m2" data-title="Materi: Penjumlahan Desimal">
+  <div class="slide-inner">
+    <span class="chip chip-blue">📘 Materi 2</span>
+    <h2>Cara Menjumlahkan Desimal</h2>
+    <div class="grid2" style="margin-top:.8rem">
+      <div class="card">
+        <h3>Langkah-langkah</h3>
+        <div class="steps">
+          <div class="step"><span class="n">1</span><p>Tulis bilangan ke bawah, <b>koma sejajar lurus</b>.</p></div>
+          <div class="step"><span class="n">2</span><p>Lengkapi angka di belakang koma dengan <b>nol</b> agar sama banyak.</p></div>
+          <div class="step"><span class="n">3</span><p>Jumlahkan mulai dari <b>kanan</b> (perseratusan → persepuluhan → satuan).</p></div>
+          <div class="step"><span class="n">4</span><p>Letakkan koma pada hasil <b>sejajar</b> dengan koma di atas.</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Contoh: 12,5 + 3,75</h3>
+        <div style="text-align:center">
+          <div class="calc" style="display:inline-flex;max-width:none">
+            <div class="crow"><span class="cop">&nbsp;</span><span class="cnum">12,50</span></div>
+            <div class="crow"><span class="cop">+</span><span class="cnum">3,75</span></div>
+            <div class="cline"></div>
+            <div class="crow cres"><span class="cop">=</span><span class="cnum">16,25</span></div>
+          </div>
+        </div>
+        <p style="font-weight:700">Lihat! Koma pada 16,25 sejajar lurus dengan koma di atas. ✓</p>
+      </div>
+    </div>
+    <div class="note">🔑 Kuncinya satu: <b>koma sejajar</b>. Koma yang sejajar membuat nilai tempat juga sejajar — satuan bertemu satuan, persepuluhan bertemu persepuluhan.</div>
+  </div>
+</section>
+
+<!-- ============ 6. MATERI 3 ============ -->
+<section class="slide" id="s-m3" data-title="Materi: Pengurangan Desimal">
+  <div class="slide-inner">
+    <span class="chip chip-blue">📘 Materi 3</span>
+    <h2>Cara Mengurangkan Desimal</h2>
+    <div class="grid2" style="margin-top:.8rem">
+      <div class="card">
+        <h3>Langkah-langkah</h3>
+        <div class="steps">
+          <div class="step"><span class="n">1</span><p>Susun ke bawah, <b>koma sejajar</b>, bilangan besar di atas.</p></div>
+          <div class="step"><span class="n">2</span><p>Isi tempat kosong di belakang koma dengan <b>nol penolong</b>.</p></div>
+          <div class="step"><span class="n">3</span><p>Kurangkan dari <b>kanan ke kiri</b>, pinjam dari tetangga kiri bila perlu.</p></div>
+          <div class="step"><span class="n">4</span><p>Tulis koma pada hasil <b>sejajar</b> dengan koma di atas.</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Contoh: 7,5 − 2,85</h3>
+        <div style="text-align:center">
+          <div class="calc" style="display:inline-flex;max-width:none">
+            <div class="crow"><span class="cop">&nbsp;</span><span class="cnum">7,50</span></div>
+            <div class="crow"><span class="cop">−</span><span class="cnum">2,85</span></div>
+            <div class="cline"></div>
+            <div class="crow cres"><span class="cop">=</span><span class="cnum">4,65</span></div>
+          </div>
+        </div>
+        <p style="font-weight:700">7,5 ditulis 7,50 dulu, lalu 0 pinjam ke 5 → 10−5=5, 4−8 pinjam lagi… hasilnya 4,65. ✓</p>
+      </div>
+    </div>
+    <div class="note">💡 Bilangan bulat pun bisa dipakai: <b>10 = 10,00</b> dan <b>100 = 100,00</b>. Jadi 10 − 3,48 = 10,00 − 3,48 = 6,52.</div>
+  </div>
+</section>
+
+<!-- ============ 7. MATERI 4 ============ -->
+<section class="slide" id="s-m4" data-title="Materi: Tips & Kunci">
+  <div class="slide-inner">
+    <span class="chip chip-blue">📘 Materi 4</span>
+    <h2>Tips &amp; Kesalahan yang Sering Terjadi</h2>
+    <div class="grid2" style="margin-top:.8rem">
+      <div class="card">
+        <h3>✅ Lakukan</h3>
+        <div class="steps">
+          <div class="step"><span class="n">✓</span><p>Selalu <b>sejajarkan koma</b> sebelum berhitung.</p></div>
+          <div class="step"><span class="n">✓</span><p>Isi tempat kosong dengan <b>nol penolong</b>.</p></div>
+          <div class="step"><span class="n">✓</span><p>Cek kembali: hasil penjumlahan pasti <b>lebih besar</b>; hasil pengurangan pasti <b>lebih kecil</b> dari bilangan pertama.</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>❌ Hindari</h3>
+        <div class="steps">
+          <div class="step"><span class="n">✗</span><p>Menyusun angka tanpa memperhatikan koma — nilai tempat jadi tidak bertemu.</p></div>
+          <div class="step"><span class="n">✗</span><p>Lupa menuliskan koma pada hasil.</p></div>
+        </div>
+        <div class="warnbox">Hati-hati! <b>2,5 + 0,45</b> yang disusun salah bisa terlihat seperti 25 + 045. Dengan koma sejajar: 2,50 + 0,45 = <b>2,95</b> ✓</div>
+      </div>
+    </div>
+    <div class="note">🎯 Uji cepat pemahamanmu: <b>0,5 + 0,45 = ?</b> Kalau jawabanmu 0,95, kamu sudah siap berlatih!</div>
+  </div>
+</section>
+
+<!-- ============ 8. PEMBATAS LATIHAN ============ -->
+<section class="slide" id="s-div-lat" data-title="Pembatas: Ayo Berlatih">
+  <div class="slide-inner divider">
+    <span class="emoji">✏️</span>
+    <span class="chip chip-orange">Bagian Latihan</span>
+    <h2>Ayo Berlatih!</h2>
+    <p class="lead">20 soal hitungan menantimu. Ketik jawabanmu, lalu tekan <b>Cek Jawaban</b>. Jawaban benar pada <b>percobaan pertama</b> mendapat skor penuh!</p>
+    <div class="row-btns"><button class="btn btn-primary" onclick="next()">Mulai Latihan ▶</button></div>
+  </div>
+</section>
+
+<!-- slot 20 slide latihan (dibuat oleh JavaScript) -->
+<div id="latihanHost"></div>
+
+<!-- ============ 29. PEMBATAS SOAL CERITA ============ -->
+<section class="slide" id="s-div-cer" data-title="Pembatas: Soal Cerita">
+  <div class="slide-inner divider">
+    <span class="emoji">📖</span>
+    <span class="chip chip-yellow">Bagian Soal Cerita</span>
+    <h2>Tantangan Soal Cerita!</h2>
+    <p class="lead">20 soal cerita dari kehidupan sehari-hari: berat, panjang, volume, jarak, dan waktu. Baca pelan-pelan, tulis yang diketahui, lalu susun dengan koma sejajar!</p>
+    <div class="row-btns"><button class="btn btn-primary" onclick="next()">Mulai Soal Cerita ▶</button></div>
+  </div>
+</section>
+
+<!-- slot 20 slide soal cerita (dibuat oleh JavaScript) -->
+<div id="ceritaHost"></div>
+
+<!-- ============ 50. HASIL ============ -->
+<section class="slide" id="s-hasil" data-title="Hasil Pengerjaan Siswa">
+  <div class="slide-inner">
+    <span class="chip">📊 Evaluasi</span>
+    <h2>Hasil Pengerjaan Siswa</h2>
+    <p class="lead">Skor dihitung dari jawaban <b>benar pada percobaan pertama</b>. Peta jawaban di bawah bisa diklik untuk membuka soalnya lagi.</p>
+    <div class="stat-grid">
+      <div class="card stat stat-green"><div class="stat-num" id="st-first">0</div><div>Benar percobaan pertama</div></div>
+      <div class="card stat stat-yellow"><div class="stat-num" id="st-later">0</div><div>Benar setelah beberapa percobaan</div></div>
+      <div class="card stat stat-red"><div class="stat-num" id="st-wrong">0</div><div>Salah / belum dijawab</div></div>
+      <div class="card stat stat-blue"><div class="stat-num" id="st-score">0%</div><div>Skor Total</div></div>
+    </div>
+    <div class="card">
+      <h3>Rincian per Bagian</h3>
+      <div class="bar-row"><span>✏️ Latihan</span><div class="bar-wrap"><div class="bar" id="barLat"></div></div><span id="lblLat">0/20</span></div>
+      <div class="bar-row"><span>📖 Soal Cerita</span><div class="bar-wrap"><div class="bar" id="barCer"></div></div><span id="lblCer">0/20</span></div>
+      <div class="bar-row"><span>🏆 Percobaan pertama</span><div class="bar-wrap"><div class="bar" id="barAll" style="background:var(--orange)"></div></div><span id="lblAll">0/40</span></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>Peta Jawaban</h3>
+      <div class="legend">🟩 benar percobaan 1 &nbsp; 🟨 benar setelah beberapa percobaan &nbsp; 🟥 pernah salah &nbsp; ⬜ belum dijawab</div>
+      <div class="chipgrid" id="chipgrid"></div>
+    </div>
+    <div class="row-btns">
+      <button class="btn btn-teal" onclick="resetAll()">🔄 Ulangi Pengerjaan</button>
+      <button class="btn btn-primary" onclick="goId('s-simpul')">Lanjut ke Kesimpulan ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 51. KESIMPULAN ============ -->
+<section class="slide" id="s-simpul" data-title="Kesimpulan">
+  <div class="slide-inner">
+    <span class="chip">🧠 Kesimpulan</span>
+    <h2>Apa yang Sudah Kita Pelajari?</h2>
+    <div class="grid2" style="margin-top:1rem">
+      <div class="card"><h3>1️⃣ Koma Sejajar</h3><p>Menjumlahkan dan mengurangkan desimal selalu dimulai dengan menyusun bilangan ke bawah dengan <b>koma sejajar lurus</b>, agar nilai tempat bertemu dengan pasangannya.</p></div>
+      <div class="card"><h3>2️⃣ Nol Penolong</h3><p>Tempat kosong di belakang koma diisi <b>nol</b> (2,5 menjadi 2,50), karena menambah nol di belakang koma tidak mengubah nilai bilangan.</p></div>
+      <div class="card"><h3>3️⃣ Hitung dari Kanan</h3><p>Penjumlahan dan pengurangan dikerjakan <b>dari kanan ke kiri</b> seperti bilangan bulat, lalu koma dituliskan pada hasil sejajar dengan koma di atas.</p></div>
+      <div class="card"><h3>4️⃣ Desimal Berguna</h3><p>Desimal dipakai untuk <b>berat</b> (kg), <b>panjang</b> (m), <b>volume</b> (L), <b>jarak</b> (km), dan <b>waktu</b> — makanya keterampilan ini penting dalam kehidupan sehari-hari.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 52. REFLEKSI ============ -->
+<section class="slide" id="s-refleksi" data-title="Refleksi">
+  <div class="slide-inner">
+    <span class="chip">🪞 Refleksi Diri</span>
+    <h2>Refleksi: Bagaimana Hari Ini?</h2>
+    <div class="card" style="margin-top:.9rem">
+      <h3>1. Bagaimana perasaanmu belajar hari ini?</h3>
+      <div class="refl-opt" data-group="mood">
+        <button class="btn" onclick="reflPick(this,'mood','mudah')">😄 Mudah</button>
+        <button class="btn" onclick="reflPick(this,'mood','cukup')">🙂 Cukup</button>
+        <button class="btn" onclick="reflPick(this,'mood','sulit')">🤔 Sulit</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>2. Materi mana yang paling menantang bagimu?</h3>
+      <div class="refl-opt" data-group="topic">
+        <button class="btn" onclick="reflPick(this,'topic','Penjumlahan desimal')">➕ Penjumlahan</button>
+        <button class="btn" onclick="reflPick(this,'topic','Pengurangan desimal')">➖ Pengurangan</button>
+        <button class="btn" onclick="reflPick(this,'topic','Soal cerita')">📖 Soal cerita</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>3. Apa yang ingin kamu pelajari lagi?</h3>
+      <textarea placeholder="Tulis jawabanmu di sini… (opsional)"></textarea>
+    </div>
+    <div class="feedback good" id="reflMsg"></div>
+  </div>
+</section>
+
+<!-- ============ 53. PENUTUP ============ -->
+<section class="slide" id="s-thanks" data-title="Thank You for Today">
+  <div class="slide-inner">
+    <span class="thanks-emoji">🌟</span>
+    <h1 style="margin:.4rem 0">Thank You for Today!</h1>
+    <p class="lead">Kamu hebat sudah belajar penjumlahan dan pengurangan bilangan desimal hari ini.<br>Ingat kuncinya: <b>koma sejajar</b> dan <b>nol penolong</b>. Sampai jumpa di pertemuan berikutnya! 👋</p>
+    <div class="row-btns">
+      <button class="btn btn-teal" onclick="restartAll()">🔁 Mulai Lagi dari Awal</button>
+      <button class="btn btn-ghost" onclick="openMenu()">☰ Daftar Materi</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="navbar">
+  <button class="btn btn-ghost btn-nav" id="prevBtn">◀ Sebelumnya</button>
+  <div class="nav-mid" id="navPos">Cover</div>
+  <button class="btn btn-primary btn-nav" id="nextBtn">Berikutnya ▶</button>
+</footer>
+
+<div class="menu-overlay" id="menu" hidden>
+  <div class="menu-card">
+    <div class="menu-head"><b>📋 Daftar Slide</b><button class="btn btn-ghost btn-sm" id="menuClose">✕ Tutup</button></div>
+    <div class="menu-body" id="menuBody"></div>
+  </div>
+</div>
+
+<div id="confetti" aria-hidden="true"></div>
+
+<script>
+"use strict";
+/* ============ DATA SOAL (disuntikkan saat build) ============ */
+const QDATA = [{"id": 1, "type": "latihan", "no": 1, "q": "Hitunglah: <b>2,5 + 1,3</b> = ...", "expr": "2,5 + 1,3", "answer": "3,8", "value": 3.8, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (2,5 dan 1,3). Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 2,5 + 1,3 = <b>3,8</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">2,5</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">1,3</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">3,8</span></div></div>"}, {"id": 2, "type": "latihan", "no": 2, "q": "Hitunglah: <b>4,7 + 2,8</b> = ...", "expr": "4,7 + 2,8", "answer": "7,5", "value": 7.5, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (4,7 dan 2,8). Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 4,7 + 2,8 = <b>7,5</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">4,7</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">2,8</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">7,5</span></div></div>"}, {"id": 3, "type": "latihan", "no": 3, "q": "Hitunglah: <b>6,4 + 3,56</b> = ...", "expr": "6,4 + 3,56", "answer": "9,96", "value": 9.96, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 6,4 menjadi <b>6,40</b> dan 3,56 menjadi <b>3,56</b>. Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 6,4 + 3,56 = <b>9,96</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">6,40</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">3,56</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">9,96</span></div></div>"}, {"id": 4, "type": "latihan", "no": 4, "q": "Hitunglah: <b>12,5 + 8,75</b> = ...", "expr": "12,5 + 8,75", "answer": "21,25", "value": 21.25, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 12,5 menjadi <b>12,50</b> dan 8,75 menjadi <b>8,75</b>. Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 12,5 + 8,75 = <b>21,25</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">12,50</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">8,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">21,25</span></div></div>"}, {"id": 5, "type": "latihan", "no": 5, "q": "Hitunglah: <b>0,75 + 0,25</b> = ...", "expr": "0,75 + 0,25", "answer": "1", "value": 1.0, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (0,75 dan 0,25). Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 0,75 + 0,25 = <b>1</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">0,75</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">0,25</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">1,00</span></div></div>"}, {"id": 6, "type": "latihan", "no": 6, "q": "Hitunglah: <b>3,125 + 2,45</b> = ...", "expr": "3,125 + 2,45", "answer": "5,575", "value": 5.575, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 3,125 menjadi <b>3,125</b> dan 2,45 menjadi <b>2,450</b>. Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 3,125 + 2,45 = <b>5,575</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">3,125</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">2,450</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">5,575</span></div></div>"}, {"id": 7, "type": "latihan", "no": 7, "q": "Hitunglah: <b>15,4 + 7,86</b> = ...", "expr": "15,4 + 7,86", "answer": "23,26", "value": 23.26, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 15,4 menjadi <b>15,40</b> dan 7,86 menjadi <b>7,86</b>. Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 15,4 + 7,86 = <b>23,26</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">15,40</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">7,86</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">23,26</span></div></div>"}, {"id": 8, "type": "latihan", "no": 8, "q": "Hitunglah: <b>24,75 + 13,25</b> = ...", "expr": "24,75 + 13,25", "answer": "38", "value": 38.0, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (24,75 dan 13,25). Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 24,75 + 13,25 = <b>38</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">24,75</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">13,25</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">38,00</span></div></div>"}, {"id": 9, "type": "latihan", "no": 9, "q": "Hitunglah: <b>45,6 + 27,45</b> = ...", "expr": "45,6 + 27,45", "answer": "73,05", "value": 73.05, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 45,6 menjadi <b>45,60</b> dan 27,45 menjadi <b>27,45</b>. Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 45,6 + 27,45 = <b>73,05</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">45,60</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">27,45</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">73,05</span></div></div>"}, {"id": 10, "type": "latihan", "no": 10, "q": "Hitunglah: <b>5,05 + 4,95</b> = ...", "expr": "5,05 + 4,95", "answer": "10", "value": 10.0, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (5,05 dan 4,95). Jumlahkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 5,05 + 4,95 = <b>10</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">5,05</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">4,95</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">10,00</span></div></div>"}, {"id": 11, "type": "latihan", "no": 11, "q": "Hitunglah: <b>5,6 − 2,3</b> = ...", "expr": "5,6 - 2,3", "answer": "3,3", "value": 3.3, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (5,6 dan 2,3). Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 5,6 − 2,3 = <b>3,3</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">5,6</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">2,3</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">3,3</span></div></div>"}, {"id": 12, "type": "latihan", "no": 12, "q": "Hitunglah: <b>8,9 − 4,7</b> = ...", "expr": "8,9 - 4,7", "answer": "4,2", "value": 4.2, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Kedua bilangan sudah sama banyak desimalnya (8,9 dan 4,7). Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 8,9 − 4,7 = <b>4,2</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">8,9</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">4,7</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">4,2</span></div></div>"}, {"id": 13, "type": "latihan", "no": 13, "q": "Hitunglah: <b>7,5 − 2,85</b> = ...", "expr": "7,5 - 2,85", "answer": "4,65", "value": 4.65, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 7,5 menjadi <b>7,50</b> dan 2,85 menjadi <b>2,85</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 7,5 − 2,85 = <b>4,65</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">7,50</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">2,85</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">4,65</span></div></div>"}, {"id": 14, "type": "latihan", "no": 14, "q": "Hitunglah: <b>12,4 − 6,75</b> = ...", "expr": "12,4 - 6,75", "answer": "5,65", "value": 5.65, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 12,4 menjadi <b>12,40</b> dan 6,75 menjadi <b>6,75</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 12,4 − 6,75 = <b>5,65</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">12,40</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">6,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">5,65</span></div></div>"}, {"id": 15, "type": "latihan", "no": 15, "q": "Hitunglah: <b>10 − 3,48</b> = ...", "expr": "10 - 3,48", "answer": "6,52", "value": 6.52, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Bilangan bulat boleh ditulis dengan koma dan nol: 10 = 10,00. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 10 − 3,48 = <b>6,52</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">10,00</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">3,48</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">6,52</span></div></div>"}, {"id": 16, "type": "latihan", "no": 16, "q": "Hitunglah: <b>20,5 − 8,125</b> = ...", "expr": "20,5 - 8,125", "answer": "12,375", "value": 12.375, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 20,5 menjadi <b>20,500</b> dan 8,125 menjadi <b>8,125</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 20,5 − 8,125 = <b>12,375</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">20,500</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">8,125</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">12,375</span></div></div>"}, {"id": 17, "type": "latihan", "no": 17, "q": "Hitunglah: <b>9,4 − 2,87</b> = ...", "expr": "9,4 - 2,87", "answer": "6,53", "value": 6.53, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 9,4 menjadi <b>9,40</b> dan 2,87 menjadi <b>2,87</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 9,4 − 2,87 = <b>6,53</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">9,40</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">2,87</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">6,53</span></div></div>"}, {"id": 18, "type": "latihan", "no": 18, "q": "Hitunglah: <b>16,25 − 9,4</b> = ...", "expr": "16,25 - 9,4", "answer": "6,85", "value": 6.85, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 16,25 menjadi <b>16,25</b> dan 9,4 menjadi <b>9,40</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 16,25 − 9,4 = <b>6,85</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">16,25</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">9,40</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">6,85</span></div></div>"}, {"id": 19, "type": "latihan", "no": 19, "q": "Hitunglah: <b>100 − 27,35</b> = ...", "expr": "100 - 27,35", "answer": "72,65", "value": 72.65, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Bilangan bulat boleh ditulis dengan koma dan nol: 100 = 100,00. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 100 − 27,35 = <b>72,65</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">100,00</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">27,35</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">72,65</span></div></div>"}, {"id": 20, "type": "latihan", "no": 20, "q": "Hitunglah: <b>30,08 − 12,5</b> = ...", "expr": "30,08 - 12,5", "answer": "17,58", "value": 17.58, "pemb": "<p>Susun ke bawah dengan <b>koma sejajar</b>. Lengkapi dengan nol sehingga 30,08 menjadi <b>30,08</b> dan 12,5 menjadi <b>12,50</b>. Kurangkan mulai dari kanan ke kiri, lalu letakkan koma pada hasil sejajar dengan koma di atas. Jadi, 30,08 − 12,5 = <b>17,58</b>.</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">30,08</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">12,50</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">17,58</span></div></div>"}, {"id": 101, "type": "cerita", "no": 1, "q": "Ibu membeli <b>2,5 kg</b> gula pasir dan <b>1,75 kg</b> tepung terigu. Berapa kilogram berat seluruh belanjaan Ibu?", "expr": "2,5 + 1,75", "answer": "4,25", "value": 4.25, "pemb": "<p><strong>Diketahui:</strong> gula pasir 2,5 kg dan tepung terigu 1,75 kg</p><p><strong>Ditanya:</strong> total berat seluruh belanjaan Ibu</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">2,50</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">1,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">4,25</span></div></div><p>2,5 + 1,75 = <b>4,25</b> kg</p><p><strong>Jadi, total berat seluruh belanjaan Ibu adalah 4,25 kg.</strong></p>"}, {"id": 102, "type": "cerita", "no": 2, "q": "Seutas pita panjangnya <b>3,6 m</b>. Untuk membungkus kado, pita dipotong sepanjang <b>1,25 m</b>. Berapa meter sisa pita itu?", "expr": "3,6 − 1,25", "answer": "2,35", "value": 2.35, "pemb": "<p><strong>Diketahui:</strong> pita panjangnya 3,6 m dan terpotong 1,25 m</p><p><strong>Ditanya:</strong> sisa panjang pita</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">3,60</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">1,25</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,35</span></div></div><p>3,6 − 1,25 = <b>2,35</b> m</p><p><strong>Jadi, sisa pita adalah 2,35 m.</strong></p>"}, {"id": 103, "type": "cerita", "no": 3, "q": "Botol minum Dina berisi <b>1,5 L</b> air. Ia menambahkan <b>0,75 L</b> lagi. Berapa liter isi botol Dina sekarang?", "expr": "1,5 + 0,75", "answer": "2,25", "value": 2.25, "pemb": "<p><strong>Diketahui:</strong> air mula-mula 1,5 L dan ditambah 0,75 L</p><p><strong>Ditanya:</strong> volume air di botol sekarang</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">1,50</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">0,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,25</span></div></div><p>1,5 + 0,75 = <b>2,25</b> L</p><p><strong>Jadi, volume air di botol sekarang adalah 2,25 L.</strong></p>"}, {"id": 104, "type": "cerita", "no": 4, "q": "Tinggi badan Raka <b>1,28 m</b>, sedangkan tinggi badan adiknya <b>0,95 m</b>. Berapa meter selisih tinggi badan mereka?", "expr": "1,28 − 0,95", "answer": "0,33", "value": 0.33, "pemb": "<p><strong>Diketahui:</strong> tinggi Raka 1,28 m dan tinggi adiknya 0,95 m</p><p><strong>Ditanya:</strong> selisih tinggi badan mereka</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">1,28</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">0,95</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">0,33</span></div></div><p>1,28 − 0,95 = <b>0,33</b> m</p><p><strong>Jadi, selisih tinggi badan mereka adalah 0,33 m.</strong></p>"}, {"id": 105, "type": "cerita", "no": 5, "q": "Jarak rumah Ayah ke kota <b>12,5 km</b>. Ayah sudah menempuh <b>8,75 km</b>. Berapa kilometer lagi jarak yang harus ditempuh Ayah?", "expr": "12,5 − 8,75", "answer": "3,75", "value": 3.75, "pemb": "<p><strong>Diketahui:</strong> jarak seluruhnya 12,5 km dan sudah ditempuh 8,75 km</p><p><strong>Ditanya:</strong> sisa jarak yang harus ditempuh</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">12,50</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">8,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">3,75</span></div></div><p>12,5 − 8,75 = <b>3,75</b> km</p><p><strong>Jadi, Ayah masih harus menempuh 3,75 km lagi.</strong></p>"}, {"id": 106, "type": "cerita", "no": 6, "q": "Sari berlatih renang selama <b>0,85 jam</b> pada pagi hari dan <b>1,5 jam</b> pada sore hari. Berapa jam total latihan renang Sari?", "expr": "0,85 + 1,5", "answer": "2,35", "value": 2.35, "pemb": "<p><strong>Diketahui:</strong> latihan pagi 0,85 jam dan latihan sore 1,5 jam</p><p><strong>Ditanya:</strong> total waktu latihan renang</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">0,85</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">1,50</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,35</span></div></div><p>0,85 + 1,5 = <b>2,35</b> jam</p><p><strong>Jadi, total latihan renang Sari adalah 2,35 jam.</strong></p>"}, {"id": 107, "type": "cerita", "no": 7, "q": "Di pasar, Bu Ani membeli semangka seberat <b>3,125 kg</b> dan melon seberat <b>2,4 kg</b>. Berapa kilogram berat kedua buah itu?", "expr": "3,125 + 2,4", "answer": "5,525", "value": 5.525, "pemb": "<p><strong>Diketahui:</strong> berat semangka 3,125 kg dan berat melon 2,4 kg</p><p><strong>Ditanya:</strong> berat kedua buah seluruhnya</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">3,125</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">2,400</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">5,525</span></div></div><p>3,125 + 2,4 = <b>5,525</b> kg</p><p><strong>Jadi, berat kedua buah adalah 5,525 kg.</strong></p>"}, {"id": 108, "type": "cerita", "no": 8, "q": "Ibu punya <b>4,5 kg</b> jeruk. Sebanyak <b>1,25 kg</b> dipakai untuk membuat jus. Berapa kilogram sisa jeruk Ibu?", "expr": "4,5 − 1,25", "answer": "3,25", "value": 3.25, "pemb": "<p><strong>Diketahui:</strong> jeruk mula-mula 4,5 kg dan terpakai 1,25 kg</p><p><strong>Ditanya:</strong> sisa berat jeruk</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">4,50</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">1,25</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">3,25</span></div></div><p>4,5 − 1,25 = <b>3,25</b> kg</p><p><strong>Jadi, sisa jeruk Ibu adalah 3,25 kg.</strong></p>"}, {"id": 109, "type": "cerita", "no": 9, "q": "Sebuah tangki air berisi <b>18,75 L</b>. Untuk menyiram taman dipakai <b>6,5 L</b>. Berapa liter air yang tersisa di tangki?", "expr": "18,75 − 6,5", "answer": "12,25", "value": 12.25, "pemb": "<p><strong>Diketahui:</strong> air di tangki 18,75 L dan terpakai 6,5 L</p><p><strong>Ditanya:</strong> sisa air di tangki</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">18,75</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">6,50</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">12,25</span></div></div><p>18,75 − 6,5 = <b>12,25</b> L</p><p><strong>Jadi, sisa air di tangki adalah 12,25 L.</strong></p>"}, {"id": 110, "type": "cerita", "no": 10, "q": "Panjang sebuah meja <b>1,85 m</b>. Meja diperpanjang dengan papan sepanjang <b>0,45 m</b>. Berapa meter panjang meja sekarang?", "expr": "1,85 + 0,45", "answer": "2,3", "value": 2.3, "pemb": "<p><strong>Diketahui:</strong> panjang meja 1,85 m dan papan tambahan 0,45 m</p><p><strong>Ditanya:</strong> panjang meja setelah diperpanjang</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">1,85</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">0,45</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,30</span></div></div><p>1,85 + 0,45 = <b>2,3</b> m</p><p><strong>Jadi, panjang meja sekarang adalah 2,3 m.</strong></p>"}, {"id": 111, "type": "cerita", "no": 11, "q": "Berat koper Ayah <b>18,4 kg</b> dan berat koper Ibu <b>15,75 kg</b>. Berapa kilogram berat kedua koper seluruhnya?", "expr": "18,4 + 15,75", "answer": "34,15", "value": 34.15, "pemb": "<p><strong>Diketahui:</strong> koper Ayah 18,4 kg dan koper Ibu 15,75 kg</p><p><strong>Ditanya:</strong> berat kedua koper seluruhnya</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">18,40</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">15,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">34,15</span></div></div><p>18,4 + 15,75 = <b>34,15</b> kg</p><p><strong>Jadi, berat kedua koper seluruhnya adalah 34,15 kg.</strong></p>"}, {"id": 112, "type": "cerita", "no": 12, "q": "Target lari Bima hari ini <b>5 km</b>. Ia baru berlari <b>2,4 km</b>. Berapa kilometer lagi agar target Bima tercapai?", "expr": "5 − 2,4", "answer": "2,6", "value": 2.6, "pemb": "<p><strong>Diketahui:</strong> target lari 5 km dan baru ditempuh 2,4 km</p><p><strong>Ditanya:</strong> sisa jarak lari Bima</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">5,0</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">2,4</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,6</span></div></div><p>5 − 2,4 = <b>2,6</b> km</p><p><strong>Jadi, Bima masih harus berlari 2,6 km lagi.</strong></p>"}, {"id": 113, "type": "cerita", "no": 13, "q": "Tas Dodi berisi buku seberat <b>0,85 kg</b> dan album seberat <b>0,4 kg</b>. Berat tas itu sendiri <b>0,35 kg</b>. Berapa kilogram berat tas beserta isinya?", "expr": "0,85 + 0,4 + 0,35", "answer": "1,6", "value": 1.6, "pemb": "<p><strong>Diketahui:</strong> berat buku 0,85 kg, album 0,4 kg, dan tas 0,35 kg</p><p><strong>Ditanya:</strong> berat tas beserta seluruh isinya</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">0,85</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">0,40</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">0,35</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">1,60</span></div></div><p>0,85 + 0,4 + 0,35 = <b>1,6</b> kg</p><p><strong>Jadi, berat tas beserta isinya adalah 1,6 kg.</strong></p>"}, {"id": 114, "type": "cerita", "no": 14, "q": "Teko berisi <b>1,5 L</b> air es. Sebanyak <b>0,325 L</b> dituang ke dalam gelas. Berapa liter sisa air es di teko?", "expr": "1,5 − 0,325", "answer": "1,175", "value": 1.175, "pemb": "<p><strong>Diketahui:</strong> air es di teko 1,5 L dan dituang 0,325 L</p><p><strong>Ditanya:</strong> sisa air es di teko</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">1,500</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">0,325</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">1,175</span></div></div><p>1,5 − 0,325 = <b>1,175</b> L</p><p><strong>Jadi, sisa air es di teko adalah 1,175 L.</strong></p>"}, {"id": 115, "type": "cerita", "no": 15, "q": "Rani bersepeda sejauh <b>7,45 km</b>, lalu meneruskan selama <b>3,6 km</b> lagi sampai taman. Berapa kilometer jarak seluruh yang ditempuh Rani?", "expr": "7,45 + 3,6", "answer": "11,05", "value": 11.05, "pemb": "<p><strong>Diketahui:</strong> sepeda bagian pertama 7,45 km dan bagian kedua 3,6 km</p><p><strong>Ditanya:</strong> jarak seluruh yang ditempuh Rani</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">7,45</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">3,60</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">11,05</span></div></div><p>7,45 + 3,6 = <b>11,05</b> km</p><p><strong>Jadi, jarak yang ditempuh Rani adalah 11,05 km.</strong></p>"}, {"id": 116, "type": "cerita", "no": 16, "q": "Seorang penjahit memiliki kain sutra <b>5,5 m</b>. Sebanyak <b>2,75 m</b> dipakai untuk membuat blus. Berapa meter sisa kain sutra?", "expr": "5,5 − 2,75", "answer": "2,75", "value": 2.75, "pemb": "<p><strong>Diketahui:</strong> kain sutra 5,5 m dan terpakai 2,75 m</p><p><strong>Ditanya:</strong> sisa panjang kain sutra</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">5,50</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">2,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">2,75</span></div></div><p>5,5 − 2,75 = <b>2,75</b> m</p><p><strong>Jadi, sisa kain sutra adalah 2,75 m.</strong></p>"}, {"id": 117, "type": "cerita", "no": 17, "q": "Berat badan Doni <b>32,5 kg</b>. Ia menaiki timbangan sambil membawa tas seberat <b>4,25 kg</b>. Berapa kilogram angka yang muncul di timbangan?", "expr": "32,5 + 4,25", "answer": "36,75", "value": 36.75, "pemb": "<p><strong>Diketahui:</strong> berat badan Doni 32,5 kg dan berat tas 4,25 kg</p><p><strong>Ditanya:</strong> angka yang muncul di timbangan</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">32,50</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">4,25</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">36,75</span></div></div><p>32,5 + 4,25 = <b>36,75</b> kg</p><p><strong>Jadi, angka yang muncul di timbangan adalah 36,75 kg.</strong></p>"}, {"id": 118, "type": "cerita", "no": 18, "q": "Sebuah kereta sudah menempuh <b>45,75 km</b> dan tersisa <b>12,5 km</b> lagi. Berapa kilometer panjang seluruh perjalanan kereta itu?", "expr": "45,75 + 12,5", "answer": "58,25", "value": 58.25, "pemb": "<p><strong>Diketahui:</strong> jarak yang sudah ditempuh 45,75 km dan sisa 12,5 km</p><p><strong>Ditanya:</strong> panjang seluruh perjalanan</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">45,75</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">12,50</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">58,25</span></div></div><p>45,75 + 12,5 = <b>58,25</b> km</p><p><strong>Jadi, panjang seluruh perjalanan adalah 58,25 km.</strong></p>"}, {"id": 119, "type": "cerita", "no": 19, "q": "Botol kecil berisi <b>0,35 L</b> susu. Botol besar berisi <b>1,2 L</b> lebih banyak daripada botol kecil. Berapa liter isi botol besar?", "expr": "0,35 + 1,2", "answer": "1,55", "value": 1.55, "pemb": "<p><strong>Diketahui:</strong> botol kecil berisi 0,35 L dan botol besar 1,2 L lebih banyak</p><p><strong>Ditanya:</strong> isi botol besar</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">0,35</span></div><div class=\"crow\"><span class=\"cop\">+</span><span class=\"cnum\">1,20</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">1,55</span></div></div><p>0,35 + 1,2 = <b>1,55</b> L</p><p><strong>Jadi, isi botol besar adalah 1,55 L.</strong></p>"}, {"id": 120, "type": "cerita", "no": 20, "q": "Tinggi sebuah menara air <b>25,5 m</b>. Tiang bendera <b>3,75 m</b> lebih pendek daripada menara air. Berapa meter tinggi tiang bendera?", "expr": "25,5 − 3,75", "answer": "21,75", "value": 21.75, "pemb": "<p><strong>Diketahui:</strong> menara air tingginya 25,5 m dan tiang bendera 3,75 m lebih pendek</p><p><strong>Ditanya:</strong> tinggi tiang bendera</p><p><strong>Jawab:</strong> susun ke bawah dengan koma sejajar:</p><div class=\"calc\"><div class=\"crow\"><span class=\"cop\">&nbsp;</span><span class=\"cnum\">25,50</span></div><div class=\"crow\"><span class=\"cop\">−</span><span class=\"cnum\">3,75</span></div><div class=\"cline\"></div><div class=\"crow cres\"><span class=\"cop\">=</span><span class=\"cnum\">21,75</span></div></div><p>25,5 − 3,75 = <b>21,75</b> m</p><p><strong>Jadi, tinggi tiang bendera adalah 21,75 m.</strong></p>"}];
+
+/* ============ STATE ============ */
+const state = {}; // id -> {attempts, status:0 belum,1 benar percobaan-1, 2 benar kemudian, wrong:bool}
+function st(id){ if(!state[id]) state[id] = {attempts:0, status:0, wrong:false}; return state[id]; }
+let slides = [], cur = 0, confettiShown = false;
+const BAD_MSGS = [
+  "Belum tepat. Periksa lagi posisi komanya, ya! 💪",
+  "Hampir! Coba susun ke bawah dengan koma sejajar dulu. ✏️",
+  "Coba lagi! Isi tempat kosong di belakang koma dengan nol. 🔍",
+  "Belum benar. Hitung ulang dari kanan ke kiri, pelan-pelan. 🐢"
+];
+
+/* ============ BANGUN SLIDE SOAL ============ */
+function qTemplate(qd){
+  const tag = qd.type === "latihan" ? "✏️ Latihan" : "📖 Soal Cerita";
+  return `<div class="slide-inner">
+    <div class="q-top">
+      <span class="chip ${qd.type==="latihan"?"chip-blue":"chip-yellow"}">${tag} • Soal ${qd.no} dari 20</span>
+      <span class="q-status" id="qs-${qd.id}">⬜</span>
+    </div>
+    <div class="card q-card">
+      <div class="q-text">${qd.q}</div>
+      <div class="answer-row">
+        <span class="ans-label">Jawaban:</span>
+        <input class="answer-input" id="in-${qd.id}" inputmode="decimal" autocomplete="off"
+               placeholder="ketik angka, contoh: 12,5" aria-label="Jawaban soal ${qd.no}">
+        <button class="btn btn-primary" onclick="checkAnswer(${qd.id})">✔ Cek Jawaban</button>
+      </div>
+      <div class="feedback" id="fb-${qd.id}"></div>
+      <div class="pemb-row"><button class="btn btn-ghost" id="pbb-${qd.id}" onclick="togglePemb(${qd.id})">💡 Lihat Pembahasan</button></div>
+      <div class="pembahasan" id="pb-${qd.id}" hidden>${qd.pemb}</div>
+    </div>
+  </div>`;
+}
+function buildQuestions(){
+  const lat = document.getElementById("latihanHost");
+  const cer = document.getElementById("ceritaHost");
+  QDATA.forEach(qd => {
+    const sec = document.createElement("section");
+    sec.className = "slide";
+    sec.dataset.title = (qd.type === "latihan" ? "Latihan " : "Soal Cerita ") + qd.no;
+    sec.dataset.qid = qd.id;
+    sec.innerHTML = qTemplate(qd);
+    (qd.type === "latihan" ? lat : cer).appendChild(sec);
+  });
+}
+
+/* ============ NAVIGASI ============ */
+function show(i){
+  if(i < 0 || i >= slides.length) return;
+  slides[cur].classList.remove("active");
+  cur = i;
+  const s = slides[cur];
+  s.classList.add("active");
+  s.scrollTop = 0;
+  window.scrollTo(0, 0);
+  document.getElementById("progress").style.width = ((cur + 1) / slides.length * 100) + "%";
+  document.getElementById("slideCount").textContent = (cur + 1) + " / " + slides.length;
+  document.getElementById("navPos").textContent = (s.dataset.title || "") + "  •  slide " + (cur + 1);
+  document.getElementById("prevBtn").disabled = (cur === 0);
+  const nb = document.getElementById("nextBtn");
+  if(cur === slides.length - 1){ nb.textContent = "🔄 Ke Awal"; } else { nb.textContent = "Berikutnya ▶"; }
+  if(s.id === "s-hasil") renderHasil();
+  if(s.id === "s-thanks") confetti();
+  if(s.id === "s-cover" && confettiShown) confettiShown = false;
+  closeMenu();
+}
+function next(){ if(cur === slides.length - 1){ show(0); } else show(cur + 1); }
+function prev(){ show(cur - 1); }
+function goId(id){ const i = slides.findIndex(s => s.id === id); if(i >= 0) show(i); }
+function restartAll(){ resetAll(true); show(0); }
+
+/* ============ CEK JAWABAN ============ */
+function parseNum(str){
+  let s = (str || "").trim().replace(/\s+/g, "").replace(/,/g, ".");
+  if(!/^-?\d*\.?\d+$/.test(s) && !/^-?\d+\.$/.test(s)) return null;
+  const v = parseFloat(s);
+  return isNaN(v) ? null : v;
+}
+function checkAnswer(id){
+  const qd = QDATA.find(q => q.id === id);
+  const s = st(id);
+  const inp = document.getElementById("in-" + id);
+  const fb = document.getElementById("fb-" + id);
+  if(s.status){
+    fb.className = "feedback good show";
+    fb.innerHTML = `🎉 Soal ini sudah kamu jawab dengan benar: <b>${qd.answer}</b>. Yuk lanjut ke soal berikutnya!`;
+    return;
+  }
+  const v = parseNum(inp.value);
+  if(v === null){
+    fb.className = "feedback warn show";
+    fb.innerHTML = "⚠️ Ketik dulu jawabanmu dengan angka, ya! Contoh: <b>12,5</b>";
+    return;
+  }
+  s.attempts++;
+  if(Math.abs(v - qd.value) < 1e-9){
+    if(s.attempts === 1){
+      s.status = 1;
+      fb.className = "feedback good show";
+      fb.innerHTML = `🎉 <b>Benar sekali!</b> Jawaban <b>${qd.answer}</b> tepat pada <b>percobaan pertama</b> — skor penuh! Klik Pembahasan untuk melihat caranya.`;
+      document.getElementById("qs-" + id).textContent = "🟩";
+      document.getElementById("pbb-" + id).classList.add("pulse");
+    } else {
+      s.status = 2;
+      fb.className = "feedback good2 show";
+      fb.innerHTML = `👏 <b>Benar!</b> Jawaban <b>${qd.answer}</b> — kamu berhasil pada percobaan ke-${s.attempts}. Klik Pembahasan untuk melihat caranya.`;
+      document.getElementById("qs-" + id).textContent = "🟨";
+      document.getElementById("pbb-" + id).classList.add("pulse");
+    }
+    inp.disabled = true;
+  } else {
+    s.wrong = true;
+    fb.className = "feedback bad show";
+    fb.innerHTML = BAD_MSGS[(s.attempts - 1) % BAD_MSGS.length] + `<br><span style="font-weight:700">Skor percobaan pertama untuk soal ini sudah hangus — tetap semangat sampai ketemu jawabannya!</span>`;
+    document.getElementById("qs-" + id).textContent = "🟥";
+  }
+}
+function togglePemb(id){
+  const pb = document.getElementById("pb-" + id);
+  const btn = document.getElementById("pbb-" + id);
+  pb.hidden = !pb.hidden;
+  btn.classList.remove("pulse");
+  btn.textContent = pb.hidden ? "💡 Lihat Pembahasan" : "🙈 Tutup Pembahasan";
+}
+
+/* ============ HASIL ============ */
+function statusOf(id){ return st(id).status; }
+function renderHasil(){
+  let first = 0, later = 0, wrong = 0;
+  let latFirst = 0, cerFirst = 0, latWrong = 0, cerWrong = 0;
+  QDATA.forEach(qd => {
+    const s = st(qd.id);
+    const cFirst = qd.type === "latihan" ? "latFirst" : "cerFirst";
+    if(s.status === 1){ first++; if(qd.type === "latihan") latFirst++; else cerFirst++; }
+    else if(s.status === 2){ later++; }
+    else { wrong++; if(s.wrong){ if(qd.type === "latihan") latWrong++; else cerWrong++; } }
+  });
+  document.getElementById("st-first").textContent = first;
+  document.getElementById("st-later").textContent = later;
+  document.getElementById("st-wrong").textContent = wrong;
+  document.getElementById("st-score").textContent = Math.round(first / 40 * 100) + "%";
+  document.getElementById("barLat").style.width = (latFirst / 20 * 100) + "%";
+  document.getElementById("barCer").style.width = (cerFirst / 20 * 100) + "%";
+  document.getElementById("barAll").style.width = (first / 40 * 100) + "%";
+  document.getElementById("lblLat").textContent = latFirst + "/20";
+  document.getElementById("lblCer").textContent = cerFirst + "/20";
+  document.getElementById("lblAll").textContent = first + "/40";
+  // peta jawaban (diklik → lompat ke soal)
+  const grid = document.getElementById("chipgrid");
+  grid.innerHTML = "";
+  QDATA.forEach(qd => {
+    const s = st(qd.id);
+    const cls = s.status === 1 ? "s1" : s.status === 2 ? "s2" : (s.wrong ? "s3" : "");
+    const chip = document.createElement("button");
+    chip.className = "qchip " + cls;
+    chip.textContent = (qd.type === "latihan" ? "L" : "C") + qd.no;
+    chip.title = (qd.type === "latihan" ? "Latihan " : "Soal Cerita ") + qd.no;
+    chip.onclick = () => {
+      const idx = slides.findIndex(x => x.dataset && x.dataset.qid === String(qd.id));
+      if(idx >= 0) show(idx);
+    };
+    grid.appendChild(chip);
+  });
+  if(first / 40 >= 0.75 && !confettiShown){ confetti(); confettiShown = true; }
+}
+function resetAll(silent){
+  Object.keys(state).forEach(k => delete state[k]);
+  QDATA.forEach(qd => {
+    const inp = document.getElementById("in-" + qd.id);
+    if(inp){ inp.value = ""; inp.disabled = false; }
+    const fb = document.getElementById("fb-" + qd.id);
+    if(fb){ fb.className = "feedback"; fb.innerHTML = ""; }
+    const qs = document.getElementById("qs-" + qd.id);
+    if(qs) qs.textContent = "⬜";
+    const pb = document.getElementById("pb-" + qd.id);
+    if(pb) pb.hidden = true;
+    const pbb = document.getElementById("pbb-" + qd.id);
+    if(pbb){ pbb.classList.remove("pulse"); pbb.textContent = "💡 Lihat Pembahasan"; }
+  });
+  confettiShown = false;
+  renderHasil();
+  if(!silent) show(slides.findIndex(s => s.dataset && s.dataset.qid === String(QDATA[0].id)));
+}
+
+/* ============ KUIS APERSEPSI ============ */
+function aperPick(pilihKiri){
+  const fb = document.getElementById("aperFb");
+  fb.classList.add("show");
+  if(pilihKiri){
+    fb.className = "feedback good show";
+    fb.innerHTML = "🎉 <b>Benar!</b> 0,5 = 0,50, sedangkan 0,45 hanya 45 per seratus. Jadi <b>0,5 &gt; 0,45</b>. Kuncinya: samakan dulu angka di belakang koma sebelum membandingkan!";
+    document.getElementById("aperA").style.background = "var(--green)";
+    document.getElementById("aperA").style.color = "#fff";
+  } else {
+    fb.className = "feedback bad show";
+    fb.innerHTML = "Belum tepat. Coba samakan dulu: <b>0,5 = 0,50</b>, lalu bandingkan dengan <b>0,45</b>. Sekarang, mana yang lebih besar? 😉";
+  }
+}
+
+/* ============ REFLEKSI ============ */
+const refl = {mood: null, topic: null};
+function reflPick(btn, group, val){
+  refl[group] = val;
+  btn.parentElement.querySelectorAll(".btn").forEach(b => b.classList.remove("sel"));
+  btn.classList.add("sel");
+  const msg = document.getElementById("reflMsg");
+  if(refl.mood && refl.topic){
+    const moodTxt = {mudah: "mudah", cukup: "cukup paham", sulit: "masih agak sulit"}[refl.mood];
+    const tip = {
+      mudah: "Kerja bagus! 🌟 Coba bantui temanmu yang masih kesulitan, ya!",
+      cukup: "Hebat! 💪 Terus berlatih agar makin lancar menghitung desimal.",
+      sulit: "Tidak apa-apa! 🌱 Pelan-pelan saja — yang penting koma selalu sejajar. Kamu pasti bisa!"
+    }[refl.mood];
+    msg.className = "feedback good show";
+    msg.innerHTML = `Terima kasih sudah jujur! 🙏 Kamu merasa <b>${moodTxt}</b> dan materi paling menantang menurutmu adalah <b>${refl.topic}</b>. ${tip}`;
+  }
+}
+
+/* ============ MENU DAFTAR SLIDE ============ */
+function openMenu(){
+  buildMenu();
+  document.getElementById("menu").hidden = false;
+}
+function closeMenu(){ document.getElementById("menu").hidden = true; }
+function buildMenu(){
+  const body = document.getElementById("menuBody");
+  body.innerHTML = "";
+  const iLat = slides.findIndex(s => s.dataset && s.dataset.qid);
+  const iCer = slides.findIndex(s => s.dataset && s.dataset.qid === "101");
+  const iHas = slides.findIndex(s => s.id === "s-hasil");
+  const groups = [
+    ["🚀 Pembuka", 0, 2],
+    ["📘 Materi", 3, 7],
+    ["✏️ Latihan (20 soal)", iLat, iLat + 19],
+    ["📖 Soal Cerita (20 soal)", iCer, iCer + 19],
+    ["🏁 Hasil & Penutup", iHas, slides.length - 1]
+  ];
+  groups.forEach(([label, a, b]) => {
+    const div = document.createElement("div");
+    div.className = "menu-group";
+    const h = document.createElement("h4");
+    h.textContent = label;
+    div.appendChild(h);
+    const g = document.createElement("div");
+    g.className = "menu-grid";
+    for(let i = a; i <= b && i < slides.length; i++){
+      const b2 = document.createElement("button");
+      b2.className = "menu-item" + (i === cur ? " cur" : "");
+      b2.textContent = slides[i].dataset.title || ("Slide " + (i + 1));
+      b2.onclick = () => { show(i); };
+      g.appendChild(b2);
+    }
+    div.appendChild(g);
+    body.appendChild(div);
+  });
+}
+
+/* ============ KONFETI ============ */
+function confetti(n){
+  n = n || 90;
+  const c = document.getElementById("confetti");
+  const colors = ["#FF8A3D","#FFC93C","#2BB3A3","#4A7DFF","#FF6FA5","#35C25E"];
+  for(let i = 0; i < n; i++){
+    const d = document.createElement("div");
+    d.className = "cf";
+    d.style.left = Math.random() * 100 + "vw";
+    d.style.background = colors[i % colors.length];
+    d.style.animationDelay = (Math.random() * 0.9) + "s";
+    d.style.animationDuration = (2.2 + Math.random() * 1.7) + "s";
+    const sz = 6 + Math.random() * 8;
+    d.style.width = sz + "px";
+    d.style.height = sz * 1.4 + "px";
+    c.appendChild(d);
+    setTimeout(() => d.remove(), 5200);
+  }
+}
+
+/* ============ EVENT GLOBAL ============ */
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("nextBtn").addEventListener("click", next);
+document.getElementById("menuBtn").addEventListener("click", openMenu);
+document.getElementById("menuClose").addEventListener("click", closeMenu);
+document.getElementById("menu").addEventListener("click", e => { if(e.target.id === "menu") closeMenu(); });
+document.addEventListener("keydown", e => {
+  const t = e.target;
+  const typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA");
+  if(e.key === "Enter" && t && t.classList && t.classList.contains("answer-input")){
+    const id = parseInt(t.id.replace("in-", ""), 10);
+    if(!isNaN(id)) checkAnswer(id);
+    return;
+  }
+  if(typing) return;
+  if(e.key === "ArrowRight" || e.key === "PageDown"){ e.preventDefault(); next(); }
+  if(e.key === "ArrowLeft" || e.key === "PageUp"){ e.preventDefault(); prev(); }
+  if(e.key === "Escape") closeMenu();
+});
+let touchX = null, touchY = null;
+document.addEventListener("touchstart", e => {
+  if(e.target.closest && e.target.closest("input, textarea, button")) { touchX = null; return; }
+  touchX = e.changedTouches[0].clientX; touchY = e.changedTouches[0].clientY;
+}, {passive: true});
+document.addEventListener("touchend", e => {
+  if(touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  const dy = e.changedTouches[0].clientY - touchY;
+  if(Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5){ dx < 0 ? next() : prev(); }
+  touchX = null;
+}, {passive: true});
+
+/* ============ INISIALISASI ============ */
+buildQuestions();
+slides = Array.from(document.querySelectorAll("#deck .slide"));
+document.getElementById("slideCount").textContent = "1 / " + slides.length;
+show(0);
+
+</script>
+</body>
+</html>
